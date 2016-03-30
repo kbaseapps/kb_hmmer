@@ -12,17 +12,6 @@
     },
     "parameters": [ 
         {
-            "id": "input_one_name",
-            "optional": false,
-            "advanced": false,
-            "allow_multiple": false,
-            "default_values": [ "" ],
-            "field_type": "text",
-            "text_options": {
-                "valid_ws_types": [ "KBaseCollections.FeatureSet","KBaseGenomes.Feature" ]
-            }
-        },
-        {
             "id": "input_msa_name",
             "optional": false,
             "advanced": false,
@@ -120,16 +109,12 @@
     "behavior": {
         "service-mapping": {
             "url": "",
-            "name": "kb_blast",
-            "method": "psiBLAST_msa_start_Search",
+            "name": "kb_hmmer",
+            "method": "HMMER_MSA_Search",
             "input_mapping": [
                 {
                     "narrative_system_variable": "workspace",
                     "target_property": "workspace_name"
-                },
-                {
-                    "input_parameter": "input_one_name",
-                    "target_property": "input_one_name"
                 },
                 {
                     "input_parameter": "input_msa_name",
