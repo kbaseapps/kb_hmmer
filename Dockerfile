@@ -46,8 +46,7 @@ RUN \
   rm -f hmmer-3.1b2-linux-intel-x86_64.tar.gz && \
   cd hmmer && \
   ./configure && \
-  make && \
-  make install
+  make
 
 
 WORKDIR /kb/module
