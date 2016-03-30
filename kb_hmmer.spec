@@ -63,5 +63,5 @@ module kb_hmmer {
     **        input_many_id: SingleEndLibrary, FeatureSet, Genome, GenomeSet
     **        output_id: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
     */
-    funcdef HMMER_BasicSearch (HMMER_Params params)  returns (HMMER_Output) authentication required;
+    funcdef HMMER_MSA_Search (HMMER_Params params)  returns (HMMER_Output) authentication required;
 };
