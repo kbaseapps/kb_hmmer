@@ -11,6 +11,7 @@ import uuid
 from datetime import datetime
 from pprint import pprint, pformat
 import numpy as np
+import math
 import gzip
 
 from Bio import SeqIO
@@ -315,7 +316,7 @@ class kb_hmmer:
 
             # break up MSA into 60 char chunks
             records = []
-            whole_chunks = int(floor(row_len/60))
+            whole_chunks = int(math.floor(row_len/60))
             if whole_chunks > 0:
                 for j in range(whole_chunks):
                     for row_id in row_order:
