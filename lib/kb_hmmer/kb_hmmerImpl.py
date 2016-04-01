@@ -286,7 +286,7 @@ class kb_hmmer:
                     default_row_labels[row_id] = row_id
 
             # export features to CLUSTAL formatted MSA (HMMER BUILD seems to only take CLUSTAL)
-            input_MSA_file_path = os.path.join(self.scratch, params['input_msa_name']+".fasta")
+            input_MSA_file_path = os.path.join(self.scratch, params['input_msa_name']+".clustal")
             self.log(console, 'writing MSA file: '+input_MSA_file_path)
 
             # set header
@@ -351,10 +351,10 @@ class kb_hmmer:
                 input_MSA_file_handle.write("\n".join(records)+"\n")
 
             # DEBUG
-            report += "MSA:\n"
-            report += header+"\n"
-            report += "\n".join(records)+"\n"
-            self.log(console,report)
+            #report += "MSA:\n"
+            #report += header+"\n"
+            #report += "\n".join(records)+"\n"
+            #self.log(console,report)
 
 
             # Determine whether nuc or protein sequences
@@ -577,7 +577,7 @@ class kb_hmmer:
         # Check for HMM output
         if not os.path.isfile(HMM_file_path):
             raise ValueError("HMMER_BUILD failed to create HMM file '"+HMM_file_path+"'")
-        elif not os.path.getsize(HMM_file_path+"'") > 0:
+        elif not os.path.getsize(HMM_file_path) > 0:
             raise ValueError("HMMER_BUILD created empty HMM file '"+HMM_file_path+"'")
 
 
