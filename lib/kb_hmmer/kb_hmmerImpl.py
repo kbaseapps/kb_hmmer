@@ -316,38 +316,43 @@ class kb_hmmer:
 
             # break up MSA into 60 char chunks
             records = []
-            whole_chunks = int(math.floor(row_len/60))
+            chunk_len = 60
+            whole_chunks = int(math.floor(row_len/chunk_len))
             if whole_chunks > 0:
                 for j in range(whole_chunks):
+                    records.append('')
                     for row_id in row_order:
                         padding = ''
                         if longest_row_id_len-len(row_id) > 0:
                             for i in range(0,longest_row_id_len-len(row_id)):
                                 padding += ' '
                         records.append(row_id + padding + " " +
-                                       MSA_in['alignment'][row_id][j*60:(j+1)*60])
+                                       MSA_in['alignment'][row_id][j*chunk_len:(j+1)*chunk_len])
                     records.append(''.join([' ' for s in range(longest_row_id_len)]) + " " +
-                                   conservation_symbol[j*60:(j+1)*60])
-            # add incomplete rows
-            j=whole_chunks
-            for row_id in row_order:
-                padding = ''
-                if longest_row_id_len-len(row_id) > 0:
-                    for i in range(0,longest_row_id_len-len(row_id)):
-                        padding += ' '
-                records.append(row_id + padding + " " +
-                               MSA_in['alignment'][row_id][j*60:row_len])
+                                   conservation_symbol[j*chunk_len:(j+1)*chunk_len])
+
+            # add final rows
+            if (row_len % chunk_len) != 0:
+                j=whole_chunks
+                records.append('')
+                for row_id in row_order:
+                    padding = ''
+                    if longest_row_id_len-len(row_id) > 0:
+                        for i in range(0,longest_row_id_len-len(row_id)):
+                            padding += ' '
+                    records.append(row_id + padding + " " +
+                                   MSA_in['alignment'][row_id][j*chunk_len:row_len])
                 records.append(''.join([' ' for s in range(longest_row_id_len)]) + " " +
-                               conservation_symbol[j*60:row_len])
+                               conservation_symbol[j*chunk_len:row_len])
             
             # write that sucker
             with open(input_MSA_file_path,'w',0) as input_MSA_file_handle:
-                input_MSA_file_handle.write(header+"\n\n")
+                input_MSA_file_handle.write(header+"\n")
                 input_MSA_file_handle.write("\n".join(records)+"\n")
 
             # DEBUG
             report += "MSA:\n"
-            report += header+"\n\n"
+            report += header+"\n"
             report += "\n".join(records)+"\n"
             self.log(console,report)
 
@@ -540,7 +545,7 @@ class kb_hmmer:
         HMM_file_path = input_MSA_file_path+".HMM"
 
         hmmer_build_cmd.append('--informat')
-        hmmer_build_cmd.append('FASTA')
+        hmmer_build_cmd.append('CLUSTAL')
         hmmer_build_cmd.append(HMM_file_path)
         hmmer_build_cmd.append(input_MSA_file_path)
 
