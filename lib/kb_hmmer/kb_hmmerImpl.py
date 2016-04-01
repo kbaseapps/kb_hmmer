@@ -618,7 +618,7 @@ class kb_hmmer:
         hmmer_search_cmd.append(output_hit_MSA_file_path)
         hmmer_search_cmd.append('--noali')
         hmmer_search_cmd.append('--notextw')
-        hmmer_search_cmd.append('-E')
+        hmmer_search_cmd.append('-E')  # can't use -T with -E, so we'll use -E
         hmmer_search_cmd.append(str(params['e_value']))
         hmmer_search_cmd.append(HMM_file_path)
         hmmer_search_cmd.append(many_forward_reads_file_path)
@@ -658,11 +658,11 @@ class kb_hmmer:
         # Check for output
         if not os.path.isfile(output_hit_TAB_file_path):
             raise ValueError("HMMER_SEARCH failed to create TAB file '"+output_hit_TAB_file_path+"'")
-        elif not os.path.getsize(output_hit_TAB_file_path+"'") > 0:
+        elif not os.path.getsize(output_hit_TAB_file_path) > 0:
             raise ValueError("HMMER_SEARCH created empty TAB file '"+output_hit_TAB_file_path+"'")
         if not os.path.isfile(output_hit_MSA_file_path):
             raise ValueError("HMMER_SEARCH failed to create MSA file '"+output_hit_MSA_file_path+"'")
-        elif not os.path.getsize(output_hit_MSA_file_path+"'") > 0:
+        elif not os.path.getsize(output_hit_MSA_file_path) > 0:
             raise ValueError("HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
 
 
