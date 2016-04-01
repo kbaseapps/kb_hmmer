@@ -171,10 +171,10 @@ class kb_hmmer(object):
             raise ServerError('Unknown', 0, 'An unknown server error occurred')
         return resp['result']
  
-    def HMMER_BasicSearch(self, params, json_rpc_context = None):
+    def HMMER_MSA_Search(self, params, json_rpc_context = None):
         if json_rpc_context and type(json_rpc_context) is not dict:
-            raise ValueError('Method HMMER_BasicSearch: argument json_rpc_context is not type dict as required.')
-        resp = self._call('kb_hmmer.HMMER_BasicSearch',
+            raise ValueError('Method HMMER_MSA_Search: argument json_rpc_context is not type dict as required.')
+        resp = self._call('kb_hmmer.HMMER_MSA_Search',
                           [params], json_rpc_context)
         return resp[0]
  

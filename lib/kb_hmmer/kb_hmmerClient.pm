@@ -112,9 +112,9 @@ sub new
 
 
 
-=head2 HMMER_BasicSearch
+=head2 HMMER_MSA_Search
 
-  $return = $obj->HMMER_BasicSearch($params)
+  $return = $obj->HMMER_MSA_Search($params)
 
 =over 4
 
@@ -130,6 +130,9 @@ HMMER_Params is a reference to a hash where the following keys are defined:
 	input_many_name has a value which is a kb_hmmer.data_obj_name
 	input_msa_name has a value which is a kb_hmmer.data_obj_name
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	e_value has a value which is a float
+	bitscore has a value which is a float
+	maxaccepts has a value which is a float
 workspace_name is a string
 data_obj_name is a string
 HMMER_Output is a reference to a hash where the following keys are defined:
@@ -150,6 +153,9 @@ HMMER_Params is a reference to a hash where the following keys are defined:
 	input_many_name has a value which is a kb_hmmer.data_obj_name
 	input_msa_name has a value which is a kb_hmmer.data_obj_name
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	e_value has a value which is a float
+	bitscore has a value which is a float
+	maxaccepts has a value which is a float
 workspace_name is a string
 data_obj_name is a string
 HMMER_Output is a reference to a hash where the following keys are defined:
@@ -173,7 +179,7 @@ Methods for HMMER search of an MSA against many sequences
 
 =cut
 
- sub HMMER_BasicSearch
+ sub HMMER_MSA_Search
 {
     my($self, @args) = @_;
 
@@ -182,7 +188,7 @@ Methods for HMMER search of an MSA against many sequences
     if ((my $n = @args) != 1)
     {
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function HMMER_BasicSearch (received $n, expecting 1)");
+							       "Invalid argument count for function HMMER_MSA_Search (received $n, expecting 1)");
     }
     {
 	my($params) = @args;
@@ -190,30 +196,30 @@ Methods for HMMER search of an MSA against many sequences
 	my @_bad_arguments;
         (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
         if (@_bad_arguments) {
-	    my $msg = "Invalid arguments passed to HMMER_BasicSearch:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    my $msg = "Invalid arguments passed to HMMER_MSA_Search:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-								   method_name => 'HMMER_BasicSearch');
+								   method_name => 'HMMER_MSA_Search');
 	}
     }
 
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-	method => "kb_hmmer.HMMER_BasicSearch",
+	method => "kb_hmmer.HMMER_MSA_Search",
 	params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
 	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
 					       code => $result->content->{error}->{code},
-					       method_name => 'HMMER_BasicSearch',
+					       method_name => 'HMMER_MSA_Search',
 					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
 					      );
 	} else {
 	    return wantarray ? @{$result->result} : $result->result->[0];
 	}
     } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method HMMER_BasicSearch",
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method HMMER_MSA_Search",
 					    status_line => $self->{client}->status_line,
-					    method_name => 'HMMER_BasicSearch',
+					    method_name => 'HMMER_MSA_Search',
 				       );
     }
 }
@@ -231,16 +237,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'HMMER_BasicSearch',
+                method_name => 'HMMER_MSA_Search',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method HMMER_BasicSearch",
+            error => "Error invoking method HMMER_MSA_Search",
             status_line => $self->{client}->status_line,
-            method_name => 'HMMER_BasicSearch',
+            method_name => 'HMMER_MSA_Search',
         );
     }
 }
@@ -413,6 +419,9 @@ workspace_name has a value which is a kb_hmmer.workspace_name
 input_many_name has a value which is a kb_hmmer.data_obj_name
 input_msa_name has a value which is a kb_hmmer.data_obj_name
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
+e_value has a value which is a float
+bitscore has a value which is a float
+maxaccepts has a value which is a float
 
 </pre>
 
@@ -425,6 +434,9 @@ workspace_name has a value which is a kb_hmmer.workspace_name
 input_many_name has a value which is a kb_hmmer.data_obj_name
 input_msa_name has a value which is a kb_hmmer.data_obj_name
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
+e_value has a value which is a float
+bitscore has a value which is a float
+maxaccepts has a value which is a float
 
 
 =end text

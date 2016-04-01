@@ -232,7 +232,6 @@ class kb_hmmer:
         #END_CONSTRUCTOR
         pass
 
-
     def HMMER_MSA_Search(self, ctx, params):
         # ctx is the context object
         # return variables are: returnVal

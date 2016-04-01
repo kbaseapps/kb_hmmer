@@ -24,7 +24,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "workspace_name",
     "input_many_name",
     "input_msa_name",
-    "output_filtered_name"
+    "output_filtered_name",
+    "e_value",
+    "bitscore",
+    "maxaccepts"
 })
 public class HMMERParams {
 
@@ -36,6 +39,12 @@ public class HMMERParams {
     private String inputMsaName;
     @JsonProperty("output_filtered_name")
     private String outputFilteredName;
+    @JsonProperty("e_value")
+    private Double eValue;
+    @JsonProperty("bitscore")
+    private Double bitscore;
+    @JsonProperty("maxaccepts")
+    private Double maxaccepts;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("workspace_name")
@@ -98,6 +107,51 @@ public class HMMERParams {
         return this;
     }
 
+    @JsonProperty("e_value")
+    public Double getEValue() {
+        return eValue;
+    }
+
+    @JsonProperty("e_value")
+    public void setEValue(Double eValue) {
+        this.eValue = eValue;
+    }
+
+    public HMMERParams withEValue(Double eValue) {
+        this.eValue = eValue;
+        return this;
+    }
+
+    @JsonProperty("bitscore")
+    public Double getBitscore() {
+        return bitscore;
+    }
+
+    @JsonProperty("bitscore")
+    public void setBitscore(Double bitscore) {
+        this.bitscore = bitscore;
+    }
+
+    public HMMERParams withBitscore(Double bitscore) {
+        this.bitscore = bitscore;
+        return this;
+    }
+
+    @JsonProperty("maxaccepts")
+    public Double getMaxaccepts() {
+        return maxaccepts;
+    }
+
+    @JsonProperty("maxaccepts")
+    public void setMaxaccepts(Double maxaccepts) {
+        this.maxaccepts = maxaccepts;
+    }
+
+    public HMMERParams withMaxaccepts(Double maxaccepts) {
+        this.maxaccepts = maxaccepts;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -110,7 +164,7 @@ public class HMMERParams {
 
     @Override
     public String toString() {
-        return ((((((((((("HMMERParams"+" [workspaceName=")+ workspaceName)+", inputManyName=")+ inputManyName)+", inputMsaName=")+ inputMsaName)+", outputFilteredName=")+ outputFilteredName)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((("HMMERParams"+" [workspaceName=")+ workspaceName)+", inputManyName=")+ inputManyName)+", inputMsaName=")+ inputMsaName)+", outputFilteredName=")+ outputFilteredName)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", maxaccepts=")+ maxaccepts)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

@@ -61,9 +61,9 @@ class JSONObjectEncoder(json.JSONEncoder):
 sync_methods = {}
 async_run_methods = {}
 async_check_methods = {}
-async_run_methods['kb_hmmer.HMMER_BasicSearch_async'] = ['kb_hmmer', 'HMMER_BasicSearch']
-async_check_methods['kb_hmmer.HMMER_BasicSearch_check'] = ['kb_hmmer', 'HMMER_BasicSearch']
-sync_methods['kb_hmmer.HMMER_BasicSearch'] = True
+async_run_methods['kb_hmmer.HMMER_MSA_Search_async'] = ['kb_hmmer', 'HMMER_MSA_Search']
+async_check_methods['kb_hmmer.HMMER_MSA_Search_check'] = ['kb_hmmer', 'HMMER_MSA_Search']
+sync_methods['kb_hmmer.HMMER_MSA_Search'] = True
 
 class AsyncJobServiceClient(object):
 
@@ -335,10 +335,10 @@ class Application(object):
         self.serverlog.set_log_level(6)
         self.rpc_service = JSONRPCServiceCustom()
         self.method_authentication = dict()
-        self.rpc_service.add(impl_kb_hmmer.HMMER_BasicSearch,
-                             name='kb_hmmer.HMMER_BasicSearch',
+        self.rpc_service.add(impl_kb_hmmer.HMMER_MSA_Search,
+                             name='kb_hmmer.HMMER_MSA_Search',
                              types=[dict])
-        self.method_authentication['kb_hmmer.HMMER_BasicSearch'] = 'required'
+        self.method_authentication['kb_hmmer.HMMER_MSA_Search'] = 'required'
         self.auth_client = biokbase.nexus.Client(
             config={'server': 'nexus.api.globusonline.org',
                     'verify_ssl': True,

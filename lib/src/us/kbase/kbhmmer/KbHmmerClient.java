@@ -142,7 +142,7 @@ public class KbHmmerClient {
     }
 
     /**
-     * <p>Original spec-file function name: HMMER_BasicSearch</p>
+     * <p>Original spec-file function name: HMMER_MSA_Search</p>
      * <pre>
      * Methods for HMMER search of an MSA against many sequences 
      * **
@@ -156,11 +156,11 @@ public class KbHmmerClient {
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public HMMEROutput hMMERBasicSearch(HMMERParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public HMMEROutput hMMERMSASearch(HMMERParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(params);
         TypeReference<List<HMMEROutput>> retType = new TypeReference<List<HMMEROutput>>() {};
-        List<HMMEROutput> res = caller.jsonrpcCall("kb_hmmer.HMMER_BasicSearch", args, retType, true, true, jsonRpcContext);
+        List<HMMEROutput> res = caller.jsonrpcCall("kb_hmmer.HMMER_MSA_Search", args, retType, true, true, jsonRpcContext);
         return res.get(0);
     }
 }
