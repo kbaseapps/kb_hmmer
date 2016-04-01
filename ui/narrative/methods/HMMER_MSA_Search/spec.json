@@ -70,30 +70,6 @@
             }
         },
         {
-            "id": "ident_thresh",
-            "optional": false,
-            "advanced": false,
-            "allow_multiple": false,
-            "default_values": [ "0.97" ],
-            "field_type": "text",
-            "text_options": {
-                "validate_as": "float",
-                "min_integer" : 0
-            }
-        },
-        {
-            "id": "overlap_fraction",
-            "optional": true,
-            "advanced": true,
-            "allow_multiple": false,
-            "default_values": [ "0.5" ],
-            "field_type": "text",
-            "text_options": {
-                "validate_as": "float",
-                "min_integer" : 0
-            }
-        },
-        {
             "id": "maxaccepts",
             "optional": true,
             "advanced": true,
@@ -135,14 +111,6 @@
                 {
                     "input_parameter": "bitscore",
                     "target_property": "bitscore"
-                },
-                {
-                    "input_parameter": "ident_thresh",
-                    "target_property": "ident_thresh"
-                },
-                {
-                    "input_parameter": "overlap_fraction",
-                    "target_property": "overlap_fraction"
                 },
                 {
                     "input_parameter": "maxaccepts",
