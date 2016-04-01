@@ -258,9 +258,6 @@ class kb_hmmer:
 
         #### Get the input_msa object
         ##
-        if input_one_feature_id == None:
-            raise ValueError("input_one_feature_id was not obtained")
-        master_row_idx = 0
         try:
             ws = workspaceService(self.workspaceURL, token=ctx['token'])
             objects = ws.get_objects([{'ref': params['workspace_name']+'/'+params['input_msa_name']}])
@@ -287,15 +284,6 @@ class kb_hmmer:
                 for row_id in row_order:
                     default_row_labels[row_id] = row_id
 
-            # determine row index of query sequence
-            for row_id in row_order:
-                master_row_idx += 1
-                if row_id == input_one_feature_id:
-                    break
-            if master_row_idx == 0:
-                raise ValueError("failed to find query id within MSA")
-
-            
             # export features to FASTA formatted MSA
             input_MSA_file_path = os.path.join(self.scratch, params['input_msa_name']+".fasta")
             self.log(console, 'writing MSA file: '+input_MSA_file_path)
@@ -624,23 +612,23 @@ class kb_hmmer:
 
 
         # Check for output
-        if not os.path.isfile(output_TAB_file_path):
-            raise ValueError("HMMER_SEARCH failed to create TAB file '"+output_TAB_file_path+"'")
-        elif not os.path.getsize(output_TAB_file_path+"'") > 0:
-            raise ValueError("HMMER_SEARCH created empty TAB file '"+output_TAB_file_path+"'")
-        if not os.path.isfile(output_MSA_file_path):
-            raise ValueError("HMMER_SEARCH failed to create MSA file '"+output_MSA_file_path+"'")
-        elif not os.path.getsize(output_MSA_file_path+"'") > 0:
-            raise ValueError("HMMER_SEARCH created empty MSA file '"+output_MSA_file_path+"'")
+        if not os.path.isfile(output_hit_TAB_file_path):
+            raise ValueError("HMMER_SEARCH failed to create TAB file '"+output_hit_TAB_file_path+"'")
+        elif not os.path.getsize(output_hit_TAB_file_path+"'") > 0:
+            raise ValueError("HMMER_SEARCH created empty TAB file '"+output_hit_TAB_file_path+"'")
+        if not os.path.isfile(output_hit_MSA_file_path):
+            raise ValueError("HMMER_SEARCH failed to create MSA file '"+output_hit_MSA_file_path+"'")
+        elif not os.path.getsize(output_hit_MSA_file_path+"'") > 0:
+            raise ValueError("HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
 
 
         # DEBUG
         report = "TAB:\n\n"
-        with open (output_TAB_file_path, 'r') as output_handle:
+        with open (output_hit_TAB_file_path, 'r') as output_handle:
             for line in output_handle:
                 report += line+"\n"
         report += "\n\nMSA:\n\n"
-        with open (output_MSA_file_path, 'r') as output_handle:
+        with open (output_hit_MSA_file_path, 'r') as output_handle:
             for line in output_handle:
                 report += line+"\n"
 
