@@ -731,11 +731,11 @@ class kb_hmmer:
 
         # DEBUG
         report = "TAB:\n\n"
-        while open (output_TAB_file_path, 'r') as output_handle:
+        with open (output_TAB_file_path, 'r') as output_handle:
             for line in output_handle:
                 report += line+"\n"
         report += "\n\nMSA:\n\n"
-        while open (output_MSA_file_path, 'r') as output_handle:
+        with open (output_MSA_file_path, 'r') as output_handle:
             for line in output_handle:
                 report += line+"\n"
 
