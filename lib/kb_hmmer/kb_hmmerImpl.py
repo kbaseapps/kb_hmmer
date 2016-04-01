@@ -585,7 +585,7 @@ class kb_hmmer:
         #
         # SYNTAX (from http://eddylab.org/software/hmmer3/3.1b2/Userguide.pdf)
         #
-        # hmmsearch --tblout -o <output> -A <MSA_out> --noali --notextw -E <e_value> -T <bit_score> <hmmfile> <seqdb>
+        # hmmsearch --tblout <TAB_out> -A <MSA_out> --noali --notextw -E <e_value> -T <bit_score> <hmmfile> <seqdb>
         #
         hmmer_search_bin = self.HMMER_SEARCH
         hmmer_search_cmd = [hmmer_search_bin]
@@ -613,7 +613,6 @@ class kb_hmmer:
 
         # this is command for basic search mode
         hmmer_search_cmd.append('--tblout')
-        hmmer_search_cmd.append('-o')
         hmmer_search_cmd.append(output_hit_TAB_file_path)
         hmmer_search_cmd.append('-A')
         hmmer_search_cmd.append(output_hit_MSA_file_path)
