@@ -614,9 +614,9 @@ class kb_hmmer:
         # this is command for basic search mode
         hmmer_search_cmd.append('--tblout')
         hmmer_search_cmd.append('-o')
-        hmmer_search_cmd.append(output_TAB_file_path)
+        hmmer_search_cmd.append(output_hit_TAB_file_path)
         hmmer_search_cmd.append('-A')
-        hmmer_search_cmd.append(output_MSA_file_path)
+        hmmer_search_cmd.append(output_hit_MSA_file_path)
         hmmer_search_cmd.append('--noali')
         hmmer_search_cmd.append('--notextw')
         hmmer_search_cmd.append('-E')
