@@ -667,14 +667,226 @@ class kb_hmmer:
 
 
         # DEBUG
-        report = "TAB:\n\n"
-        with open (output_hit_TAB_file_path, 'r') as output_handle:
-            for line in output_handle:
-                report += line+"\n"
-        report += "\n\nMSA:\n\n"
-        with open (output_hit_MSA_file_path, 'r') as output_handle:
-            for line in output_handle:
-                report += line+"\n"
+#        report = "TAB:\n\n"
+#        with open (output_hit_TAB_file_path, 'r') as output_handle:
+#            for line in output_handle:
+#                report += line+"\n"
+#        report += "\n\nMSA:\n\n"
+#        with open (output_hit_MSA_file_path, 'r') as output_handle:
+#            for line in output_handle:
+#                report += line+"\n"
+
+
+        # Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
+        #
+        self.log(console, 'PARSING HMMER ALIGNMENT OUTPUT')
+        if not os.path.isfile(output_hit_TAB_file_path):
+            raise ValueError("failed to create HMMER output: "+output_hit_TAB_file_path)
+        elif not os.path.getsize(output_hit_TAB_file_path) > 0:
+            raise ValueError("created empty file for HMMER output: "+output_hit_TAB_file_path)
+        hit_seq_ids = dict()
+        output_hit_TAB_file_handle = open (output_hit_TAB_file_path, "r", 0)
+        output_aln_buf = output_hit_TAB_file_handle.readlines()
+        output_hit_TAB_file_handle.close()
+        hit_total = 0
+        high_bitscore_line = dict()
+        high_bitscore_score = dict()
+        high_bitscore_ident = dict()
+        high_bitscore_alnlen = dict()
+        hit_order = []
+        hit_buf = []
+        #header_done = False
+        for line in output_aln_buf:
+            if line.startswith('#'):
+                #if not header_done:
+                #    hit_buf.append(line)
+                continue
+            #header_done = True
+            #self.log(console,'HIT LINE: '+line)  # DEBUG
+            hit_info = re.split ('\s+', line)
+            hit_seq_id            = hit_info[0]
+            hit_accession         = hit_info[1]
+            query_name            = hit_info[2]
+            query_accession       = hit_info[3]
+            hit_e_value           = float(hit_info[4])
+            hit_bitscore          = float(hit_info[5])
+            hit_bias              = float(hit_info[6])
+            hit_e_value_best_dom  = float(hit_info[7])
+            hit_bitscore_best_dom = float(hit_info[8])
+            hit_bias_best_dom     = float(hit_info[9])
+            hit_expected_dom_n    = float(hit_info[10])
+            hit_regions           = float(hit_info[11])
+            hit_regions_multidom  = float(hit_info[12])
+            hit_overlaps          = float(hit_info[13])
+            hit_envelopes         = float(hit_info[14])
+            hit_dom_n             = float(hit_info[15])
+            hit_doms_within_rep_thresh = float(hit_info[16])
+            hit_doms_within_inc_thresh = float(hit_info[17])
+            hit_desc                   = hit_info[18]
+
+            try:
+                if hit_bitscore > high_bitscore_score[hit_seq_id]:
+                    high_bitscore_score[hit_seq_id] = hit_bitscore
+                    high_bitscore_line[hit_seq_id] = line
+            except:
+                hit_order.append(hit_seq_id)
+                high_bitscore_score[hit_seq_id] = hit_bitscore
+                high_bitscore_line[hit_seq_id] = line
+
+        for hit_seq_id in hit_order:
+            hit_buf.append(high_bitscore_line[hit_seq_id])
+
+            #self.log(console,"HIT_SEQ_ID: '"+hit_seq_id+"'")
+            #if 'ident_thresh' in params and float(params['ident_thresh']) > float(high_bitscore_ident[hit_seq_id]):
+            #    continue
+            if 'bitscore' in params and float(params['bitscore']) > float(high_bitscore_score[hit_seq_id]):
+                continue
+            #if 'overlap_fraction' in params and float(params['overlap_fraction']) > float(high_bitscore_alnlen[hit_seq_id])/float(query_len):
+            #    continue
+            if 'maxaccepts' in params and params['maxaccepts'] != None and hit_total == int(params['maxaccepts']):
+                break
+            
+            hit_total += 1
+            hit_seq_ids[hit_seq_id] = True
+            self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
+        
+
+        self.log(console, 'EXTRACTING HITS FROM INPUT')
+        self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
+
+
+        # FeatureSet input -> FeatureSet output
+        #
+        if many_type_name == 'FeatureSet':
+
+            seq_total = len(input_many_featureSet['elements'].keys())
+
+            output_featureSet = dict()
+            if 'description' in input_many_featureSet and input_many_featureSet['description'] != None:
+                output_featureSet['description'] = input_many_featureSet['description'] + " - psiBLAST_msa_start_Search filtered"
+            else:
+                output_featureSet['description'] = "psiBLAST_msa_start_Search filtered"
+            output_featureSet['element_ordering'] = []
+            output_featureSet['elements'] = dict()
+            if 'element_ordering' in input_many_featureSet and input_many_featureSet['element_ordering'] != None:
+                for fId in input_many_featureSet['element_ordering']:
+                    try:
+                        in_filtered_set = hit_seq_ids[fId]
+                        #self.log(console, 'FOUND HIT '+fId)  # DEBUG
+                        output_featureSet['element_ordering'].append(fId)
+                        output_featureSet['elements'][fId] = input_many_featureSet['elements'][fId]
+                    except:
+                        pass
+            else:
+                fId_list = input_many_featureSet['elements'].keys()
+                self.log(console,"ADDING FEATURES TO FEATURESET")
+                for fId in sorted(fId_list):
+                    try:
+                        #self.log(console,"checking '"+fId+"'")
+                        in_filtered_set = hit_seq_ids[fId]
+                        #self.log(console, 'FOUND HIT '+fId)  # DEBUG
+                        output_featureSet['element_ordering'].append(fId)
+                        output_featureSet['elements'][fId] = input_many_featureSet['elements'][fId]
+                    except:
+                        pass
+
+        # Parse Genome hits into FeatureSet
+        #
+        elif many_type_name == 'Genome':
+            seq_total = 0
+
+            output_featureSet = dict()
+            if 'scientific_name' in input_many_genome and input_many_genome['scientific_name'] != None:
+                output_featureSet['description'] = input_many_genome['scientific_name'] + " - psiBLAST_msa_start_Search filtered"
+            else:
+                output_featureSet['description'] = "psiBLAST_msa_start_Search filtered"
+            output_featureSet['element_ordering'] = []
+            output_featureSet['elements'] = dict()
+            for feature in input_many_genome['features']:
+                seq_total += 1
+                try:
+                    in_filtered_set = hit_seq_ids[feature['id']]
+                    #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
+                    output_featureSet['element_ordering'].append(feature['id'])
+                    output_featureSet['elements'][feature['id']] = [input_many_genome_ref]
+                except:
+                    pass
+
+        # Parse GenomeSet hits into FeatureSet
+        #
+        elif many_type_name == 'GenomeSet':
+            seq_total = 0
+
+            output_featureSet = dict()
+            if 'description' in input_many_genomeSet and input_many_genomeSet['description'] != None:
+                output_featureSet['description'] = input_many_genomeSet['description'] + " - psiBLAST_msa_start_Search filtered"
+            else:
+                output_featureSet['description'] = "psiBLAST_msa_start_Search filtered"
+            output_featureSet['element_ordering'] = []
+            output_featureSet['elements'] = dict()
+
+            for genome_name in input_many_genomeSet['elements'].keys():
+                if 'ref' in input_many_genomeSet['elements'][genome_name] and \
+                        input_many_genomeSet['elements'][genome_name]['ref'] != None:
+                    genomeRef = input_many_genomeSet['elements'][genome_name]['ref']
+                    genome = ws.get_objects([{'ref':genomeRef}])[0]['data']
+                    for feature in genome['features']:
+                        seq_total += 1
+                        try:
+                            in_filtered_set = hit_seq_ids[feature['id']]
+                            #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
+                            output_featureSet['element_ordering'].append(feature['id'])
+                            output_featureSet['elements'][feature['id']] = [genomeRef]
+                        except:
+                            pass
+
+                elif 'data' in input_many_genomeSet['elements'][genome_name] and \
+                        input_many_genomeSet['elements'][genome_name]['data'] != None:
+#                    genome = input_many_genomeSet['elements'][genome_name]['data']
+#                    for feature in genome['features']:
+#                        #self.log(console,"kbase_id: '"+feature['id']+"'")  # DEBUG
+#                        seq_total += 1
+#                        try:
+#                            in_filtered_set = hit_seq_ids[feature['id']]
+#                            #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
+#                            output_featureSet['element_ordering'].append(feature['id'])
+                    raise ValueError ("FAILURE: unable to address genome object that is stored within 'data' field of genomeSet object")
+#                            output_featureSet['elements'][feature['id']] = [genomeRef_is_inside_data_within_genomeSet_object_and_that_cant_be_addressed]
+#                        except:
+#                            pass
+
+
+        # load the method provenance from the context object
+        #
+        self.log(console,"SETTING PROVENANCE")  # DEBUG
+        provenance = [{}]
+        if 'provenance' in ctx:
+            provenance = ctx['provenance']
+        # add additional info to provenance here, in this case the input data object reference
+        provenance[0]['input_ws_objects'] = []
+#        if 'input_one_name' in params and params['input_one_name'] != None:
+#            provenance[0]['input_ws_objects'].append(params['workspace_name']+'/'+params['input_one_name'])
+        provenance[0]['input_ws_objects'].append(params['workspace_name']+'/'+params['input_msa_name'])
+        provenance[0]['input_ws_objects'].append(params['workspace_name']+'/'+params['input_many_name'])
+        provenance[0]['service'] = 'kb_hmmer'
+        provenance[0]['method'] = 'HMMER_MSA_Search'
+
+
+        # Upload results
+        #
+        self.log(console,"UPLOADING RESULTS")  # DEBUG
+
+        # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+        new_obj_info = ws.save_objects({
+                            'workspace': params['workspace_name'],
+                            'objects':[{
+                                    'type': 'KBaseCollections.FeatureSet',
+                                    'data': output_featureSet,
+                                    'name': params['output_filtered_name'],
+                                    'meta': {},
+                                    'provenance': provenance
+                                }]
+                        })
 
 
         # build output report object
@@ -697,8 +909,7 @@ class kb_hmmer:
                         'name':reportName,
                         'meta':{},
                         'hidden':1,
-                        #'provenance':provenance  # DEBUG
-                        'provenance':None
+                        'provenance':provenance  # DEBUG
                     }
                 ]
             })[0]
