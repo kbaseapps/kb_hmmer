@@ -305,7 +305,7 @@ class kb_hmmer:
             # get alignment line (just storing identity markers)
             conservation_symbol = []
             for i in range(row_len):
-                first_seen_char = MSA_in['alignment'][row_id_0]
+                first_seen_char = MSA_in['alignment'][row_id_0][i]
                 symbol = '*'
                 for row_id in row_order:
                     if MSA_in['alignment'][row_id][i] == '-' or MSA_in['alignment'][row_id][i] != first_seen_char:
