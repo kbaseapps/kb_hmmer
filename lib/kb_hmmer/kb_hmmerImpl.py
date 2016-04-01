@@ -304,7 +304,7 @@ class kb_hmmer:
                 if len(MSA_in['alignment'][row_id]) != row_len:
                     raise ValueError("MSA alignment rows are not constant length")
             # get alignment line (just storing identity markers)
-            conservation_symbol = []
+            conservation_symbol = ''
             for i in range(row_len):
                 first_seen_char = MSA_in['alignment'][row_id_0][i]
                 symbol = '*'
@@ -312,7 +312,7 @@ class kb_hmmer:
                     if MSA_in['alignment'][row_id][i] == '-' or MSA_in['alignment'][row_id][i] != first_seen_char:
                         symbol = ' '
                         break
-                conservation_symbol.append(symbol)
+                conservation_symbol += symbol
 
             # break up MSA into 60 char chunks
             records = []
