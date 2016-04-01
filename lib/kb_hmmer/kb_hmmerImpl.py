@@ -288,7 +288,9 @@ class kb_hmmer:
             input_MSA_file_path = os.path.join(self.scratch, params['input_msa_name']+".fasta")
             self.log(console, 'writing MSA file: '+input_MSA_file_path)
 
+            # set header
             header = 'CLUSTAL W (1.81) multiple sequence alignment'
+
             # get longest id
             longest_row_id_len = 0
             for row_id in row_order:
@@ -309,7 +311,7 @@ class kb_hmmer:
                     if MSA_in['alignment'][row_id][i] == '-' or MSA_in['alignment'][row_id][i] != first_seen_char:
                         symbol = ' '
                         break
-                conservation_symbol[i] = symbol:
+                conservation_symbol[i] = symbol
 
             # break up MSA into 60 char chunks
             records = []
