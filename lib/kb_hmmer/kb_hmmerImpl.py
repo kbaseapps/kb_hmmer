@@ -346,6 +346,7 @@ class kb_hmmer:
             report += "MSA:\n"
             report += header+"\n\n"
             report += "\n".join(records)+"\n"
+            self.log(console,report)
 
 
             # Determine whether nuc or protein sequences
