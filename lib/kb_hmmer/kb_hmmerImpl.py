@@ -696,6 +696,7 @@ class kb_hmmer:
         hit_buf = []
         #header_done = False
         for line in output_aln_buf:
+            hit_buf.append(line)
             if line.startswith('#'):
                 #if not header_done:
                 #    hit_buf.append(line)
@@ -733,7 +734,7 @@ class kb_hmmer:
                 high_bitscore_line[hit_seq_id] = line
 
         for hit_seq_id in hit_order:
-            hit_buf.append(high_bitscore_line[hit_seq_id])
+            #hit_buf.append(high_bitscore_line[hit_seq_id])
 
             #self.log(console,"HIT_SEQ_ID: '"+hit_seq_id+"'")
             #if 'ident_thresh' in params and float(params['ident_thresh']) > float(high_bitscore_ident[hit_seq_id]):
@@ -891,6 +892,11 @@ class kb_hmmer:
         # build output report object
         #
         self.log(console,"BUILDING REPORT")  # DEBUG
+        report += 'sequences in many set: '+str(seq_total)+"\n"
+        report += 'sequences in hit set:  '+str(hit_total)+"\n"
+        report += "\n"
+        for line in hit_buf:
+            report += line
 
         reportObj = {
             'objects_created':[{'ref':params['workspace_name']+'/'+params['output_filtered_name'], 'description':'HMMER_MSA_Search hits'}],
