@@ -500,7 +500,7 @@ class kb_hmmer:
         HMM_file_path = input_MSA_file_path+".HMM"
 
         hmmer_build_cmd.append('--informat')
-        hmmer_build_cmd.append('fasta')
+        hmmer_build_cmd.append('FASTA')
         hmmer_build_cmd.append(HMM_file_path)
         hmmer_build_cmd.append(input_MSA_file_path)
 
