@@ -640,7 +640,7 @@ class kb_hmmer:
         if not os.path.isfile(HMM_file_path):
             raise ValueError("HMMER_BUILD failed to create HMM file '"+HMM_file_path+"'")
         elif not os.path.getsize(HMM_file_path+"'") > 0:
-            raise ValueError("HMMER_BUILD created empty HMM file '"+HMM_file_path"'")
+            raise ValueError("HMMER_BUILD created empty HMM file '"+HMM_file_path+"'")
 
 
         ### Construct the HMMER_SEARCH command
