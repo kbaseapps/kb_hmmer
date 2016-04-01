@@ -311,7 +311,7 @@ class kb_hmmer:
                     if MSA_in['alignment'][row_id][i] == '-' or MSA_in['alignment'][row_id][i] != first_seen_char:
                         symbol = ' '
                         break
-                conservation_symbol[i] = symbol
+                conservation_symbol.append(symbol)
 
             # break up MSA into 60 char chunks
             records = []
