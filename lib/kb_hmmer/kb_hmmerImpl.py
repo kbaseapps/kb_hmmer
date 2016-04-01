@@ -722,11 +722,11 @@ class kb_hmmer:
         if not os.path.isfile(output_TAB_file_path):
             raise ValueError("HMMER_SEARCH failed to create TAB file '"+output_TAB_file_path+"'")
         elif not os.path.getsize(output_TAB_file_path+"'") > 0:
-            raise ValueError("HMMER_SEARCH created empty TAB file '"+output_TAB_file_path"'")
+            raise ValueError("HMMER_SEARCH created empty TAB file '"+output_TAB_file_path+"'")
         if not os.path.isfile(output_MSA_file_path):
             raise ValueError("HMMER_SEARCH failed to create MSA file '"+output_MSA_file_path+"'")
         elif not os.path.getsize(output_MSA_file_path+"'") > 0:
-            raise ValueError("HMMER_SEARCH created empty MSA file '"+output_MSA_file_path"'")
+            raise ValueError("HMMER_SEARCH created empty MSA file '"+output_MSA_file_path+"'")
 
 
         # DEBUG
