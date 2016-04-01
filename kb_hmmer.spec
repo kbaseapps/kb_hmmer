@@ -33,11 +33,12 @@ module kb_hmmer {
 	data_obj_name  input_msa_name;
         data_obj_name  output_filtered_name;
 
-/*	float ident_thresh;
 	float e_value;
 	float bitscore;
-	float overlap_fraction;
 	float maxaccepts;
+
+/*	float ident_thresh;
+	float overlap_fraction;
 */
     } HMMER_Params;
 
