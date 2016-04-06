@@ -438,7 +438,7 @@ class kb_hmmer:
                                 record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=genome['id'])
                                 records.append(record)
 
-            if len(invalid_msgs) == 0:
+            if len(invalid_msgs) == 0 and len(records) > 0:
                 SeqIO.write(records, many_forward_reads_file_path, "fasta")
 
         # Genome
@@ -472,7 +472,7 @@ class kb_hmmer:
                         record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=input_many_genome['id'])
                         records.append(record)
 
-            if len(invalid_msgs) == 0:
+            if len(invalid_msgs) == 0 and len(records) > 0:
                 SeqIO.write(records, many_forward_reads_file_path, "fasta")
 
         # GenomeSet
@@ -534,7 +534,7 @@ class kb_hmmer:
                 else:
                     self.invalid_log(invalid_msgs,'genome '+genome_name+' missing')
 
-            if len(invalid_msgs) == 0:
+            if len(invalid_msgs) == 0 and len(records) > 0:
                 SeqIO.write(records, many_forward_reads_file_path, "fasta")
             
         # Missing proper input_many_type
