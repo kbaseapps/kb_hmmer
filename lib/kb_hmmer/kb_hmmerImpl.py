@@ -545,6 +545,7 @@ class kb_hmmer:
 
         # check for failed input file creation
         #
+        HMM_file_path = input_MSA_file_path+".HMM"
         if not os.path.isfile(HMM_file_path):
             self.invalid_log(invalid_msgs,"no such file '"+HMM_file_path+"'")
         elif not os.path.getsize(HMM_file_path):
@@ -622,8 +623,6 @@ class kb_hmmer:
             raise ValueError("no such file '"+input_MSA_file_path+"'")
         elif not os.path.getsize(input_MSA_file_path) > 0:
             raise ValueError("empty file '"+input_MSA_file_path+"'")
-
-        HMM_file_path = input_MSA_file_path+".HMM"
 
         hmmer_build_cmd.append('--informat')
         hmmer_build_cmd.append('CLUSTAL')
