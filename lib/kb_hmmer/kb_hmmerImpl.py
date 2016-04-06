@@ -545,7 +545,7 @@ class kb_hmmer:
         #
         # hmmbuild --informat fasta <hmmfile.out> <msafile>
         #
-        if len(invalid_msgs) == 0:
+        #if len(invalid_msgs) == 0:  # DEBUG better to write some seqs rather than indent subsequent code blocks!  I'm soooo lazy!
         hmmer_build_bin = self.HMMER_BUILD
         hmmer_build_cmd = [hmmer_build_bin]
 
