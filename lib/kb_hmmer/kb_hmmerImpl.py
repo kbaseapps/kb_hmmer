@@ -374,6 +374,8 @@ class kb_hmmer:
                 if NUC_MSA_pattern.match(MSA_in['alignment'][row_id]) == None:
                     all_seqs_nuc = False
                     break
+            if all_seqs_nuc:
+                self.invalid_log(invalid_msgs,"HMMER needs a protein MSA.  This appears to be only nucleotides")
 
         # Missing proper input_type
         #
@@ -435,8 +437,9 @@ class kb_hmmer:
                                 #record = SeqRecord(Seq(feature['dna_sequence']), id=feature['id'], description=genome['id'])
                                 record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=genome['id'])
                                 records.append(record)
-            SeqIO.write(records, many_forward_reads_file_path, "fasta")
 
+            if len(invalid_msgs) == 0:
+                SeqIO.write(records, many_forward_reads_file_path, "fasta")
 
         # Genome
         #
@@ -468,8 +471,9 @@ class kb_hmmer:
                     else:
                         record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=input_many_genome['id'])
                         records.append(record)
-            SeqIO.write(records, many_forward_reads_file_path, "fasta")
 
+            if len(invalid_msgs) == 0:
+                SeqIO.write(records, many_forward_reads_file_path, "fasta")
 
         # GenomeSet
         #
@@ -537,6 +541,18 @@ class kb_hmmer:
         #
         else:
             raise ValueError('Cannot yet handle input_many type of: '+type_name)
+
+
+        # check for failed input file creation
+        #
+        if not os.path.isfile(HMM_file_path):
+            self.invalid_log(invalid_msgs,"no such file '"+HMM_file_path+"'")
+        elif not os.path.getsize(HMM_file_path):
+            self.invalid_log(invalid_msgs,"empty file '"+HMM_file_path+"'")
+        if not os.path.isfile(many_forward_reads_file_path):
+            self.invalid_log(invalid_msgs,"no such file '"+many_forward_reads_file_path+"'")
+        elif not os.path.getsize(many_forward_reads_file_path):
+            self.invalid_log(invalid_msgs,"empty file '"+many_forward_reads_file_path+"'")
 
 
         # input data failed validation.  Need to return
