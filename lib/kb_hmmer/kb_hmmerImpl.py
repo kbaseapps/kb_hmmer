@@ -530,13 +530,64 @@ class kb_hmmer:
                 else:
                     self.invalid_log(invalid_msgs,'genome '+genome_name+' missing')
 
-            #if len(invalid_msgs) == 0:  # DEBUG better to write some seqs rather than indent subsequent code blocks!  I'm soooo lazy!
-            SeqIO.write(records, many_forward_reads_file_path, "fasta")
+            if len(invalid_msgs) == 0:
+                SeqIO.write(records, many_forward_reads_file_path, "fasta")
             
         # Missing proper input_many_type
         #
         else:
-            raise ValueError('Cannot yet handle input_many type of: '+type_name)            
+            raise ValueError('Cannot yet handle input_many type of: '+type_name)
+
+
+        # input data failed validation.  Need to return
+        #
+        if len(invalid_msgs) > 0:
+
+            # load the method provenance from the context object
+            #
+            self.log(console,"SETTING PROVENANCE")  # DEBUG
+            provenance = [{}]
+            if 'provenance' in ctx:
+                provenance = ctx['provenance']
+            # add additional info to provenance here, in this case the input data object reference
+            provenance[0]['input_ws_objects'] = []
+            provenance[0]['input_ws_objects'].append(params['workspace_name']+'/'+params['input_msa_name'])
+            provenance[0]['input_ws_objects'].append(params['workspace_name']+'/'+params['input_many_name'])
+            provenance[0]['service'] = 'kb_hmmer'
+            provenance[0]['method'] = 'HMMER_MSA_Search'
+
+
+            # build output report object
+            #
+            self.log(console,"BUILDING REPORT")  # DEBUG
+            report += "FAILURE:\n\n"+"\n".join(invalid_msgs)+"\n"
+            reportObj = {
+                'objects_created':[],
+                'text_message':report
+                }
+
+            reportName = 'hmmer_report_'+str(hex(uuid.getnode()))
+            ws = workspaceService(self.workspaceURL, token=ctx['token'])
+            report_obj_info = ws.save_objects({
+                    #'id':info[6],
+                    'workspace':params['workspace_name'],
+                    'objects':[
+                        {
+                        'type':'KBaseReport.Report',
+                        'data':reportObj,
+                        'name':reportName,
+                        'meta':{},
+                        'hidden':1,
+                        'provenance':provenance  # DEBUG
+                        }
+                        ]
+                    })[0]
+
+            self.log(console,"BUILDING RETURN OBJECT")
+            returnVal = { 'report_name': reportName,
+                      'report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
+                      }
+            return returnVal
 
 
         # Build HMM from MSA
@@ -545,7 +596,6 @@ class kb_hmmer:
         #
         # hmmbuild --informat fasta <hmmfile.out> <msafile>
         #
-        #if len(invalid_msgs) == 0:  # DEBUG better to write some seqs rather than indent subsequent code blocks!  I'm soooo lazy!
         hmmer_build_bin = self.HMMER_BUILD
         hmmer_build_cmd = [hmmer_build_bin]
 
