@@ -70,6 +70,14 @@ class kb_hmmer:
         print(message)
         sys.stdout.flush()
 
+    # target is a list for collecting log messages pertaining to failed validation tests  
+    def invalid_log(self, target, message):        
+        # we should do something better here...
+        if target is not None:
+            target.append(message)
+        #print(message)
+        #sys.stdout.flush()
+
     def get_single_end_read_library(self, ws_data, ws_info, forward):
         pass
 
@@ -237,6 +245,7 @@ class kb_hmmer:
         # return variables are: returnVal
         #BEGIN HMMER_MSA_Search
         console = []
+        invalid_msgs = []
         self.log(console,'Running HMMER_MSA_Search with params=')
         self.log(console, "\n"+pformat(params))
         report = ''
@@ -416,11 +425,12 @@ class kb_hmmer:
 
                             # HMMER SEARCH is prot-prot in this implementation
                             if feature['type'] != 'CDS':
-                                self.log(console,"skipping non-CDS feature "+feature['id'])
+                                self.log(console,"skipping non-CDS feature "+feature['id']+" in featureSet "+params['input_many_name'])
                                 continue
                             elif 'protein_translation' not in feature or feature['protein_translation'] == None:
-                                self.log(console,"bad CDS feature "+feature['id'])
-                                raise ValueError("bad CDS feature "+feature['id'])
+                                self.log(console,"bad CDS feature "+feature['id']+" in featureSet "+params['input_many_name'])
+                                self.invalid_log(invalid_msgs,"bad CDS feature "+feature['id']+" in featureSet "+params['input_many_name'])
+                                continue
                             else:
                                 #record = SeqRecord(Seq(feature['dna_sequence']), id=feature['id'], description=genome['id'])
                                 record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=genome['id'])
@@ -453,7 +463,8 @@ class kb_hmmer:
                         continue
                     elif 'protein_translation' not in feature or feature['protein_translation'] == None:
                         self.log(console,"bad CDS feature "+feature['id'])
-                        raise ValueError("bad CDS feature "+feature['id'])
+                        self.invalid_log(invalid_msgs,"bad CDS feature "+feature['id']+" in genome "+params['input_many_name'])
+                        continue
                     else:
                         record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=input_many_genome['id'])
                         records.append(record)
@@ -488,7 +499,8 @@ class kb_hmmer:
                                 continue
                             elif 'protein_translation' not in feature or feature['protein_translation'] == None:
                                 self.log(console,"bad CDS feature "+feature['id'])
-                                raise ValueError("bad CDS feature "+feature['id'])
+                                self.invalid_log(invalid_msgs,"bad CDS feature "+feature['id']+" in genome "+genome_name)
+                                continue
                             else:
                                 record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=genome['id'])
                                 records.append(record)
@@ -505,17 +517,20 @@ class kb_hmmer:
                             # HMMER SEARCH is prot-prot in this implementation
                             #record = SeqRecord(Seq(feature['dna_sequence']), id=feature['id'], description=genome['id'])
                             if feature['type'] != 'CDS':
+                                #self.log(console,"skipping non-CDS feature "+feature['id'])  # too much chatter for a Genome
                                 continue
                             elif 'protein_translation' not in feature or feature['protein_translation'] == None:
                                 self.log(console,"bad CDS feature "+feature['id'])
-                                raise ValueError("bad CDS feature "+feature['id'])
+                                self.invalid_log(invalid_msgs,"bad CDS feature "+feature['id']+" in genome "+genome_name)
+                                continue
                             else:
                                 record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=genome['id'])
                                 records.append(record)
 
                 else:
-                    raise ValueError('genome '+genome_name+' missing')
+                    self.invalid_log(invalid_msgs,'genome '+genome_name+' missing')
 
+            #if len(invalid_msgs) == 0:  # DEBUG better to write some seqs rather than indent subsequent code blocks!  I'm soooo lazy!
             SeqIO.write(records, many_forward_reads_file_path, "fasta")
             
         # Missing proper input_many_type
@@ -530,6 +545,7 @@ class kb_hmmer:
         #
         # hmmbuild --informat fasta <hmmfile.out> <msafile>
         #
+        if len(invalid_msgs) == 0:
         hmmer_build_bin = self.HMMER_BUILD
         hmmer_build_cmd = [hmmer_build_bin]
 
@@ -874,10 +890,11 @@ class kb_hmmer:
 
         # Upload results
         #
-        self.log(console,"UPLOADING RESULTS")  # DEBUG
+        if len(invalid_msgs) == 0:
+            self.log(console,"UPLOADING RESULTS")  # DEBUG
 
-        # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
-        new_obj_info = ws.save_objects({
+            # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+            new_obj_info = ws.save_objects({
                             'workspace': params['workspace_name'],
                             'objects':[{
                                     'type': 'KBaseCollections.FeatureSet',
@@ -892,18 +909,25 @@ class kb_hmmer:
         # build output report object
         #
         self.log(console,"BUILDING REPORT")  # DEBUG
-        report += 'sequences in many set: '+str(seq_total)+"\n"
-        report += 'sequences in hit set:  '+str(hit_total)+"\n"
-        report += "\n"
-        for line in hit_buf:
-            report += line
-
-        reportObj = {
-            'objects_created':[{'ref':params['workspace_name']+'/'+params['output_filtered_name'], 'description':'HMMER_MSA_Search hits'}],
-            'text_message':report
-        }
+        if len(invalid_msgs) == 0:
+            report += 'sequences in many set: '+str(seq_total)+"\n"
+            report += 'sequences in hit set:  '+str(hit_total)+"\n"
+            report += "\n"
+            for line in hit_buf:
+                report += line
+            reportObj = {
+                'objects_created':[{'ref':params['workspace_name']+'/'+params['output_filtered_name'], 'description':'HMMER_MSA_Search hits'}],
+                'text_message':report
+                }
+        else:
+            report += "FAILURE:\n\n"+"\n".join(invalid_msgs)+"\n"
+            reportObj = {
+                'objects_created':[],
+                'text_message':report
+                }
 
         reportName = 'hmmer_report_'+str(hex(uuid.getnode()))
+        ws = workspaceService(self.workspaceURL, token=ctx['token'])
         report_obj_info = ws.save_objects({
 #                'id':info[6],
                 'workspace':params['workspace_name'],
