@@ -624,6 +624,7 @@ class kb_hmmer:
         #
         hmmer_build_bin = self.HMMER_BUILD
         hmmer_build_cmd = [hmmer_build_bin]
+        HMM_file_path = input_MSA_file_path+".HMM"
 
         # check for necessary files
         if not os.path.isfile(hmmer_build_bin):
