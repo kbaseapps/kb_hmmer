@@ -545,11 +545,10 @@ class kb_hmmer:
 
         # check for failed input file creation
         #
-        HMM_file_path = input_MSA_file_path+".HMM"
-        if not os.path.isfile(HMM_file_path):
-            self.invalid_log(invalid_msgs,"no such file '"+HMM_file_path+"'")
-        elif not os.path.getsize(HMM_file_path):
-            self.invalid_log(invalid_msgs,"empty file '"+HMM_file_path+"'")
+        if not os.path.isfile(input_MSA_file_path):
+            self.invalid_log(invalid_msgs,"no such file '"+input_MSA_file_path+"'")
+        elif not os.path.getsize(input_MSA_file_path):
+            self.invalid_log(invalid_msgs,"empty file '"+input_MSA_file_path+"'")
         if not os.path.isfile(many_forward_reads_file_path):
             self.invalid_log(invalid_msgs,"no such file '"+many_forward_reads_file_path+"'")
         elif not os.path.getsize(many_forward_reads_file_path):
