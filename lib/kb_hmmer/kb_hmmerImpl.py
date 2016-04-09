@@ -288,6 +288,7 @@ class kb_hmmer:
             # export features to CLUSTAL formatted MSA (HMMER BUILD seems to only take CLUSTAL)
             input_MSA_file_path = os.path.join(self.scratch, params['input_msa_name']+".clustal")
             self.log(console, 'writing MSA file: '+input_MSA_file_path)
+            protein_sequence_found_in_MSA_input = False
 
             # set header
             header = 'CLUSTAL W (1.81) multiple sequence alignment'
@@ -368,6 +369,8 @@ class kb_hmmer:
                     break
             if all_seqs_nuc:
                 self.log(invalid_msgs,"HMMER needs a protein MSA.  This appears to be only nucleotides")
+            else:
+                protein_sequence_found_in_MSA_input = True
 
         # Missing proper input_type
         #
@@ -406,7 +409,7 @@ class kb_hmmer:
             self.log(console, 'writing fasta file: '+many_forward_reads_file_path)
 
             records = []
-            protein_sequence_found = False
+            protein_sequence_found_in_many_input = False
             feature_written = dict()
             for genomeRef in genome2Features:
                 genome = ws.get_objects([{'ref':genomeRef}])[0]['data']
@@ -429,7 +432,7 @@ class kb_hmmer:
                                 continue
                             else:
                                 #record = SeqRecord(Seq(feature['dna_sequence']), id=feature['id'], description=genome['id'])
-                                protein_sequence_found = True
+                                protein_sequence_found_in_many_input = True
                                 record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=genome['id'])
                                 records.append(record)
 
@@ -446,7 +449,7 @@ class kb_hmmer:
             many_forward_reads_file_path = os.path.join(self.scratch, params['input_many_name']+".fasta")
             self.log(console, 'writing fasta file: '+many_forward_reads_file_path)
             records = []
-            protein_sequence_found = False
+            protein_sequence_found_in_many_input = False
             feature_written = dict()
             for feature in input_many_genome['features']:
                 try:
@@ -465,7 +468,7 @@ class kb_hmmer:
                         self.log(invalid_msgs,"bad CDS feature "+feature['id']+" in genome "+params['input_many_name'])
                         continue
                     else:
-                        protein_sequence_found = True
+                        protein_sequence_found_in_many_input = True
                         record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=input_many_genome['id'])
                         records.append(record)
 
@@ -482,7 +485,7 @@ class kb_hmmer:
             self.log(console, 'writing fasta file: '+many_forward_reads_file_path)
             
             records = []
-            protein_sequence_found = False
+            protein_sequence_found_in_many_input = False
             feature_written = dict()
             for genome_name in input_many_genomeSet['elements'].keys():
                 if 'ref' in input_many_genomeSet['elements'][genome_name] and \
@@ -504,7 +507,7 @@ class kb_hmmer:
                                 self.log(invalid_msgs,"bad CDS feature "+feature['id']+" in genome "+genome_name)
                                 continue
                             else:
-                                protein_sequence_found = True
+                                protein_sequence_found_in_many_input = True
                                 record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=genome['id'])
                                 records.append(record)
 
@@ -527,14 +530,14 @@ class kb_hmmer:
                                 self.log(invalid_msgs,"bad CDS feature "+feature['id']+" in genome "+genome_name)
                                 continue
                             else:
-                                protein_sequence_found = True
+                                protein_sequence_found_in_many_input = True
                                 record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=genome['id'])
                                 records.append(record)
 
                 else:
                     self.log(invalid_msgs,'genome '+genome_name+' missing')
 
-            if len(invalid_msgs) == 0 and len(records) > 0 and protein_sequence_found:
+            if len(invalid_msgs) == 0 and len(records) > 0 and protein_sequence_found_in_many_input:
                 SeqIO.write(records, many_forward_reads_file_path, "fasta")
             
         # Missing proper input_many_type
@@ -545,16 +548,10 @@ class kb_hmmer:
 
         # check for failed input file creation
         #
-        if not protein_sequence_found:
+        if not protein_sequence_found_in_MSA_input:
+            self.log(invalid_msgs,"no protein sequences found in '"+params['input_MSA_name']+"'")
+        if not protein_sequence_found_in_many_input:
             self.log(invalid_msgs,"no protein sequences found in '"+params['input_many_name']+"'")
-        if not os.path.isfile(input_MSA_file_path):
-            self.log(invalid_msgs,"no such file '"+input_MSA_file_path+"'")
-        elif not os.path.getsize(input_MSA_file_path):
-            self.log(invalid_msgs,"empty file '"+input_MSA_file_path+"'")
-        if not os.path.isfile(many_forward_reads_file_path):
-            self.log(invalid_msgs,"no such file '"+many_forward_reads_file_path+"'")
-        elif not os.path.getsize(many_forward_reads_file_path):
-            self.log(invalid_msgs,"empty file '"+many_forward_reads_file_path+"'")
 
 
         # input data failed validation.  Need to return
