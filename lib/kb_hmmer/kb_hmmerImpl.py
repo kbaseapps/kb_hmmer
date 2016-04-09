@@ -605,6 +605,7 @@ class kb_hmmer:
             returnVal = { 'report_name': reportName,
                       'report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
                       }
+            self.log(console,"HMMER_MSA_Search DONE")
             return [returnVal]
 
 
