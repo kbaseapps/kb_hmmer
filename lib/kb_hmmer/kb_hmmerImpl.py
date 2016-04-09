@@ -549,7 +549,7 @@ class kb_hmmer:
         # check for failed input file creation
         #
         if not protein_sequence_found_in_MSA_input:
-            self.log(invalid_msgs,"no protein sequences found in '"+params['input_MSA_name']+"'")
+            self.log(invalid_msgs,"no protein sequences found in '"+params['input_msa_name']+"'")
         if not protein_sequence_found_in_many_input:
             self.log(invalid_msgs,"no protein sequences found in '"+params['input_many_name']+"'")
 
