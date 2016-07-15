@@ -22,6 +22,19 @@ from biokbase.workspace.client import Workspace as workspaceService
 from requests_toolbelt import MultipartEncoder
 from biokbase.AbstractHandle.Client import AbstractHandle as HandleService
 
+# KBase Data API
+import doekbase.data_api
+from doekbase.data_api.annotation.genome_annotation.api import GenomeAnnotationAPI
+from doekbase.data_api.sequence.assembly.api import AssemblyAPI
+from doekbase.data_api.taxonomy.taxon.api import TaxonAPI
+#from doekbase.data_api.core import ObjectAPI
+    
+# Standard setup for accessing Data API
+services = {"workspace_service_url": "https://ci.kbase.us/services/ws/",
+            "shock_service_url": "https://ci.kbase.us/services/shock-api/"}
+token = os.environ["KB_AUTH_TOKEN"]
+
+
 # silence whining
 import requests
 requests.packages.urllib3.disable_warnings()
