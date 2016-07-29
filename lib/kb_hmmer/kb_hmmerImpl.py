@@ -30,9 +30,9 @@ from doekbase.data_api.taxonomy.taxon.api import TaxonAPI
 #from doekbase.data_api.core import ObjectAPI
     
 # Standard setup for accessing Data API
-services = {"workspace_service_url": "https://ci.kbase.us/services/ws/",
-            "shock_service_url": "https://ci.kbase.us/services/shock-api/"}
-token = os.environ["KB_AUTH_TOKEN"]
+#services = {"workspace_service_url": "https://ci.kbase.us/services/ws/",
+#            "shock_service_url": "https://ci.kbase.us/services/shock-api/"}
+#token = os.environ["KB_AUTH_TOKEN"]
 
 
 # silence whining
@@ -93,8 +93,47 @@ class kb_hmmer:
     def get_feature_set_seqs(self, ws_data, ws_info):
         pass
 
-    def get_genome_feature_seqs(self, ws_data, ws_info):
-        pass
+#    def get_genome_feature_seqs(self, ws_data, ws_info):
+    def kbase_data2file_Genome2Fasta (self,
+                                      genome=None,
+                                      log=[],
+                                      invalid_log=[],
+                                      outdir=None,
+                                      outfile=None,
+                                      residue_type=None
+                                      )
+
+        from Bio import SeqIO
+        from Bio.Seq import Seq
+        from Bio.SeqRecord import SeqRecord
+        from Bio.Alphabet import generic_protein
+        records = []
+        protein_sequence_found_in_many_input = False
+        feature_written = dict()
+        for feature in input_many_genome['features']:
+            try:
+                f_written = feature_written[feature['id']]
+            except:
+                feature_written[feature['id']] = True
+                #self.log(console,"kbase_id: '"+feature['id']+"'")  # DEBUG
+
+                # HMMER SEARCH is prot-prot in this implementation
+                #record = SeqRecord(Seq(feature['dna_sequence']), id=feature['id'], description=input_many_genome['id'])
+                if feature['type'] != 'CDS':
+                    #self.log(console,"skipping non-CDS feature "+feature['id'])  # too much chatter for a Genome
+                    continue
+                elif 'protein_translation' not in feature or feature['protein_translation'] == None:
+                    self.log(console,"bad CDS feature "+feature['id'])
+                    self.log(invalid_msgs,"bad CDS feature "+feature['id']+" in genome "+params['input_many_name'])
+                    continue
+                else:
+                    protein_sequence_found_in_many_input = True
+                    record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=input_many_genome['id'])
+                    records.append(record)
+
+        if len(invalid_msgs) == 0 and len(records) > 0:
+            SeqIO.write(records, many_forward_reads_file_path, "fasta")
+
 
     def get_genome_set_feature_seqs(self, ws_data, ws_info):
         pass
@@ -465,6 +504,15 @@ class kb_hmmer:
             # export features to FASTA file
             many_forward_reads_file_path = os.path.join(self.scratch, params['input_many_name']+".fasta")
             self.log(console, 'writing fasta file: '+many_forward_reads_file_path)
+
+            kbase_data2file_Genome2Fasta (genome=input_many_genome,
+                                          log=console,
+                                          invalid_log=invalid_msgs,
+                                          outdir=self.scratch,
+                                          outfile=params['input_many_name']+".fasta",
+                                          'protein'
+                                          )
+
             records = []
             protein_sequence_found_in_many_input = False
             feature_written = dict()
