@@ -510,35 +510,8 @@ class kb_hmmer:
                                           invalid_log=invalid_msgs,
                                           outdir=self.scratch,
                                           outfile=params['input_many_name']+".fasta",
-                                          'protein'
+                                          residue_type='AA'
                                           )
-
-            records = []
-            protein_sequence_found_in_many_input = False
-            feature_written = dict()
-            for feature in input_many_genome['features']:
-                try:
-                    f_written = feature_written[feature['id']]
-                except:
-                    feature_written[feature['id']] = True
-                    #self.log(console,"kbase_id: '"+feature['id']+"'")  # DEBUG
-
-                    # HMMER SEARCH is prot-prot in this implementation
-                    #record = SeqRecord(Seq(feature['dna_sequence']), id=feature['id'], description=input_many_genome['id'])
-                    if feature['type'] != 'CDS':
-                        #self.log(console,"skipping non-CDS feature "+feature['id'])  # too much chatter for a Genome
-                        continue
-                    elif 'protein_translation' not in feature or feature['protein_translation'] == None:
-                        self.log(console,"bad CDS feature "+feature['id'])
-                        self.log(invalid_msgs,"bad CDS feature "+feature['id']+" in genome "+params['input_many_name'])
-                        continue
-                    else:
-                        protein_sequence_found_in_many_input = True
-                        record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=input_many_genome['id'])
-                        records.append(record)
-
-            if len(invalid_msgs) == 0 and len(records) > 0:
-                SeqIO.write(records, many_forward_reads_file_path, "fasta")
 
         # GenomeSet
         #
