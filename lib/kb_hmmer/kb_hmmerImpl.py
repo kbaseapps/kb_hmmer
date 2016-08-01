@@ -23,7 +23,7 @@ class kb_hmmer:
     #########################################
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/dcchivian/kb_hmmer.git"
-    GIT_COMMIT_HASH = "2f915257e754bce2e9c21619366407691adc821d"
+    GIT_COMMIT_HASH = "657d5a384661a4d3c5638246b095eaa7ce25334b"
     
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
