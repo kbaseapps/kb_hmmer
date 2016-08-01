@@ -29,7 +29,7 @@ def _get_token(user_id, password,
                         'grant_type=client_credentials'):
     # This is bandaid helper function until we get a full
     # KBase python auth client released
-    auth = _base64.encodestring(user_id + ':' + password)
+    auth = _base64.b64encode(user_id + ':' + password)
     headers = {'Authorization': 'Basic ' + auth}
     ret = _requests.get(auth_svc, headers=headers, allow_redirects=True)
     status = ret.status_code
@@ -170,8 +170,34 @@ class kb_hmmer(object):
         if 'result' not in resp:
             raise ServerError('Unknown', 0, 'An unknown server error occurred')
         return resp['result']
+        
  
     def HMMER_MSA_Search(self, params, json_rpc_context = None):
+        """
+        Methods for HMMER search of an MSA against many sequences 
+        **
+        **    overloading as follows:
+        **        input_msa_name: MSA
+        **        input_many_id: SingleEndLibrary, FeatureSet, Genome, GenomeSet
+        **        output_id: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+        :param params: instance of type "HMMER_Params" (HMMER Input Params)
+           -> structure: parameter "workspace_name" of type "workspace_name"
+           (** The workspace object refs are of form: ** **    objects =
+           ws.get_objects([{'ref':
+           params['workspace_id']+'/'+params['obj_name']}]) ** ** "ref" means
+           the entire name combining the workspace id and the object name **
+           "id" is a numerical identifier of the workspace or object, and
+           should just be used for workspace ** "name" is a string identifier
+           of a workspace or object.  This is received from Narrative.),
+           parameter "input_many_name" of type "data_obj_name", parameter
+           "input_msa_name" of type "data_obj_name", parameter
+           "output_filtered_name" of type "data_obj_name", parameter
+           "e_value" of Double, parameter "bitscore" of Double, parameter
+           "maxaccepts" of Double
+        :returns: instance of type "HMMER_Output" (HMMER Output) ->
+           structure: parameter "report_name" of type "data_obj_name",
+           parameter "report_ref" of type "data_obj_ref"
+        """
         if json_rpc_context and type(json_rpc_context) is not dict:
             raise ValueError('Method HMMER_MSA_Search: argument json_rpc_context is not type dict as required.')
         resp = self._call('kb_hmmer.HMMER_MSA_Search',

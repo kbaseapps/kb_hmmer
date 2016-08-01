@@ -43,6 +43,10 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     #########################################
+    VERSION = "0.0.1"
+    GIT_URL = "https://github.com/dcchivian/kb_hmmer.git"
+    GIT_COMMIT_HASH = "45b5301fce662473f566346c90d902f744cf17ec"
+    
     #BEGIN_CLASS_HEADER
     workspaceURL = None
     shockURL = None
@@ -231,9 +235,34 @@ class kb_hmmer:
 
         #END_CONSTRUCTOR
         pass
-
+    
 
     def HMMER_MSA_Search(self, ctx, params):
+        """
+        Methods for HMMER search of an MSA against many sequences 
+        **
+        **    overloading as follows:
+        **        input_msa_name: MSA
+        **        input_many_id: SingleEndLibrary, FeatureSet, Genome, GenomeSet
+        **        output_id: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+        :param params: instance of type "HMMER_Params" (HMMER Input Params)
+           -> structure: parameter "workspace_name" of type "workspace_name"
+           (** The workspace object refs are of form: ** **    objects =
+           ws.get_objects([{'ref':
+           params['workspace_id']+'/'+params['obj_name']}]) ** ** "ref" means
+           the entire name combining the workspace id and the object name **
+           "id" is a numerical identifier of the workspace or object, and
+           should just be used for workspace ** "name" is a string identifier
+           of a workspace or object.  This is received from Narrative.),
+           parameter "input_many_name" of type "data_obj_name", parameter
+           "input_msa_name" of type "data_obj_name", parameter
+           "output_filtered_name" of type "data_obj_name", parameter
+           "e_value" of Double, parameter "bitscore" of Double, parameter
+           "maxaccepts" of Double
+        :returns: instance of type "HMMER_Output" (HMMER Output) ->
+           structure: parameter "report_name" of type "data_obj_name",
+           parameter "report_ref" of type "data_obj_ref"
+        """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN HMMER_MSA_Search
@@ -930,4 +959,11 @@ class kb_hmmer:
             raise ValueError('Method HMMER_MSA_Search return value ' +
                              'returnVal is not type dict as required.')
         # return the results
+        return [returnVal]
+
+    def status(self, ctx):
+        #BEGIN_STATUS
+        returnVal = {'state': "OK", 'message': "", 'version': self.VERSION, 
+                     'git_url': self.GIT_URL, 'git_commit_hash': self.GIT_COMMIT_HASH}
+        #END_STATUS
         return [returnVal]
