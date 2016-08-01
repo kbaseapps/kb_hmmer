@@ -22,23 +22,6 @@ from biokbase.workspace.client import Workspace as workspaceService
 from requests_toolbelt import MultipartEncoder
 from biokbase.AbstractHandle.Client import AbstractHandle as HandleService
 
-# KBase Data API
-import doekbase.data_api
-from doekbase.data_api.annotation.genome_annotation.api import GenomeAnnotationAPI
-from doekbase.data_api.sequence.assembly.api import AssemblyAPI
-from doekbase.data_api.taxonomy.taxon.api import TaxonAPI
-#from doekbase.data_api.core import ObjectAPI
-    
-# Standard setup for accessing Data API
-#services = {"workspace_service_url": "https://ci.kbase.us/services/ws/",
-#            "shock_service_url": "https://ci.kbase.us/services/shock-api/"}
-#token = os.environ["KB_AUTH_TOKEN"]
-
-
-# silence whining
-import requests
-requests.packages.urllib3.disable_warnings()
-
 #END_HEADER
 
 
@@ -93,46 +76,8 @@ class kb_hmmer:
     def get_feature_set_seqs(self, ws_data, ws_info):
         pass
 
-#    def get_genome_feature_seqs(self, ws_data, ws_info):
-    def kbase_data2file_Genome2Fasta (self, \
-                                      genome=None, \
-                                      log=[], \
-                                      invalid_log=[], \
-                                      outdir=None, \
-                                      outfile=None, \
-                                      residue_type=None)
-
-        from Bio import SeqIO
-        from Bio.Seq import Seq
-        from Bio.SeqRecord import SeqRecord
-        from Bio.Alphabet import generic_protein
-        records = []
-        protein_sequence_found_in_many_input = False
-        feature_written = dict()
-        for feature in input_many_genome['features']:
-            try:
-                f_written = feature_written[feature['id']]
-            except:
-                feature_written[feature['id']] = True
-                #self.log(console,"kbase_id: '"+feature['id']+"'")  # DEBUG
-
-                # HMMER SEARCH is prot-prot in this implementation
-                #record = SeqRecord(Seq(feature['dna_sequence']), id=feature['id'], description=input_many_genome['id'])
-                if feature['type'] != 'CDS':
-                    #self.log(console,"skipping non-CDS feature "+feature['id'])  # too much chatter for a Genome
-                    continue
-                elif 'protein_translation' not in feature or feature['protein_translation'] == None:
-                    self.log(console,"bad CDS feature "+feature['id'])
-                    self.log(invalid_msgs,"bad CDS feature "+feature['id']+" in genome "+params['input_many_name'])
-                    continue
-                else:
-                    protein_sequence_found_in_many_input = True
-                    record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=input_many_genome['id'])
-                    records.append(record)
-
-        if len(invalid_msgs) == 0 and len(records) > 0:
-            SeqIO.write(records, many_forward_reads_file_path, "fasta")
-
+    def get_genome_feature_seqs(self, ws_data, ws_info):
+        pass
 
     def get_genome_set_feature_seqs(self, ws_data, ws_info):
         pass
@@ -287,12 +232,12 @@ class kb_hmmer:
         #END_CONSTRUCTOR
         pass
 
+
     def HMMER_MSA_Search(self, ctx, params):
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN HMMER_MSA_Search
         console = []
-        invalid_msgs = []
         self.log(console,'Running HMMER_MSA_Search with params=')
         self.log(console, "\n"+pformat(params))
         report = ''
@@ -343,7 +288,6 @@ class kb_hmmer:
             # export features to CLUSTAL formatted MSA (HMMER BUILD seems to only take CLUSTAL)
             input_MSA_file_path = os.path.join(self.scratch, params['input_msa_name']+".clustal")
             self.log(console, 'writing MSA file: '+input_MSA_file_path)
-            protein_sequence_found_in_MSA_input = False
 
             # set header
             header = 'CLUSTAL W (1.81) multiple sequence alignment'
@@ -422,10 +366,6 @@ class kb_hmmer:
                 if NUC_MSA_pattern.match(MSA_in['alignment'][row_id]) == None:
                     all_seqs_nuc = False
                     break
-            if all_seqs_nuc:
-                self.log(invalid_msgs,"HMMER needs a protein MSA.  This appears to be only nucleotides")
-            else:
-                protein_sequence_found_in_MSA_input = True
 
         # Missing proper input_type
         #
@@ -462,9 +402,7 @@ class kb_hmmer:
             # export features to FASTA file
             many_forward_reads_file_path = os.path.join(self.scratch, params['input_many_name']+".fasta")
             self.log(console, 'writing fasta file: '+many_forward_reads_file_path)
-
             records = []
-            protein_sequence_found_in_many_input = False
             feature_written = dict()
             for genomeRef in genome2Features:
                 genome = ws.get_objects([{'ref':genomeRef}])[0]['data']
@@ -479,20 +417,17 @@ class kb_hmmer:
 
                             # HMMER SEARCH is prot-prot in this implementation
                             if feature['type'] != 'CDS':
-                                self.log(console,"skipping non-CDS feature "+feature['id']+" in featureSet "+params['input_many_name'])
+                                self.log(console,"skipping non-CDS feature "+feature['id'])
                                 continue
                             elif 'protein_translation' not in feature or feature['protein_translation'] == None:
-                                self.log(console,"bad CDS feature "+feature['id']+" in featureSet "+params['input_many_name'])
-                                self.log(invalid_msgs,"bad CDS feature "+feature['id']+" in featureSet "+params['input_many_name'])
-                                continue
+                                self.log(console,"bad CDS feature "+feature['id'])
+                                raise ValueError("bad CDS feature "+feature['id'])
                             else:
                                 #record = SeqRecord(Seq(feature['dna_sequence']), id=feature['id'], description=genome['id'])
-                                protein_sequence_found_in_many_input = True
                                 record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=genome['id'])
                                 records.append(record)
+            SeqIO.write(records, many_forward_reads_file_path, "fasta")
 
-            if len(invalid_msgs) == 0 and len(records) > 0:
-                SeqIO.write(records, many_forward_reads_file_path, "fasta")
 
         # Genome
         #
@@ -503,14 +438,28 @@ class kb_hmmer:
             # export features to FASTA file
             many_forward_reads_file_path = os.path.join(self.scratch, params['input_many_name']+".fasta")
             self.log(console, 'writing fasta file: '+many_forward_reads_file_path)
+            records = []
+            feature_written = dict()
+            for feature in input_many_genome['features']:
+                try:
+                    f_written = feature_written[feature['id']]
+                except:
+                    feature_written[feature['id']] = True
+                    #self.log(console,"kbase_id: '"+feature['id']+"'")  # DEBUG
 
-            kbase_data2file_Genome2Fasta (genome=input_many_genome,
-                                          log=console,
-                                          invalid_log=invalid_msgs,
-                                          outdir=self.scratch,
-                                          outfile=params['input_many_name']+".fasta",
-                                          residue_type='AA'
-                                          )
+                    # HMMER SEARCH is prot-prot in this implementation
+                    #record = SeqRecord(Seq(feature['dna_sequence']), id=feature['id'], description=input_many_genome['id'])
+                    if feature['type'] != 'CDS':
+                        #self.log(console,"skipping non-CDS feature "+feature['id'])  # too much chatter for a Genome
+                        continue
+                    elif 'protein_translation' not in feature or feature['protein_translation'] == None:
+                        self.log(console,"bad CDS feature "+feature['id'])
+                        raise ValueError("bad CDS feature "+feature['id'])
+                    else:
+                        record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=input_many_genome['id'])
+                        records.append(record)
+            SeqIO.write(records, many_forward_reads_file_path, "fasta")
+
 
         # GenomeSet
         #
@@ -520,9 +469,8 @@ class kb_hmmer:
             # export features to FASTA file
             many_forward_reads_file_path = os.path.join(self.scratch, params['input_many_name']+".fasta")
             self.log(console, 'writing fasta file: '+many_forward_reads_file_path)
-            
+
             records = []
-            protein_sequence_found_in_many_input = False
             feature_written = dict()
             for genome_name in input_many_genomeSet['elements'].keys():
                 if 'ref' in input_many_genomeSet['elements'][genome_name] and \
@@ -541,10 +489,8 @@ class kb_hmmer:
                                 continue
                             elif 'protein_translation' not in feature or feature['protein_translation'] == None:
                                 self.log(console,"bad CDS feature "+feature['id'])
-                                self.log(invalid_msgs,"bad CDS feature "+feature['id']+" in genome "+genome_name)
-                                continue
+                                raise ValueError("bad CDS feature "+feature['id'])
                             else:
-                                protein_sequence_found_in_many_input = True
                                 record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=genome['id'])
                                 records.append(record)
 
@@ -560,87 +506,23 @@ class kb_hmmer:
                             # HMMER SEARCH is prot-prot in this implementation
                             #record = SeqRecord(Seq(feature['dna_sequence']), id=feature['id'], description=genome['id'])
                             if feature['type'] != 'CDS':
-                                #self.log(console,"skipping non-CDS feature "+feature['id'])  # too much chatter for a Genome
                                 continue
                             elif 'protein_translation' not in feature or feature['protein_translation'] == None:
                                 self.log(console,"bad CDS feature "+feature['id'])
-                                self.log(invalid_msgs,"bad CDS feature "+feature['id']+" in genome "+genome_name)
-                                continue
+                                raise ValueError("bad CDS feature "+feature['id'])
                             else:
-                                protein_sequence_found_in_many_input = True
                                 record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description=genome['id'])
                                 records.append(record)
 
                 else:
-                    self.log(invalid_msgs,'genome '+genome_name+' missing')
+                    raise ValueError('genome '+genome_name+' missing')
 
-            if len(invalid_msgs) == 0 and len(records) > 0 and protein_sequence_found_in_many_input:
-                SeqIO.write(records, many_forward_reads_file_path, "fasta")
+            SeqIO.write(records, many_forward_reads_file_path, "fasta")
             
         # Missing proper input_many_type
         #
         else:
-            raise ValueError('Cannot yet handle input_many type of: '+type_name)
-
-
-        # check for failed input file creation
-        #
-        if not protein_sequence_found_in_MSA_input:
-            self.log(invalid_msgs,"no protein sequences found in '"+params['input_msa_name']+"'")
-        if not protein_sequence_found_in_many_input:
-            self.log(invalid_msgs,"no protein sequences found in '"+params['input_many_name']+"'")
-
-
-        # input data failed validation.  Need to return
-        #
-        if len(invalid_msgs) > 0:
-
-            # load the method provenance from the context object
-            #
-            self.log(console,"SETTING PROVENANCE")  # DEBUG
-            provenance = [{}]
-            if 'provenance' in ctx:
-                provenance = ctx['provenance']
-            # add additional info to provenance here, in this case the input data object reference
-            provenance[0]['input_ws_objects'] = []
-            provenance[0]['input_ws_objects'].append(params['workspace_name']+'/'+params['input_msa_name'])
-            provenance[0]['input_ws_objects'].append(params['workspace_name']+'/'+params['input_many_name'])
-            provenance[0]['service'] = 'kb_hmmer'
-            provenance[0]['method'] = 'HMMER_MSA_Search'
-
-
-            # build output report object
-            #
-            self.log(console,"BUILDING REPORT")  # DEBUG
-            report += "FAILURE:\n\n"+"\n".join(invalid_msgs)+"\n"
-            reportObj = {
-                'objects_created':[],
-                'text_message':report
-                }
-
-            reportName = 'hmmer_report_'+str(hex(uuid.getnode()))
-            ws = workspaceService(self.workspaceURL, token=ctx['token'])
-            report_obj_info = ws.save_objects({
-                    #'id':info[6],
-                    'workspace':params['workspace_name'],
-                    'objects':[
-                        {
-                        'type':'KBaseReport.Report',
-                        'data':reportObj,
-                        'name':reportName,
-                        'meta':{},
-                        'hidden':1,
-                        'provenance':provenance  # DEBUG
-                        }
-                        ]
-                    })[0]
-
-            self.log(console,"BUILDING RETURN OBJECT")
-            returnVal = { 'report_name': reportName,
-                      'report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
-                      }
-            self.log(console,"HMMER_MSA_Search DONE")
-            return [returnVal]
+            raise ValueError('Cannot yet handle input_many type of: '+type_name)            
 
 
         # Build HMM from MSA
@@ -651,7 +533,6 @@ class kb_hmmer:
         #
         hmmer_build_bin = self.HMMER_BUILD
         hmmer_build_cmd = [hmmer_build_bin]
-        HMM_file_path = input_MSA_file_path+".HMM"
 
         # check for necessary files
         if not os.path.isfile(hmmer_build_bin):
@@ -660,6 +541,8 @@ class kb_hmmer:
             raise ValueError("no such file '"+input_MSA_file_path+"'")
         elif not os.path.getsize(input_MSA_file_path) > 0:
             raise ValueError("empty file '"+input_MSA_file_path+"'")
+
+        HMM_file_path = input_MSA_file_path+".HMM"
 
         hmmer_build_cmd.append('--informat')
         hmmer_build_cmd.append('CLUSTAL')
@@ -814,7 +697,6 @@ class kb_hmmer:
         hit_buf = []
         #header_done = False
         for line in output_aln_buf:
-            hit_buf.append(line)
             if line.startswith('#'):
                 #if not header_done:
                 #    hit_buf.append(line)
@@ -852,7 +734,7 @@ class kb_hmmer:
                 high_bitscore_line[hit_seq_id] = line
 
         for hit_seq_id in hit_order:
-            #hit_buf.append(high_bitscore_line[hit_seq_id])
+            hit_buf.append(high_bitscore_line[hit_seq_id])
 
             #self.log(console,"HIT_SEQ_ID: '"+hit_seq_id+"'")
             #if 'ident_thresh' in params and float(params['ident_thresh']) > float(high_bitscore_ident[hit_seq_id]):
@@ -992,11 +874,10 @@ class kb_hmmer:
 
         # Upload results
         #
-        if len(invalid_msgs) == 0:
-            self.log(console,"UPLOADING RESULTS")  # DEBUG
+        self.log(console,"UPLOADING RESULTS")  # DEBUG
 
-            # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
-            new_obj_info = ws.save_objects({
+        # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+        new_obj_info = ws.save_objects({
                             'workspace': params['workspace_name'],
                             'objects':[{
                                     'type': 'KBaseCollections.FeatureSet',
@@ -1011,25 +892,13 @@ class kb_hmmer:
         # build output report object
         #
         self.log(console,"BUILDING REPORT")  # DEBUG
-        if len(invalid_msgs) == 0:
-            report += 'sequences in many set: '+str(seq_total)+"\n"
-            report += 'sequences in hit set:  '+str(hit_total)+"\n"
-            report += "\n"
-            for line in hit_buf:
-                report += line
-            reportObj = {
-                'objects_created':[{'ref':params['workspace_name']+'/'+params['output_filtered_name'], 'description':'HMMER_MSA_Search hits'}],
-                'text_message':report
-                }
-        else:
-            report += "FAILURE:\n\n"+"\n".join(invalid_msgs)+"\n"
-            reportObj = {
-                'objects_created':[],
-                'text_message':report
-                }
+
+        reportObj = {
+            'objects_created':[{'ref':params['workspace_name']+'/'+params['output_filtered_name'], 'description':'HMMER_MSA_Search hits'}],
+            'text_message':report
+        }
 
         reportName = 'hmmer_report_'+str(hex(uuid.getnode()))
-        ws = workspaceService(self.workspaceURL, token=ctx['token'])
         report_obj_info = ws.save_objects({
 #                'id':info[6],
                 'workspace':params['workspace_name'],
