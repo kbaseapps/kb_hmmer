@@ -1,4 +1,4 @@
-#BEGIN HEADER
+#BEGIN_HEADER
 import os
 import sys
 import shutil
@@ -21,20 +21,6 @@ from Bio.Alphabet import generic_protein
 from biokbase.workspace.client import Workspace as workspaceService
 from requests_toolbelt import MultipartEncoder
 from biokbase.AbstractHandle.Client import AbstractHandle as HandleService
-
-'''
-# KBase Data API
-import doekbase.data_api
-from doekbase.data_api.annotation.genome_annotation.api import GenomeAnnotationAPI
-from doekbase.data_api.sequence.assembly.api import AssemblyAPI
-from doekbase.data_api.taxonomy.taxon.api import TaxonAPI
-#from doekbase.data_api.core import ObjectAPI
-    
-# Standard setup for accessing Data API
-#services = {"workspace_service_url": "https://ci.kbase.us/services/ws/",
-#            "shock_service_url": "https://ci.kbase.us/services/shock-api/"}
-#token = os.environ["KB_AUTH_TOKEN"]#BEGIN_HEADER
-'''
 
 #END_HEADER
 
@@ -90,18 +76,8 @@ class kb_hmmer:
     def get_feature_set_seqs(self, ws_data, ws_info):
         pass
 
-#    def get_genome_feature_seqs(self, ws_data, ws_info):
-#        pass
-
-#    def kbase_data2file_Genome2Fasta (self, \
-#                                      genome=None, \
-#                                      console_log=[], \
-#                                      invalid_log=[], \
-#                                      outdir=None, \
-#                                      outfile=None, \
-#                                      residue_type=None):
-#        pass
-                                        
+    def get_genome_feature_seqs(self, ws_data, ws_info):
+        pass
 
     def get_genome_set_feature_seqs(self, ws_data, ws_info):
         pass
