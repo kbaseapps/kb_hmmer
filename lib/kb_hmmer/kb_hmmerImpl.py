@@ -91,14 +91,14 @@ class kb_hmmer:
 #    def get_genome_feature_seqs(self, ws_data, ws_info):
 #        pass
 
-    def kbase_data2file_Genome2Fasta (self, \
-                                      genome=None, \
-                                      console_log=[], \
-                                      invalid_log=[], \
-                                      outdir=None, \
-                                      outfile=None, \
-                                      residue_type=None):
-        pass
+#    def kbase_data2file_Genome2Fasta (self, \
+#                                      genome=None, \
+#                                      console_log=[], \
+#                                      invalid_log=[], \
+#                                      outdir=None, \
+#                                      outfile=None, \
+#                                      residue_type=None):
+#        pass
                                         
 
     def get_genome_set_feature_seqs(self, ws_data, ws_info):
