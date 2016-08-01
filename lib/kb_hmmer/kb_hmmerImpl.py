@@ -94,14 +94,13 @@ class kb_hmmer:
         pass
 
 #    def get_genome_feature_seqs(self, ws_data, ws_info):
-    def kbase_data2file_Genome2Fasta (self,
-                                      genome=None,
-                                      log=[],
-                                      invalid_log=[],
-                                      outdir=None,
-                                      outfile=None,
-                                      residue_type=None
-                                      )
+    def kbase_data2file_Genome2Fasta (self, \
+                                      genome=None, \
+                                      log=[], \
+                                      invalid_log=[], \
+                                      outdir=None, \
+                                      outfile=None, \
+                                      residue_type=None)
 
         from Bio import SeqIO
         from Bio.Seq import Seq
