@@ -1,14 +1,21 @@
+# -*- coding: utf-8 -*-
 import unittest
 import os
 import json
 import time
+import requests
 
 from os import environ
-from ConfigParser import ConfigParser
+try:
+    from ConfigParser import ConfigParser  # py2
+except:
+    from configparser import ConfigParser  # py3
+
 from pprint import pprint
 
 from biokbase.workspace.client import Workspace as workspaceService
 from kb_hmmer.kb_hmmerImpl import kb_hmmer
+from kb_hmmer.kb_hmmerServer import MethodContext
 
 
 class kb_hmmerTest(unittest.TestCase):
@@ -16,9 +23,20 @@ class kb_hmmerTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         token = environ.get('KB_AUTH_TOKEN', None)
-        cls.ctx = {'token': token, 'provenance': [{'service': 'kb_hmmer',
-            'method': 'please_never_use_it_in_production', 'method_params': []}],
-            'authenticated': 1}
+        user_id = requests.post(
+            'https://kbase.us/services/authorization/Sessions/Login',
+            data='token={}&fields=user_id'.format(token)).json()['user_id']
+        # WARNING: don't call any logging methods on the context object,
+        # it'll result in a NoneType error
+        cls.ctx = MethodContext(None)
+        cls.ctx.update({'token': token,
+                        'user_id': user_id,
+                        'provenance': [
+                            {'service': 'kb_hmmer',
+                             'method': 'please_never_use_it_in_production',
+                             'method_params': []
+                             }],
+                        'authenticated': 1})
         config_file = environ.get('KB_DEPLOYMENT_CONFIG', None)
         cls.cfg = {}
         config = ConfigParser()
@@ -53,6 +71,7 @@ class kb_hmmerTest(unittest.TestCase):
     def getContext(self):
         return self.__class__.ctx
 
+    # NOTE: According to Python unittest naming rules test method names should start from 'test'.
     def test_your_method(self):
         # Prepare test objects in workspace if needed using 
         # self.getWsClient().save_objects({'workspace': self.getWsName(), 'objects': []})
