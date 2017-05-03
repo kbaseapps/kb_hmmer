@@ -678,36 +678,48 @@ class kb_hmmer:
             return [returnVal]
 
 
-        # FORMAT DB
+        # set the output path
+        timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
+        output_dir = os.path.join(self.scratch,'output.'+str(timestamp))
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        output_aln_file_path = os.path.join(output_dir, 'alnout.txt');
+        output_extra_file_path = os.path.join(output_dir, 'alnout_extra.txt');
+        output_filtered_fasta_file_path = os.path.join(output_dir, 'output_filtered.faa');
+
+
+        # Build HMM from MSA
         #
-        # OLD SYNTAX: formatdb -i $database -o T -p F -> $database.nsq or $database.00.nsq
-        # NEW SYNTAX: makeblastdb -in $database -parse_seqids -dbtype prot/nucl -out <basename>
-        makeblastdb_cmd = [self.Make_BLAST_DB]
+        # SYNTAX (from http://eddylab.org/software/hmmer3/3.1b2/Userguide.pdf)
+        #
+        # hmmbuild --informat fasta <hmmfile.out> <msafile>
+        #
+        hmmer_build_bin = self.HMMER_BUILD
+        hmmer_build_cmd = [hmmer_build_bin]
 
         # check for necessary files
-        if not os.path.isfile(self.Make_BLAST_DB):
-            raise ValueError("no such file '"+self.Make_BLAST_DB+"'")
-        if not os.path.isfile(many_forward_reads_file_path):
-            raise ValueError("no such file '"+many_forward_reads_file_path+"'")
-        elif not os.path.getsize(many_forward_reads_file_path) > 0:
-            raise ValueError("empty file '"+many_forward_reads_file_path+"'")
+        if not os.path.isfile(hmmer_build_bin):
+            raise ValueError("no such file '"+hmmer_build_bin+"'")
+        if not os.path.isfile(input_MSA_file_path):
+            raise ValueError("no such file '"+input_MSA_file_path+"'")
+        elif not os.path.getsize(input_MSA_file_path) > 0:
+            raise ValueError("empty file '"+input_MSA_file_path+"'")
 
-        makeblastdb_cmd.append('-in')
-        makeblastdb_cmd.append(many_forward_reads_file_path)
-        makeblastdb_cmd.append('-parse_seqids')
-        makeblastdb_cmd.append('-dbtype')
-        makeblastdb_cmd.append('prot')
-        makeblastdb_cmd.append('-out')
-        makeblastdb_cmd.append(many_forward_reads_file_path)
+        HMM_file_path = input_MSA_file_path+".HMM"
 
-        # Run Make_BLAST_DB, capture output as it happens
+        hmmer_build_cmd.append('--informat')
+        hmmer_build_cmd.append('CLUSTAL')
+        hmmer_build_cmd.append(HMM_file_path)
+        hmmer_build_cmd.append(input_MSA_file_path)
+
+        # Run HMMER_BUILD, capture output as it happens
         #
-        self.log(console, 'RUNNING Make_BLAST_DB:')
-        self.log(console, '    '+' '.join(makeblastdb_cmd))
-#        report += "\n"+'running Make_BLAST_DB:'+"\n"
-#        report += '    '+' '.join(makeblastdb_cmd)+"\n"
+        self.log(console, 'RUNNING HMMER_BUILD:')
+        self.log(console, '    '+' '.join(hmmer_build_cmd))
+#        report += "\n"+'running HMMER_BUILD:'+"\n"
+#        report += '    '+' '.join(hmmer_build_cmd)+"\n"
 
-        p = subprocess.Popen(makeblastdb_cmd, \
+        p = subprocess.Popen(hmmer_build_cmd, \
                              cwd = self.scratch, \
                              stdout = subprocess.PIPE, \
                              stderr = subprocess.STDOUT, \
@@ -722,34 +734,32 @@ class kb_hmmer:
         p.wait()
         self.log(console, 'return code: ' + str(p.returncode))
         if p.returncode != 0:
-            raise ValueError('Error running makeblastdb, return code: '+str(p.returncode) + 
+            raise ValueError('Error running HMMER_BUILD, return code: '+str(p.returncode) + 
                 '\n\n'+ '\n'.join(console))
 
-        # Check for db output
-        if not os.path.isfile(many_forward_reads_file_path+".psq") and not os.path.isfile(many_forward_reads_file_path+".00.psq"):
-            raise ValueError("makeblastdb failed to create DB file '"+many_forward_reads_file_path+".psq'")
-        elif not os.path.getsize(many_forward_reads_file_path+".psq") > 0 and not os.path.getsize(many_forward_reads_file_path+".00.psq") > 0:
-            raise ValueError("makeblastdb created empty DB file '"+many_forward_reads_file_path+".psq'")
+        # Check for HMM output
+        if not os.path.isfile(HMM_file_path):
+            raise ValueError("HMMER_BUILD failed to create HMM file '"+HMM_file_path+"'")
+        elif not os.path.getsize(HMM_file_path) > 0:
+            raise ValueError("HMMER_BUILD created empty HMM file '"+HMM_file_path+"'")
 
 
-        ### Construct the psiBLAST command
+        ### Construct the HMMER_SEARCH command
         #
-        # OLD SYNTAX: blastpgp -j <rounds> -h <e_value_matrix> -z <database_size:e.g. 1e8> -q $q -G $G -E $E -m $m -e $e_value -v $limit -b $limit -K $limit -i $fasta_file -B <msa_file> -d $database -o $out_file
-        # NEW SYNTAX: psiblast -in_msa <msa_queryfile> -msa_master_idx <row_n> -db <basename> -out <out_aln_file> -outfmt 0/7 (8 became 7) -evalue <e_value> -dust no (DNA) -seg no (AA) -num_threads <num_cores>
+        # SYNTAX (from http://eddylab.org/software/hmmer3/3.1b2/Userguide.pdf)
         #
-        blast_bin = self.psiBLAST
+        # hmmsearch --tblout <TAB_out> -A <MSA_out> --noali --notextw -E <e_value> -T <bit_score> <hmmfile> <seqdb>
+        #
+        hmmer_search_bin = self.HMMER_SEARCH
+        hmmer_search_cmd = [hmmer_search_bin]
 
         # check for necessary files
-        if not os.path.isfile(blast_bin):
-            raise ValueError("no such file '"+blast_bin+"'")
-        #if not os.path.isfile(one_forward_reads_file_path):
-        #    raise ValueError("no such file '"+one_forward_reads_file_path+"'")
-        #elif not os.path.getsize(one_forward_reads_file_path) > 0:
-        #    raise ValueError("empty file '"+one_forward_reads_file_path+"'")
-        if not os.path.isfile(input_MSA_file_path):
-            raise ValueError("no such file '"+input_MSA_file_path+"'")
-        elif not os.path.getsize(input_MSA_file_path):
-            raise ValueError("empty file '"+input_MSA_file_path+"'")
+        if not os.path.isfile(hmmer_search_bin):
+            raise ValueError("no such file '"+hmmer_search_bin+"'")
+        if not os.path.isfile(HMM_file_path):
+            raise ValueError("no such file '"+HMM_file_path+"'")
+        elif not os.path.getsize(HMM_file_path):
+            raise ValueError("empty file '"+HMM_file_path+"'")
         if not os.path.isfile(many_forward_reads_file_path):
             raise ValueError("no such file '"+many_forward_reads_file_path+"'")
         elif not os.path.getsize(many_forward_reads_file_path):
@@ -760,102 +770,36 @@ class kb_hmmer:
         output_dir = os.path.join(self.scratch,'output.'+str(timestamp))
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-        output_aln_file_path = os.path.join(output_dir, 'alnout.txt');
-        output_extra_file_path = os.path.join(output_dir, 'alnout_extra.txt');
-        output_filtered_fasta_file_path = os.path.join(output_dir, 'output_filtered.faa');
+        output_hit_TAB_file_path = os.path.join(output_dir, 'hitout.txt');
+        output_hit_MSA_file_path = os.path.join(output_dir, 'msaout.txt');
+        output_filtered_fasta_file_path = os.path.join(output_dir, 'output_filtered.fasta');
 
-        # this is command for extra output
-        extra_output = False
-        if 'output_extra_format' in params and params['output_extra_format'] != None and params['output_extra_format'] != '' and params['output_extra_format'] != 'none':
-            extra_output = True
-
-            blast_cmd = [blast_bin]
-            blast_cmd.append('-query')
-            blast_cmd.append(one_forward_reads_file_path)
-            blast_cmd.append('-db')
-            blast_cmd.append(many_forward_reads_file_path)
-            blast_cmd.append('-out')
-            blast_cmd.append(output_extra_file_path)
-            #blast_cmd.append('-html')  # HTML is a flag so doesn't get an arg val
-            blast_cmd.append('-outfmt')
-            blast_cmd.append(str(params['output_extra_format']))
-            blast_cmd.append('-evalue')
-            blast_cmd.append(str(params['e_value']))
-
-            # options (not allowed for format 0)
-            #if 'maxaccepts' in params:
-            #    if params['maxaccepts']:
-            #        blast_cmd.append('-max_target_seqs')
-            #        blast_cmd.append(str(params['maxaccepts']))
-
-            # Run BLAST, capture output as it happens
-            #
-            self.log(console, 'RUNNING BLAST (FOR EXTRA OUTPUT):')
-            self.log(console, '    '+' '.join(blast_cmd))
-            #        report += "\n"+'running BLAST:'+"\n"
-            #        report += '    '+' '.join(blast_cmd)+"\n"
-
-            p = subprocess.Popen(blast_cmd, \
-                             cwd = self.scratch, \
-                             stdout = subprocess.PIPE, \
-                             stderr = subprocess.STDOUT, \
-                             shell = False)
-
-            while True:
-                line = p.stdout.readline()
-                if not line: break
-                self.log(console, line.replace('\n', ''))
-
-            p.stdout.close()
-            p.wait()
-            self.log(console, 'return code: ' + str(p.returncode))
-            if p.returncode != 0:
-                raise ValueError('Error running BLAST, return code: '+str(p.returncode) + 
-                '\n\n'+ '\n'.join(console))
-
-            # upload BLAST output
-            dfu = DFUClient(self.callbackURL)
-            try:
-                extra_upload_ret = dfu.file_to_shock({'file_path': output_extra_file_path,
-# DEBUG
-#                                                      'make_handle': 0,
-#                                                      'pack': 'zip'})
-                                                      'make_handle': 0})
-            except:
-                raise ValueError ('error loading output_extra file to shock')
-
-
-        # this is command for basic search mode (with TAB TXT output)
-        blast_cmd = [blast_bin]
-#        blast_cmd.append('-query')
-#        blast_cmd.append(one_forward_reads_file_path)
-        blast_cmd.append('-in_msa')
-        blast_cmd.append(input_MSA_file_path)
-        blast_cmd.append('-msa_master_idx')
-        blast_cmd.append(str(master_row_idx))
-        blast_cmd.append('-db')
-        blast_cmd.append(many_forward_reads_file_path)
-        blast_cmd.append('-out')
-        blast_cmd.append(output_aln_file_path)
-        blast_cmd.append('-outfmt')
-        blast_cmd.append('7')
-        blast_cmd.append('-evalue')
-        blast_cmd.append(str(params['e_value']))
+        # this is command for basic search mode
+        hmmer_search_cmd.append('--tblout')
+        hmmer_search_cmd.append(output_hit_TAB_file_path)
+        hmmer_search_cmd.append('-A')
+        hmmer_search_cmd.append(output_hit_MSA_file_path)
+        hmmer_search_cmd.append('--noali')
+        hmmer_search_cmd.append('--notextw')
+        hmmer_search_cmd.append('-E')  # can't use -T with -E, so we'll use -E
+        hmmer_search_cmd.append(str(params['e_value']))
+        hmmer_search_cmd.append(HMM_file_path)
+        hmmer_search_cmd.append(many_forward_reads_file_path)
 
         # options
-        if 'maxaccepts' in params:
-            if params['maxaccepts']:
-                blast_cmd.append('-max_target_seqs')
-                blast_cmd.append(str(params['maxaccepts']))
+#        if 'maxaccepts' in params:
+#            if params['maxaccepts']:
+#                hmmer_search_cmd.append('-max_target_seqs')
+#                hmmer_search_cmd.append(str(params['maxaccepts']))
 
-        # Run BLAST, capture output as it happens
+        # Run HMMER, capture output as it happens
         #
-        self.log(console, 'RUNNING BLAST:')
-        self.log(console, '    '+' '.join(blast_cmd))
-#        report += "\n"+'running BLAST:'+"\n"
-#        report += '    '+' '.join(blast_cmd)+"\n"
+        self.log(console, 'RUNNING HMMER_SEARCH:')
+        self.log(console, '    '+' '.join(hmmer_search_cmd))
+#        report += "\n"+'running HMMER_SEARCH:'+"\n"
+#        report += '    '+' '.join(hmmer_search_cmd)+"\n"
 
-        p = subprocess.Popen(blast_cmd, \
+        p = subprocess.Popen(hmmer_search_cmd, \
                              cwd = self.scratch, \
                              stdout = subprocess.PIPE, \
                              stderr = subprocess.STDOUT, \
@@ -870,43 +814,43 @@ class kb_hmmer:
         p.wait()
         self.log(console, 'return code: ' + str(p.returncode))
         if p.returncode != 0:
-            raise ValueError('Error running BLAST, return code: '+str(p.returncode) + 
+            raise ValueError('Error running HMMER_SEARCH, return code: '+str(p.returncode) + 
                 '\n\n'+ '\n'.join(console))
 
-        # upload BLAST output
-        dfu = DFUClient(self.callbackURL)
-        try:
-            base_upload_ret = dfu.file_to_shock({'file_path': output_aln_file_path,
-# DEBUG
-#                                                 'make_handle': 0,
-#                                                 'pack': 'zip'})
-                                                 'make_handle': 0})
-        except:
-            raise ValueError ('error loading aln_out file to shock')
+
+        # Check for output
+        if not os.path.isfile(output_hit_TAB_file_path):
+            raise ValueError("HMMER_SEARCH failed to create TAB file '"+output_hit_TAB_file_path+"'")
+        elif not os.path.getsize(output_hit_TAB_file_path) > 0:
+            raise ValueError("HMMER_SEARCH created empty TAB file '"+output_hit_TAB_file_path+"'")
+        if not os.path.isfile(output_hit_MSA_file_path):
+            raise ValueError("HMMER_SEARCH failed to create MSA file '"+output_hit_MSA_file_path+"'")
+        elif not os.path.getsize(output_hit_MSA_file_path) > 0:
+            raise ValueError("HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
 
 
-        # get query_len for filtering later
+        # DEBUG
+#        report = "TAB:\n\n"
+#        with open (output_hit_TAB_file_path, 'r') as output_handle:
+#            for line in output_handle:
+#                report += line+"\n"
+#        report += "\n\nMSA:\n\n"
+#        with open (output_hit_MSA_file_path, 'r') as output_handle:
+#            for line in output_handle:
+#                report += line+"\n"
+
+
+        # Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
         #
-        query_len = 0
-        with open(one_forward_reads_file_path, 'r', 0) as query_file_handle:
-            for line in query_file_handle:
-                if line.startswith('>'):
-                    continue
-                query_len += len(re.sub(r" ","", line.rstrip())) 
-        
-
-        # Parse the BLAST tabular output and store ids to filter many set to make filtered object to save back to KBase
-        #
-        self.log(console, 'PARSING BLAST ALIGNMENT OUTPUT')
-        if not os.path.isfile(output_aln_file_path):
-            raise ValueError("failed to create BLAST output: "+output_aln_file_path)
-        elif not os.path.getsize(output_aln_file_path) > 0:
-            raise ValueError("created empty file for BLAST output: "+output_aln_file_path)
+        self.log(console, 'PARSING HMMER ALIGNMENT OUTPUT')
+        if not os.path.isfile(output_hit_TAB_file_path):
+            raise ValueError("failed to create HMMER output: "+output_hit_TAB_file_path)
+        elif not os.path.getsize(output_hit_TAB_file_path) > 0:
+            raise ValueError("created empty file for HMMER output: "+output_hit_TAB_file_path)
         hit_seq_ids = dict()
-        accept_fids = dict()
-        output_aln_file_handle = open (output_aln_file_path, "r", 0)
-        output_aln_buf = output_aln_file_handle.readlines()
-        output_aln_file_handle.close()
+        output_hit_TAB_file_handle = open (output_hit_TAB_file_path, "r", 0)
+        output_aln_buf = output_hit_TAB_file_handle.readlines()
+        output_hit_TAB_file_handle.close()
         hit_total = 0
         high_bitscore_line = dict()
         high_bitscore_score = dict()
@@ -914,42 +858,42 @@ class kb_hmmer:
         high_bitscore_alnlen = dict()
         hit_order = []
         hit_buf = []
-        header_done = False
+        #header_done = False
         for line in output_aln_buf:
             if line.startswith('#'):
-                if not header_done:
-                    hit_buf.append(line)
+                #if not header_done:
+                #    hit_buf.append(line)
                 continue
-            header_done = True
+            #header_done = True
             #self.log(console,'HIT LINE: '+line)  # DEBUG
-            hit_info = line.split("\t")
-            hit_seq_id     = hit_info[1]
-            hit_ident      = float(hit_info[2]) / 100.0
-            hit_aln_len    = hit_info[3]
-            hit_mismatches = hit_info[4]
-            hit_gaps       = hit_info[5]
-            hit_q_beg      = hit_info[6]
-            hit_q_end      = hit_info[7]
-            hit_t_beg      = hit_info[8]
-            hit_t_end      = hit_info[9]
-            hit_e_value    = hit_info[10]
-            hit_bitscore   = hit_info[11]
-
-            # BLAST SOMETIMES ADDS THIS TO IDs.  NO IDEA WHY, BUT GET RID OF IT!
-            if hit_seq_id.startswith('gnl|'):
-                hit_seq_id = hit_seq_id[4:]
+            hit_info = re.split ('\s+', line)
+            hit_seq_id            = hit_info[0]
+            hit_accession         = hit_info[1]
+            query_name            = hit_info[2]
+            query_accession       = hit_info[3]
+            hit_e_value           = float(hit_info[4])
+            hit_bitscore          = float(hit_info[5])
+            hit_bias              = float(hit_info[6])
+            hit_e_value_best_dom  = float(hit_info[7])
+            hit_bitscore_best_dom = float(hit_info[8])
+            hit_bias_best_dom     = float(hit_info[9])
+            hit_expected_dom_n    = float(hit_info[10])
+            hit_regions           = float(hit_info[11])
+            hit_regions_multidom  = float(hit_info[12])
+            hit_overlaps          = float(hit_info[13])
+            hit_envelopes         = float(hit_info[14])
+            hit_dom_n             = float(hit_info[15])
+            hit_doms_within_rep_thresh = float(hit_info[16])
+            hit_doms_within_inc_thresh = float(hit_info[17])
+            hit_desc                   = hit_info[18]
 
             try:
-                if float(hit_bitscore) > float(high_bitscore_score[hit_seq_id]):
+                if hit_bitscore > high_bitscore_score[hit_seq_id]:
                     high_bitscore_score[hit_seq_id] = hit_bitscore
-                    high_bitscore_ident[hit_seq_id] = hit_ident
-                    high_bitscore_alnlen[hit_seq_id] = hit_aln_len
                     high_bitscore_line[hit_seq_id] = line
             except:
                 hit_order.append(hit_seq_id)
                 high_bitscore_score[hit_seq_id] = hit_bitscore
-                high_bitscore_ident[hit_seq_id] = hit_ident
-                high_bitscore_alnlen[hit_seq_id] = hit_aln_len
                 high_bitscore_line[hit_seq_id] = line
 
         filtering_fields = dict()
@@ -957,26 +901,26 @@ class kb_hmmer:
             hit_buf.append(high_bitscore_line[hit_seq_id])
             filtering_fields[hit_seq_id] = dict()
 
-            #self.log(console,"HIT_SEQ_ID: '"+hit_seq_id+"'")
             filter = False
-            if 'ident_thresh' in params and float(params['ident_thresh']) > float(high_bitscore_ident[hit_seq_id]):
-                filter = True
-                filtering_fields[hit_seq_id]['ident_thresh'] = True
+            #self.log(console,"HIT_SEQ_ID: '"+hit_seq_id+"'")
+            #if 'ident_thresh' in params and float(params['ident_thresh']) > float(high_bitscore_ident[hit_seq_id]):
+            #    continue
             if 'bitscore' in params and float(params['bitscore']) > float(high_bitscore_score[hit_seq_id]):
                 filter = True
                 filtering_fields[hit_seq_id]['bitscore'] = True
-            if 'overlap_fraction' in params and float(params['overlap_fraction']) > float(high_bitscore_alnlen[hit_seq_id])/float(query_len):
+            #if 'overlap_fraction' in params and float(params['overlap_fraction']) > float(high_bitscore_alnlen[hit_seq_id])/float(query_len):
+            #    continue
+            if 'maxaccepts' in params and params['maxaccepts'] != None and hit_total == int(params['maxaccepts']):
                 filter = True
-                filtering_fields[hit_seq_id]['overlap_fraction'] = True
+                filtering_fields[hit_seq_id]['maxaccepts'] = True
 
             if filter:
-                continue
+                break
             
             hit_total += 1
             hit_seq_ids[hit_seq_id] = True
             self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
         
-
         self.log(console, 'EXTRACTING HITS FROM INPUT')
         self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
 
