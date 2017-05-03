@@ -15,16 +15,16 @@ class kb_hmmer:
 **
     '''
 
-    ######## WARNING FOR GEVENT USERS #######
+    ######## WARNING FOR GEVENT USERS ####### noqa
     # Since asynchronous IO can lead to methods - even the same method -
     # interrupting each other, you must be *very* careful when using global
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
-    #########################################
-    VERSION = "0.0.1"
-    GIT_URL = "https://github.com/dcchivian/kb_hmmer.git"
-    GIT_COMMIT_HASH = "530cd5b34ffbe090de1c8e2f8dd987336ca40183"
-    
+    ######################################### noqa
+    VERSION = "0.0.2"
+    GIT_URL = "https://github.com/dcchivian/kb_hmmer"
+    GIT_COMMIT_HASH = "de3116c7f2665d262d67a76c13b2a9104c4ac256"
+
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
 
@@ -34,7 +34,7 @@ class kb_hmmer:
         #BEGIN_CONSTRUCTOR
         #END_CONSTRUCTOR
         pass
-    
+
 
     def HMMER_MSA_Search(self, ctx, params):
         """
@@ -73,7 +73,6 @@ class kb_hmmer:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
-
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK", 'message': "", 'version': self.VERSION, 
