@@ -54,7 +54,7 @@ class kb_hmmer:
     ######################################### noqa
     VERSION = "0.0.2"
     GIT_URL = "https://github.com/dcchivian/kb_hmmer"
-    GIT_COMMIT_HASH = "8f8518954e83ef5a067ee2297ccbb7f7eb26cc9e"
+    GIT_COMMIT_HASH = "36c2c5e73ae9a46460588f7c2374e46ab87fb6a8"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -226,9 +226,9 @@ class kb_hmmer:
         Methods for HMMER search of an MSA against many sequences 
         **
         **    overloading as follows:
-        **        input_msa_name: MSA
-        **        input_many_id: SingleEndLibrary, FeatureSet, Genome, GenomeSet
-        **        output_id: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+        **        input_msa_ref: MSA
+        **        input_many_ref: SingleEndLibrary, FeatureSet, Genome, GenomeSet
+        **        output_name: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
         :param params: instance of type "HMMER_Params" (HMMER Input Params)
            -> structure: parameter "workspace_name" of type "workspace_name"
            (** The workspace object refs are of form: ** **    objects =

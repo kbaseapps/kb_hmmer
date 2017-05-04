@@ -60,9 +60,9 @@ module kb_hmmer {
     /*  Methods for HMMER search of an MSA against many sequences 
     **
     **    overloading as follows:
-    **        input_msa_name: MSA
-    **        input_many_id: SingleEndLibrary, FeatureSet, Genome, GenomeSet
-    **        output_id: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+    **        input_msa_ref: MSA
+    **        input_many_ref: SingleEndLibrary, FeatureSet, Genome, GenomeSet
+    **        output_name: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
     */
     funcdef HMMER_MSA_Search (HMMER_Params params)  returns (HMMER_Output) authentication required;
 };

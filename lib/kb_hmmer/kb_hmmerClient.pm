@@ -170,9 +170,9 @@ HMMER_Output is a reference to a hash where the following keys are defined:
 Methods for HMMER search of an MSA against many sequences 
 **
 **    overloading as follows:
-**        input_msa_name: MSA
-**        input_many_id: SingleEndLibrary, FeatureSet, Genome, GenomeSet
-**        output_id: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+**        input_msa_ref: MSA
+**        input_many_ref: SingleEndLibrary, FeatureSet, Genome, GenomeSet
+**        output_name: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
 
 =back
 
