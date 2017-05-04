@@ -50,8 +50,8 @@ class kb_hmmer(object):
            "id" is a numerical identifier of the workspace or object, and
            should just be used for workspace ** "name" is a string identifier
            of a workspace or object.  This is received from Narrative.),
-           parameter "input_many_name" of type "data_obj_name", parameter
-           "input_msa_name" of type "data_obj_name", parameter
+           parameter "input_many_ref" of type "data_obj_ref", parameter
+           "input_msa_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "e_value" of Double, parameter "bitscore" of Double, parameter
            "maxaccepts" of Double

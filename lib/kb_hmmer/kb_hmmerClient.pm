@@ -126,18 +126,18 @@ $params is a kb_hmmer.HMMER_Params
 $return is a kb_hmmer.HMMER_Output
 HMMER_Params is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_hmmer.workspace_name
-	input_many_name has a value which is a kb_hmmer.data_obj_name
-	input_msa_name has a value which is a kb_hmmer.data_obj_name
+	input_many_ref has a value which is a kb_hmmer.data_obj_ref
+	input_msa_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	maxaccepts has a value which is a float
 workspace_name is a string
+data_obj_ref is a string
 data_obj_name is a string
 HMMER_Output is a reference to a hash where the following keys are defined:
 	report_name has a value which is a kb_hmmer.data_obj_name
 	report_ref has a value which is a kb_hmmer.data_obj_ref
-data_obj_ref is a string
 
 </pre>
 
@@ -149,18 +149,18 @@ $params is a kb_hmmer.HMMER_Params
 $return is a kb_hmmer.HMMER_Output
 HMMER_Params is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_hmmer.workspace_name
-	input_many_name has a value which is a kb_hmmer.data_obj_name
-	input_msa_name has a value which is a kb_hmmer.data_obj_name
+	input_many_ref has a value which is a kb_hmmer.data_obj_ref
+	input_msa_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	maxaccepts has a value which is a float
 workspace_name is a string
+data_obj_ref is a string
 data_obj_name is a string
 HMMER_Output is a reference to a hash where the following keys are defined:
 	report_name has a value which is a kb_hmmer.data_obj_name
 	report_ref has a value which is a kb_hmmer.data_obj_ref
-data_obj_ref is a string
 
 
 =end text
@@ -446,8 +446,8 @@ HMMER Input Params
 <pre>
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_hmmer.workspace_name
-input_many_name has a value which is a kb_hmmer.data_obj_name
-input_msa_name has a value which is a kb_hmmer.data_obj_name
+input_many_ref has a value which is a kb_hmmer.data_obj_ref
+input_msa_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 e_value has a value which is a float
 bitscore has a value which is a float
@@ -461,8 +461,8 @@ maxaccepts has a value which is a float
 
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_hmmer.workspace_name
-input_many_name has a value which is a kb_hmmer.data_obj_name
-input_msa_name has a value which is a kb_hmmer.data_obj_name
+input_many_ref has a value which is a kb_hmmer.data_obj_ref
+input_msa_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 e_value has a value which is a float
 bitscore has a value which is a float
