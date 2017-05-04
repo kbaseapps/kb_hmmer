@@ -22,8 +22,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "workspace_name",
-    "input_many_name",
-    "input_msa_name",
+    "input_many_ref",
+    "input_msa_ref",
     "output_filtered_name",
     "e_value",
     "bitscore",
@@ -33,10 +33,10 @@ public class HMMERParams {
 
     @JsonProperty("workspace_name")
     private String workspaceName;
-    @JsonProperty("input_many_name")
-    private String inputManyName;
-    @JsonProperty("input_msa_name")
-    private String inputMsaName;
+    @JsonProperty("input_many_ref")
+    private String inputManyRef;
+    @JsonProperty("input_msa_ref")
+    private String inputMsaRef;
     @JsonProperty("output_filtered_name")
     private String outputFilteredName;
     @JsonProperty("e_value")
@@ -62,33 +62,33 @@ public class HMMERParams {
         return this;
     }
 
-    @JsonProperty("input_many_name")
-    public String getInputManyName() {
-        return inputManyName;
+    @JsonProperty("input_many_ref")
+    public String getInputManyRef() {
+        return inputManyRef;
     }
 
-    @JsonProperty("input_many_name")
-    public void setInputManyName(String inputManyName) {
-        this.inputManyName = inputManyName;
+    @JsonProperty("input_many_ref")
+    public void setInputManyRef(String inputManyRef) {
+        this.inputManyRef = inputManyRef;
     }
 
-    public HMMERParams withInputManyName(String inputManyName) {
-        this.inputManyName = inputManyName;
+    public HMMERParams withInputManyRef(String inputManyRef) {
+        this.inputManyRef = inputManyRef;
         return this;
     }
 
-    @JsonProperty("input_msa_name")
-    public String getInputMsaName() {
-        return inputMsaName;
+    @JsonProperty("input_msa_ref")
+    public String getInputMsaRef() {
+        return inputMsaRef;
     }
 
-    @JsonProperty("input_msa_name")
-    public void setInputMsaName(String inputMsaName) {
-        this.inputMsaName = inputMsaName;
+    @JsonProperty("input_msa_ref")
+    public void setInputMsaRef(String inputMsaRef) {
+        this.inputMsaRef = inputMsaRef;
     }
 
-    public HMMERParams withInputMsaName(String inputMsaName) {
-        this.inputMsaName = inputMsaName;
+    public HMMERParams withInputMsaRef(String inputMsaRef) {
+        this.inputMsaRef = inputMsaRef;
         return this;
     }
 
@@ -164,7 +164,7 @@ public class HMMERParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((("HMMERParams"+" [workspaceName=")+ workspaceName)+", inputManyName=")+ inputManyName)+", inputMsaName=")+ inputMsaName)+", outputFilteredName=")+ outputFilteredName)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", maxaccepts=")+ maxaccepts)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((("HMMERParams"+" [workspaceName=")+ workspaceName)+", inputManyRef=")+ inputManyRef)+", inputMsaRef=")+ inputMsaRef)+", outputFilteredName=")+ outputFilteredName)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", maxaccepts=")+ maxaccepts)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

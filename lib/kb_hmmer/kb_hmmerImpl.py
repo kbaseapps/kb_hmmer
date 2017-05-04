@@ -54,7 +54,7 @@ class kb_hmmer:
     ######################################### noqa
     VERSION = "0.0.2"
     GIT_URL = "https://github.com/dcchivian/kb_hmmer"
-    GIT_COMMIT_HASH = "de3116c7f2665d262d67a76c13b2a9104c4ac256"
+    GIT_COMMIT_HASH = "8f8518954e83ef5a067ee2297ccbb7f7eb26cc9e"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -238,8 +238,8 @@ class kb_hmmer:
            "id" is a numerical identifier of the workspace or object, and
            should just be used for workspace ** "name" is a string identifier
            of a workspace or object.  This is received from Narrative.),
-           parameter "input_many_name" of type "data_obj_name", parameter
-           "input_msa_name" of type "data_obj_name", parameter
+           parameter "input_many_ref" of type "data_obj_ref", parameter
+           "input_msa_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "e_value" of Double, parameter "bitscore" of Double, parameter
            "maxaccepts" of Double
