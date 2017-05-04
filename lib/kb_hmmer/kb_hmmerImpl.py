@@ -268,8 +268,8 @@ class kb_hmmer:
         #
         if 'workspace_name' not in params:
             raise ValueError('workspace_name parameter is required')
-        if 'input_one_ref' not in params:
-            raise ValueError('input_one_ref parameter is required')
+#        if 'input_one_ref' not in params:
+#            raise ValueError('input_one_ref parameter is required')
         if 'input_msa_ref' not in params:
             raise ValueError('input_msa_ref parameter is required')
         if 'input_many_ref' not in params:
@@ -279,13 +279,14 @@ class kb_hmmer:
 
 
         # set local names
-        input_one_ref = params['input_one_ref']
+#        input_one_ref = params['input_one_ref']
         input_msa_ref = params['input_msa_ref']
         input_many_ref = params['input_many_ref']
         
 
         #### Get the input_one object
         ##
+        """
         input_one_id = None
         if 'input_one_ref' in params and params['input_one_ref'] != None:
             try:
@@ -367,12 +368,14 @@ class kb_hmmer:
         else:
             raise ValueError('Must define either input_one_sequence or input_one_name')
 
+        """
+
 
         #### Get the input_msa object
         ##
-        if input_one_feature_id == None:
-            self.log(invalid_msgs,"input_one_feature_id was not obtained from Query Object: "+input_one_name)
-        master_row_idx = 0
+#        if input_one_feature_id == None:
+#            self.log(invalid_msgs,"input_one_feature_id was not obtained from Query Object: "+input_one_name)
+#        master_row_idx = 0
         try:
             ws = workspaceService(self.workspaceURL, token=ctx['token'])
             objects = ws.get_objects([{'ref': input_msa_ref}])
@@ -402,12 +405,12 @@ class kb_hmmer:
                     default_row_labels[row_id] = row_id
 
             # determine row index of query sequence
-            for row_id in row_order:
-                master_row_idx += 1
-                if row_id == input_one_feature_id:
-                    break
-            if master_row_idx == 0:
-                self.log(invalid_msgs,"Failed to find query id "+input_one_feature_id+" from Query Object "+input_one_name+" within MSA: "+input_msa_name)
+#            for row_id in row_order:
+#                master_row_idx += 1
+#                if row_id == input_one_feature_id:
+#                    break
+#            if master_row_idx == 0:
+#                self.log(invalid_msgs,"Failed to find query id "+input_one_feature_id+" from Query Object "+input_one_name+" within MSA: "+input_msa_name)
 
             
             # export features to Clustal-esque file that PSI-BLAST likes
@@ -617,8 +620,8 @@ class kb_hmmer:
 
         # check for failed input file creation
         #
-        if not appropriate_sequence_found_in_one_input:
-            self.log(invalid_msgs,"no protein sequences found in '"+input_one_name+"'")
+#        if not appropriate_sequence_found_in_one_input:
+#            self.log(invalid_msgs,"no protein sequences found in '"+input_one_name+"'")
         if not appropriate_sequence_found_in_MSA_input:
             self.log(invalid_msgs,"no protein sequences found in '"+input_msa_name+"'")
         if not appropriate_sequence_found_in_many_input:
@@ -637,7 +640,7 @@ class kb_hmmer:
                 provenance = ctx['provenance']
             # add additional info to provenance here, in this case the input data object reference
             provenance[0]['input_ws_objects'] = []
-            provenance[0]['input_ws_objects'].append(input_one_ref)
+#            provenance[0]['input_ws_objects'].append(input_one_ref)
             provenance[0]['input_ws_objects'].append(input_msa_ref)
             provenance[0]['input_ws_objects'].append(input_many_ref)
             provenance[0]['service'] = 'kb_hmmer'
@@ -1053,7 +1056,7 @@ class kb_hmmer:
             provenance = ctx['provenance']
         # add additional info to provenance here, in this case the input data object reference
         provenance[0]['input_ws_objects'] = []
-        provenance[0]['input_ws_objects'].append(input_one_ref)
+#        provenance[0]['input_ws_objects'].append(input_one_ref)
         provenance[0]['input_ws_objects'].append(input_msa_ref)
         provenance[0]['input_ws_objects'].append(input_many_ref)
         provenance[0]['service'] = 'kb_blast'
