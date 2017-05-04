@@ -258,7 +258,7 @@ class kb_hmmer:
         report = ''
 #        report = 'Running '+search_tool_name+'_Search with params='
 #        report += "\n"+pformat(params)
-        appropriate_sequence_found_in_one_input = False
+        #appropriate_sequence_found_in_one_input = False
         appropriate_sequence_found_in_MSA_input = False
         appropriate_sequence_found_in_many_input = False
         genome_id_feature_id_delim = '.f:'
@@ -442,15 +442,16 @@ class kb_hmmer:
 
             # Determine whether nuc or protein sequences
             #
-            NUC_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
-            all_seqs_nuc = True
+            self.log (console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
+            PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
+            #NUC_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
+            appropriate_sequence_found_in_MSA_input = True
             for row_id in row_order:
-                #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")
-                if NUC_MSA_pattern.match(MSA_in['alignment'][row_id]) == None:
-                    all_seqs_nuc = False
+                self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
+                if not PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
+                    self.log(invalid_msgs,"BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
+                    appropriate_sequence_found_in_MSA_input = False
                     break
-                else:
-                    appropriate_sequence_found_in_MSA_input = True
 
         # Missing proper input_type
         #
