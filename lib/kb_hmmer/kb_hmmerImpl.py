@@ -447,7 +447,7 @@ class kb_hmmer:
             #NUC_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
             appropriate_sequence_found_in_MSA_input = True
             for row_id in row_order:
-                self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
+                #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
                 if not PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
                     self.log(invalid_msgs,"BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
                     appropriate_sequence_found_in_MSA_input = False
