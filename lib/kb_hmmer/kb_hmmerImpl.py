@@ -329,7 +329,9 @@ class kb_hmmer:
                     }
 
                 #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-                DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'])
+                #SERVICE_VER = 'release'
+                SERVICE_VER = 'dev'
+                DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
                 FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA (FeatureSetToFASTA_params)
                 one_forward_reads_file_path = FeatureSetToFASTA_retVal['fasta_file_path']
                 if len(FeatureSetToFASTA_retVal['feature_ids_by_genome_ref'].keys()) > 0:
@@ -528,7 +530,9 @@ class kb_hmmer:
                 }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'])
+            #SERVICE_VER = 'release'
+            SERVICE_VER = 'dev'
+            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
             FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA (FeatureSetToFASTA_params)
             many_forward_reads_file_path = FeatureSetToFASTA_retVal['fasta_file_path']
             feature_ids_by_genome_ref = FeatureSetToFASTA_retVal['feature_ids_by_genome_ref']
@@ -563,7 +567,9 @@ class kb_hmmer:
                 }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'])
+            #SERVICE_VER = 'release'
+            SERVICE_VER = 'dev'
+            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
             GenomeToFASTA_retVal = DOTFU.GenomeToFASTA (GenomeToFASTA_params)
             many_forward_reads_file_path = GenomeToFASTA_retVal['fasta_file_path']
             feature_ids = GenomeToFASTA_retVal['feature_ids']
@@ -600,7 +606,9 @@ class kb_hmmer:
                 }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'])
+            #SERVICE_VER = 'release'
+            SERVICE_VER = 'dev'
+            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
             GenomeSetToFASTA_retVal = DOTFU.GenomeSetToFASTA (GenomeSetToFASTA_params)
             many_forward_reads_file_path = GenomeSetToFASTA_retVal['fasta_file_path_list'][0]
             feature_ids_by_genome_id = GenomeSetToFASTA_retVal['feature_ids_by_genome_id']
