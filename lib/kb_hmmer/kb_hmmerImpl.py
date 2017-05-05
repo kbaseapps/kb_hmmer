@@ -1382,10 +1382,10 @@ class kb_hmmer:
             html_report_lines += ['</body>']
             html_report_lines += ['</html>']
 
-            # write html to file and upload
-            #html_report_str = "\n".join(html_report_lines)
-            html_report_str = "<html><body>HELLO KITTY</body></html>"  # DEBUG
 
+            # write html to file and upload
+            #
+            html_report_str = "\n".join(html_report_lines)
             html_output_dir = os.path.join(output_dir,'html_output')
             if not os.path.exists(html_output_dir):
                 os.makedirs(html_output_dir)
@@ -1428,12 +1428,11 @@ class kb_hmmer:
                          'workspace_name': params['workspace_name'],
                          'report_object_name': reportName
                          }
-            #html_buf_lim = 16000  # really 16KB, but whatever
-            #if len(html_report_str) <= html_buf_lim:
-            #    reportObj['direct_html'] = html_report_str
-            #else:
-            #    reportObj['direct_html_link_index'] = 0
-            reportObj['direct_html_link_index'] = 0
+            html_buf_lim = 16000  # really 16KB, but whatever
+            if len(html_report_str) <= html_buf_lim:
+                reportObj['direct_html'] = html_report_str
+            else:
+                reportObj['direct_html_link_index'] = 0
 
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': search_tool_name+'_Search.HTML',
