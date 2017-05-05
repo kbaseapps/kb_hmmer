@@ -2,7 +2,7 @@ module-name:
     kb_hmmer
 
 module-description:
-    A KBase module that offers HMMER Hidden Markov Model Sequence Search and Alignment
+    A KBase module that offers HMMER Hidden Markov Model Sequence Search
 
 service-language:
     python
