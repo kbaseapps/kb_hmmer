@@ -1383,10 +1383,12 @@ class kb_hmmer:
             html_report_lines += ['</html>']
 
             # write html to file and upload
+            #html_report_str = "\n".join(html_report_lines)
+            html_report_str = "<html><body>HELLO KITTY</body></html>"  # DEBUG
+
             html_output_dir = os.path.join(output_dir,'html_output')
             if not os.path.exists(html_output_dir):
                 os.makedirs(html_output_dir)
-            html_report_str = "\n".join(html_report_lines)
             html_file = search_tool_name+'_Search.html'
             html_path = os.path.join (html_output_dir, html_file)
             with open (html_path, 'w', 0) as html_handle:
