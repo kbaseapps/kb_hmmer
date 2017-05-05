@@ -902,7 +902,7 @@ class kb_hmmer:
 
         # Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
         #
-        self.log(console, 'PARSING HMMER ALIGNMENT OUTPUT')
+        self.log(console, 'PARSING HMMER SEARCH OUTPUT')
         if not os.path.isfile(output_hit_TAB_file_path):
             raise ValueError("failed to create HMMER output: "+output_hit_TAB_file_path)
         elif not os.path.getsize(output_hit_TAB_file_path) > 0:
@@ -1391,11 +1391,23 @@ class kb_hmmer:
 
             dfu = DFUClient(self.callbackURL)
             try:
-                upload_ret = dfu.file_to_shock({'file_path': html_path,
+                HTML_upload_ret = dfu.file_to_shock({'file_path': html_path,
                                                 'make_handle': 0,
                                                 'pack': 'zip'})
             except:
-                raise ValueError ('Logging exception loading html_report to shock')
+                raise ValueError ('Logging exception loading HTML file to shock')
+            try:
+                TAB_upload_ret = dfu.file_to_shock({'file_path': output_hit_TAB_file_path,
+                                                    'make_handle': 0,
+                                                    'pack': 'zip'})
+            except:
+                raise ValueError ('Logging exception loading TAB output to shock')
+            try:
+                MSA_upload_ret = dfu.file_to_shock({'file_path': output_hit_MSA_file_path,
+                                                    'make_handle': 0,
+                                                    'pack': 'zip'})
+            except:
+                raise ValueError ('Logging exception loading MSA output to shock')
 
 
             # create report object
@@ -1410,35 +1422,41 @@ class kb_hmmer:
                          'workspace_name': params['workspace_name'],
                          'report_object_name': reportName
                          }
-            html_buf_lim = 16000  # really 16KB, but whatever
-            if len(html_report_str) <= html_buf_lim:
-                reportObj['direct_html'] = html_report_str
-            else:
-                reportObj['direct_html_link_index'] = 0
+            #html_buf_lim = 16000  # really 16KB, but whatever
+            #if len(html_report_str) <= html_buf_lim:
+            #    reportObj['direct_html'] = html_report_str
+            #else:
+            #    reportObj['direct_html_link_index'] = 0
+            reportObj['direct_html_link_index'] = 0
 
-            reportObj['html_links'] = [{'shock_id': upload_ret['shock_id'],
-                                        'name': html_file,
-                                        'label': search_tool_name+' Results'}
+            reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
+                                        'name': search_tool_name+'_Search.HTML',
+                                        'label': search_tool_name+' HTML Report'}
                                        ]
-            reportObj['file_links'] = [{'shock_id': base_upload_ret['shock_id'],
-                                        'name': search_tool_name+'_Search-m'+'7'+'.txt',
-                                        'label': search_tool_name+' Results: m'+'7'}
+            reportObj['file_links'] = [{'shock_id': TAB_upload_ret['shock_id'],
+                                        'name': search_tool_name+'_Search.TSV',
+                                        'label': search_tool_name+' hits TABLE'},
+
+                                       {'shock_id': MSA_upload_ret['shock_id'],
+                                        'name': search_tool_name+'_Search.MSA',
+                                        'label': search_tool_name+' hits MSA'},
+
                                        ]
-            if extra_output:
-                extension = 'txt'
-                if params['output_extra_format'] == '5':
-                    extension = 'xml'
-                elif params['output_extra_format'] == '8':
-                    extension = 'asn1txt'
-                elif params['output_extra_format'] == '9':
-                    extension = 'asn1bin'
-                elif params['output_extra_format'] == '10':
-                    extension = 'csv'
-                elif params['output_extra_format'] == '11':
-                    extension = 'asn1arc'
-                reportObj['file_links'].append({'shock_id': extra_upload_ret['shock_id'],
-                                                'name': search_tool_name+'_Search-m'+str(params['output_extra_format'])+'.'+extension,
-                                                'label': search_tool_name+' Results: m'+str(params['output_extra_format'])})
+#            if extra_output:
+#                extension = 'txt'
+#                if params['output_extra_format'] == '5':
+#                    extension = 'xml'
+#                elif params['output_extra_format'] == '8':
+#                    extension = 'asn1txt'
+#                elif params['output_extra_format'] == '9':
+#                    extension = 'asn1bin'
+#                elif params['output_extra_format'] == '10':
+#                    extension = 'csv'
+#                elif params['output_extra_format'] == '11':
+#                    extension = 'asn1arc'
+#                reportObj['file_links'].append({'shock_id': extra_upload_ret['shock_id'],
+#                                                'name': search_tool_name+'_Search-m'+str(params['output_extra_format'])+'.'+extension,
+#                                                'label': search_tool_name+' Results: m'+str(params['output_extra_format'])})
                             
             reportObj['objects_created'].append({'ref':str(params['workspace_name'])+'/'+params['output_filtered_name'],'description':search_tool_name+' hits'})
             #reportObj['message'] = report
