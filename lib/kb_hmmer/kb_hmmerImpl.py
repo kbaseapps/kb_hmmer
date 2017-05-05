@@ -415,29 +415,76 @@ class kb_hmmer:
 #                self.log(invalid_msgs,"Failed to find query id "+input_one_feature_id+" from Query Object "+input_one_name+" within MSA: "+input_msa_name)
 
             
-            # export features to Clustal-esque file that PSI-BLAST likes
-            input_MSA_file_path = os.path.join(self.scratch, input_msa_name+".fasta")
+            # export features to CLUSTAL formatted MSA (HMMER BUILD seems to only take CLUSTAL)
+            input_MSA_file_path = os.path.join(self.scratch, input_msa_name+".clustal")
             self.log(console, 'writing MSA file: '+input_MSA_file_path)
-            records = []
+
+            # set header
+            header = 'CLUSTAL W (1.81) multiple sequence alignment'
+
+            # get longest id
             longest_row_id_len = 0
             for row_id in row_order:
                 if len(row_id) > longest_row_id_len:
                     longest_row_id_len = len(row_id)
+            # make sure rows are all same length
+            row_id_0 = row_order[0]
+            row_len = len(MSA_in['alignment'][row_id_0])
             for row_id in row_order:
-                #self.log(console,"row_id: '"+row_id+"'")  # DEBUG
-                #self.log(console,"alignment: '"+MSA_in['alignment'][row_id]+"'")  # DEBUG
-                # using SeqIO makes multiline sequences.  We want Clustal-esque, but we'll not break them up and hope PSI-BLAST is happy
-                #record = SeqRecord(Seq(MSA_in['alignment'][row_id]), id=row_id, description=default_row_labels[row_id])
-                #records.append(record)
-                #SeqIO.write(records, input_MSA_file_path, "fasta")
-                padding = ''
-                for i in range(0,longest_row_id_len-len(row_id)):
-                    padding += ' '
-                records.append(row_id + padding + "\t" +
-                               MSA_in['alignment'][row_id]
-                               )
+                if len(MSA_in['alignment'][row_id]) != row_len:
+                    raise ValueError("MSA alignment rows are not constant length")
+            # get alignment line (just storing identity markers)
+            conservation_symbol = ''
+            for i in range(row_len):
+                first_seen_char = MSA_in['alignment'][row_id_0][i]
+                symbol = '*'
+                for row_id in row_order:
+                    if MSA_in['alignment'][row_id][i] == '-' or MSA_in['alignment'][row_id][i] != first_seen_char:
+                        symbol = ' '
+                        break
+                conservation_symbol += symbol
+
+            # break up MSA into 60 char chunks
+            records = []
+            chunk_len = 60
+            whole_chunks = int(math.floor(row_len/chunk_len))
+            if whole_chunks > 0:
+                for j in range(whole_chunks):
+                    records.append('')
+                    for row_id in row_order:
+                        padding = ''
+                        if longest_row_id_len-len(row_id) > 0:
+                            for i in range(0,longest_row_id_len-len(row_id)):
+                                padding += ' '
+                        records.append(row_id + padding + " " +
+                                       MSA_in['alignment'][row_id][j*chunk_len:(j+1)*chunk_len])
+                    records.append(''.join([' ' for s in range(longest_row_id_len)]) + " " +
+                                   conservation_symbol[j*chunk_len:(j+1)*chunk_len])
+
+            # add final rows
+            if (row_len % chunk_len) != 0:
+                j=whole_chunks
+                records.append('')
+                for row_id in row_order:
+                    padding = ''
+                    if longest_row_id_len-len(row_id) > 0:
+                        for i in range(0,longest_row_id_len-len(row_id)):
+                            padding += ' '
+                    records.append(row_id + padding + " " +
+                                   MSA_in['alignment'][row_id][j*chunk_len:row_len])
+                records.append(''.join([' ' for s in range(longest_row_id_len)]) + " " +
+                               conservation_symbol[j*chunk_len:row_len])
+            
+            # write that sucker
             with open(input_MSA_file_path,'w',0) as input_MSA_file_handle:
+                input_MSA_file_handle.write(header+"\n")
                 input_MSA_file_handle.write("\n".join(records)+"\n")
+
+            # DEBUG
+            #report += "MSA:\n"
+            #report += header+"\n"
+            #report += "\n".join(records)+"\n"
+            #self.log(console,report)
 
 
             # Determine whether nuc or protein sequences
