@@ -12,6 +12,7 @@ import uuid
 from datetime import datetime
 from pprint import pprint, pformat
 import numpy as np
+import math
 import gzip
 
 from Bio import SeqIO
