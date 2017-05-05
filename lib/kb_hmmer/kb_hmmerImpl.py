@@ -908,6 +908,7 @@ class kb_hmmer:
         elif not os.path.getsize(output_hit_TAB_file_path) > 0:
             raise ValueError("created empty file for HMMER output: "+output_hit_TAB_file_path)
         hit_seq_ids = dict()
+        accept_fids = dict()
         output_hit_TAB_file_handle = open (output_hit_TAB_file_path, "r", 0)
         output_aln_buf = output_hit_TAB_file_handle.readlines()
         output_hit_TAB_file_handle.close()
