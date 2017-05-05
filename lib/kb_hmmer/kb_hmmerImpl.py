@@ -1392,8 +1392,8 @@ class kb_hmmer:
             dfu = DFUClient(self.callbackURL)
             try:
                 HTML_upload_ret = dfu.file_to_shock({'file_path': html_path,
-                                                     'make_handle': 0})
-                                                     #'pack': 'zip'})
+                                                     'make_handle': 0,
+                                                     'pack': 'zip'})
             except:
                 raise ValueError ('Logging exception loading HTML file to shock')
             try:
@@ -1434,7 +1434,7 @@ class kb_hmmer:
                                         'label': search_tool_name+' HTML Report'}
                                        ]
             reportObj['file_links'] = [{'shock_id': TAB_upload_ret['shock_id'],
-                                        'name': search_tool_name+'_Search.TSV',
+                                        'name': search_tool_name+'_Search.TAB',
                                         'label': search_tool_name+' hits TABLE'},
 
                                        {'shock_id': MSA_upload_ret['shock_id'],
