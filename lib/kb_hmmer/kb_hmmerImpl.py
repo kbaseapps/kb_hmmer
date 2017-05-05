@@ -738,7 +738,7 @@ class kb_hmmer:
             return [returnVal]
 
 
-        # set the output path
+        # set the output paths
         timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
         output_dir = os.path.join(self.scratch,'output.'+str(timestamp))
         if not os.path.exists(output_dir):
@@ -1383,15 +1383,19 @@ class kb_hmmer:
             html_report_lines += ['</html>']
 
             # write html to file and upload
+            html_output_dir = os.path.join(output_dir,'html_output')
+            if not os.path.exists(html_output_dir):
+                os.makedirs(html_output_dir)
             html_report_str = "\n".join(html_report_lines)
             html_file = search_tool_name+'_Search.html'
-            html_path = os.path.join (output_dir, html_file)
+            html_path = os.path.join (html_output_dir, html_file)
             with open (html_path, 'w', 0) as html_handle:
                 html_handle.write(html_report_str)
 
             dfu = DFUClient(self.callbackURL)
             try:
-                HTML_upload_ret = dfu.file_to_shock({'file_path': html_path,
+                #HTML_upload_ret = dfu.file_to_shock({'file_path': html_path,
+                HTML_upload_ret = dfu.file_to_shock({'file_path': html_output_dir,
                                                      'make_handle': 0,
                                                      'pack': 'zip'})
             except:
