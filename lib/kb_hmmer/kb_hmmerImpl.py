@@ -1392,20 +1392,20 @@ class kb_hmmer:
             dfu = DFUClient(self.callbackURL)
             try:
                 HTML_upload_ret = dfu.file_to_shock({'file_path': html_path,
-                                                'make_handle': 0,
-                                                'pack': 'zip'})
+                                                     'make_handle': 0})
+                                                     #'pack': 'zip'})
             except:
                 raise ValueError ('Logging exception loading HTML file to shock')
             try:
                 TAB_upload_ret = dfu.file_to_shock({'file_path': output_hit_TAB_file_path,
-                                                    'make_handle': 0,
-                                                    'pack': 'zip'})
+                                                    'make_handle': 0})
+                                                    #'pack': 'zip'})
             except:
                 raise ValueError ('Logging exception loading TAB output to shock')
             try:
                 MSA_upload_ret = dfu.file_to_shock({'file_path': output_hit_MSA_file_path,
-                                                    'make_handle': 0,
-                                                    'pack': 'zip'})
+                                                    'make_handle': 0})
+                                                    #'pack': 'zip'})
             except:
                 raise ValueError ('Logging exception loading MSA output to shock')
 
