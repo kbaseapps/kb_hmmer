@@ -1227,7 +1227,7 @@ class kb_hmmer:
 #                identity = str(round(float(identity), 1))
 #                if identity == '100.0':  identity = '100'
 
-                [hit_id, hit_accession, query_name, query_accession, e_value, bit_score, bias, e_value_best_dom, bit_score_best_dom, bias_best_dom, expected_dom_n, regions, regions_multidom, overlaps, envelopes, dom_n, doms_within_rep_thresh, doms_within_inc_thresh, hit_desc] = line.split(" ")[0:18]
+                [hit_id, hit_accession, query_name, query_accession, e_value, bit_score, bias, e_value_best_dom, bit_score_best_dom, bias_best_dom, expected_dom_n, regions, regions_multidom, overlaps, envelopes, dom_n, doms_within_rep_thresh, doms_within_inc_thresh, hit_desc] = re.split('\s+',line)[0:19]
 
                 #if many_type_name == 'SingleEndLibrary':
                 #    pass
