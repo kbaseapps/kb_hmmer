@@ -386,13 +386,13 @@ class kb_hmmer:
             input_msa_data = objects[0]['data']
             info = objects[0]['info']
             input_msa_name = str(info[1])
-            input_msa_type = info[2].split('.')[1].split('-')[0]
+            msa_type_name = info[2].split('.')[1].split('-')[0]
 
         except Exception as e:
             raise ValueError('Unable to fetch input_msa_name object from workspace: ' + str(e))
             #to get the full stack trace: traceback.format_exc()
 
-        if input_msa_type == 'MSA':
+        if msa_type_name == 'MSA':
             MSA_in = input_msa_data
             row_order = []
             default_row_labels = dict()
@@ -504,7 +504,7 @@ class kb_hmmer:
         # Missing proper input_type
         #
         else:
-            raise ValueError('Cannot yet handle input_name type of: '+type_name)
+            raise ValueError('Cannot yet handle input_msa type of: '+msa_type_name)
 
 
         #### Get the input_many object
@@ -672,7 +672,7 @@ class kb_hmmer:
         # Missing proper input_many_type
         #
         else:
-            raise ValueError('Cannot yet handle input_many type of: '+type_name)            
+            raise ValueError('Cannot yet handle input_many type of: '+many_type_name)            
 
 
         # check for failed input file creation
@@ -1336,7 +1336,7 @@ class kb_hmmer:
  #                   html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
 
                     # evalue
-                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(e_value)+'</nobr><br><nobr>('+str(e_value_best_dom)+')</nobr></font></td>']
+                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(e_value)+'</nobr></font></td>']
 
                     # bit score
 #                    if 'bitscore' in filtering_fields[hit_id:
@@ -1344,7 +1344,7 @@ class kb_hmmer:
 #                    else:
 #                        this_cell_color = row_color
 
-                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bit_score)+'</nobr><br><nobr>('+str(bit_score_best_dom)+')</nobr></font></td>']
+                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bit_score)+'</nobr></font></td>']
                     # bias
 #                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bias)+'</nobr><br><nobr>('+str(bias_best_dom)+')</nobr></font></td>']
 
