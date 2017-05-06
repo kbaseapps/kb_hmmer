@@ -976,7 +976,7 @@ class kb_hmmer:
                 filtering_fields[hit_seq_id]['maxaccepts'] = True
 
             if filter:
-                break
+                continue
             
             hit_total += 1
             hit_seq_ids[hit_seq_id] = True
@@ -1339,12 +1339,11 @@ class kb_hmmer:
                     html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(e_value)+'</nobr></font></td>']
 
                     # bit score
-#                    if 'bitscore' in filtering_fields[hit_id:
-#                        this_cell_color = reject_cell_color
-#                    else:
-#                        this_cell_color = row_color
-
-                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bit_score)+'</nobr></font></td>']
+                    if 'bitscore' in filtering_fields[hit_id:
+                        this_cell_color = reject_cell_color
+                    else:
+                        this_cell_color = row_color
+                    html_report_lines += ['<td align=center bgcolor="'+str(this_cell_color)+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bit_score)+'</nobr></font></td>']
                     # bias
 #                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bias)+'</nobr><br><nobr>('+str(bias_best_dom)+')</nobr></font></td>']
 
