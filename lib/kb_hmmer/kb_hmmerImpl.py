@@ -1396,8 +1396,8 @@ class kb_hmmer:
 
             dfu = DFUClient(self.callbackURL)
             try:
-                #HTML_upload_ret = dfu.file_to_shock({'file_path': html_path,
-                HTML_upload_ret = dfu.file_to_shock({'file_path': html_output_dir,
+                HTML_upload_ret = dfu.file_to_shock({'file_path': html_path,
+                #HTML_upload_ret = dfu.file_to_shock({'file_path': html_output_dir,
                                                      'make_handle': 0,
                                                      'pack': 'zip'})
             except:
@@ -1435,7 +1435,7 @@ class kb_hmmer:
                 reportObj['direct_html_link_index'] = 0
 
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
-                                        'name': search_tool_name+'_Search.HTML',
+                                        'name': html_file,
                                         'label': search_tool_name+' HTML Report'}
                                        ]
             reportObj['file_links'] = [{'shock_id': TAB_upload_ret['shock_id'],
