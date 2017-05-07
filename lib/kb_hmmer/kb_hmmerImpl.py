@@ -1017,9 +1017,10 @@ class kb_hmmer:
             for MSA_out_line in output_hit_MSA_file_handle.readlines():
                 MSA_out_line = MSA_out_line.strip()
                 if MSA_out_line.startswith('#=GS '):
-                    hit_range = re.sub('#=GS ', '', MSA_out_line)
-                    hit_range = re.sub('\s+.*?$', '', hit_range)
-                    hit_range = re.sub('^.*\/', '', hit_range)
+                    hit_rec = re.sub('#=GS ', '', MSA_out_line)
+                    hit_rec = re.sub('\s+.*?$', '', hit_rec)
+                    hit_range = re.sub('^.*\/', '', hit_rec)
+                    hit_id = re.sub('\/[^\/]+$', '', hit_rec)
                     (beg_str, end_str) = hit_range.split('-')
                     hit_beg[hit_id] = int(beg_str)
                     hit_end[hit_id] = int(end_str)
