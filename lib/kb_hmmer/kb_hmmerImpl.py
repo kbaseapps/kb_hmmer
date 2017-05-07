@@ -997,8 +997,8 @@ class kb_hmmer:
                         id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                         if id_untrans in hit_order or id_trans in hit_order:
                             hit_seq_len[last_id] = len(last_buf)
-                    header = re.sub('^>', fasta_line)
-                    last_id = re.sub('\s+.*?$', header)
+                    header = re.sub('^>', '', fasta_line)
+                    last_id = re.sub('\s+.*?$', '', header)
                     last_buf = ''
                 else:
                     last_buf += fasta_line
@@ -1017,9 +1017,9 @@ class kb_hmmer:
             for MSA_out_line in output_hit_MSA_file_handle.readlines():
                 MSA_out_line = MSA_out_line.strip()
                 if MSA_out_line.startswith('#=GS '):
-                    hit_range = re.sub('#=GS ', MSA_out_line)
-                    hit_range = re.sub('\s+.*?$', hit_range)
-                    hit_range = re.sub('^.*?\/', hit_range)
+                    hit_range = re.sub('#=GS ', '', MSA_out_line)
+                    hit_range = re.sub('\s+.*?$', '', hit_range)
+                    hit_range = re.sub('^.*?\/', '', hit_range)
                     (beg_str, end_str) = hit_range.split('-')
                     hit_beg[hit_id] = int(beg_str)
                     hit_end[hit_id] = int(end_str)
