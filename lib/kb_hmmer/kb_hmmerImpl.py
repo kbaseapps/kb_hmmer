@@ -1248,7 +1248,7 @@ class kb_hmmer:
             html_report_lines += ['<body bgcolor="white">']
             html_report_lines += ['<table cellpadding='+cellpadding+' cellspacing = '+cellspacing+' border='+border+'>']
             html_report_lines += ['<tr bgcolor="'+head_color+'">']
- #           html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'ALIGNMENT COVERAGE'+'</font></td>']
+            html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'ALIGNMENT COVERAGE (HIT SEQ)'+'</font></td>']
             html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'GENE ID'+'</font></td>']
             html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'FUNCTION'+'</font></td>']
             html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'GENOME'+'</font></td>']
@@ -1331,13 +1331,12 @@ class kb_hmmer:
                     #html_report_lines += ['<tr bgcolor="'+'white'+'">']  # DEBUG
                     # add overlap bar
 
-                    # coverage graphic
-                    """
+                    # coverage graphic (with respect to hit seq)
                     html_report_lines += ['<td valign=middle align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'">']
                     html_report_lines += ['<table style="height:'+str(bar_height)+'px; width:'+str(bar_width)+'px" border=0 cellpadding=0 cellspacing=0>']
                     full_len_pos = bar_width
-                    aln_beg_pos = int (float(bar_width) * float(int(q_beg)-1)/float(int(query_len)-1))
-                    aln_end_pos = int (float(bar_width) * float(int(q_end)-1)/float(int(query_len)-1))
+                    aln_beg_pos = int (float(bar_width) * float(int(h_beg)-1)/float(int(h_len)-1))
+                    aln_end_pos = int (float(bar_width) * float(int(h_end)-1)/float(int(h_len)-1))
                     cell_pix_height = str(int(round(float(bar_height)/3.0, 0)))
 
                     cell_color = ['','','']
@@ -1362,7 +1361,6 @@ class kb_hmmer:
                         html_report_lines += ['</tr>']
                     html_report_lines += ['</table>']
                     html_report_lines += ['</td>']
-                    """
 
                     # add other cells
                     # fid
