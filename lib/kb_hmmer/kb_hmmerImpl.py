@@ -982,6 +982,49 @@ class kb_hmmer:
             hit_seq_ids[hit_seq_id] = True
             self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
         
+
+        # Measure length of hit sequences
+        #
+        hit_seq_len = dict()
+        with open (many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
+            last_id = None
+            last_buf = ''
+            for fasta_line in many_forward_reads_file_handle.readlines():
+                fasta_line = fasta_line.strip()
+                if fasta_line.startswith('>'):
+                    if last_id != None:
+                        id_untrans = last_id
+                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        if id_untrans in hit_order or id_trans in hit_order:
+                            hit_seq_len[last_id] = len(last_buf)
+                    header = re.sub('^>', fasta_line)
+                    last_id = re.sub('\s+.*?$', header)
+                    last_buf = ''
+                else:
+                    last_buf += fasta_line
+            if last_id != None:
+                id_untrans = last_id
+                id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                if id_untrans in hit_order or id_trans in hit_order:
+                    hit_seq_len[last_id] = len(last_buf)
+
+
+        # Get hit beg and end positions from Stockholm format MSA output
+        #
+        hit_beg = dict()
+        hit_end = dict()
+        with open (output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
+            for MSA_out_line in output_hit_MSA_file_handle.readlines():
+                MSA_out_line = MSA_out_line.strip()
+                if MSA_out_line.startswith('#=GS '):
+                    hit_range = re.sub('#=GS ', MSA_out_line)
+                    hit_range = re.sub('\s+.*?$', hit_range)
+                    hit_range = re.sub('^.*?\/', hit_range)
+                    (beg_str, end_str) = hit_range.split('-')
+                    hit_beg[hit_id] = int(beg_str)
+                    hit_end[hit_id] = int(end_str)
+
+
         self.log(console, 'EXTRACTING HITS FROM INPUT')
         self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
 
@@ -1209,10 +1252,10 @@ class kb_hmmer:
             html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'FUNCTION'+'</font></td>']
             html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'GENOME'+'</font></td>']
 #            html_report_lines += ['<td align=center style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'IDENT'+'%</font></td>']
-#            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'ALN_LEN/regions'+'</font></td>']
+            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'ALN_LEN'+'</font></td>']
             html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'E-VALUE'+'</font></td>']
             html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'BIT SCORE'+'</font></td>']
-#            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'<nobr>Q_BEG-Q_END:</nobr> <nobr>H_BEG-H_END</nobr>'+'</font></td>']
+            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'<nobr>H_BEG-H_END</nobr>'+'</font></td>']
 #            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'MIS MATCH'+'</font></td>']
 #            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'GAP OPEN'+'</font></td>']
             html_report_lines += ['</tr>']
@@ -1222,12 +1265,19 @@ class kb_hmmer:
                 if line == '' or line.startswith('#'):
                     continue
 
+                [hit_id, hit_accession, query_name, query_accession, e_value, bit_score, bias, e_value_best_dom, bit_score_best_dom, bias_best_dom, expected_dom_n, regions, regions_multidom, overlaps, envelopes, dom_n, doms_within_rep_thresh, doms_within_inc_thresh, hit_desc] = re.split('\s+',line)[0:19]
+
 #                [query_id, hit_id, identity, aln_len, mismatches, gap_openings, q_beg, q_end, h_beg, h_end, e_value, bit_score] = line.split("\t")[0:12]
-#                aln_len_perc = round (100.0*float(aln_len)/float(query_len), 1)
 #                identity = str(round(float(identity), 1))
 #                if identity == '100.0':  identity = '100'
 
-                [hit_id, hit_accession, query_name, query_accession, e_value, bit_score, bias, e_value_best_dom, bit_score_best_dom, bias_best_dom, expected_dom_n, regions, regions_multidom, overlaps, envelopes, dom_n, doms_within_rep_thresh, doms_within_inc_thresh, hit_desc] = re.split('\s+',line)[0:19]
+                # get coords with respect to hit sequence
+                h_len = hit_seq_len[hit_id]
+                h_beg = hit_beg[hit_id]
+                h_end = hit_end[hit_id]
+                aln_len = h_end-h_beg+1
+                aln_len_perc = round (100.0*float(aln_len)/float(h_len), 1)
+
 
                 #if many_type_name == 'SingleEndLibrary':
                 #    pass
@@ -1333,13 +1383,13 @@ class kb_hmmer:
  #                       this_cell_color = reject_cell_color
  #                   else:
  #                       this_cell_color = row_color
- #                   html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
+                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
 
                     # evalue
                     html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(e_value)+'</nobr></font></td>']
 
                     # bit score
-                    if 'bitscore' in filtering_fields[hit_id:
+                    if 'bitscore' in filtering_fields[hit_id]:
                         this_cell_color = reject_cell_color
                     else:
                         this_cell_color = row_color
@@ -1347,8 +1397,9 @@ class kb_hmmer:
                     # bias
 #                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bias)+'</nobr><br><nobr>('+str(bias_best_dom)+')</nobr></font></td>']
 
-                    # aln coords?
-#                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(q_beg)+'-'+str(q_end)+':</nobr> <nobr>'+str(h_beg)+'-'+str(h_end)+'</nobr></font></td>']
+                    # aln coords only for hit seq
+                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(h_beg)+'-'+str(h_end)+'</nobr></font></td>']
+
                     # mismatches?
 #                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(mismatches)+'</font></td>']
                     # gaps?
