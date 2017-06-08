@@ -2105,6 +2105,7 @@ class kb_hmmer:
         output_hit_TAB_file_paths = []
         output_hit_MSA_file_paths = []
         output_filtered_fasta_file_paths = []
+        objects_created_refs = []
         html_report_chunks = []
         
         for i,input_msa_ref in enumerate(input_msa_refs):
@@ -2549,47 +2550,51 @@ class kb_hmmer:
             provenance[0]['method'] = search_tool_name+'_Search'
 
 
-            # Upload results
+            # Upload results if coalesce_output is 0
             #
-            output_name = input_msa_name+'-'+params['output_filtered_name']
-            objects_created_refs = []
+            if params['coalesce_output'] == 1:
+# HERE
 
-            if len(invalid_msgs) == 0:
-                if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
-                    self.log(console,"NO Object to Upload for MSA "+input_msa_name)  # DEBUG
-                    objects_created_refs.append(None)
-                    continue
+                continue
+            else:
+                output_name = input_msa_name+'-'+params['output_filtered_name']
 
-                self.log(console,"Uploading results Object MSA "+input_msa_name)  # DEBUG
+                if len(invalid_msgs) == 0:
+                    if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
+                        self.log(console,"No Object to Upload for MSA "+input_msa_name)  # DEBUG
+                        objects_created_refs.append(None)
+                        continue
 
-                # input many SequenceSet -> save SequenceSet
-                #
-                if many_type_name == 'SequenceSet':
-                    new_obj_info = ws.save_objects({
-                                'workspace': params['workspace_name'],
-                                'objects':[{
-                                        'type': 'KBaseSequences.SequenceSet',
-                                        'data': output_sequenceSet,
-                                        'name': output_name,
-                                        'meta': {},
-                                        'provenance': provenance
-                                    }]
-                            })[0]
+                    self.log(console,"Uploading results Object MSA "+input_msa_name)  # DEBUG
 
-                else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
-                    new_obj_info = ws.save_objects({
-                                'workspace': params['workspace_name'],
-                                'objects':[{
-                                        'type': 'KBaseCollections.FeatureSet',
-                                        'data': output_featureSet,
-                                        'name': output_name,
-                                        'meta': {},
-                                        'provenance': provenance
-                                    }]
-                            })[0]
+                    # input many SequenceSet -> save SequenceSet
+                    #
+                    if many_type_name == 'SequenceSet':
+                        new_obj_info = ws.save_objects({
+                                    'workspace': params['workspace_name'],
+                                    'objects':[{
+                                            'type': 'KBaseSequences.SequenceSet',
+                                            'data': output_sequenceSet,
+                                            'name': output_name,
+                                            'meta': {},
+                                            'provenance': provenance
+                                        }]
+                                })[0]
 
-                [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
-                objects_created_refs.append(str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I]))
+                    else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+                        new_obj_info = ws.save_objects({
+                                    'workspace': params['workspace_name'],
+                                    'objects':[{
+                                            'type': 'KBaseCollections.FeatureSet',
+                                            'data': output_featureSet,
+                                            'name': output_name,
+                                            'meta': {},
+                                            'provenance': provenance
+                                        }]
+                                })[0]
+
+                    [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+                    objects_created_refs.append(str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I]))
 
 
             #### Build output report chunks
