@@ -20,6 +20,7 @@ module kb_hmmer {
     typedef string sequence;
     typedef string data_obj_name;
     typedef string data_obj_ref;
+    typedef bool   int;
 
 
     /* HMMER Input Params
@@ -77,6 +78,7 @@ module kb_hmmer {
 	data_obj_ref   input_many_ref;
         data_obj_name  output_filtered_name;
 
+	bool  coalesce_output;
 	float e_value;
 	float bitscore;
 	float maxaccepts;
