@@ -1893,8 +1893,9 @@ class kb_hmmer:
         #### Get the input_msa_refs
         ##
         input_msa_refs = []
+        ws = workspaceService(self.workspaceURL, token=ctx['token'])
         try:
-            msa_obj_info_list = wsClient.list_objects({'ids':[params['workspace_name']],'type':"KBaseTrees.MSA"})
+            msa_obj_info_list = ws.list_objects({'ids':[params['workspace_name']],'type':"KBaseTrees.MSA"})
         except Exception as e:
             raise ValueError ("Unable to list MSA objects from workspace: "+str(params['workspace_name'])+" "+str(e))
 
