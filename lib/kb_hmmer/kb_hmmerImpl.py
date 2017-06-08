@@ -2955,7 +2955,7 @@ class kb_hmmer:
                                              'label': input_msa_name+'.'+search_tool_name+' hits MSA'}
                                            ]
                                            
-                reportObj['objects_created'].append(objects_created_refs[i], 'description':input_msa_name+' '+search_tool_name+' hits'})
+                reportObj['objects_created'].append({'ref':objects_created_refs[i], 'description':input_msa_name+' '+search_tool_name+' hits'})
 
 
             # save report object
