@@ -337,6 +337,10 @@ class Application(object):
                              name='kb_hmmer.HMMER_MSA_Search',
                              types=[dict])
         self.method_authentication['kb_hmmer.HMMER_MSA_Search'] = 'required'  # noqa
+        self.rpc_service.add(impl_kb_hmmer.HMMER_Local_MSA_Group_Search,
+                             name='kb_hmmer.HMMER_Local_MSA_Group_Search',
+                             types=[dict])
+        self.method_authentication['kb_hmmer.HMMER_Local_MSA_Group_Search'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_hmmer.status,
                              name='kb_hmmer.status',
                              types=[dict])

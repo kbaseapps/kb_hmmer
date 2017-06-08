@@ -188,6 +188,28 @@ public class KbHmmerClient {
         return res.get(0);
     }
 
+    /**
+     * <p>Original spec-file function name: HMMER_Local_MSA_Group_Search</p>
+     * <pre>
+     * Methods for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
+     * **
+     * **    overloading as follows:
+     * **        input_many_ref: SingleEndLibrary, FeatureSet, Genome, GenomeSet
+     * **        output_name: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.kbhmmer.HMMERLocalMSAGroupParams HMMERLocalMSAGroupParams} (original type "HMMER_Local_MSA_Group_Params")
+     * @return   instance of type {@link us.kbase.kbhmmer.HMMEROutput HMMEROutput} (original type "HMMER_Output")
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public HMMEROutput hMMERLocalMSAGroupSearch(HMMERLocalMSAGroupParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<HMMEROutput>> retType = new TypeReference<List<HMMEROutput>>() {};
+        List<HMMEROutput> res = caller.jsonrpcCall("kb_hmmer.HMMER_Local_MSA_Group_Search", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
     public Map<String, Object> status(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         TypeReference<List<Map<String, Object>>> retType = new TypeReference<List<Map<String, Object>>>() {};

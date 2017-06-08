@@ -55,7 +55,7 @@ class kb_hmmer:
     ######################################### noqa
     VERSION = "0.0.2"
     GIT_URL = "https://github.com/dcchivian/kb_hmmer"
-    GIT_COMMIT_HASH = "36c2c5e73ae9a46460588f7c2374e46ab87fb6a8"
+    GIT_COMMIT_HASH = "b52ac1b49ba09bd461595de67b84eeda13dc0d0c"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -1567,6 +1567,42 @@ class kb_hmmer:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method HMMER_MSA_Search return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def HMMER_Local_MSA_Group_Search(self, ctx, params):
+        """
+        Methods for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
+        **
+        **    overloading as follows:
+        **        input_many_ref: SingleEndLibrary, FeatureSet, Genome, GenomeSet
+        **        output_name: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+        :param params: instance of type "HMMER_Local_MSA_Group_Params" (HMMER
+           Local MSA Group Input Params) -> structure: parameter
+           "workspace_name" of type "workspace_name" (** The workspace object
+           refs are of form: ** **    objects = ws.get_objects([{'ref':
+           params['workspace_id']+'/'+params['obj_name']}]) ** ** "ref" means
+           the entire name combining the workspace id and the object name **
+           "id" is a numerical identifier of the workspace or object, and
+           should just be used for workspace ** "name" is a string identifier
+           of a workspace or object.  This is received from Narrative.),
+           parameter "input_many_ref" of type "data_obj_ref", parameter
+           "output_filtered_name" of type "data_obj_name", parameter
+           "e_value" of Double, parameter "bitscore" of Double, parameter
+           "maxaccepts" of Double
+        :returns: instance of type "HMMER_Output" (HMMER Output) ->
+           structure: parameter "report_name" of type "data_obj_name",
+           parameter "report_ref" of type "data_obj_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN HMMER_Local_MSA_Group_Search
+        #END HMMER_Local_MSA_Group_Search
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method HMMER_Local_MSA_Group_Search return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
