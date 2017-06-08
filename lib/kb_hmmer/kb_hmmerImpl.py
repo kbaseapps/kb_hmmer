@@ -1626,7 +1626,8 @@ class kb_hmmer:
         if 'output_filtered_name' not in params:
             raise ValueError('output_filtered_name parameter is required')
         if 'coalesce_output' not in params:
-            raise ValueError('coalesce_output parameter is required')
+            #raise ValueError('coalesce_output parameter is required')
+            self.log(console,'MISSING!!! FIX!!! coalesce_output parameter is required')
 
 
         # set local names and ids
@@ -2559,7 +2560,7 @@ class kb_hmmer:
 
             ### Create output object
             #
-            if params['coalesce_output'] == 1:
+            if 'coalesce_output' in params and params['coalesce_output'] == 1:
                 if len(invalid_msgs) == 0:
                     if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
                         self.log(console,"No Object to Upload for MSA "+input_msa_name)  # DEBUG
@@ -2838,7 +2839,7 @@ class kb_hmmer:
 
         #### Create and Upload output objects if coalesce_output is true
         ##
-        if params['coalesce_output'] == 1:
+        if 'coalesce_output' in params and params['coalesce_output'] == 1:
             output_name = params['output_filtered_name']
 
             if len(invalid_msgs) == 0:
