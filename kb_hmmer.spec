@@ -20,7 +20,7 @@ module kb_hmmer {
     typedef string sequence;
     typedef string data_obj_name;
     typedef string data_obj_ref;
-    typedef bool   int;
+    typedef int    bool;
 
 
     /* HMMER Input Params
