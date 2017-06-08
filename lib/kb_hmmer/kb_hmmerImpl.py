@@ -1627,10 +1627,11 @@ class kb_hmmer:
             raise ValueError('output_filtered_name parameter is required')
 
 
-        # set local names
+        # set local names and ids
 #        input_one_ref = params['input_one_ref']
         #input_msa_ref = params['input_msa_ref']
         input_many_ref = params['input_many_ref']
+        ws_id = input_many_ref.split('/')[0]
         
 
         #### Get the input_one object
