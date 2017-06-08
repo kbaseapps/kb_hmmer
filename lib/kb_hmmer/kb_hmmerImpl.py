@@ -2910,15 +2910,17 @@ class kb_hmmer:
 
                 self.log(console, 'UPLOADING OF HMMER OUTPUT FOR MSA '+input_msa_name)
                 try:
-                    TAB_upload_rets += dfu.file_to_shock({'file_path': output_hit_TAB_file_paths[i],
-                                                          'make_handle': 0})
-                                                          #'pack': 'zip'})
+                    TAB_upload_rets.append(dfu.file_to_shock({'file_path': output_hit_TAB_file_paths[i],
+                                                              'make_handle': 0})
+                                                              #'pack': 'zip'})
+                                           )
                 except:
                     raise ValueError ('Logging exception loading TAB output to shock for MSA '+input_msa_name)
                 try:
-                    MSA_upload_rets += dfu.file_to_shock({'file_path': output_hit_MSA_file_paths[i],
-                                                          'make_handle': 0})
-                                                          #'pack': 'zip'})
+                    MSA_upload_rets.append(dfu.file_to_shock({'file_path': output_hit_MSA_file_paths[i],
+                                                              'make_handle': 0})
+                                                              #'pack': 'zip'})
+                                           )
                 except:
                     raise ValueError ('Logging exception loading MSA output to shock for MSA '+input_msa_name)
 
