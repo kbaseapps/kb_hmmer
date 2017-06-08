@@ -1629,7 +1629,7 @@ class kb_hmmer:
 
         # set local names
 #        input_one_ref = params['input_one_ref']
-        input_msa_ref = params['input_msa_ref']
+        #input_msa_ref = params['input_msa_ref']
         input_many_ref = params['input_many_ref']
         
 
@@ -2587,7 +2587,7 @@ class kb_hmmer:
                             })[0]
 
                 [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
-                objects_created_refs.append(str(params['workspace_name'])+'/'+str(new_obj_info[OBJID_I]))
+                objects_created_refs.append(str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I]))
 
 
             #### Build output report chunks
