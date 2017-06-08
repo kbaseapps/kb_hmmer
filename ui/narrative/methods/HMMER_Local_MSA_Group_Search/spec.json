@@ -35,6 +35,30 @@
             }
         },
         {
+            "id": "coalesce_output",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "1" ],
+            "field_type": "dropdown",
+	    "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "0",
+                                        "display": "Separate by HMM",
+                                        "id": "sep",
+                                        "ui-name": "sep"
+                                },
+                                {
+                                        "value": "1",
+                                        "display": "Merge all hits",
+                                        "id": "merge",
+                                        "ui-name": "merge"
+                                }
+			]					    
+            }
+        },
+        {
             "id": "e_value",
             "optional": false,
             "advanced": false,

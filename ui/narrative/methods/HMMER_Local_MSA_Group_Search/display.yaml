@@ -37,6 +37,11 @@ parameters :
             Output Object
         short-hint : |
             Object containing matches.  Output will be will be FeatureSet.
+    coalesce_output:
+        ui-name : |
+            Coalesce output
+        short-hint : |
+            Combine output into one object instead of splitting into a separate object per HMM Search
     e_value:
         ui-name : |
             E-value
