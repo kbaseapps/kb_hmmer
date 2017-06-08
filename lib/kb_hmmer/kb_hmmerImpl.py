@@ -1625,6 +1625,8 @@ class kb_hmmer:
             raise ValueError('input_many_ref parameter is required')
         if 'output_filtered_name' not in params:
             raise ValueError('output_filtered_name parameter is required')
+        if 'coalesce_output' not in params:
+            raise ValueError('coalesce_output parameter is required')
 
 
         # set local names and ids
@@ -2106,6 +2108,9 @@ class kb_hmmer:
         output_hit_MSA_file_paths = []
         output_filtered_fasta_file_paths = []
         objects_created_refs = []
+        coalesced_sequenceObjs = []
+        coalesce_featureIds_element_ordering = []
+        coalesce_featureIds_genome_ordering = []
         html_report_chunks = []
         
         for i,input_msa_ref in enumerate(input_msa_refs):
@@ -2298,6 +2303,7 @@ class kb_hmmer:
             high_bitscore_alnlen = dict()
             hit_order = []
             hit_buf = []
+            hit_accept_something = False
             #header_done = False
             for line in output_aln_buf:
                 if line.startswith('#'):
@@ -2359,6 +2365,7 @@ class kb_hmmer:
                 if filter:
                     continue
             
+                hit_accept_something = True
                 hit_total += 1
                 hit_seq_ids[hit_seq_id] = True
                 self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
@@ -2550,13 +2557,28 @@ class kb_hmmer:
             provenance[0]['method'] = search_tool_name+'_Search'
 
 
-            # Upload results if coalesce_output is 0
+            ### Create output object
             #
             if params['coalesce_output'] == 1:
-# HERE
+                if len(invalid_msgs) == 0:
+                    if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
+                        self.log(console,"No Object to Upload for MSA "+input_msa_name)  # DEBUG
+                        objects_created_refs.append(None)
+                        continue
 
-                continue
-            else:
+                    # accumulate hits into coalesce object
+                    #
+                    if many_type_name == 'SequenceSet':  # input many SequenceSet -> save SequenceSet
+                        for seq_obj in output_sequenceSet['sequences']:
+                            coalesced_sequenceObjs.append(seq_obj)
+
+                    else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+
+                        for fId in output_featureSet['element_ordering']:
+                            coalesce_featureIds_element_ordering.append(fId)
+                            coalesce_featureIds_genome_ordering.append(output_featureSet['elements'][fId][0])
+
+            else:  # keep output separate  Upload results if coalesce_output is 0
                 output_name = input_msa_name+'-'+params['output_filtered_name']
 
                 if len(invalid_msgs) == 0:
@@ -2812,6 +2834,55 @@ class kb_hmmer:
                         html_report_chunk += ['</tr>']
 
                         html_report_chunks.append("\n".join(html_report_chunk))
+
+
+        #### Create and Upload output objects if coalesce_output is true
+        ##
+        if params['coalesce_output'] == 1:
+            output_name = params['output_filtered_name']
+
+            if len(invalid_msgs) == 0:
+                if not hit_accept_something:
+                    self.log(console,"No Object to Upload for all MSAs")  # DEBUG
+
+                else:
+                    self.log(console,"Uploading results Object")  # DEBUG
+
+                    if many_type_name == 'SequenceSet':  # input many SequenceSet -> save SequenceSet
+
+                        output_sequenceSet['sequences'] = coalesced_sequenceObjs
+                        new_obj_info = ws.save_objects({
+                                'workspace': params['workspace_name'],
+                                'objects':[{
+                                        'type': 'KBaseSequences.SequenceSet',
+                                        'data': output_sequenceSet,
+                                        'name': output_name,
+                                        'meta': {},
+                                        'provenance': provenance
+                                        }]
+                                })[0]
+
+                    else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+
+                        output_featureSet['element_ordering'] = coalesce_featureIds_element_ordering
+                        output_featureSet['elements'] = dict()
+                        for i,fId in enumerate(output_featureSet['element_ordering']):
+                            output_featureSet['elements'][fId] = []
+                            output_featureSet['elements'][fId].append(coalesce_featureIds_genome_ordering[i])
+
+                        new_obj_info = ws.save_objects({
+                                'workspace': params['workspace_name'],
+                                'objects':[{
+                                        'type': 'KBaseCollections.FeatureSet',
+                                        'data': output_featureSet,
+                                        'name': output_name,
+                                        'meta': {},
+                                        'provenance': provenance
+                                        }]
+                                })[0]
+
+                    [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+                    objects_created_refs.append(str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I]))
 
 
         #### Build output report (and assemble html chunks)

@@ -115,6 +115,10 @@
                     "target_property": "output_filtered_name"
                 },
                 {
+                    "input_parameter": "coalesce_output",
+                    "target_property": "coalesce_output"
+                },
+                {
                     "input_parameter": "e_value",
                     "target_property": "e_value"
                 },
