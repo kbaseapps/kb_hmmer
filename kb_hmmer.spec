@@ -65,4 +65,33 @@ module kb_hmmer {
     **        output_name: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
     */
     funcdef HMMER_MSA_Search (HMMER_Params params)  returns (HMMER_Output) authentication required;
+
+
+    /* HMMER Local MSA Group Input Params
+    */
+    typedef structure {
+        workspace_name workspace_name;
+/*	sequence       input_one_sequence;
+	data_obj_ref   input_one_ref;
+*/
+	data_obj_ref   input_many_ref;
+        data_obj_name  output_filtered_name;
+
+	float e_value;
+	float bitscore;
+	float maxaccepts;
+
+/*	float ident_thresh;
+	float overlap_fraction;
+*/
+    } HMMER_Local_MSA_Group_Params;
+
+
+    /*  Methods for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
+    **
+    **    overloading as follows:
+    **        input_many_ref: SingleEndLibrary, FeatureSet, Genome, GenomeSet
+    **        output_name: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+    */
+    funcdef HMMER_Local_MSA_Group_Search (HMMER_Local_MSA_Group_Params params)  returns (HMMER_Output) authentication required;
 };
