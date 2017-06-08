@@ -63,6 +63,34 @@ class kb_hmmer(object):
             'kb_hmmer.HMMER_MSA_Search',
             [params], self._service_ver, context)
 
+    def HMMER_Local_MSA_Group_Search(self, params, context=None):
+        """
+        Methods for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
+        **
+        **    overloading as follows:
+        **        input_many_ref: SingleEndLibrary, FeatureSet, Genome, GenomeSet
+        **        output_name: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+        :param params: instance of type "HMMER_Local_MSA_Group_Params" (HMMER
+           Local MSA Group Input Params) -> structure: parameter
+           "workspace_name" of type "workspace_name" (** The workspace object
+           refs are of form: ** **    objects = ws.get_objects([{'ref':
+           params['workspace_id']+'/'+params['obj_name']}]) ** ** "ref" means
+           the entire name combining the workspace id and the object name **
+           "id" is a numerical identifier of the workspace or object, and
+           should just be used for workspace ** "name" is a string identifier
+           of a workspace or object.  This is received from Narrative.),
+           parameter "input_many_ref" of type "data_obj_ref", parameter
+           "output_filtered_name" of type "data_obj_name", parameter
+           "e_value" of Double, parameter "bitscore" of Double, parameter
+           "maxaccepts" of Double
+        :returns: instance of type "HMMER_Output" (HMMER Output) ->
+           structure: parameter "report_name" of type "data_obj_name",
+           parameter "report_ref" of type "data_obj_ref"
+        """
+        return self._client.call_method(
+            'kb_hmmer.HMMER_Local_MSA_Group_Search',
+            [params], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('kb_hmmer.status',
                                         [], self._service_ver, context)

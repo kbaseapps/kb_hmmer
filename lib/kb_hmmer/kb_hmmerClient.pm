@@ -224,6 +224,118 @@ Methods for HMMER search of an MSA against many sequences
     }
 }
  
+
+
+=head2 HMMER_Local_MSA_Group_Search
+
+  $return = $obj->HMMER_Local_MSA_Group_Search($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a kb_hmmer.HMMER_Local_MSA_Group_Params
+$return is a kb_hmmer.HMMER_Output
+HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a kb_hmmer.workspace_name
+	input_many_ref has a value which is a kb_hmmer.data_obj_ref
+	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	e_value has a value which is a float
+	bitscore has a value which is a float
+	maxaccepts has a value which is a float
+workspace_name is a string
+data_obj_ref is a string
+data_obj_name is a string
+HMMER_Output is a reference to a hash where the following keys are defined:
+	report_name has a value which is a kb_hmmer.data_obj_name
+	report_ref has a value which is a kb_hmmer.data_obj_ref
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a kb_hmmer.HMMER_Local_MSA_Group_Params
+$return is a kb_hmmer.HMMER_Output
+HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a kb_hmmer.workspace_name
+	input_many_ref has a value which is a kb_hmmer.data_obj_ref
+	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	e_value has a value which is a float
+	bitscore has a value which is a float
+	maxaccepts has a value which is a float
+workspace_name is a string
+data_obj_ref is a string
+data_obj_name is a string
+HMMER_Output is a reference to a hash where the following keys are defined:
+	report_name has a value which is a kb_hmmer.data_obj_name
+	report_ref has a value which is a kb_hmmer.data_obj_ref
+
+
+=end text
+
+=item Description
+
+Methods for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
+**
+**    overloading as follows:
+**        input_many_ref: SingleEndLibrary, FeatureSet, Genome, GenomeSet
+**        output_name: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+
+=back
+
+=cut
+
+ sub HMMER_Local_MSA_Group_Search
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function HMMER_Local_MSA_Group_Search (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to HMMER_Local_MSA_Group_Search:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'HMMER_Local_MSA_Group_Search');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "kb_hmmer.HMMER_Local_MSA_Group_Search",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'HMMER_Local_MSA_Group_Search',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method HMMER_Local_MSA_Group_Search",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'HMMER_Local_MSA_Group_Search',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -267,16 +379,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'HMMER_MSA_Search',
+                method_name => 'HMMER_Local_MSA_Group_Search',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method HMMER_MSA_Search",
+            error => "Error invoking method HMMER_Local_MSA_Group_Search",
             status_line => $self->{client}->status_line,
-            method_name => 'HMMER_MSA_Search',
+            method_name => 'HMMER_Local_MSA_Group_Search',
         );
     }
 }
@@ -504,6 +616,51 @@ report_ref has a value which is a kb_hmmer.data_obj_ref
 a reference to a hash where the following keys are defined:
 report_name has a value which is a kb_hmmer.data_obj_name
 report_ref has a value which is a kb_hmmer.data_obj_ref
+
+
+=end text
+
+=back
+
+
+
+=head2 HMMER_Local_MSA_Group_Params
+
+=over 4
+
+
+
+=item Description
+
+HMMER Local MSA Group Input Params
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a kb_hmmer.workspace_name
+input_many_ref has a value which is a kb_hmmer.data_obj_ref
+output_filtered_name has a value which is a kb_hmmer.data_obj_name
+e_value has a value which is a float
+bitscore has a value which is a float
+maxaccepts has a value which is a float
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a kb_hmmer.workspace_name
+input_many_ref has a value which is a kb_hmmer.data_obj_ref
+output_filtered_name has a value which is a kb_hmmer.data_obj_name
+e_value has a value which is a float
+bitscore has a value which is a float
+maxaccepts has a value which is a float
 
 
 =end text

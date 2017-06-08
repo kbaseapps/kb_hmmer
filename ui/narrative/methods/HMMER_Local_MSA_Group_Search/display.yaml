@@ -1,9 +1,9 @@
 #
 # define display information
 #
-name: HMMER v3.1b2 MSA prot-prot Search
+name: HMMER v3.1b2 Local MSA Group prot-prot Search
 tooltip: |
-    Search for matches to a Multiple Sequence Alignment (MSA) using Hidden Markov Model (HMMER) Search.
+    Search for matches to all MSAs that are within workspace using Hidden Markov Model (HMMER) Search.
 screenshots: []
 
 icon: hmmer-cyan.png
@@ -27,11 +27,6 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
-    input_msa_ref:
-        ui-name : |
-            Query MSA
-        short-hint : |
-            Multiple PROTEIN sequence alignment that includes the Query sequence with the same ID as the Query Object.
     input_many_ref:
         ui-name : |
             Targets Object
