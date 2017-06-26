@@ -1,7 +1,7 @@
 #
 # define display information
 #
-name: HMMER v3.1b2 Local MSA Group prot-prot Search
+name: HMMER Local MSA Group prot-prot Search - v3.1b2
 tooltip: |
     Search for matches to all MSAs that are within workspace using Hidden Markov Model (HMMER) Search.
 screenshots: []
