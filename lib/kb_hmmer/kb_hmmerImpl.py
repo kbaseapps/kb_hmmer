@@ -55,7 +55,7 @@ class kb_hmmer:
     ######################################### noqa
     VERSION = "0.0.2"
     GIT_URL = "https://github.com/dcchivian/kb_hmmer"
-    GIT_COMMIT_HASH = "b52ac1b49ba09bd461595de67b84eeda13dc0d0c"
+    GIT_COMMIT_HASH = "306e1556919d594dbc184f729130c6eb58882b5e"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -1571,7 +1571,6 @@ class kb_hmmer:
         # return the results
         return [returnVal]
 
-
     def HMMER_Local_MSA_Group_Search(self, ctx, params):
         """
         Methods for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
@@ -1590,8 +1589,8 @@ class kb_hmmer:
            of a workspace or object.  This is received from Narrative.),
            parameter "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "e_value" of Double, parameter "bitscore" of Double, parameter
-           "maxaccepts" of Double
+           "coalesce_output" of type "bool", parameter "e_value" of Double,
+           parameter "bitscore" of Double, parameter "maxaccepts" of Double
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"

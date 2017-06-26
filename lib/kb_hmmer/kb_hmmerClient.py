@@ -81,8 +81,8 @@ class kb_hmmer(object):
            of a workspace or object.  This is received from Narrative.),
            parameter "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "e_value" of Double, parameter "bitscore" of Double, parameter
-           "maxaccepts" of Double
+           "coalesce_output" of type "bool", parameter "e_value" of Double,
+           parameter "bitscore" of Double, parameter "maxaccepts" of Double
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"

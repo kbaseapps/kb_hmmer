@@ -243,12 +243,14 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	workspace_name has a value which is a kb_hmmer.workspace_name
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	coalesce_output has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	maxaccepts has a value which is a float
 workspace_name is a string
 data_obj_ref is a string
 data_obj_name is a string
+bool is an int
 HMMER_Output is a reference to a hash where the following keys are defined:
 	report_name has a value which is a kb_hmmer.data_obj_name
 	report_ref has a value which is a kb_hmmer.data_obj_ref
@@ -265,12 +267,14 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	workspace_name has a value which is a kb_hmmer.workspace_name
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	coalesce_output has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	maxaccepts has a value which is a float
 workspace_name is a string
 data_obj_ref is a string
 data_obj_name is a string
+bool is an int
 HMMER_Output is a reference to a hash where the following keys are defined:
 	report_name has a value which is a kb_hmmer.data_obj_name
 	report_ref has a value which is a kb_hmmer.data_obj_ref
@@ -540,6 +544,32 @@ a string
 
 
 
+=head2 bool
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+an int
+</pre>
+
+=end html
+
+=begin text
+
+an int
+
+=end text
+
+=back
+
+
+
 =head2 HMMER_Params
 
 =over 4
@@ -644,6 +674,7 @@ a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_hmmer.workspace_name
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
+coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
 maxaccepts has a value which is a float
@@ -658,6 +689,7 @@ a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_hmmer.workspace_name
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
+coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
 maxaccepts has a value which is a float
