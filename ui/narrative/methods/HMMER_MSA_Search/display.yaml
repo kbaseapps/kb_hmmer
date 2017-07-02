@@ -66,7 +66,7 @@ description : |
     <p><hr></p>
     <p>HMMER v3.1b2 from <A HREF="http://hmmer.org">HMMER.ORG</A></p>
     <p><i>Please cite:</i></p>
-    <p><b>HMMER:</b><br><ul><li><A HREF="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195">Eddy SR. (2011) PLoS Comp. Biol., 7:e1002195</A> doi:10.1371/journal.pcbi.1002195</ul></p>
+    <p><b>HMMER:</b><br><ul><li>Eddy SR. (2011) Accelerated Profile HMM Searches. <A HREF="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195">PLoS Comp. Biol., 7:e1002195</A> doi:10.1371/journal.pcbi.1002195</ul></p>
     <p><hr></p>
     <p><i>Implemented for KBase by <a href="https://github.com/dcchivian">Dylan Chivian</a> (<a href="mailto:DCChivian@lbl.gov">DCChivian@lbl.gov</a>)</i></p>
     <p><hr></p>
