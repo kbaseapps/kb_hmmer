@@ -4,7 +4,10 @@
 name: HMMER MSA prot-prot Search - v3.1b2
 tooltip: |
     Search for matches to a Multiple Sequence Alignment (MSA) using Hidden Markov Model (HMMER) Search.
-screenshots: []
+screenshots:
+
+    - HMMER_input_widget.png
+    - HMMER_output_table.png
 
 icon: hmmer-cyan.png
 
@@ -60,5 +63,24 @@ parameters :
 
 description : |
     <p>This method performs a Hidden Markov Model (HMM) search on protein sequences using HMMER models build from an input MSA.</p>
-    <p><A HREF="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195">Eddy SR. (2011) PLoS Comp. Biol., 7:e1002195</A> doi: 10.1371/journal.pcbi.1002195</p>
+    <p><hr></p>
     <p>HMMER v3.1b2 from <A HREF="http://hmmer.org">HMMER.ORG</A></p>
+    <p><i>Please cite:</i></p>
+    <p><b>HMMER:</b><br><ul><li><A HREF="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195">Eddy SR. (2011) PLoS Comp. Biol., 7:e1002195</A> doi:10.1371/journal.pcbi.1002195</ul></p>
+    <p><hr></p>
+    <p><i>Implemented for KBase by <a href="https://github.com/dcchivian">Dylan Chivian</a> (<a href="mailto:DCChivian@lbl.gov">DCChivian@lbl.gov</a>)</i></p>
+    <p><hr></p>
+    <p>HMMER MSA Search turns a protein multiple sequence alignment (MSA) into a Hidden Markov Model (HMM) which is used to search a protein sequence database.  The MSA must first be generated using a tool such as MUSCLE to build an MSA from a FeatureSet object.  The KBase implementation permits searching through the genes in a Genome object, the genes in the Genome members of a GenomeSet, or the genes in a FeatureSet.  The output object of these searches is a FeatureSet containing those genes that pass the thresholds given by the user.  The App also provides a table of the hits (with those hits that are below the thresholds in gray) and links to download the table of hits and a Stockholm format MSA.</p>
+    <p><hr></p>
+    <p><b>Configuration:</b></p>
+    <p><b><i>Query MSA:</i></b> The MSA to use as the Query.  It must be generated, using an App such as MUSCLE.  An HMM will be automatically generated from the MSA by HMMBuild.</p>
+    <p><b><i>Targets Object:</i></b> The Targets Object may be a FeatureSet of genes, a Genome, or a GenomeSet.  A HMMER search database will be automatically generated from the Targets Object.</p>
+    <p><b><i>Output Object:</i></b> This is the set of genes that are both hit and pass user-defined thresholds.</p>
+    <p><b><i>E-value:</i></b> This bounds the e-value for the weakest hit to consider viable.  Values below this do not get reported in the table or the HMMER output text downloads.</p>
+    <p><b><i>Bitscore:</i></b> This bounds the bitscore for the weakest hit to include in the FeatureSet output object.  Hits below this threshold are still reported in the table and HMMER text downloads.</p>
+    <p><b><i>Max Accepts:</i></b> Hard cap on how many hits to report (Default: 1000)</p>
+    <p><hr></p>
+    <p><b>Output:</b></p>
+    <p><b><i>Output Object:</i></b> Gene hits are captured in a FeatureSet output object.  If there are additional user-defined thresholds, those are filtered out and do not appear in the object, even if they are shown in the output table.</p>
+    <p><b><i>Output HTML Table:</i></b> The tab-delimited hit table is HTML formatted and additionally shows the region of the hit sequence (as there is no query sequence) covered by the HMMER alignment.  Hits that are above the e-value threshold but below other thresholds and are not included in the FeatureSet output object are shown in gray, with the attributes that were below the threshold in red.</p>
+    <p><b><i>Downloadable files:</i></b> HMMER table and Stockholm format MSA are available for download.  These are not altered from the direct output from the HMMER run.</p>
