@@ -5,7 +5,7 @@
     ],
     "contact": "help@kbase.us",
     "visible": true,
-    "categories": ["inactive","sequence"],
+    "categories": ["active","sequence"],
     "widgets": {
         "input": null,
         "output": "no-display"
