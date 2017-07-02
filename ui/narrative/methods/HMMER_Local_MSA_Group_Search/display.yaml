@@ -4,7 +4,10 @@
 name: HMMER Local MSA Group prot-prot Search - v3.1b2
 tooltip: |
     Search for matches to all MSAs that are within workspace using Hidden Markov Model (HMMER) Search.
-screenshots: []
+screenshots:
+
+    - HMMER_Local_MSA_Group_input_widget.png
+    - HMMER_output_table.png
 
 icon: hmmer-cyan.png
 
@@ -59,6 +62,25 @@ parameters :
             limits the number of hits in result.  Default: 1000
 
 description : |
-    <p>This method performs a Hidden Markov Model (HMM) search on protein sequences using HMMER models build from an input MSA.</p>
-    <p><A HREF="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195">Eddy SR. (2011) PLoS Comp. Biol., 7:e1002195</A> doi: 10.1371/journal.pcbi.1002195</p>
+    <p>This method performs a set of Hidden Markov Model (HMM) searches on protein sequences using HMMER models build from a Group of MSAs.</p>
+    <p><hr></p>
     <p>HMMER v3.1b2 from <A HREF="http://hmmer.org">HMMER.ORG</A></p>
+    <p><i>Please cite:</i></p>
+    <p><b>HMMER:</b><br><ul><li><A HREF="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195">Eddy SR. (2011) PLoS Comp. Biol., 7:e1002195</A> doi:10.1371/journal.pcbi.1002195</ul></p>
+    <p><hr></p>
+    <p><i>Implemented for KBase by <a href="https://github.com/dcchivian">Dylan Chivian</a> (<a href="mailto:DCChivian@lbl.gov">DCChivian@lbl.gov</a>)</i></p>
+    <p><hr></p>
+    <p>HMMER Local MSA Group Search performs multiple HMMER searches.  It reads the objects in the Narrative to find the Multiple Sequence Alignments (MSAs) and uses those MSAs to create a set of Hidden Markov Models (HMMs) which are used in turn to search a protein sequence database.  The MSAs must first be generated using a tool such as MUSCLE that builds an MSA from a FeatureSet object.  The KBase implementation permits searching through the genes in a Genome object, the genes in the Genome members of a GenomeSet, or the genes in a FeatureSet.  The output object of these searches is a FeatureSet containing those genes that pass the thresholds given by the user.  The App also provides a table of the hits (with those hits that are below the thresholds in gray) and links to download the table of hits and a Stockholm format MSA.  A separate table for each MSA/HMM is provided, whereas the user may select whether to combine the hits into a single FeatureSet or produce a separate FeatureSet object for each MSA/HMM.</p>
+    <p><hr></p>
+    <p><b>Configuration:</b></p>
+    <p><b><i>Targets Object:</i></b> The Targets Object may be a FeatureSet of genes, a Genome, or a GenomeSet.  A HMMER search database will be automatically generated from the Targets Object.</p>
+    <p><b><i>Output Object:</i></b> This is the set of genes that are both hit and pass user-defined thresholds.</p>
+    <p><b><i>Coalesce Output:</i></b> Select whether to combine all hits into a single FeatureSet (which may be used in subsequent Functional Profiling) or make a separate FeatureSet of hits for each MSA/HMM.</p> 
+    <p><b><i>E-value:</i></b> This bounds the e-value for the weakest hit to consider viable.  Values below this do not get reported in the table or the HMMER output text downloads.</p>
+    <p><b><i>Bitscore:</i></b> This bounds the bitscore for the weakest hit to include in the FeatureSet output object.  Hits below this threshold are still reported in the table and HMMER text downloads.</p>
+    <p><b><i>Max Accepts:</i></b> Hard cap on how many hits to report (Default: 1000)</p>
+    <p><hr></p>
+    <p><b>Output:</b></p>
+    <p><b><i>Output Object:</i></b> Gene hits are captured in a FeatureSet output object.  If there are additional user-defined thresholds, those are filtered out and do not appear in the object, even if they are shown in the output table.  The Output object name is used as a basename to which the MSA/HMM name is prepended if the user has selected to separate FeatureSets.</p>
+    <p><b><i>Output HTML Table:</i></b> The tab-delimited hit table is HTML formatted and additionally shows the region of the hit sequence (as there is no query sequence) covered by the HMMER alignment.  Hits that are above the e-value threshold but below other thresholds and are not included in the FeatureSet output object are shown in gray, with the attributes that were below the threshold in red.  A separate table is made for each MSA/HMM.</p>
+    <p><b><i>Downloadable files:</i></b> HMMER table and Stockholm format MSA are available for download.  These are not altered from the direct output from the HMMER run.  The text output is generated for each MSA/HMM.</p>
