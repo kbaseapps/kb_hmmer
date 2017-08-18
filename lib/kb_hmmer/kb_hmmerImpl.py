@@ -19,7 +19,8 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_protein
-from biokbase.workspace.client import Workspace as workspaceService
+#from biokbase.workspace.client import Workspace as workspaceService
+from Workspace.WorkspaceClient import Workspace as workspaceService
 from requests_toolbelt import MultipartEncoder
 from biokbase.AbstractHandle.Client import AbstractHandle as HandleService
 
@@ -292,8 +293,8 @@ class kb_hmmer:
         if 'input_one_ref' in params and params['input_one_ref'] != None:
             try:
                 ws = workspaceService(self.workspaceURL, token=ctx['token'])
-                objects = ws.get_objects([{'ref': params['input_one_ref']}])
-                #objects = ws.get_objects2({'objects':[{'ref': input_one_ref}]})['data']
+                #objects = ws.get_objects([{'ref': params['input_one_ref']}])
+                objects = ws.get_objects2({'objects':[{'ref': input_one_ref}]})['data']
                 input_one_data = objects[0]['data']
                 input_one_name = str(objects[0]['info'][1])
                 info = objects[0]['info']
@@ -381,8 +382,8 @@ class kb_hmmer:
 #        master_row_idx = 0
         try:
             ws = workspaceService(self.workspaceURL, token=ctx['token'])
-            objects = ws.get_objects([{'ref': input_msa_ref}])
-            #objects = ws.get_objects2({'objects':[{'ref': input_msa_ref}]})['data']
+            #objects = ws.get_objects([{'ref': input_msa_ref}])
+            objects = ws.get_objects2({'objects':[{'ref': input_msa_ref}]})['data']
             input_msa_data = objects[0]['data']
             info = objects[0]['info']
             input_msa_name = str(info[1])
@@ -511,8 +512,8 @@ class kb_hmmer:
         ##
         try:
             ws = workspaceService(self.workspaceURL, token=ctx['token'])
-            objects = ws.get_objects([{'ref': input_many_ref}])
-            #objects = ws.get_objects2({'objects':[{'ref': input_many_ref}]})['data']
+            #objects = ws.get_objects([{'ref': input_many_ref}])
+            objects = ws.get_objects2({'objects':[{'ref': input_many_ref}]})['data']
             input_many_data = objects[0]['data']
             info = objects[0]['info']
             input_many_name = str(info[1])
@@ -1643,8 +1644,8 @@ class kb_hmmer:
         if 'input_one_ref' in params and params['input_one_ref'] != None:
             try:
                 ws = workspaceService(self.workspaceURL, token=ctx['token'])
-                objects = ws.get_objects([{'ref': params['input_one_ref']}])
-                #objects = ws.get_objects2({'objects':[{'ref': input_one_ref}]})['data']
+                #objects = ws.get_objects([{'ref': params['input_one_ref']}])
+                objects = ws.get_objects2({'objects':[{'ref': input_one_ref}]})['data']
                 input_one_data = objects[0]['data']
                 input_one_name = str(objects[0]['info'][1])
                 info = objects[0]['info']
@@ -1729,8 +1730,8 @@ class kb_hmmer:
         ##
         try:
             ws = workspaceService(self.workspaceURL, token=ctx['token'])
-            objects = ws.get_objects([{'ref': input_many_ref}])
-            #objects = ws.get_objects2({'objects':[{'ref': input_many_ref}]})['data']
+            #objects = ws.get_objects([{'ref': input_many_ref}])
+            objects = ws.get_objects2({'objects':[{'ref': input_many_ref}]})['data']
             input_many_data = objects[0]['data']
             info = objects[0]['info']
             input_many_name = str(info[1])
@@ -1915,8 +1916,8 @@ class kb_hmmer:
         for input_msa_ref in input_msa_refs:
             try:
                 ws = workspaceService(self.workspaceURL, token=ctx['token'])
-                objects = ws.get_objects([{'ref': input_msa_ref}])
-                #objects = ws.get_objects2({'objects':[{'ref': input_msa_ref}]})['data']
+                #objects = ws.get_objects([{'ref': input_msa_ref}])
+                objects = ws.get_objects2({'objects':[{'ref': input_msa_ref}]})['data']
                 input_msa_data = objects[0]['data']
                 info = objects[0]['info']
                 input_msa_name = str(info[1])
