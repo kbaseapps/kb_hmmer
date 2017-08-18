@@ -17,6 +17,7 @@ from pprint import pprint
 from biokbase.workspace.client import Workspace as workspaceService
 from kb_hmmer.kb_hmmerImpl import kb_hmmer
 from kb_hmmer.kb_hmmerServer import MethodContext
+from kb_hmmer.authclient import KBaseAuth as _KBaseAuth
 
 
 class kb_hmmerTest(unittest.TestCase):
