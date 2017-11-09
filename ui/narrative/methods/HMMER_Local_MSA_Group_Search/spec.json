@@ -3,9 +3,9 @@
     "authors": [
         "dylan"
     ],
-    "contact": "help@kbase.us",
+    "contact": "http://kbase.us/contact-us/",
     "visible": true,
-    "categories": ["active","sequence"],
+    "categories": ["inactive","sequence"],
     "widgets": {
         "input": null,
         "output": "no-display"
