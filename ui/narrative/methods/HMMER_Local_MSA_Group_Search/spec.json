@@ -1,11 +1,11 @@
 {
-    "ver": "1.0.3",
+    "ver": "1.1.0",
     "authors": [
         "dylan"
     ],
     "contact": "http://kbase.us/contact-us/",
     "visible": true,
-    "categories": ["inactive","sequence"],
+    "categories": ["active","sequence"],
     "widgets": {
         "input": null,
         "output": "no-display"

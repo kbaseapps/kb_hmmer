@@ -54,9 +54,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.0.3"
+    VERSION = "1.1.0"
     GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "306e1556919d594dbc184f729130c6eb58882b5e"
+    GIT_COMMIT_HASH = "f5d49d433e5ae7fd00d12503d8888e2f6694cd73"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
