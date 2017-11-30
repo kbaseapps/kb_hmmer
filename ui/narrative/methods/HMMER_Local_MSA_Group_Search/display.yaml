@@ -30,16 +30,11 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
-    use_all_local_MSAs:
-        ui-name : |
-            Search MSAs
-        short-hint : |
-            Either use ALL local MSAs or select a subset
     input_msa_refs:
         ui-name : |
-            Select MSAs (optional)
+            Select MSAs (leave blank to use ALL)
         short-hint : |
-            Select MSAs from local set if you choose not to use ALL
+            Select MSAs from local set, or will use ALL if left blank
     input_many_ref:
         ui-name : |
             Targets Object
