@@ -186,7 +186,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 01: Single Model against Single Genome
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_01_kb_hmmer_HMMER_MSA_Search_Genome()")
+    @unittest.skip("skipped test test_01_kb_hmmer_HMMER_MSA_Search_Genome()")
     def test_01_kb_hmmer_HMMER_MSA_Search_Genome(self):
         test_name = 'test_01_kb_hmmer_HMMER_MSA_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
@@ -228,7 +228,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 02: Single Model against GenomeSet
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet()")
+    @unittest.skip("skipped test test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet()")
     def test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet(self):
         test_name = 'test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet'
         header_msg = "RUNNING "+test_name+"()"
@@ -288,7 +288,8 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params
         parameters = { 'workspace_name': self.getWsName(),
-                       #'input_msa_ref': self.MSA_refs[0],      # Single MSA
+                       'use_all_local_MSAs': "0",
+                       'input_msa_refs': [self.MSA_refs[0], self.MSA_refs[1], self.MSA_refs[2]],  # Specific MSAs
                        'input_many_ref': self.genome_refs[0],  # Single Genome
                        'output_filtered_name': obj_out_name,
                        'coalesce_output': 0,
@@ -332,7 +333,8 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params        
         parameters = { 'workspace_name': self.getWsName(),
-                       'input_msa_ref': self.MSA_refs[0],         # Single MSA
+                       'use_all_local_MSAs': "1",
+                       #'input_msa_refs': [self.MSA_refs[0]],         # Single MSA
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
                        'coalesce_output': 0,  # KEY
@@ -376,7 +378,8 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params        
         parameters = { 'workspace_name': self.getWsName(),
-                       'input_msa_ref': self.MSA_refs[0],         # Single MSA
+                       'use_all_local_MSAs': "1",
+                       #'input_msa_ref': [self.MSA_refs[0]],         # Single MSA
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
                        'coalesce_output': 1,  # KEY

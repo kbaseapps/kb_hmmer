@@ -1,3 +1,7 @@
+### Version 1.1.1
+__Changes__
+- added selectable MSAs to HMMER Local MSA Group Search
+
 ### Version 1.1.0
 __Changes__
 - added HMMER Local MSA Group Search
