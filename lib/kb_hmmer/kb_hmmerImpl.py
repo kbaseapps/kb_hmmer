@@ -54,9 +54,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.1.0"
-    GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "f5d49d433e5ae7fd00d12503d8888e2f6694cd73"
+    VERSION = "1.1.1"
+    GIT_URL = "https://github.com/dcchivian/kb_hmmer"
+    GIT_COMMIT_HASH = "41ac400532808d0f136fd0109be783c46efebe9d"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -1498,7 +1498,9 @@ class kb_hmmer:
            "id" is a numerical identifier of the workspace or object, and
            should just be used for workspace ** "name" is a string identifier
            of a workspace or object.  This is received from Narrative.),
-           parameter "input_many_ref" of type "data_obj_ref", parameter
+           parameter "use_all_local_MSAs" of type "bool", parameter
+           "input_msa_refs" of type "data_obj_ref", parameter
+           "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "coalesce_output" of type "bool", parameter "e_value" of Double,
            parameter "bitscore" of Double, parameter "maxaccepts" of Double
@@ -1529,14 +1531,18 @@ class kb_hmmer:
             raise ValueError('workspace_name parameter is required')
 #        if 'input_one_ref' not in params:
 #            raise ValueError('input_one_ref parameter is required')
-        #if 'input_msa_ref' not in params:
-        #    raise ValueError('input_msa_ref parameter is required')
+        if 'use_all_local_MSAs' not in params:
+            raise ValueError('use_all_local_MSAs parameter is required')
         if 'input_many_ref' not in params:
             raise ValueError('input_many_ref parameter is required')
         if 'output_filtered_name' not in params:
             raise ValueError('output_filtered_name parameter is required')
         if 'coalesce_output' not in params:
             raise ValueError('coalesce_output parameter is required')
+
+        if int(params['use_all_local_MSAs']) == 0:
+            if 'input_msa_refs' not in params or len(params['input_msa_refs']) == 0:
+                raise ValueError('input_msa_refs parameter is required if selecting local MSAs')
 
 
         # set local names and ids
@@ -1716,18 +1722,21 @@ class kb_hmmer:
 
         #### Get the input_msa_refs
         ##
-        input_msa_refs = []
-        ws = workspaceService(self.workspaceURL, token=ctx['token'])
-        try:
-            msa_obj_info_list = ws.list_objects({'ids':[ws_id],'type':"KBaseTrees.MSA"})
-        except Exception as e:
-            raise ValueError ("Unable to list MSA objects from workspace: "+str(params['workspace_name'])+" "+str(e))
+        if int(params['use_all_local_MSAs']) == 0:
+            input_msa_refs = params['input_msa_refs']
+        else:
+            input_msa_refs = []
+            ws = workspaceService(self.workspaceURL, token=ctx['token'])
+            try:
+                msa_obj_info_list = ws.list_objects({'ids':[ws_id],'type':"KBaseTrees.MSA"})
+            except Exception as e:
+                raise ValueError ("Unable to list MSA objects from workspace: "+str(params['workspace_name'])+" "+str(e))
 
-        for info in msa_obj_info_list:
-            [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+            for info in msa_obj_info_list:
+                [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
                 
-            input_msa_ref = str(info[WSID_I])+'/'+str(info[OBJID_I])+'/'+str(info[VERSION_I])
-            input_msa_refs.append(input_msa_ref)
+                input_msa_ref = str(info[WSID_I])+'/'+str(info[OBJID_I])+'/'+str(info[VERSION_I])
+                input_msa_refs.append(input_msa_ref)
 
 
         #### write the MSAs to file and collect names

@@ -241,6 +241,8 @@ $params is a kb_hmmer.HMMER_Local_MSA_Group_Params
 $return is a kb_hmmer.HMMER_Output
 HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_hmmer.workspace_name
+	use_all_local_MSAs has a value which is a kb_hmmer.bool
+	input_msa_refs has a value which is a kb_hmmer.data_obj_ref
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	coalesce_output has a value which is a kb_hmmer.bool
@@ -248,9 +250,9 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	bitscore has a value which is a float
 	maxaccepts has a value which is a float
 workspace_name is a string
+bool is an int
 data_obj_ref is a string
 data_obj_name is a string
-bool is an int
 HMMER_Output is a reference to a hash where the following keys are defined:
 	report_name has a value which is a kb_hmmer.data_obj_name
 	report_ref has a value which is a kb_hmmer.data_obj_ref
@@ -265,6 +267,8 @@ $params is a kb_hmmer.HMMER_Local_MSA_Group_Params
 $return is a kb_hmmer.HMMER_Output
 HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_hmmer.workspace_name
+	use_all_local_MSAs has a value which is a kb_hmmer.bool
+	input_msa_refs has a value which is a kb_hmmer.data_obj_ref
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	coalesce_output has a value which is a kb_hmmer.bool
@@ -272,9 +276,9 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	bitscore has a value which is a float
 	maxaccepts has a value which is a float
 workspace_name is a string
+bool is an int
 data_obj_ref is a string
 data_obj_name is a string
-bool is an int
 HMMER_Output is a reference to a hash where the following keys are defined:
 	report_name has a value which is a kb_hmmer.data_obj_name
 	report_ref has a value which is a kb_hmmer.data_obj_ref
@@ -672,6 +676,8 @@ HMMER Local MSA Group Input Params
 <pre>
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_hmmer.workspace_name
+use_all_local_MSAs has a value which is a kb_hmmer.bool
+input_msa_refs has a value which is a kb_hmmer.data_obj_ref
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 coalesce_output has a value which is a kb_hmmer.bool
@@ -687,6 +693,8 @@ maxaccepts has a value which is a float
 
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_hmmer.workspace_name
+use_all_local_MSAs has a value which is a kb_hmmer.bool
+input_msa_refs has a value which is a kb_hmmer.data_obj_ref
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 coalesce_output has a value which is a kb_hmmer.bool
