@@ -2733,6 +2733,7 @@ class kb_hmmer:
                 feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
                 genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
                 
+            sp = '&nbsp;'
             head_color = "#eeeeff"
             border_head_color = "#ffccff"
             accept_row_color = 'white'
