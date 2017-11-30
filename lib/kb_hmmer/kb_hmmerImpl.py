@@ -1356,8 +1356,8 @@ class kb_hmmer:
 
             dfu = DFUClient(self.callbackURL)
             try:
-                HTML_upload_ret = dfu.file_to_shock({'file_path': html_path,
-                #HTML_upload_ret = dfu.file_to_shock({'file_path': html_output_dir,
+                #HTML_upload_ret = dfu.file_to_shock({'file_path': html_path,
+                HTML_upload_ret = dfu.file_to_shock({'file_path': html_output_dir,
                                                      'make_handle': 0,
                                                      'pack': 'zip'})
             except:
@@ -1381,23 +1381,23 @@ class kb_hmmer:
             reportObj = {'objects_created': [],
                          #'text_message': '',  # or is it 'message'?
                          'message': '',  # or is it 'text_message'?
-                         'direct_html': '',
+                         'direct_html': None,
                          'direct_html_link_index': None,
                          'file_links': [],
                          'html_links': [],
                          'workspace_name': params['workspace_name'],
                          'report_object_name': reportName
                          }
-            html_buf_lim = 16000  # really 16KB, but whatever
-            if len(html_report_str) <= html_buf_lim:
-                reportObj['direct_html'] = html_report_str
-            else:
-                reportObj['direct_html_link_index'] = 0
-
+            #html_buf_lim = 16000  # really 16KB, but whatever
+            #if len(html_report_str) <= html_buf_lim:
+            #    reportObj['direct_html'] = html_report_str
+            #else:
+            reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_file,
                                         'label': search_tool_name+' HTML Report'}
                                        ]
+
             reportObj['file_links'] = [{'shock_id': TAB_upload_ret['shock_id'],
                                         'name': search_tool_name+'_Search.TAB',
                                         'label': search_tool_name+' hits TABLE'},
@@ -2795,8 +2795,8 @@ class kb_hmmer:
             dfu = DFUClient(self.callbackURL)
             # upload output html
             try:
-                HTML_upload_ret = dfu.file_to_shock({'file_path': html_path,
-                #HTML_upload_ret = dfu.file_to_shock({'file_path': html_output_dir,
+                #HTML_upload_ret = dfu.file_to_shock({'file_path': html_path,
+                HTML_upload_ret = dfu.file_to_shock({'file_path': html_output_dir,
                                                      'make_handle': 0,
                                                      'pack': 'zip'})
             except:
@@ -2834,23 +2834,23 @@ class kb_hmmer:
             reportObj = {'objects_created': [],
                          #'text_message': '',  # or is it 'message'?
                          'message': '',  # or is it 'text_message'?
-                         'direct_html': '',
+                         'direct_html': None,
                          'direct_html_link_index': None,
                          'file_links': [],
                          'html_links': [],
                          'workspace_name': params['workspace_name'],
                          'report_object_name': reportName
                          }
-            html_buf_lim = 16000  # really 16KB, but whatever
-            if len(html_report_str) <= html_buf_lim:
-                reportObj['direct_html'] = html_report_str
-            else:
-                reportObj['direct_html_link_index'] = 0
-
+            #html_buf_lim = 16000  # really 16KB, but whatever
+            #if len(html_report_str) <= html_buf_lim:
+            #    reportObj['direct_html'] = html_report_str
+            #else:
+            reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_file,
                                         'label': search_tool_name+' HTML Report'}
                                        ]
+
             for i,input_msa_name in enumerate(input_msa_names):
                 if total_hit_cnt[i] == 0:
                     continue
