@@ -186,7 +186,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 01: Single Model against Single Genome
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_01_kb_hmmer_HMMER_MSA_Search_Genome()")
+    # HIDE @unittest.skip("skipped test test_01_kb_hmmer_HMMER_MSA_Search_Genome()")
     def test_01_kb_hmmer_HMMER_MSA_Search_Genome(self):
         test_name = 'test_01_kb_hmmer_HMMER_MSA_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
@@ -228,7 +228,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 02: Single Model against GenomeSet
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet()")
+    # HIDE @unittest.skip("skipped test test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet()")
     def test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet(self):
         test_name = 'test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet'
         header_msg = "RUNNING "+test_name+"()"
@@ -304,18 +304,19 @@ class kb_hmmerTest(unittest.TestCase):
         report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
         self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
 
-        created_obj_0_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})[0]
-        self.assertEqual(created_obj_0_info[NAME_I], obj_out_name)
-        self.assertEqual(created_obj_0_info[TYPE_I].split('-')[0], obj_out_type)
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
         pass
 
 
-    ### Test 04: All Models in workspace against GenomeSet
+    ### Test 04: All Models in workspace against GenomeSet, DON'T coalesce output
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet()")
-    def test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet(self):
-        test_name = 'test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet'
+    # HIDE @unittest.skip("skipped test test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_NOcoalesce()")
+    def test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_NOcoalesce(self):
+        test_name = 'test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_NOcoalesce'
         header_msg = "RUNNING "+test_name+"()"
         header_delim = len(header_msg) * '='
         print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
@@ -334,7 +335,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_msa_ref': self.MSA_refs[0],         # Single MSA
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
-                       'coalesce_output': 1,
+                       'coalesce_output': 0,  # KEY
                        'e_value': ".001",
                        'bitscore': "50",
                        'maxaccepts': "1000"
@@ -342,12 +343,57 @@ class kb_hmmerTest(unittest.TestCase):
         ret = self.getImpl().HMMER_Local_MSA_Group_Search(self.getContext(), parameters)[0]
         self.assertIsNotNone(ret['report_ref'])
 
-        # check created obj
+        # check created objs
         #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
         report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
         self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
 
-        created_obj_0_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})[0]
-        self.assertEqual(created_obj_0_info[NAME_I], obj_out_name)
-        self.assertEqual(created_obj_0_info[TYPE_I].split('-')[0], obj_out_type)
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 05: All Models in workspace against GenomeSet, DO coalesce output
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_coalesce()")
+    def test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_coalesce(self):
+        test_name = 'test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_coalesce'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params        
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_msa_ref': self.MSA_refs[0],         # Single MSA
+                       'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
+                       'output_filtered_name': obj_out_name,
+                       'coalesce_output': 1,  # KEY
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'maxaccepts': "1000"
+                     }
+        ret = self.getImpl().HMMER_Local_MSA_Group_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created objs
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
         pass
