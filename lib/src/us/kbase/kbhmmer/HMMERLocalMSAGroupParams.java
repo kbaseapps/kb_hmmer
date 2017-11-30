@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "workspace_name",
+    "use_all_local_MSAs",
+    "input_msa_refs",
     "input_many_ref",
     "output_filtered_name",
     "coalesce_output",
@@ -33,6 +35,10 @@ public class HMMERLocalMSAGroupParams {
 
     @JsonProperty("workspace_name")
     private String workspaceName;
+    @JsonProperty("use_all_local_MSAs")
+    private Long useAllLocalMSAs;
+    @JsonProperty("input_msa_refs")
+    private String inputMsaRefs;
     @JsonProperty("input_many_ref")
     private String inputManyRef;
     @JsonProperty("output_filtered_name")
@@ -59,6 +65,36 @@ public class HMMERLocalMSAGroupParams {
 
     public HMMERLocalMSAGroupParams withWorkspaceName(String workspaceName) {
         this.workspaceName = workspaceName;
+        return this;
+    }
+
+    @JsonProperty("use_all_local_MSAs")
+    public Long getUseAllLocalMSAs() {
+        return useAllLocalMSAs;
+    }
+
+    @JsonProperty("use_all_local_MSAs")
+    public void setUseAllLocalMSAs(Long useAllLocalMSAs) {
+        this.useAllLocalMSAs = useAllLocalMSAs;
+    }
+
+    public HMMERLocalMSAGroupParams withUseAllLocalMSAs(Long useAllLocalMSAs) {
+        this.useAllLocalMSAs = useAllLocalMSAs;
+        return this;
+    }
+
+    @JsonProperty("input_msa_refs")
+    public String getInputMsaRefs() {
+        return inputMsaRefs;
+    }
+
+    @JsonProperty("input_msa_refs")
+    public void setInputMsaRefs(String inputMsaRefs) {
+        this.inputMsaRefs = inputMsaRefs;
+    }
+
+    public HMMERLocalMSAGroupParams withInputMsaRefs(String inputMsaRefs) {
+        this.inputMsaRefs = inputMsaRefs;
         return this;
     }
 
@@ -164,7 +200,7 @@ public class HMMERLocalMSAGroupParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((("HMMERLocalMSAGroupParams"+" [workspaceName=")+ workspaceName)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", coalesceOutput=")+ coalesceOutput)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", maxaccepts=")+ maxaccepts)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((("HMMERLocalMSAGroupParams"+" [workspaceName=")+ workspaceName)+", useAllLocalMSAs=")+ useAllLocalMSAs)+", inputMsaRefs=")+ inputMsaRefs)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", coalesceOutput=")+ coalesceOutput)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", maxaccepts=")+ maxaccepts)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
