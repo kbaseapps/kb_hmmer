@@ -2782,7 +2782,8 @@ class kb_hmmer:
                 if total_hit_cnt[i] == 0:
                     html_report_lines += ['<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>']
                 else:
-                    html_report_lines.extend(html_report_chunks[i])
+                    #html_report_lines.extend(html_report_chunks[i])
+                    html_report_lines += [ html_report_chunks[i] ]
                 html_report_lines += ['<tr><td colspan=table_col_width>sp</td></tr>']
 
             html_report_lines += ['</table>']
