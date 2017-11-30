@@ -1,7 +1,7 @@
 #
 # define display information
 #
-name: HMMER Local MSA Group prot-prot Search - v3.1b2
+name: HMMER Search & Functional Profile with Custom Models - v3.1b2
 tooltip: |
     Search for matches to all MSAs that are within workspace using Hidden Markov Model (HMMER) Search.
 screenshots:
@@ -30,6 +30,16 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
+    use_all_local_MSAs:
+        ui-name : |
+            Search MSAs
+        short-hint : |
+            Either use ALL local MSAs or select a subset
+    input_msa_refs:
+        ui-name : |
+            Select MSAs (optional)
+        short-hint : |
+            Select MSAs from local set if you choose not to use ALL
     input_many_ref:
         ui-name : |
             Targets Object
