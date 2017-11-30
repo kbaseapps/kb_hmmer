@@ -2779,7 +2779,7 @@ class kb_hmmer:
                 else:
                     #html_report_lines.extend(html_report_chunks[i])
                     html_report_lines += [ html_report_chunks[i] ]
-                html_report_lines += ['<tr><td colspan=table_col_width>sp</td></tr>']
+                html_report_lines += ['<tr><td colspan=table_col_width>'+sp+'</td></tr>']
 
             html_report_lines += ['</table>']
             html_report_lines += ['</body>']
