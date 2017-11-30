@@ -75,7 +75,6 @@ module kb_hmmer {
 /*	sequence       input_one_sequence;
 	data_obj_ref   input_one_ref;
 */
-        bool           use_all_local_MSAs;
 	data_obj_ref   input_msa_refs;
 	data_obj_ref   input_many_ref;
         data_obj_name  output_filtered_name;

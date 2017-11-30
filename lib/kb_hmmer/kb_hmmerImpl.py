@@ -56,7 +56,7 @@ class kb_hmmer:
     ######################################### noqa
     VERSION = "1.1.1"
     GIT_URL = "https://github.com/dcchivian/kb_hmmer"
-    GIT_COMMIT_HASH = "41ac400532808d0f136fd0109be783c46efebe9d"
+    GIT_COMMIT_HASH = "6c6444f6b844893aab7762871451472c9f3c58f8"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -1498,8 +1498,7 @@ class kb_hmmer:
            "id" is a numerical identifier of the workspace or object, and
            should just be used for workspace ** "name" is a string identifier
            of a workspace or object.  This is received from Narrative.),
-           parameter "use_all_local_MSAs" of type "bool", parameter
-           "input_msa_refs" of type "data_obj_ref", parameter
+           parameter "input_msa_refs" of type "data_obj_ref", parameter
            "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "coalesce_output" of type "bool", parameter "e_value" of Double,
@@ -1531,18 +1530,14 @@ class kb_hmmer:
             raise ValueError('workspace_name parameter is required')
 #        if 'input_one_ref' not in params:
 #            raise ValueError('input_one_ref parameter is required')
-        if 'use_all_local_MSAs' not in params:
-            raise ValueError('use_all_local_MSAs parameter is required')
+#        if 'input_msa_refs' not in params or len(params['input_msa_refs']) == 0:
+#            raise ValueError('input_msa_refs parameter is required if selecting local MSAs')
         if 'input_many_ref' not in params:
             raise ValueError('input_many_ref parameter is required')
         if 'output_filtered_name' not in params:
             raise ValueError('output_filtered_name parameter is required')
         if 'coalesce_output' not in params:
             raise ValueError('coalesce_output parameter is required')
-
-        if int(params['use_all_local_MSAs']) == 0:
-            if 'input_msa_refs' not in params or len(params['input_msa_refs']) == 0:
-                raise ValueError('input_msa_refs parameter is required if selecting local MSAs')
 
 
         # set local names and ids
@@ -1722,7 +1717,7 @@ class kb_hmmer:
 
         #### Get the input_msa_refs
         ##
-        if int(params['use_all_local_MSAs']) == 0:
+        if 'input_msa_refs' in params and len(params['input_msa_refs']) != 0:
             input_msa_refs = params['input_msa_refs']
         else:
             input_msa_refs = []
@@ -2784,7 +2779,7 @@ class kb_hmmer:
                 else:
                     #html_report_lines.extend(html_report_chunks[i])
                     html_report_lines += [ html_report_chunks[i] ]
-                html_report_lines += ['<tr><td colspan=table_col_width>sp</td></tr>']
+                html_report_lines += ['<tr><td colspan=table_col_width>'+sp+'</td></tr>']
 
             html_report_lines += ['</table>']
             html_report_lines += ['</body>']
