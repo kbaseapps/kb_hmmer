@@ -54,9 +54,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.0.3"
+    VERSION = "1.1.0"
     GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "306e1556919d594dbc184f729130c6eb58882b5e"
+    GIT_COMMIT_HASH = "f5d49d433e5ae7fd00d12503d8888e2f6694cd73"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -285,95 +285,6 @@ class kb_hmmer:
         input_msa_ref = params['input_msa_ref']
         input_many_ref = params['input_many_ref']
         
-
-        #### Get the input_one object
-        ##
-        """
-        input_one_id = None
-        if 'input_one_ref' in params and params['input_one_ref'] != None:
-            try:
-                ws = workspaceService(self.workspaceURL, token=ctx['token'])
-                #objects = ws.get_objects([{'ref': params['input_one_ref']}])
-                objects = ws.get_objects2({'objects':[{'ref': input_one_ref}]})['data']
-                input_one_data = objects[0]['data']
-                input_one_name = str(objects[0]['info'][1])
-                info = objects[0]['info']
-
-                one_type_name = info[2].split('.')[1].split('-')[0]
-            except Exception as e:
-                raise ValueError('Unable to fetch input_one_name object from workspace: ' + str(e))
-                #to get the full stack trace: traceback.format_exc()
-
-
-            # Handle overloading (input_one can be Feature, or FeatureSet)
-            #
-            if one_type_name == 'FeatureSet':
-                # retrieve sequences for features
-                #input_one_featureSet = input_one_data
-                one_forward_reads_file_dir = self.scratch
-                one_forward_reads_file = input_one_name+".fasta"
-
-                # DEBUG
-                #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
-                FeatureSetToFASTA_params = {
-                    'featureSet_ref':      input_one_ref,
-                    'file':                one_forward_reads_file,
-                    'dir':                 one_forward_reads_file_dir,
-                    'console':             console,
-                    'invalid_msgs':        invalid_msgs,
-                    'residue_type':        'protein',
-                    'feature_type':        'CDS',
-                    'record_id_pattern':   '%%genome_ref%%'+genome_id_feature_id_delim+'%%feature_id%%',
-                    'record_desc_pattern': '[%%genome_ref%%]',
-                    'case':                'upper',
-                    'linewrap':            50,
-                    'merge_fasta_files':   'TRUE'
-                    }
-
-                #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-                #SERVICE_VER = 'release'
-                SERVICE_VER = 'dev'
-                DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-                FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA (FeatureSetToFASTA_params)
-                one_forward_reads_file_path = FeatureSetToFASTA_retVal['fasta_file_path']
-                if len(FeatureSetToFASTA_retVal['feature_ids_by_genome_ref'].keys()) > 0:
-                    appropriate_sequence_found_in_one_input = True
-
-                # DEBUG
-                #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
-                #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
-
-
-            # Feature
-            #
-            elif one_type_name == 'Feature':
-                # export feature to FASTA file
-                feature = input_one_data
-                input_one_feature_id = feature['id']
-                one_forward_reads_file_path = os.path.join(self.scratch, input_one_name+".fasta")
-                self.log(console, 'writing fasta file: '+one_forward_reads_file_path)
-                # HMMER_prot is prot-prot
-                #record = SeqRecord(Seq(feature['dna_sequence']), id=feature['id'], description='['+feature['genome_id']+']'+' '+feature['function'])
-                #if feature['type'] != 'CDS':
-                #    self.log(console,input_one_name+" feature type must be CDS")
-                #    self.log(invalid_msgs,input_one_name+" feature type must be CDS")
-                if 'protein_translation' not in feature or feature['protein_translation'] == None:
-                    #self.log(console,"bad CDS Feature "+input_one_name+": no protein_translation found")
-                    #raise ValueError ("bad CDS Feature "input_one_name+": no protein_translation found")
-                    self.log(console,input_one_name+" feature type must be CDS")
-                    self.log(invalid_msgs,input_one_name+" feature type must be CDS")
-                else:
-                    appropriate_sequence_found_in_one_input = True
-                    record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description='['+feature['genome_id']+']'+' '+feature['function'])
-                    SeqIO.write([record], one_forward_reads_file_path, "fasta")
-                    appropriate_sequence_found_in_one_input = True
-            else:
-                raise ValueError('Cannot yet handle input_one type of: '+type_name)            
-        else:
-            raise ValueError('Must define either input_one_sequence or input_one_name')
-
-        """
-
 
         #### Get the input_msa object
         ##
@@ -674,7 +585,6 @@ class kb_hmmer:
         #
         else:
             raise ValueError('Cannot yet handle input_many type of: '+many_type_name)            
-
 
         # check for failed input file creation
         #
@@ -1626,8 +1536,7 @@ class kb_hmmer:
         if 'output_filtered_name' not in params:
             raise ValueError('output_filtered_name parameter is required')
         if 'coalesce_output' not in params:
-            #raise ValueError('coalesce_output parameter is required')
-            self.log(console,'MISSING!!! FIX!!! coalesce_output parameter is required')
+            raise ValueError('coalesce_output parameter is required')
 
 
         # set local names and ids
@@ -1636,95 +1545,6 @@ class kb_hmmer:
         input_many_ref = params['input_many_ref']
         ws_id = input_many_ref.split('/')[0]
         
-
-        #### Get the input_one object
-        ##
-        """
-        input_one_id = None
-        if 'input_one_ref' in params and params['input_one_ref'] != None:
-            try:
-                ws = workspaceService(self.workspaceURL, token=ctx['token'])
-                #objects = ws.get_objects([{'ref': params['input_one_ref']}])
-                objects = ws.get_objects2({'objects':[{'ref': input_one_ref}]})['data']
-                input_one_data = objects[0]['data']
-                input_one_name = str(objects[0]['info'][1])
-                info = objects[0]['info']
-
-                one_type_name = info[2].split('.')[1].split('-')[0]
-            except Exception as e:
-                raise ValueError('Unable to fetch input_one_name object from workspace: ' + str(e))
-                #to get the full stack trace: traceback.format_exc()
-
-
-            # Handle overloading (input_one can be Feature, or FeatureSet)
-            #
-            if one_type_name == 'FeatureSet':
-                # retrieve sequences for features
-                #input_one_featureSet = input_one_data
-                one_forward_reads_file_dir = self.scratch
-                one_forward_reads_file = input_one_name+".fasta"
-
-                # DEBUG
-                #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
-                FeatureSetToFASTA_params = {
-                    'featureSet_ref':      input_one_ref,
-                    'file':                one_forward_reads_file,
-                    'dir':                 one_forward_reads_file_dir,
-                    'console':             console,
-                    'invalid_msgs':        invalid_msgs,
-                    'residue_type':        'protein',
-                    'feature_type':        'CDS',
-                    'record_id_pattern':   '%%genome_ref%%'+genome_id_feature_id_delim+'%%feature_id%%',
-                    'record_desc_pattern': '[%%genome_ref%%]',
-                    'case':                'upper',
-                    'linewrap':            50,
-                    'merge_fasta_files':   'TRUE'
-                    }
-
-                #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-                #SERVICE_VER = 'release'
-                SERVICE_VER = 'dev'
-                DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-                FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA (FeatureSetToFASTA_params)
-                one_forward_reads_file_path = FeatureSetToFASTA_retVal['fasta_file_path']
-                if len(FeatureSetToFASTA_retVal['feature_ids_by_genome_ref'].keys()) > 0:
-                    appropriate_sequence_found_in_one_input = True
-
-                # DEBUG
-                #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
-                #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
-
-
-            # Feature
-            #
-            elif one_type_name == 'Feature':
-                # export feature to FASTA file
-                feature = input_one_data
-                input_one_feature_id = feature['id']
-                one_forward_reads_file_path = os.path.join(self.scratch, input_one_name+".fasta")
-                self.log(console, 'writing fasta file: '+one_forward_reads_file_path)
-                # HMMER_prot is prot-prot
-                #record = SeqRecord(Seq(feature['dna_sequence']), id=feature['id'], description='['+feature['genome_id']+']'+' '+feature['function'])
-                #if feature['type'] != 'CDS':
-                #    self.log(console,input_one_name+" feature type must be CDS")
-                #    self.log(invalid_msgs,input_one_name+" feature type must be CDS")
-                if 'protein_translation' not in feature or feature['protein_translation'] == None:
-                    #self.log(console,"bad CDS Feature "+input_one_name+": no protein_translation found")
-                    #raise ValueError ("bad CDS Feature "input_one_name+": no protein_translation found")
-                    self.log(console,input_one_name+" feature type must be CDS")
-                    self.log(invalid_msgs,input_one_name+" feature type must be CDS")
-                else:
-                    appropriate_sequence_found_in_one_input = True
-                    record = SeqRecord(Seq(feature['protein_translation']), id=feature['id'], description='['+feature['genome_id']+']'+' '+feature['function'])
-                    SeqIO.write([record], one_forward_reads_file_path, "fasta")
-                    appropriate_sequence_found_in_one_input = True
-            else:
-                raise ValueError('Cannot yet handle input_one type of: '+type_name)            
-        else:
-            raise ValueError('Must define either input_one_sequence or input_one_name')
-
-        """
-
 
         #### Get the input_many object
         ##
@@ -2108,6 +1928,7 @@ class kb_hmmer:
         output_hit_TAB_file_paths = []
         output_hit_MSA_file_paths = []
         output_filtered_fasta_file_paths = []
+        output_hits_flags = []
         objects_created_refs = []
         coalesced_sequenceObjs = []
         coalesce_featureIds_element_ordering = []
@@ -2271,7 +2092,11 @@ class kb_hmmer:
             if not os.path.isfile(output_hit_MSA_file_path):
                 raise ValueError("HMMER_SEARCH failed to create MSA file '"+output_hit_MSA_file_path+"'")
             elif not os.path.getsize(output_hit_MSA_file_path) > 0:
-                raise ValueError("HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
+                #raise ValueError("HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
+                self.log(console,"HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
+                objects_created_refs.append(None)
+                total_hit_cnt.append(0)
+                continue
 
 
             # DEBUG
@@ -2560,7 +2385,7 @@ class kb_hmmer:
 
             ### Create output object
             #
-            if 'coalesce_output' in params and params['coalesce_output'] == 1:
+            if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
                 if len(invalid_msgs) == 0:
                     if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
                         self.log(console,"No Object to Upload for MSA "+input_msa_name)  # DEBUG
@@ -2580,6 +2405,7 @@ class kb_hmmer:
                             #coalesce_featureIds_genome_ordering.append(output_featureSet['elements'][fId][0])
                             for this_genome_ref in output_featureSet['elements'][fId]:
                                 coalesce_featureIds_genome_ordering.append(this_genome_ref)
+
             else:  # keep output separate  Upload results if coalesce_output is 0
                 output_name = input_msa_name+'-'+params['output_filtered_name']
 
@@ -2840,7 +2666,7 @@ class kb_hmmer:
 
         #### Create and Upload output objects if coalesce_output is true
         ##
-        if 'coalesce_output' in params and params['coalesce_output'] == 1:
+        if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
             output_name = params['output_filtered_name']
 
             if len(invalid_msgs) == 0:
@@ -3036,9 +2862,15 @@ class kb_hmmer:
                                              'name': input_msa_name+'.'+search_tool_name+'_Search.MSA',
                                              'label': input_msa_name+'.'+search_tool_name+' hits MSA'}
                                            ]
-                                           
-                reportObj['objects_created'].append({'ref':objects_created_refs[i], 'description':input_msa_name+' '+search_tool_name+' hits'})
-
+            if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
+                for object_created_ref in objects_created_refs:
+                    reportObj['objects_created'].append({'ref':object_created_ref, 'description':'Coalesced'+' '+search_tool_name+' hits'})
+            else:
+                for i,input_msa_name in enumerate(input_msa_names):
+                    if total_hit_cnt[i] == 0:
+                        continue
+                    reportObj['objects_created'].append({'ref':objects_created_refs[i], 'description':input_msa_name+' '+search_tool_name+' hits'})
+                
 
             # save report object
             #
