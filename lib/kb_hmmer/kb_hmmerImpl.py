@@ -219,6 +219,15 @@ class kb_hmmer:
         if not os.path.exists(self.scratch):
             os.makedirs(self.scratch)
 
+        # set i/o dirs
+        timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
+        self.input_dir = os.path.join(self.scratch,'input.'+str(timestamp))
+        self.output_dir = os.path.join(self.scratch,'output.'+str(timestamp))
+        if not os.path.exists(self.input_dir):
+            os.makedirs(self.input_dir)
+        if not os.path.exists(self.output_dir):
+            os.makedirs(self.output_dir)
+
         #END_CONSTRUCTOR
         pass
 
@@ -264,6 +273,11 @@ class kb_hmmer:
         appropriate_sequence_found_in_MSA_input = False
         appropriate_sequence_found_in_many_input = False
         genome_id_feature_id_delim = '.f:'
+
+        # set hmmer_dir
+        hmmer_dir = os.path.join(self.output_dir, 'hmmer_run')
+        if not os.path.exists(hmmer_dir):
+            os.makedirs(hmmer_dir)
 
 
         #### do some basic checks
@@ -329,7 +343,7 @@ class kb_hmmer:
 
             
             # export features to CLUSTAL formatted MSA (HMMER BUILD seems to only take CLUSTAL)
-            input_MSA_file_path = os.path.join(self.scratch, input_msa_name+".clustal")
+            input_MSA_file_path = os.path.join(hmmer_dir, input_msa_name+".clustal")
             self.log(console, 'writing MSA file: '+input_MSA_file_path)
 
             # set header
@@ -445,7 +459,7 @@ class kb_hmmer:
                 raise ValueError('Unable to get SequenceSet: ' + str(e))
 
             header_id = input_many_sequenceSet['sequences'][0]['sequence_id']
-            many_forward_reads_file_path = os.path.join(self.scratch, header_id+'.fasta')
+            many_forward_reads_file_path = os.path.join(self.output_dir, header_id+'.fasta')
             many_forward_reads_file_handle = open(many_forward_reads_file_path, 'w', 0)
             self.log(console, 'writing reads file: '+str(many_forward_reads_file_path))
 
@@ -470,7 +484,7 @@ class kb_hmmer:
         if many_type_name == 'FeatureSet':
             # retrieve sequences for features
             input_many_featureSet = input_many_data
-            many_forward_reads_file_dir = self.scratch
+            many_forward_reads_file_dir = self.output_dir
             many_forward_reads_file = input_many_name+".fasta"
 
             # DEBUG
@@ -508,7 +522,7 @@ class kb_hmmer:
         # Genome
         #
         elif many_type_name == 'Genome':
-            many_forward_reads_file_dir = self.scratch
+            many_forward_reads_file_dir = self.output_dir
             many_forward_reads_file = input_many_name+".fasta"
 
             # DEBUG
@@ -546,7 +560,7 @@ class kb_hmmer:
         #
         elif many_type_name == 'GenomeSet':
             input_many_genomeSet = input_many_data
-            many_forward_reads_file_dir = self.scratch
+            many_forward_reads_file_dir = self.output_dir
             many_forward_reads_file = input_many_name+".fasta"
 
             # DEBUG
@@ -649,14 +663,10 @@ class kb_hmmer:
             return [returnVal]
 
 
-        # set the output paths
-        timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
-        output_dir = os.path.join(self.scratch,'output.'+str(timestamp))
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        output_aln_file_path = os.path.join(output_dir, 'alnout.txt');
-        output_extra_file_path = os.path.join(output_dir, 'alnout_extra.txt');
-        output_filtered_fasta_file_path = os.path.join(output_dir, 'output_filtered.faa');
+        # Set output paths
+        #output_aln_file_path = os.path.join(hmmer_dir, 'alnout.txt');
+        #output_extra_file_path = os.path.join(hmmer_dir, 'alnout_extra.txt');
+        #output_filtered_fasta_file_path = os.path.join(hmmer_dir, 'output_filtered.faa');
 
 
         # Build HMM from MSA
@@ -691,7 +701,7 @@ class kb_hmmer:
 #        report += '    '+' '.join(hmmer_build_cmd)+"\n"
 
         p = subprocess.Popen(hmmer_build_cmd, \
-                             cwd = self.scratch, \
+                             cwd = self.output_dir, \
                              stdout = subprocess.PIPE, \
                              stderr = subprocess.STDOUT, \
                              shell = False)
@@ -713,6 +723,11 @@ class kb_hmmer:
             raise ValueError("HMMER_BUILD failed to create HMM file '"+HMM_file_path+"'")
         elif not os.path.getsize(HMM_file_path) > 0:
             raise ValueError("HMMER_BUILD created empty HMM file '"+HMM_file_path+"'")
+
+        # DEBUG
+        with open (HMM_file_path, 'r') as HMM_file_handle:
+            for line in HMM_file_handle.readlines():
+                self.log(console, "HMM_FILE: '"+str(line)+"'")
 
 
         ### Construct the HMMER_SEARCH command
@@ -736,14 +751,9 @@ class kb_hmmer:
         elif not os.path.getsize(many_forward_reads_file_path):
             raise ValueError("empty file '"+many_forward_reads_file_path+"'")
 
-        # set the output path
-        timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
-        output_dir = os.path.join(self.scratch,'output.'+str(timestamp))
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        output_hit_TAB_file_path = os.path.join(output_dir, 'hitout.txt');
-        output_hit_MSA_file_path = os.path.join(output_dir, 'msaout.txt');
-        output_filtered_fasta_file_path = os.path.join(output_dir, 'output_filtered.fasta');
+        output_hit_TAB_file_path = os.path.join(hmmer_dir, 'hitout.txt');
+        output_hit_MSA_file_path = os.path.join(hmmer_dir, 'msaout.txt');
+        output_filtered_fasta_file_path = os.path.join(hmmer_dir, 'output_filtered.fasta');
 
         # this is command for basic search mode
         hmmer_search_cmd.append('--tblout')
@@ -771,7 +781,7 @@ class kb_hmmer:
 #        report += '    '+' '.join(hmmer_search_cmd)+"\n"
 
         p = subprocess.Popen(hmmer_search_cmd, \
-                             cwd = self.scratch, \
+                             cwd = self.output_dir, \
                              stdout = subprocess.PIPE, \
                              stderr = subprocess.STDOUT, \
                              shell = False)
@@ -1346,7 +1356,7 @@ class kb_hmmer:
             # write html to file and upload
             #
             html_report_str = "\n".join(html_report_lines)
-            html_output_dir = os.path.join(output_dir,'html_output')
+            html_output_dir = os.path.join(self.output_dir,'html_output')
             if not os.path.exists(html_output_dir):
                 os.makedirs(html_output_dir)
             html_file = search_tool_name+'_Search.html'
@@ -1573,7 +1583,7 @@ class kb_hmmer:
                 raise ValueError('Unable to get SequenceSet: ' + str(e))
 
             header_id = input_many_sequenceSet['sequences'][0]['sequence_id']
-            many_forward_reads_file_path = os.path.join(self.scratch, header_id+'.fasta')
+            many_forward_reads_file_path = os.path.join(self.output_dir, header_id+'.fasta')
             many_forward_reads_file_handle = open(many_forward_reads_file_path, 'w', 0)
             self.log(console, 'writing reads file: '+str(many_forward_reads_file_path))
 
@@ -1598,7 +1608,7 @@ class kb_hmmer:
         if many_type_name == 'FeatureSet':
             # retrieve sequences for features
             input_many_featureSet = input_many_data
-            many_forward_reads_file_dir = self.scratch
+            many_forward_reads_file_dir = self.output_dir
             many_forward_reads_file = input_many_name+".fasta"
 
             # DEBUG
@@ -1636,7 +1646,7 @@ class kb_hmmer:
         # Genome
         #
         elif many_type_name == 'Genome':
-            many_forward_reads_file_dir = self.scratch
+            many_forward_reads_file_dir = self.output_dir
             many_forward_reads_file = input_many_name+".fasta"
 
             # DEBUG
@@ -1674,7 +1684,7 @@ class kb_hmmer:
         #
         elif many_type_name == 'GenomeSet':
             input_many_genomeSet = input_many_data
-            many_forward_reads_file_dir = self.scratch
+            many_forward_reads_file_dir = self.output_dir
             many_forward_reads_file = input_many_name+".fasta"
 
             # DEBUG
@@ -1751,6 +1761,11 @@ class kb_hmmer:
                 raise ValueError('Unable to fetch '+input_msa_name+' object from workspace: ' + str(e))
                 #to get the full stack trace: traceback.format_exc()
 
+            # set hmmer_dir
+            hmmer_dir = os.path.join(self.output_dir, input_msa_name)
+            if not os.path.exists(hmmer_dir):
+                os.makedirs(hmmer_dir)
+
             if msa_type_name == 'MSA':
                 self.log (console, "\n\nPROCESSING MSA "+input_msa_name+"\n")  # DEBUG
 
@@ -1770,7 +1785,7 @@ class kb_hmmer:
                         default_row_labels[row_id] = row_id
 
                 # export features to CLUSTAL formatted MSA (HMMER BUILD seems to only take CLUSTAL)
-                input_MSA_file_path = os.path.join(self.scratch, input_msa_name+".clustal")
+                input_MSA_file_path = os.path.join(hmmer_dir, input_msa_name+".clustal")
                 self.log(console, 'writing MSA file: '+input_MSA_file_path)
 
                 # set header
@@ -1938,21 +1953,19 @@ class kb_hmmer:
         coalesce_featureIds_element_ordering = []
         coalesce_featureIds_genome_ordering = []
         html_report_chunks = []
-        
+
         for i,input_msa_ref in enumerate(input_msa_refs):
 
             ### set paths
             #
             input_msa_name = input_msa_names[i]
-            input_MSA_file_path = os.path.join(self.scratch, input_msa_name+".clustal")
+            hmmer_dir = os.path.join(self.output_dir, input_msa_name)  # this must match above
+            input_MSA_file_path = os.path.join(hmmer_dir, input_msa_name+".clustal")
 
-            timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
-            output_dir = os.path.join(self.scratch,'output.'+str(timestamp))
-            if not os.path.exists(output_dir):
-                os.makedirs(output_dir)
-            output_aln_file_path = os.path.join(output_dir, input_msa_name+'.alnout.txt');
-            output_extra_file_path = os.path.join(output_dir, input_msa_name+'.alnout_extra.txt');
-            output_filtered_fasta_file_path = os.path.join(output_dir, input_msa_name+'.output_filtered.faa');
+            #output_aln_file_path = os.path.join(hmmer_dir, input_msa_name+'.alnout.txt');
+            #output_extra_file_path = os.path.join(hmmer_dir, input_msa_name+'.alnout_extra.txt');
+            #output_filtered_fasta_file_path = os.path.join(hmmer_dir, input_msa_name+'.output_filtered.faa');
+
 
             ### Build HMM from MSA
             #
@@ -1986,7 +1999,7 @@ class kb_hmmer:
             #report += '    '+' '.join(hmmer_build_cmd)+"\n"
 
             p = subprocess.Popen(hmmer_build_cmd, \
-                                     cwd = self.scratch, \
+                                     cwd = self.output_dir, \
                                      stdout = subprocess.PIPE, \
                                      stderr = subprocess.STDOUT, \
                                      shell = False)
@@ -2031,14 +2044,9 @@ class kb_hmmer:
             elif not os.path.getsize(many_forward_reads_file_path):
                 raise ValueError("empty file '"+many_forward_reads_file_path+"'")
 
-            # set the output path
-            timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
-            output_dir = os.path.join(self.scratch,'output.'+str(timestamp))
-            if not os.path.exists(output_dir):
-                os.makedirs(output_dir)
-            output_hit_TAB_file_path = os.path.join(output_dir, input_msa_name+'.hitout.txt');
-            output_hit_MSA_file_path = os.path.join(output_dir, input_msa_name+'.msaout.txt');
-            output_filtered_fasta_file_path = os.path.join(output_dir, input_msa_name+'.output_filtered.fasta');
+            output_hit_TAB_file_path = os.path.join(hmmer_dir, input_msa_name+'.hitout.txt');
+            output_hit_MSA_file_path = os.path.join(hmmer_dir, input_msa_name+'.msaout.txt');
+            output_filtered_fasta_file_path = os.path.join(hmmer_dir, input_msa_name+'.output_filtered.fasta');
             output_hit_TAB_file_paths.append (output_hit_TAB_file_path)
             output_hit_MSA_file_paths.append (output_hit_MSA_file_path)
             output_filtered_fasta_file_paths.append(output_filtered_fasta_file_path)
@@ -2070,7 +2078,7 @@ class kb_hmmer:
             #report += '    '+' '.join(hmmer_search_cmd)+"\n"
 
             p = subprocess.Popen(hmmer_search_cmd, \
-                                     cwd = self.scratch, \
+                                     cwd = self.output_dir, \
                                      stdout = subprocess.PIPE, \
                                      stderr = subprocess.STDOUT, \
                                      shell = False)
@@ -2104,6 +2112,8 @@ class kb_hmmer:
 
 
             # DEBUG
+            #self.log(console, "DEBUG: output_hit_TAB_file_path: '"+str(output_hit_TAB_file_path))
+            #self.log(console, "DEBUG: output_hit_MSA_file_path: '"+str(output_hit_MSA_file_path))
             #report = "TAB:\n\n"
             #with open (output_hit_TAB_file_path, 'r') as output_handle:
             #    for line in output_handle:
@@ -2112,6 +2122,7 @@ class kb_hmmer:
             #with open (output_hit_MSA_file_path, 'r') as output_handle:
             #    for line in output_handle:
             #        report += line+"\n"
+            #self.log(console, report)
 
 
             ### Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
@@ -2243,14 +2254,13 @@ class kb_hmmer:
                         hit_beg[hit_id] = int(beg_str)
                         hit_end[hit_id] = int(end_str)
 
+            #
+            ### Create output objects
+            #
 
             self.log(console, 'EXTRACTING HITS FROM INPUT')
             self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
 
-
-            #
-            ### Create output objects
-            #
 
             # SequenceSet input -> SequenceSet output
             #
@@ -2637,35 +2647,13 @@ class kb_hmmer:
                         # aln coords only for hit seq
                         html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(h_beg)+'-'+str(h_end)+'</nobr></font></td>']
 
-                        # mismatches?
-    #                    html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(mismatches)+'</font></td>']
-                        # gaps?
-    #                    html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(gap_openings)+'</font></td>']
-
-                        # regions
-    #                    html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(regions)+'</font></td>']
-
-                        # regions_multidom
-    #                    html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(regions_multidom)+'</font></td>']
-
-                        # overlaps
-    #                    html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(overlaps)+'</font></td>']
-
-                        # envelopes
-    #                    html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(envelopes)+'</font></td>']
-
-                        # expected_dom_n
-    #                    html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(expected_dom_n)+'</font></td>']
-
-                        # doms
-    #                    html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(dom_n)+','+str(doms_within_rep_thresh)+','+str(doms_within_inc_thresh)+'</font></td>']
-
-                        # hit desc
-    #                    html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(hit_desc)+'</font></td>']
-
+                        # close chunk
                         html_report_chunk += ['</tr>']
 
-                        html_report_chunks.append("\n".join(html_report_chunk))
+                # attach chunk
+                html_report_chunk_str = "\n".join(html_report_chunk)
+                html_report_chunks.append(html_report_chunk_str)
+                #self.log(console, "HTML_REPORT_CHUNK: '"+str(html_report_chunk_str)+"'")  # DEBUG
 
 
         #### Create and Upload output objects if coalesce_output is true
@@ -2773,13 +2761,13 @@ class kb_hmmer:
             html_report_lines += ['</tr>']
 
 
-            for i,input_msa_name in enumerate(input_msa_names):
+            for msa_i,input_msa_name in enumerate(input_msa_names):
                 html_report_lines += ['<tr><td colspan=table_col_width>Hits to <b>'+str(input_msa_name)+'</b></td></tr>']
-                if total_hit_cnt[i] == 0:
+                if total_hit_cnt[msa_i] == 0:
                     html_report_lines += ['<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>']
                 else:
                     #html_report_lines.extend(html_report_chunks[i])
-                    html_report_lines += [ html_report_chunks[i] ]
+                    html_report_lines += [ html_report_chunks[msa_i] ]
                 html_report_lines += ['<tr><td colspan=table_col_width>'+sp+'</td></tr>']
 
             html_report_lines += ['</table>']
@@ -2790,7 +2778,7 @@ class kb_hmmer:
             # write html to file and upload
             #
             html_report_str = "\n".join(html_report_lines)
-            html_output_dir = os.path.join(output_dir,'html_output')
+            html_output_dir = os.path.join(self.output_dir,'html_output')
             if not os.path.exists(html_output_dir):
                 os.makedirs(html_output_dir)
             html_file = search_tool_name+'_Search.html'
@@ -2811,8 +2799,8 @@ class kb_hmmer:
             # upload output files
             TAB_upload_rets = []
             MSA_upload_rets = []
-            for i,input_msa_name in enumerate(input_msa_names):
-                if total_hit_cnt[i] == 0:
+            for msa_i,input_msa_name in enumerate(input_msa_names):
+                if total_hit_cnt[msa_i] == 0:
                     self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR MSA '+input_msa_name)
                     TAB_upload_rets.append(None)
                     MSA_upload_rets.append(None)
@@ -2820,14 +2808,14 @@ class kb_hmmer:
 
                 self.log(console, 'UPLOADING OF HMMER OUTPUT FOR MSA '+input_msa_name)
                 try:
-                    TAB_upload_rets.append(dfu.file_to_shock({'file_path': output_hit_TAB_file_paths[i],
+                    TAB_upload_rets.append(dfu.file_to_shock({'file_path': output_hit_TAB_file_paths[msa_i],
                                                               'make_handle': 0})
                                                               #'pack': 'zip'})
                                            )
                 except:
                     raise ValueError ('Logging exception loading TAB output to shock for MSA '+input_msa_name)
                 try:
-                    MSA_upload_rets.append(dfu.file_to_shock({'file_path': output_hit_MSA_file_paths[i],
+                    MSA_upload_rets.append(dfu.file_to_shock({'file_path': output_hit_MSA_file_paths[msa_i],
                                                               'make_handle': 0})
                                                               #'pack': 'zip'})
                                            )
