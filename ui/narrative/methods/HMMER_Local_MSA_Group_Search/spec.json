@@ -108,7 +108,7 @@
         {
             "id": "heatmap",
             "optional": false,
-            "advanced": false,
+            "advanced": true,
             "allow_multiple": false,
             "default_values": [ "1" ],
             "field_type": "dropdown",

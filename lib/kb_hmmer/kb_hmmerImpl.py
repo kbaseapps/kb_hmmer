@@ -2816,12 +2816,11 @@ class kb_hmmer:
             html_report_lines += ['</body>']
             html_report_lines += ['</html>']
 
-# DEBUG HERE
-#            # write html to file
-#            html_path = html_search_path
-#            html_report_str = "\n".join(html_report_lines)
-#            with open (html_path, 'w', 0) as html_handle:
-#                html_handle.write(html_report_str)
+            # write html to file
+            html_path = html_search_path
+            html_report_str = "\n".join(html_report_lines)
+            with open (html_path, 'w', 0) as html_handle:
+                html_handle.write(html_report_str)
 
 
         #### Build Profile output report
