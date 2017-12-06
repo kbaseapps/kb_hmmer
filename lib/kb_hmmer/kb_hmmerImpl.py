@@ -2786,7 +2786,7 @@ class kb_hmmer:
             html_report_lines += ['<html>']
             html_report_lines += ['<body bgcolor="white">']
             if many_type_name == 'GenomeSet':
-                html_report_lines += ['<a href="'+html_profile_file+'" target="profile"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font></a> \| <font color="'+header_tab_color+'" size='+header_tab_fontsize+'>SEARCH HITS</font>]']
+                html_report_lines += ['<a href="'+html_profile_file+'" target="profile"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>TABULAR PROFILE</b></font></a> | <font color="'+header_tab_color+'" size='+header_tab_fontsize+'>SEARCH HITS</font><p>']
             html_report_lines += ['<table cellpadding='+cellpadding+' cellspacing = '+cellspacing+' border='+border+'>']
             html_report_lines += ['<tr bgcolor="'+head_color+'">']
             html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'ALIGNMENT COVERAGE (HIT SEQ)'+'</font></td>']
@@ -2921,7 +2921,7 @@ class kb_hmmer:
             html_report_lines += ['</style>']
             html_report_lines += ['</head>']
             html_report_lines += ['<body bgcolor="white">']
-            html_report_lines += ['<font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font> \| <a href="'+html_search_file+'" target="search"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>SEARCH HITS</font></a>]']
+            html_report_lines += ['<font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font> | <a href="'+html_search_file+'" target="search"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>SEARCH HITS</b></font></a><p>']
 
             # genomes as rows
             if 'vertical' in params and params['vertical'] == "1":
@@ -2935,7 +2935,7 @@ class kb_hmmer:
 #                        label = 'PFAM'
 #                    elif label == 'TIGR':
 #                        label = 'TIGRFAM'
-#                        html_report_lines += ['<tr><td valign=bottom align=right rowspan='+corner_rowspan+'><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="'+text_color+'">'+label+'</font></div></div></td>']
+                html_report_lines += ['<tr><td valign=bottom align=right rowspan='+corner_rowspan+'><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="'+text_color+'">'+label+'</font></div></div></td>']
 
 
                 # column headers
@@ -2943,7 +2943,8 @@ class kb_hmmer:
                     if not cat_seen[cat] and not show_blanks:
                         continue
                     cat_disp = cat
-                    cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
+                    if len(cat) > cat_disp_trunc_len:
+                        cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
                     #html_report_lines += ['<td style="border-right:solid 2px '+border_cat_color+'; border-bottom:solid 2px '+border_cat_color+'" bgcolor="'+head_color_2+'"title="'+cell_title+'" valign=bottom align=center>']
                     html_report_lines += ['<div class="vertical-text"><div class="vertical-text__inner">']
                     html_report_lines += ['<font color="'+text_color_2+'" size='+graph_cat_fontsize+'><b>']
@@ -2989,7 +2990,7 @@ class kb_hmmer:
                             html_report_lines += ['<td align=center valign=middle style="'+cell_width+'; border-right:solid 2px '+border_color+'; border-bottom:solid 2px '+border_color+'"><font color="'+text_color+'" size='+cell_fontsize+'>'+cell_val+'</font></td>']
 
                     html_report_lines += ['</tr>']
-                    html_report_lines += ['</table>']
+                html_report_lines += ['</table>']
 
             # genomes as columns
             else:
