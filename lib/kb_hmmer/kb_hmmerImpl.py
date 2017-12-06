@@ -2889,16 +2889,18 @@ class kb_hmmer:
             cell_width = '10px'
             if len(genome_refs) > 20:
                 graph_gen_fontsize = "1"
-            elif len(genome_refs) > 10:
-                graph_gen_fontsize = "2"
+#            elif len(genome_refs) > 10:
+#                graph_gen_fontsize = "2"
             else:
-                graph_gen_fontsize = "3"
+#                graph_gen_fontsize = "3"
+                graph_gen_fontsize = "2"
             if len(cats) > 20:
                 graph_cat_fontsize = "1"
-            elif len(cats) > 5:
-                graph_cat_fontsize = "2"
+#            elif len(cats) > 5:
+#                graph_cat_fontsize = "2"
             else:
-                graph_cat_fontsize = "3"
+#                graph_cat_fontsize = "3"
+                graph_cat_fontsize = "2"
             if int(graph_cat_fontsize) < int(graph_gen_fontsize):
                 cell_fontsize = graph_gen_fontsize = graph_cat_fontsize
             else:
@@ -3052,32 +3054,35 @@ class kb_hmmer:
         self.log(console,"UPLOADING OUTPUT FILES")  # DEBUG
         if len(invalid_msgs) == 0:
 
-            # Upload output files
-            #
-            TAB_upload_rets = []
-            MSA_upload_rets = []
+            output_hit_TAB_dir = os.path.join(self.output_dir, 'HMMER_output_TAB')
+            output_hit_MSA_dir = os.path.join(self.output_dir, 'HMMER_output_MSA')
+            
             for msa_i,input_msa_name in enumerate(input_msa_names):
                 if total_hit_cnt[msa_i] == 0:
                     self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR MSA '+input_msa_name)
-                    TAB_upload_rets.append(None)
-                    MSA_upload_rets.append(None)
                     continue
+                new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, input_msa_name+'.hitout.txt');
+                new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, input_msa_name+'.msaout.txt');
 
-                self.log(console, 'UPLOADING OF HMMER OUTPUT FOR MSA '+input_msa_name)
-                try:
-                    TAB_upload_rets.append(dfu.file_to_shock({'file_path': output_hit_TAB_file_paths[msa_i],
-                                                              'make_handle': 0})
-                                                              #'pack': 'zip'})
-                                           )
-                except:
-                    raise ValueError ('Logging exception loading TAB output to shock for MSA '+input_msa_name)
-                try:
-                    MSA_upload_rets.append(dfu.file_to_shock({'file_path': output_hit_MSA_file_paths[msa_i],
-                                                              'make_handle': 0})
-                                                              #'pack': 'zip'})
-                                           )
-                except:
-                    raise ValueError ('Logging exception loading MSA output to shock for MSA '+input_msa_name)
+                shutil.copy(output_hit_TAB_file_paths[msa_i], new_hit_TAB_file_path)
+                shutil.copy(output_hit_MSA_file_paths[msa_i], new_hit_MSA_file_path)
+
+            # Upload output dirs
+            TAB_upload_ret = None
+            MSA_upload_ret = None
+            self.log(console, 'UPLOADING OF HMMER OUTPUT FOR MSA '+input_msa_name)
+            try:
+                TAB_upload_ret = dfu.file_to_shock({'file_path': output_hit_TAB_dir,
+                                                    'make_handle': 0,
+                                                    'pack': 'zip'})
+            except:
+                raise ValueError ('Logging exception loading TAB output to shock')
+            try:
+                MSA_upload_ret = dfu.file_to_shock({'file_path': output_hit_MSA_dir,
+                                                    'make_handle': 0,
+                                                    'pack': 'zip'})
+            except:
+                raise ValueError ('Logging exception loading MSA output to shock')
 
 
         #### Create report object
@@ -3108,16 +3113,15 @@ class kb_hmmer:
                                         'label': search_tool_name+' HTML Report'}
                                        ]
 
-            for i,input_msa_name in enumerate(input_msa_names):
-                if total_hit_cnt[i] == 0:
-                    continue
-                reportObj['file_links'] += [{'shock_id': TAB_upload_rets[i]['shock_id'],
-                                             'name': input_msa_name+'.'+search_tool_name+'_Search.TAB',
-                                             'label': input_msa_name+'.'+search_tool_name+'-'+' hits TABLE'},
+            if TAB_upload_ret != None:
+                reportObj['file_links'] += [{'shock_id': TAB_upload_ret['shock_id'],
+                                             'name': search_tool_name+'_Search.TAB',
+                                             'label': search_tool_name+'-'+' hits TABLE'}]
+            if MSA_upload_ret != None:
+                reportObj['file_links'] += [{'shock_id': MSA_upload_ret['shock_id'],
                                            
-                                            {'shock_id': MSA_upload_rets[i]['shock_id'],
-                                             'name': input_msa_name+'.'+search_tool_name+'_Search.MSA',
-                                             'label': input_msa_name+'.'+search_tool_name+' hits MSA'}
+                                             'name': search_tool_name+'_Search.MSA',
+                                             'label': search_tool_name+' hits MSA'}
                                            ]
             if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
                 for object_created_ref in objects_created_refs:
