@@ -2785,7 +2785,7 @@ class kb_hmmer:
             html_report_lines = []
             html_report_lines += ['<html>']
             html_report_lines += ['<body bgcolor="white">']
-            if input_many_type == 'GenomeSet':
+            if many_type_name == 'GenomeSet':
                 html_report_lines += ['<a href="'+html_profile_file+'" target="profile"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font></a> \| <font color="'+header_tab_color+'" size='+header_tab_fontsize+'>SEARCH HITS</font>]']
             html_report_lines += ['<table cellpadding='+cellpadding+' cellspacing = '+cellspacing+' border='+border+'>']
             html_report_lines += ['<tr bgcolor="'+head_color+'">']
