@@ -67,21 +67,21 @@ parameters :
             limits the number of hits in result.  Default: 1000
     heatmap :
         ui-name : |
-            View table as
+            View GenomeSet profile as
         short-hint : |
-            Display as heatmap or numerical table
+            Display as heatmap or numerical table (if input is GenomeSet)
         long-hint  : |
-            Display as heatmap or numerical table
+            Display as heatmap or numerical table (if input is GenomeSet)
     vertical :
         ui-name : |
-            View genomes as
+            View GenomeSet profile genomes as
         short-hint : |
             Show table with genomes as rows
         long-hint  : |
             Show table with genomes as rows
     show_blanks :
         ui-name : |
-            Empty categories
+            Show GenomeSet profile empty categories
         short-hint : |
             Show categories or families that have no counts
         long-hint  : |
