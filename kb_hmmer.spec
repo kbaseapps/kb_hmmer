@@ -83,10 +83,12 @@ module kb_hmmer {
 	float e_value;
 	float bitscore;
 	float maxaccepts;
-
 /*	float ident_thresh;
 	float overlap_fraction;
 */
+        bool  heatmap;
+	bool  vertical;  /* only supports true for now */
+	bool  show_blanks;
     } HMMER_Local_MSA_Group_Params;
 
 

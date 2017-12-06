@@ -65,6 +65,27 @@ parameters :
             Max Accepts
         short-hint : |
             limits the number of hits in result.  Default: 1000
+    heatmap :
+        ui-name : |
+            View table as
+        short-hint : |
+            Display as heatmap or numerical table
+        long-hint  : |
+            Display as heatmap or numerical table
+    vertical :
+        ui-name : |
+            View genomes as
+        short-hint : |
+            Show table with genomes as rows
+        long-hint  : |
+            Show table with genomes as rows
+    show_blanks :
+        ui-name : |
+            Empty categories
+        short-hint : |
+            Show categories or families that have no counts
+        long-hint  : |
+            Show categories or families that have no counts
 
 description : |
     <p>This method performs a set of Hidden Markov Model (HMM) searches on protein sequences using HMMER models built for a Group of MSAs.</p>

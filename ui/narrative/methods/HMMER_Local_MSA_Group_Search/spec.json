@@ -1,5 +1,5 @@
 {
-    "ver": "1.1.0",
+    "ver": "1.1.2",
     "authors": [
         "dylan"
     ],
@@ -104,6 +104,72 @@
                 "validate_as": "int",
                 "min_integer" : 0
             }
+        },
+        {
+            "id": "heatmap",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "1" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "1",
+                                        "display": "heatmap",
+                                        "id": "heatmap",
+                                        "ui-name": "heatmap"
+                                },
+                                {
+                                        "value": "0",
+                                        "display": "numerical",
+                                        "id": "numerical",
+                                        "ui-name": "numerical"
+                                }
+                ]
+            }
+        },
+        {
+            "id": "vertical",
+            "optional": false,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "1" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "1",
+                                        "display": "rows",
+                                        "id": "rows",
+                                        "ui-name": "rows"
+                                }
+                ]
+            }
+        },
+        {
+            "id": "show_blanks",
+            "optional": false,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "0" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "1",
+                                        "display": "show categories with no hits",
+                                        "id": "show",
+                                        "ui-name": "show"
+                                },
+                                {
+                                        "value": "0",
+                                        "display": "hide categories with no hits",
+                                        "id": "hide",
+                                        "ui-name": "hide"
+                                }
+                ]
+            }
         }
     ],
     "behavior": {
@@ -145,7 +211,19 @@
                 {
                     "input_parameter": "maxaccepts",
                     "target_property": "maxaccepts"
-                }
+                },
+                {
+                    "input_parameter": "heatmap",
+                    "target_property": "heatmap"
+                },		
+                {
+                    "input_parameter": "vertical",
+                    "target_property": "vertical"
+                },		
+                {
+                    "input_parameter": "show_blanks",
+                    "target_property": "show_blanks"
+                }		
             ],
             "output_mapping": [
                 {
