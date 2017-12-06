@@ -3119,12 +3119,12 @@ class kb_hmmer:
 
             if TAB_upload_ret != None:
                 reportObj['file_links'] += [{'shock_id': TAB_upload_ret['shock_id'],
-                                             'name': search_tool_name+'_Search.TAB',
+                                             'name': search_tool_name+'_Search.TAB.zip',
                                              'label': search_tool_name+'-'+' hits TABLE'}]
             if MSA_upload_ret != None:
                 reportObj['file_links'] += [{'shock_id': MSA_upload_ret['shock_id'],
                                            
-                                             'name': search_tool_name+'_Search.MSA',
+                                             'name': search_tool_name+'_Search.MSA.zip',
                                              'label': search_tool_name+' hits MSA'}
                                            ]
             if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
