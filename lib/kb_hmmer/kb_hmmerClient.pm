@@ -248,6 +248,9 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	maxaccepts has a value which is a float
+	heatmap has a value which is a kb_hmmer.bool
+	vertical has a value which is a kb_hmmer.bool
+	show_blanks has a value which is a kb_hmmer.bool
 workspace_name is a string
 data_obj_ref is a string
 data_obj_name is a string
@@ -273,6 +276,9 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	maxaccepts has a value which is a float
+	heatmap has a value which is a kb_hmmer.bool
+	vertical has a value which is a kb_hmmer.bool
+	show_blanks has a value which is a kb_hmmer.bool
 workspace_name is a string
 data_obj_ref is a string
 data_obj_name is a string
@@ -681,6 +687,9 @@ coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
 maxaccepts has a value which is a float
+heatmap has a value which is a kb_hmmer.bool
+vertical has a value which is a kb_hmmer.bool
+show_blanks has a value which is a kb_hmmer.bool
 
 </pre>
 
@@ -697,6 +706,9 @@ coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
 maxaccepts has a value which is a float
+heatmap has a value which is a kb_hmmer.bool
+vertical has a value which is a kb_hmmer.bool
+show_blanks has a value which is a kb_hmmer.bool
 
 
 =end text

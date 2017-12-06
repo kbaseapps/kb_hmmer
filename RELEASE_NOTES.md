@@ -1,10 +1,14 @@
+### Version 1.1.2
+__Changes__
+- added HTML profile output for GenomeSet input to HMMER_Local_MSA_Group_Search()
+
 ### Version 1.1.1
 __Changes__
-- added selectable MSAs to HMMER Local MSA Group Search
+- added selectable MSAs to HMMER_Local_MSA_Group_Search()
 
 ### Version 1.1.0
 __Changes__
-- added HMMER Local MSA Group Search
+- added HMMER_Local_MSA_Group_Search()
 
 ### Version 1.0.3
 __Changes__

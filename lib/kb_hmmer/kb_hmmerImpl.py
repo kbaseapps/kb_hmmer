@@ -54,9 +54,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.1.1"
-    GIT_URL = "https://github.com/dcchivian/kb_hmmer"
-    GIT_COMMIT_HASH = "6c6444f6b844893aab7762871451472c9f3c58f8"
+    VERSION = "1.1.2"
+    GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
+    GIT_COMMIT_HASH = "8c8caa67f5a699fefb9a1f4f8590232d0b779ef0"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -1512,7 +1512,9 @@ class kb_hmmer:
            "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "coalesce_output" of type "bool", parameter "e_value" of Double,
-           parameter "bitscore" of Double, parameter "maxaccepts" of Double
+           parameter "bitscore" of Double, parameter "maxaccepts" of Double,
+           parameter "heatmap" of type "bool", parameter "vertical" of type
+           "bool", parameter "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"
@@ -1687,6 +1689,12 @@ class kb_hmmer:
             many_forward_reads_file_dir = self.output_dir
             many_forward_reads_file = input_many_name+".fasta"
 
+            genome_refs = []
+            for genome_id in input_many_genomeSet['elements']:
+                genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
+                if genome_ref not in genome_refs:
+                    genome_refs.append(genome_ref)
+
             # DEBUG
             #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             GenomeSetToFASTA_params = {
@@ -1744,9 +1752,10 @@ class kb_hmmer:
                 input_msa_refs.append(input_msa_ref)
 
 
-        #### write the MSAs to file and collect names
+        #### write the MSAs to file and collect names and desc
         ##
         input_msa_names = []
+        input_msa_descs = []
         for input_msa_ref in input_msa_refs:
             try:
                 ws = workspaceService(self.workspaceURL, token=ctx['token'])
@@ -1770,7 +1779,13 @@ class kb_hmmer:
                 self.log (console, "\n\nPROCESSING MSA "+input_msa_name+"\n")  # DEBUG
 
                 input_msa_names.append(input_msa_name)
+
                 MSA_in = input_msa_data
+                if 'description' in MSA_in and MSA_in['description'] != None and MSA_in['description'] != '':
+                    input_msa_descs.append(MSA_in['description'])
+                else:
+                    input_msa_descs.append(input_msa_name)
+
                 row_order = []
                 default_row_labels = dict()
                 if 'row_order' in MSA_in.keys():
@@ -1953,6 +1968,8 @@ class kb_hmmer:
         coalesce_featureIds_element_ordering = []
         coalesce_featureIds_genome_ordering = []
         html_report_chunks = []
+        hit_cnt_by_genome_and_model = dict()
+
 
         for i,input_msa_ref in enumerate(input_msa_refs):
 
@@ -2210,6 +2227,16 @@ class kb_hmmer:
                 hit_total += 1
                 hit_seq_ids[hit_seq_id] = True
                 self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
+
+                # capture accepted hit count by genome_ref and model
+                genome_ref = hit_seq_id.split(genome_id_feature_id_delim)[0]
+                self.log(console, "DEBUG: genome_ref: '"+str(genome_ref)+"'")
+                self.log(console, "DEBUG: input_msa_name: '"+str(input_msa_name)+"'")
+                if genome_ref not in hit_cnt_by_genome_and_model:
+                    hit_cnt_by_genome_and_model[genome_ref] = dict()
+                if input_msa_name not in hit_cnt_by_genome_and_model[genome_ref]:
+                    hit_cnt_by_genome_and_model[genome_ref][input_msa_name] = 0
+                hit_cnt_by_genome_and_model[genome_ref][input_msa_name] += 1
 
 
             # Measure length of hit sequences
@@ -2705,9 +2732,20 @@ class kb_hmmer:
                     objects_created_refs.append(str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I]))
 
 
-        #### Build output report (and assemble html chunks)
+        #### Set paths for output HTML
         ##
-        self.log(console,"BUILDING REPORT ")  # DEBUG
+        html_output_dir = os.path.join(self.output_dir,'html_output')
+        if not os.path.exists(html_output_dir):
+            os.makedirs(html_output_dir)
+        html_search_file = search_tool_name+'_Search.html'
+        html_search_path = os.path.join (html_output_dir, html_search_file)
+        html_profile_file = search_tool_name+'_Profile.html'
+        html_profile_path = os.path.join (html_output_dir, html_profile_file)
+
+
+        #### Build Search output report (and assemble html chunks)
+        ##
+        self.log(console,"BUILDING SEARCH REPORT ")  # DEBUG
         if len(invalid_msgs) == 0:
 
             # build html report
@@ -2730,6 +2768,8 @@ class kb_hmmer:
             reject_cell_color = '#ffcccc'
             text_fontsize = "2"
             text_color = '#606060'
+            header_tab_fontsize = "3"
+            header_tab_color = '#606060'
             border_body_color = "#cccccc"
             bar_width = 100
             bar_height = 15
@@ -2745,6 +2785,8 @@ class kb_hmmer:
             html_report_lines = []
             html_report_lines += ['<html>']
             html_report_lines += ['<body bgcolor="white">']
+            if input_many_type == 'GenomeSet':
+                html_report_lines += ['<a href="'+html_profile_file+'" target="profile"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font></a> \| <font color="'+header_tab_color+'" size='+header_tab_fontsize+'>SEARCH HITS</font>]']
             html_report_lines += ['<table cellpadding='+cellpadding+' cellspacing = '+cellspacing+' border='+border+'>']
             html_report_lines += ['<tr bgcolor="'+head_color+'">']
             html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'ALIGNMENT COVERAGE (HIT SEQ)'+'</font></td>']
@@ -2774,18 +2816,225 @@ class kb_hmmer:
             html_report_lines += ['</body>']
             html_report_lines += ['</html>']
 
+# DEBUG HERE
+#            # write html to file
+#            html_path = html_search_path
+#            html_report_str = "\n".join(html_report_lines)
+#            with open (html_path, 'w', 0) as html_handle:
+#                html_handle.write(html_report_str)
+
+
+        #### Build Profile output report
+        ##
+        self.log(console,"BUILDING PROFILE REPORT ")  # DEBUG
+        if len(invalid_msgs) == 0 and many_type_name == 'GenomeSet':
+
+            # calculate table
+            #
+            cats = input_msa_names
+            table_data = dict()
+            INSANE_VALUE = 10000000000000000
+            overall_low_val  =  INSANE_VALUE
+            overall_high_val = -INSANE_VALUE
+            cat_seen = dict()
+
+            # count raw
+            for genome_ref in genome_refs:
+                if genome_ref not in table_data:
+                    table_data[genome_ref] = dict()
+                for cat in cats:
+                    table_data[genome_ref][cat] = 0
+                    
+                if genome_ref not in hit_cnt_by_genome_and_model:
+                    continue
+
+                for cat in cats:
+                    if cat in hit_cnt_by_genome_and_model[genome_ref] and \
+                       hit_cnt_by_genome_and_model[genome_ref][cat] != 0:
+                        table_data[genome_ref][cat] = hit_cnt_by_genome_and_model[genome_ref][cat]
+                        cat_seen[cat] = True
+
+            # determine high and low val
+            for genome_ref in genome_refs:
+                for cat in cats:
+                    val = table_data[genome_ref][cat]
+                    if val == 0:  continue
+                    #self.log (console, "HIGH VAL SCAN CAT: '"+cat+"' VAL: '"+str(val)+"'")  # DEBUG
+                    if val > overall_high_val:
+                        overall_high_val = val
+                    if val < overall_low_val:
+                        overall_low_val = val
+            if overall_high_val == -INSANE_VALUE:
+                raise ValueError ("unable to find any counts")
+
+
+            # build html report
+            sp = '&nbsp;'
+            text_color   = "#606060"
+            text_color_2 = "#606060"
+            head_color_1 = "#eeeeee"
+            head_color_2 = "#eeeeee"
+            border_color = "#cccccc"
+            border_cat_color = "#ffccff"
+            #graph_color = "lightblue"
+            #graph_width = 100
+            #graph_char = "."
+            graph_char = sp
+            color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e']
+            max_color = len(color_list)-1
+            cat_disp_trunc_len = 40
+            cell_width = '10px'
+            if len(genome_refs) > 20:
+                graph_gen_fontsize = "1"
+            elif len(genome_refs) > 10:
+                graph_gen_fontsize = "2"
+            else:
+                graph_gen_fontsize = "3"
+            if len(cats) > 20:
+                graph_cat_fontsize = "1"
+            elif len(cats) > 5:
+                graph_cat_fontsize = "2"
+            else:
+                graph_cat_fontsize = "3"
+            if int(graph_cat_fontsize) < int(graph_gen_fontsize):
+                cell_fontsize = graph_gen_fontsize = graph_cat_fontsize
+            else:
+                cell_fontsize = graph_cat_fontsize = graph_gen_fontsize
+            graph_padding = "5"
+            graph_spacing = "3"
+            #border = "1"
+            border = "0"
+            #row_spacing = "-2"
+            num_rows = len(genome_refs)
+            show_groups = False
+            show_blanks = False
+            if 'show_blanks' in params and int(params['show_blanks']) == 1:
+                show_blanks = True
+
+            # build html buffer
+            html_report_lines = []
+            html_report_lines += ['<html>']
+            html_report_lines += ['<head>']
+            html_report_lines += ['<title>KBase HMMER Custom Model Profile</title>']
+            html_report_lines += ['<style>']
+            html_report_lines += [".vertical-text {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+            html_report_lines += [".vertical-text_title {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+            html_report_lines += ['</style>']
+            html_report_lines += ['</head>']
+            html_report_lines += ['<body bgcolor="white">']
+            html_report_lines += ['<font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font> \| <a href="'+html_search_file+'" target="search"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>SEARCH HITS</font></a>]']
+
+            # genomes as rows
+            if 'vertical' in params and params['vertical'] == "1":
+                # table header
+                html_report_lines += ['<table cellpadding='+graph_padding+' cellspacing='+graph_spacing+' border='+border+'>']
+                corner_rowspan = "1"
+                label = ''
+#                if params['namespace'] != 'custom':
+#                    label = params['namespace']
+#                    if label == 'PF':
+#                        label = 'PFAM'
+#                    elif label == 'TIGR':
+#                        label = 'TIGRFAM'
+#                        html_report_lines += ['<tr><td valign=bottom align=right rowspan='+corner_rowspan+'><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="'+text_color+'">'+label+'</font></div></div></td>']
+
+
+                # column headers
+                for cat in cats:
+                    if not cat_seen[cat] and not show_blanks:
+                        continue
+                    cat_disp = cat
+                    cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
+                    #html_report_lines += ['<td style="border-right:solid 2px '+border_cat_color+'; border-bottom:solid 2px '+border_cat_color+'" bgcolor="'+head_color_2+'"title="'+cell_title+'" valign=bottom align=center>']
+                    html_report_lines += ['<div class="vertical-text"><div class="vertical-text__inner">']
+                    html_report_lines += ['<font color="'+text_color_2+'" size='+graph_cat_fontsize+'><b>']
+                    #for c_i,c in enumerate(cat_disp):
+                    #    if c_i < len(cat_disp)-1:
+                    #        html_report_lines += [c+'<br>']
+                    #    else:
+                    #        html_report_lines += [c]
+                    html_report_lines += [cat_disp]
+                    html_report_lines += ['</b></font>']
+                    html_report_lines += ['</div></div>']
+                    html_report_lines += ['</td>']
+                    html_report_lines += ['</tr>']
+
+                # rest of rows
+                for genome_ref in genome_refs:
+                    genome_sci_name = genome_ref_to_sci_name[genome_ref]
+                    html_report_lines += ['<tr>']
+                    html_report_lines += ['<td align=right><font color="'+text_color+'" size='+graph_gen_fontsize+'><b><nobr>'+genome_sci_name+'</nobr></b></font></td>']
+                    for cat in cats:
+                        if not cat_seen[cat] and not show_blanks:
+                            continue
+                        val = table_data[genome_ref][cat]
+                        if val == 0:
+                            cell_color = 'white'
+                        else:                    
+                            cell_color_i = max_color - int(round(max_color * (val-overall_low_val) / float(overall_high_val-overall_low_val)))
+                            c = color_list[cell_color_i]
+                            cell_color = '#'+c+c+c+c+'FF'
+
+                        cell_val = str(table_data[genome_ref][cat])  # the key line
+
+                        if 'heatmap' in params and params['heatmap'] == '1':
+                            if table_data[genome_ref][cat] == 0:
+                                this_text_color = text_color
+                                #this_graph_char = "0"
+                                this_graph_char = sp
+                            else:
+                                this_text_color = cell_color
+                                this_graph_char = graph_char
+                                html_report_lines += ['<td align=center valign=middle title="'+cell_val+'" style="width:'+cell_width+'" bgcolor="'+cell_color+'"><font color="'+this_text_color+'" size='+cell_fontsize+'>'+this_graph_char+'</font></td>']
+                        else:
+                            html_report_lines += ['<td align=center valign=middle style="'+cell_width+'; border-right:solid 2px '+border_color+'; border-bottom:solid 2px '+border_color+'"><font color="'+text_color+'" size='+cell_fontsize+'>'+cell_val+'</font></td>']
+
+                    html_report_lines += ['</tr>']
+                    html_report_lines += ['</table>']
+
+            # genomes as columns
+            else:
+                raise ValueError ("Do not yet support Genomes as columns")
+
+
+            # key table
+            html_report_lines += ['<p>']
+            html_report_lines += ['<table cellpadding=3 cellspacing=2 border='+border+'>']
+            html_report_lines += ['<tr><td valign=middle align=left colspan=3 style="border-bottom:solid 4px '+border_color+'"><font color="'+text_color+'"><b>KEY</b></font></td></tr>']
+
+            for cat_i,cat in enumerate(cats):
+                cell_color = 'white'
+                if not cat_seen[cat] and not show_blanks:
+                    cell_color = "#eeeeee"
+                desc = input_msa_descs[cat_i]
+                cat_disp = cat
+                if len(cat_disp) > cat_disp_trunc_len+1:
+                    cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
+                html_report_lines += ['<tr>']
+                html_report_lines += ['<td valign=middle align=left bgcolor="'+cell_color+'" style="border-right:solid 4px '+border_color+'><font color="'+text_color+'" size='+graph_cat_fontsize+'>'+cat_disp+'</font></td>']
+                html_report_lines += ['<td valign=middle align=left bgcolor="'+cell_color+'"><font color="'+text_color+'" size='+graph_cat_fontsize+'>'+desc+'</font></td>']
+                html_report_lines += ['</tr>']
+
+            html_report_lines += ['</table>']
+
+            # close
+            html_report_lines += ['</body>']
+            html_report_lines += ['</html>']
 
             # write html to file and upload
-            #
+            html_path = html_profile_path
             html_report_str = "\n".join(html_report_lines)
-            html_output_dir = os.path.join(self.output_dir,'html_output')
-            if not os.path.exists(html_output_dir):
-                os.makedirs(html_output_dir)
-            html_file = search_tool_name+'_Search.html'
-            html_path = os.path.join (html_output_dir, html_file)
             with open (html_path, 'w', 0) as html_handle:
                 html_handle.write(html_report_str)
 
+
+        #### Upload HTML reports
+        ##
+        self.log(console,"UPLOADING HTML REPORT(s)")  # DEBUG
+        if len(invalid_msgs) == 0:
+
+            # Upload HTML Report dir
+            #
             dfu = DFUClient(self.callbackURL)
             # upload output html
             try:
@@ -2796,7 +3045,14 @@ class kb_hmmer:
             except:
                 raise ValueError ('Logging exception loading HTML file to shock')
 
-            # upload output files
+
+        #### Upload output files
+        ##
+        self.log(console,"UPLOADING OUTPUT FILES")  # DEBUG
+        if len(invalid_msgs) == 0:
+
+            # Upload output files
+            #
             TAB_upload_rets = []
             MSA_upload_rets = []
             for msa_i,input_msa_name in enumerate(input_msa_names):
@@ -2823,7 +3079,11 @@ class kb_hmmer:
                     raise ValueError ('Logging exception loading MSA output to shock for MSA '+input_msa_name)
 
 
-            # create report object
+        #### Create report object
+        ##
+        self.log(console,"CREATING REPORT OBJECT")  # DEBUG
+        if len(invalid_msgs) == 0:
+
             reportName = 'hmmer_report_'+str(uuid.uuid4())
             reportObj = {'objects_created': [],
                          #'text_message': '',  # or is it 'message'?
@@ -2839,9 +3099,11 @@ class kb_hmmer:
             #if len(html_report_str) <= html_buf_lim:
             #    reportObj['direct_html'] = html_report_str
             #else:
+
+# HERE
             reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
-                                        'name': html_file,
+                                        'name': html_profile_file,
                                         'label': search_tool_name+' HTML Report'}
                                        ]
 

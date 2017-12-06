@@ -28,7 +28,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "coalesce_output",
     "e_value",
     "bitscore",
-    "maxaccepts"
+    "maxaccepts",
+    "heatmap",
+    "vertical",
+    "show_blanks"
 })
 public class HMMERLocalMSAGroupParams {
 
@@ -48,6 +51,12 @@ public class HMMERLocalMSAGroupParams {
     private Double bitscore;
     @JsonProperty("maxaccepts")
     private Double maxaccepts;
+    @JsonProperty("heatmap")
+    private Long heatmap;
+    @JsonProperty("vertical")
+    private Long vertical;
+    @JsonProperty("show_blanks")
+    private Long showBlanks;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("workspace_name")
@@ -170,6 +179,51 @@ public class HMMERLocalMSAGroupParams {
         return this;
     }
 
+    @JsonProperty("heatmap")
+    public Long getHeatmap() {
+        return heatmap;
+    }
+
+    @JsonProperty("heatmap")
+    public void setHeatmap(Long heatmap) {
+        this.heatmap = heatmap;
+    }
+
+    public HMMERLocalMSAGroupParams withHeatmap(Long heatmap) {
+        this.heatmap = heatmap;
+        return this;
+    }
+
+    @JsonProperty("vertical")
+    public Long getVertical() {
+        return vertical;
+    }
+
+    @JsonProperty("vertical")
+    public void setVertical(Long vertical) {
+        this.vertical = vertical;
+    }
+
+    public HMMERLocalMSAGroupParams withVertical(Long vertical) {
+        this.vertical = vertical;
+        return this;
+    }
+
+    @JsonProperty("show_blanks")
+    public Long getShowBlanks() {
+        return showBlanks;
+    }
+
+    @JsonProperty("show_blanks")
+    public void setShowBlanks(Long showBlanks) {
+        this.showBlanks = showBlanks;
+    }
+
+    public HMMERLocalMSAGroupParams withShowBlanks(Long showBlanks) {
+        this.showBlanks = showBlanks;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -182,7 +236,7 @@ public class HMMERLocalMSAGroupParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((("HMMERLocalMSAGroupParams"+" [workspaceName=")+ workspaceName)+", inputMsaRefs=")+ inputMsaRefs)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", coalesceOutput=")+ coalesceOutput)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", maxaccepts=")+ maxaccepts)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((("HMMERLocalMSAGroupParams"+" [workspaceName=")+ workspaceName)+", inputMsaRefs=")+ inputMsaRefs)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", coalesceOutput=")+ coalesceOutput)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
