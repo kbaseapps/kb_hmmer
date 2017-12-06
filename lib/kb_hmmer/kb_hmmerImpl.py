@@ -3056,6 +3056,10 @@ class kb_hmmer:
 
             output_hit_TAB_dir = os.path.join(self.output_dir, 'HMMER_output_TAB')
             output_hit_MSA_dir = os.path.join(self.output_dir, 'HMMER_output_MSA')
+            if not os.path.exists(output_hit_TAB_dir):
+                os.makedirs(output_hit_TAB_dir)
+            if not os.path.exists(output_hit_MSA_dir):
+                os.makedirs(output_hit_MSA_dir)
             
             for msa_i,input_msa_name in enumerate(input_msa_names):
                 if total_hit_cnt[msa_i] == 0:
