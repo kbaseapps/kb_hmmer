@@ -2941,11 +2941,11 @@ class kb_hmmer:
 
 
                 # column headers
-                for cat in cats:
+                for cat_i,cat in enumerate(cats):
                     if not cat_seen[cat] and not show_blanks:
                         continue
                     cat_disp = cat
-                    cell_title = cat_disp
+                    cell_title = input_msa_descs[cat_i]
                     if len(cat_disp) > cat_disp_trunc_len:
                         cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
                     html_report_lines += ['<td style="border-right:solid 2px '+border_cat_color+'; border-bottom:solid 2px '+border_cat_color+'" bgcolor="'+head_color_2+'"title="'+cell_title+'" valign=bottom align=center>']
