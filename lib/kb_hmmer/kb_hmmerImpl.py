@@ -838,15 +838,16 @@ class kb_hmmer:
                     (beg_str, end_str) = hit_range.split('-')
                     beg = int(beg_str)
                     end = int(end_str)
+                    this_alnlen = abs(end-beg)+1
                     if hit_id in hit_beg:
-                        if math.abs(end-beg) > math.abs(hit_end[hit_id]-hit_beg[hit_id]):
+                        if this_alnlen > high_bitscore_alnlen[hit_id]:
                             hit_beg[hit_id] = beg
                             hit_end[hit_id] = end
-                            high_bitscore_alnlen[hit_id] = math.abs(end-beg+1)
+                            high_bitscore_alnlen[hit_id] = this_alnlen
                     else:
                         hit_beg[hit_id] = beg
                         hit_end[hit_id] = end
-                        high_bitscore_alnlen[hit_id] = math.abs(end-beg+1)
+                        high_bitscore_alnlen[hit_id] = this_alnlen
 
 
         # Measure length of hit sequences
@@ -955,8 +956,11 @@ class kb_hmmer:
             hit_total += 1
             hit_seq_ids[hit_seq_id] = True
             self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
-        
 
+            
+        #
+        ### Create output objects
+        #
         self.log(console, 'EXTRACTING HITS FROM INPUT')
         self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
 
@@ -2171,16 +2175,16 @@ class kb_hmmer:
                         (beg_str, end_str) = hit_range.split('-')
                         beg = int(beg_str)
                         end = int(end_str)
+                        this_alnlen = abs(end-beg)+1
                         if hit_id in hit_beg:
-                            if math.abs(end-beg) > math.abs(hit_end[hit_id]-hit_beg[hit_id]):
+                            if this_alnlen > high_bitscore_alnlen[hit_id]:
                                 hit_beg[hit_id] = int(beg_str)
                                 hit_end[hit_id] = int(end_str)
-                                high_bitscore_alnlen[hit_id] = math.abs(end-beg+1)
+                                high_bitscore_alnlen[hit_id] = this_alnlen
                         else:
                             hit_beg[hit_id] = int(beg_str)
                             hit_end[hit_id] = int(end_str)
-                            high_bitscore_alnlen[hit_id] = math.abs(end-beg+1)
-
+                            high_bitscore_alnlen[hit_id] = this_alnlen
 
 
             # Measure length of hit sequences
@@ -2312,7 +2316,6 @@ class kb_hmmer:
             #
             ### Create output objects
             #
-
             self.log(console, 'EXTRACTING HITS FROM INPUT')
             self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
 
