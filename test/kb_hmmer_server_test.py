@@ -209,6 +209,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'e_value': ".001",
                        'bitscore': "50",
+                       'overlap_fraction': "50.0",
                        'maxaccepts': "1000"
                      }
         ret = self.getImpl().HMMER_MSA_Search(self.getContext(), parameters)[0]
@@ -251,6 +252,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'e_value': ".001",
                        'bitscore': "50",
+                       'overlap_fraction': "50.0",
                        'maxaccepts': "1000"
                      }
         ret = self.getImpl().HMMER_MSA_Search(self.getContext(), parameters)[0]
@@ -295,6 +297,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'coalesce_output': 0,
                        'e_value': ".001",
                        'bitscore': "50",
+                       'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'vertical': "1",
@@ -343,6 +346,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'coalesce_output': 0,  # KEY
                        'e_value': ".001",
                        'bitscore': "50",
+                       'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'vertical': "1",
@@ -391,6 +395,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'coalesce_output': 1,  # KEY
                        'e_value': ".001",
                        'bitscore': "50",
+                       'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'vertical': "1",
