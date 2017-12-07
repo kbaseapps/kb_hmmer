@@ -1,6 +1,7 @@
 ### Version 1.1.2
 __Changes__
 - added HTML profile output for GenomeSet input to HMMER_Local_MSA_Group_Search()
+- added overlap threshold to HMMER_MSA_Search() and HMMER_Local_MSA_Group_Search()
 
 ### Version 1.1.1
 __Changes__

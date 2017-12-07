@@ -36,10 +36,10 @@ module kb_hmmer {
 
 	float e_value;
 	float bitscore;
+	float overlap_fraction;
 	float maxaccepts;
 
 /*	float ident_thresh;
-	float overlap_fraction;
 */
     } HMMER_Params;
 
@@ -82,9 +82,9 @@ module kb_hmmer {
 	bool  coalesce_output;
 	float e_value;
 	float bitscore;
+	float overlap_fraction;
 	float maxaccepts;
 /*	float ident_thresh;
-	float overlap_fraction;
 */
         bool  heatmap;
 	bool  vertical;  /* only supports true for now */

@@ -56,7 +56,7 @@ class kb_hmmer:
     ######################################### noqa
     VERSION = "1.1.2"
     GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "8c8caa67f5a699fefb9a1f4f8590232d0b779ef0"
+    GIT_COMMIT_HASH = "0661a5f3d91b8ac765cb2e55d4903a288325531f"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -253,7 +253,7 @@ class kb_hmmer:
            "input_msa_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "e_value" of Double, parameter "bitscore" of Double, parameter
-           "maxaccepts" of Double
+           "overlap_fraction" of Double, parameter "maxaccepts" of Double
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"
@@ -821,13 +821,65 @@ class kb_hmmer:
 #                report += line+"\n"
 
 
+        # Parse the hit beg and end positions from Stockholm format MSA output for overlap filtering
+        #
+        self.log(console, 'PARSING HMMER SEARCH MSA OUTPUT')
+        hit_beg = dict()
+        hit_end = dict()
+        high_bitscore_alnlen = dict()
+        with open (output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
+            for MSA_out_line in output_hit_MSA_file_handle.readlines():
+                MSA_out_line = MSA_out_line.strip()
+                if MSA_out_line.startswith('#=GS '):
+                    hit_rec = re.sub('#=GS ', '', MSA_out_line)
+                    hit_rec = re.sub('\s+.*?$', '', hit_rec)
+                    hit_range = re.sub('^.*\/', '', hit_rec)
+                    hit_id = re.sub('\/[^\/]+$', '', hit_rec)
+                    (beg_str, end_str) = hit_range.split('-')
+                    beg = int(beg_str)
+                    end = int(end_str)
+                    if hit_id in hit_beg:
+                        if math.abs(end-beg) > math.abs(hit_end[hit_id]-hit_beg[hit_id]):
+                            hit_beg[hit_id] = beg
+                            hit_end[hit_id] = end
+                            high_bitscore_alnlen[hit_id] = math.abs(end-beg+1)
+                    else:
+                        hit_beg[hit_id] = beg
+                        hit_end[hit_id] = end
+                        high_bitscore_alnlen[hit_id] = math.abs(end-beg+1)
+
+
+        # Measure length of hit sequences
+        #
+        self.log(console, 'MEASURING HIT GENES LENGTHS')
+        hit_seq_len = dict()
+        with open (many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
+            last_id = None
+            last_buf = ''
+            for fasta_line in many_forward_reads_file_handle.readlines():
+                fasta_line = fasta_line.strip()
+                if fasta_line.startswith('>'):
+                    if last_id != None:
+                        id_untrans = last_id
+                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        #if id_untrans in hit_order or id_trans in hit_order:
+                        if id_untrans in hit_beg or id_trans in hit_beg:
+                            hit_seq_len[last_id] = len(last_buf)
+                    header = re.sub('^>', '', fasta_line)
+                    last_id = re.sub('\s+.*?$', '', header)
+                    last_buf = ''
+                else:
+                    last_buf += fasta_line
+            if last_id != None:
+                id_untrans = last_id
+                id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                if id_untrans in hit_order or id_trans in hit_order:
+                    hit_seq_len[last_id] = len(last_buf)
+
+
         # Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
         #
-        self.log(console, 'PARSING HMMER SEARCH OUTPUT')
-        if not os.path.isfile(output_hit_TAB_file_path):
-            raise ValueError("failed to create HMMER output: "+output_hit_TAB_file_path)
-        elif not os.path.getsize(output_hit_TAB_file_path) > 0:
-            raise ValueError("created empty file for HMMER output: "+output_hit_TAB_file_path)
+        self.log(console, 'PARSING HMMER SEARCH TAB OUTPUT')
         hit_seq_ids = dict()
         accept_fids = dict()
         output_hit_TAB_file_handle = open (output_hit_TAB_file_path, "r", 0)
@@ -836,8 +888,8 @@ class kb_hmmer:
         hit_total = 0
         high_bitscore_line = dict()
         high_bitscore_score = dict()
-        high_bitscore_ident = dict()
-        high_bitscore_alnlen = dict()
+        #high_bitscore_ident = dict()
+        #high_bitscore_alnlen = dict()
         hit_order = []
         hit_buf = []
         #header_done = False
@@ -890,8 +942,9 @@ class kb_hmmer:
             if 'bitscore' in params and float(params['bitscore']) > float(high_bitscore_score[hit_seq_id]):
                 filter = True
                 filtering_fields[hit_seq_id]['bitscore'] = True
-            #if 'overlap_fraction' in params and float(params['overlap_fraction']) > float(high_bitscore_alnlen[hit_seq_id])/float(query_len):
-            #    continue
+            if 'overlap_fraction' in params and float(params['overlap_fraction']) > float(high_bitscore_alnlen[hit_seq_id])/float(hit_seq_len[hit_seq_id]):
+                filter = True
+                filtering_fields[hit_seq_id]['overlap_fraction'] = True
             if 'maxaccepts' in params and params['maxaccepts'] != None and hit_total == int(params['maxaccepts']):
                 filter = True
                 filtering_fields[hit_seq_id]['maxaccepts'] = True
@@ -903,49 +956,6 @@ class kb_hmmer:
             hit_seq_ids[hit_seq_id] = True
             self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
         
-
-        # Measure length of hit sequences
-        #
-        hit_seq_len = dict()
-        with open (many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
-            last_id = None
-            last_buf = ''
-            for fasta_line in many_forward_reads_file_handle.readlines():
-                fasta_line = fasta_line.strip()
-                if fasta_line.startswith('>'):
-                    if last_id != None:
-                        id_untrans = last_id
-                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                        if id_untrans in hit_order or id_trans in hit_order:
-                            hit_seq_len[last_id] = len(last_buf)
-                    header = re.sub('^>', '', fasta_line)
-                    last_id = re.sub('\s+.*?$', '', header)
-                    last_buf = ''
-                else:
-                    last_buf += fasta_line
-            if last_id != None:
-                id_untrans = last_id
-                id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                if id_untrans in hit_order or id_trans in hit_order:
-                    hit_seq_len[last_id] = len(last_buf)
-
-
-        # Get hit beg and end positions from Stockholm format MSA output
-        #
-        hit_beg = dict()
-        hit_end = dict()
-        with open (output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
-            for MSA_out_line in output_hit_MSA_file_handle.readlines():
-                MSA_out_line = MSA_out_line.strip()
-                if MSA_out_line.startswith('#=GS '):
-                    hit_rec = re.sub('#=GS ', '', MSA_out_line)
-                    hit_rec = re.sub('\s+.*?$', '', hit_rec)
-                    hit_range = re.sub('^.*\/', '', hit_rec)
-                    hit_id = re.sub('\/[^\/]+$', '', hit_rec)
-                    (beg_str, end_str) = hit_range.split('-')
-                    hit_beg[hit_id] = int(beg_str)
-                    hit_end[hit_id] = int(end_str)
-
 
         self.log(console, 'EXTRACTING HITS FROM INPUT')
         self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
@@ -1299,11 +1309,11 @@ class kb_hmmer:
  #                   html_report_lines += ['<td align=center bgcolor="'+this_cell_color+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(identity)+'%</font></td>']
 
                     # aln len
- #                   if 'overlap_fraction' in filtering_fields[hit_id]:
- #                       this_cell_color = reject_cell_color
- #                   else:
- #                       this_cell_color = row_color
-                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
+                    if 'overlap_fraction' in filtering_fields[hit_id]:
+                        this_cell_color = reject_cell_color
+                    else:
+                        this_cell_color = row_color
+                    html_report_lines += ['<td align=center bgcolor="'+str(this_cell_color)+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
 
                     # evalue
                     html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(e_value)+'</nobr></font></td>']
@@ -1513,9 +1523,10 @@ class kb_hmmer:
            "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "coalesce_output" of type "bool", parameter "e_value" of Double,
-           parameter "bitscore" of Double, parameter "maxaccepts" of Double,
-           parameter "heatmap" of type "bool", parameter "vertical" of type
-           "bool", parameter "show_blanks" of type "bool"
+           parameter "bitscore" of Double, parameter "overlap_fraction" of
+           Double, parameter "maxaccepts" of Double, parameter "heatmap" of
+           type "bool", parameter "vertical" of type "bool", parameter
+           "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"
@@ -2143,9 +2154,66 @@ class kb_hmmer:
             #self.log(console, report)
 
 
+            # Get hit beg and end positions from Stockholm format MSA output
+            #
+            self.log(console, 'PARSING HMMER SEARCH MSA OUTPUT')
+            hit_beg = dict()
+            hit_end = dict()
+            high_bitscore_alnlen = dict()
+            with open (output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
+                for MSA_out_line in output_hit_MSA_file_handle.readlines():
+                    MSA_out_line = MSA_out_line.strip()
+                    if MSA_out_line.startswith('#=GS '):
+                        hit_rec = re.sub('#=GS ', '', MSA_out_line)
+                        hit_rec = re.sub('\s+.*?$', '', hit_rec)
+                        hit_range = re.sub('^.*\/', '', hit_rec)
+                        hit_id = re.sub('\/[^\/]+$', '', hit_rec)
+                        (beg_str, end_str) = hit_range.split('-')
+                        beg = int(beg_str)
+                        end = int(end_str)
+                        if hit_id in hit_beg:
+                            if math.abs(end-beg) > math.abs(hit_end[hit_id]-hit_beg[hit_id]):
+                                hit_beg[hit_id] = int(beg_str)
+                                hit_end[hit_id] = int(end_str)
+                                high_bitscore_alnlen[hit_id] = math.abs(end-beg+1)
+                        else:
+                            hit_beg[hit_id] = int(beg_str)
+                            hit_end[hit_id] = int(end_str)
+                            high_bitscore_alnlen[hit_id] = math.abs(end-beg+1)
+
+
+
+            # Measure length of hit sequences
+            #
+            self.log(console, 'MEASURING HIT GENES LENGTHS')
+            hit_seq_len = dict()
+            with open (many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
+                last_id = None
+                last_buf = ''
+                for fasta_line in many_forward_reads_file_handle.readlines():
+                    fasta_line = fasta_line.strip()
+                    if fasta_line.startswith('>'):
+                        if last_id != None:
+                            id_untrans = last_id
+                            id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            #if id_untrans in hit_order or id_trans in hit_order:
+                            if id_untrans in hit_beg or id_trans in hit_beg:
+                                hit_seq_len[last_id] = len(last_buf)
+                        header = re.sub('^>', '', fasta_line)
+                        last_id = re.sub('\s+.*?$', '', header)
+                        last_buf = ''
+                    else:
+                        last_buf += fasta_line
+                if last_id != None:
+                    id_untrans = last_id
+                    id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                    if id_untrans in hit_order or id_trans in hit_order:
+                        hit_seq_len[last_id] = len(last_buf)
+
+
             ### Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
             #
-            self.log(console, 'PARSING HMMER SEARCH OUTPUT')
+            self.log(console, 'PARSING HMMER SEARCH TAB OUTPUT')
             if not os.path.isfile(output_hit_TAB_file_path):
                 raise ValueError("failed to create HMMER output: "+output_hit_TAB_file_path)
             elif not os.path.getsize(output_hit_TAB_file_path) > 0:
@@ -2158,8 +2226,8 @@ class kb_hmmer:
             hit_total = 0
             high_bitscore_line = dict()
             high_bitscore_score = dict()
-            high_bitscore_ident = dict()
-            high_bitscore_alnlen = dict()
+            #high_bitscore_ident = dict()
+            #high_bitscore_alnlen = dict()
             hit_order = []
             hit_buf = []
             hit_accept_something = False
@@ -2215,8 +2283,9 @@ class kb_hmmer:
                 if 'bitscore' in params and float(params['bitscore']) > float(high_bitscore_score[hit_seq_id]):
                     filter = True
                     filtering_fields[hit_seq_id]['bitscore'] = True
-                #if 'overlap_fraction' in params and float(params['overlap_fraction']) > float(high_bitscore_alnlen[hit_seq_id])/float(query_len):
-                #    continue
+                if 'overlap_fraction' in params and float(params['overlap_fraction']) > float(high_bitscore_alnlen[hit_seq_id])/float(hit_seq_len[hit_seq_id]):
+                    filter = True
+                    filtering_fields[hit_seq_id]['overlap_fraction'] = True
                 if 'maxaccepts' in params and params['maxaccepts'] != None and hit_total == int(params['maxaccepts']):
                     filter = True
                     filtering_fields[hit_seq_id]['maxaccepts'] = True
@@ -2239,48 +2308,6 @@ class kb_hmmer:
                     hit_cnt_by_genome_and_model[genome_ref][input_msa_name] = 0
                 hit_cnt_by_genome_and_model[genome_ref][input_msa_name] += 1
 
-
-            # Measure length of hit sequences
-            #
-            hit_seq_len = dict()
-            with open (many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
-                last_id = None
-                last_buf = ''
-                for fasta_line in many_forward_reads_file_handle.readlines():
-                    fasta_line = fasta_line.strip()
-                    if fasta_line.startswith('>'):
-                        if last_id != None:
-                            id_untrans = last_id
-                            id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                            if id_untrans in hit_order or id_trans in hit_order:
-                                hit_seq_len[last_id] = len(last_buf)
-                        header = re.sub('^>', '', fasta_line)
-                        last_id = re.sub('\s+.*?$', '', header)
-                        last_buf = ''
-                    else:
-                        last_buf += fasta_line
-                if last_id != None:
-                    id_untrans = last_id
-                    id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                    if id_untrans in hit_order or id_trans in hit_order:
-                        hit_seq_len[last_id] = len(last_buf)
-
-
-            # Get hit beg and end positions from Stockholm format MSA output
-            #
-            hit_beg = dict()
-            hit_end = dict()
-            with open (output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
-                for MSA_out_line in output_hit_MSA_file_handle.readlines():
-                    MSA_out_line = MSA_out_line.strip()
-                    if MSA_out_line.startswith('#=GS '):
-                        hit_rec = re.sub('#=GS ', '', MSA_out_line)
-                        hit_rec = re.sub('\s+.*?$', '', hit_rec)
-                        hit_range = re.sub('^.*\/', '', hit_rec)
-                        hit_id = re.sub('\/[^\/]+$', '', hit_rec)
-                        (beg_str, end_str) = hit_range.split('-')
-                        hit_beg[hit_id] = int(beg_str)
-                        hit_end[hit_id] = int(end_str)
 
             #
             ### Create output objects
@@ -2654,11 +2681,11 @@ class kb_hmmer:
      #                   html_report_chunk += ['<td align=center bgcolor="'+this_cell_color+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(identity)+'%</font></td>']
 
                         # aln len
-     #                   if 'overlap_fraction' in filtering_fields[hit_id]:
-     #                       this_cell_color = reject_cell_color
-     #                   else:
-     #                       this_cell_color = row_color
-                        html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
+                        if 'overlap_fraction' in filtering_fields[hit_id]:
+                            this_cell_color = reject_cell_color
+                        else:
+                            this_cell_color = row_color
+                        html_report_chunk += ['<td align=center bgcolor="'+str(this_cell_color)+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
 
                         # evalue
                         html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(e_value)+'</nobr></font></td>']
