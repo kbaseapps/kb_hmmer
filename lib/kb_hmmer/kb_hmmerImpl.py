@@ -874,7 +874,8 @@ class kb_hmmer:
             if last_id != None:
                 id_untrans = last_id
                 id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                if id_untrans in hit_order or id_trans in hit_order:
+                #if id_untrans in hit_order or id_trans in hit_order:
+                if id_untrans in hit_beg or id_trans in hit_beg:
                     hit_seq_len[last_id] = len(last_buf)
 
 
@@ -2211,7 +2212,8 @@ class kb_hmmer:
                 if last_id != None:
                     id_untrans = last_id
                     id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                    if id_untrans in hit_order or id_trans in hit_order:
+                    #if id_untrans in hit_order or id_trans in hit_order:
+                    if id_untrans in hit_beg or id_trans in hit_beg:
                         hit_seq_len[last_id] = len(last_buf)
 
 
