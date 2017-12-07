@@ -1492,6 +1492,7 @@ class kb_hmmer:
         # return the results
         return [returnVal]
 
+
     def HMMER_Local_MSA_Group_Search(self, ctx, params):
         """
         Methods for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
@@ -2946,7 +2947,7 @@ class kb_hmmer:
                         continue
                     cat_disp = cat
                     cell_title = input_msa_descs[cat_i]
-                    if len(cat_disp) > cat_disp_trunc_len:
+                    if len(cat_disp) > cat_disp_trunc_len+1:
                         cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
                     html_report_lines += ['<td style="border-right:solid 2px '+border_cat_color+'; border-bottom:solid 2px '+border_cat_color+'" bgcolor="'+head_color_2+'"title="'+cell_title+'" valign=bottom align=center>']
                     html_report_lines += ['<div class="vertical-text"><div class="vertical-text__inner">']
@@ -3003,7 +3004,7 @@ class kb_hmmer:
             # key table
             html_report_lines += ['<p>']
             html_report_lines += ['<table cellpadding=3 cellspacing=2 border='+border+'>']
-            html_report_lines += ['<tr><td valign=middle align=left colspan=3 style="border-bottom:solid 4px '+border_color+'"><font color="'+text_color+'"><b>KEY</b></font></td></tr>']
+            html_report_lines += ['<tr><td valign=middle align=left colspan=2 style="border-bottom:solid 4px '+border_color+'"><font color="'+text_color+'"><b>KEY</b></font></td></tr>']
 
             for cat_i,cat in enumerate(cats):
                 cell_color = 'white'
@@ -3014,7 +3015,7 @@ class kb_hmmer:
                 if len(cat_disp) > cat_disp_trunc_len+1:
                     cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
                 html_report_lines += ['<tr>']
-                html_report_lines += ['<td valign=middle align=left bgcolor="'+cell_color+'" style="border-right:solid 4px '+border_color+'><font color="'+text_color+'" size='+graph_cat_fontsize+'>'+cat_disp+'</font></td>']
+                html_report_lines += ['<td valign=middle align=left bgcolor="'+cell_color+'" style="border-right:solid 4px '+border_color+'"><font color="'+text_color+'" size='+graph_cat_fontsize+'>'+cat_disp+'</font></td>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="'+cell_color+'"><font color="'+text_color+'" size='+graph_cat_fontsize+'>'+desc+'</font></td>']
                 html_report_lines += ['</tr>']
 
