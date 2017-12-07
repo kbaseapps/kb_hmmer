@@ -2911,7 +2911,8 @@ class kb_hmmer:
             #graph_width = 100
             #graph_char = "."
             graph_char = sp
-            color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e']
+            #color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e']
+            color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d']
             max_color = len(color_list)-1
             cat_disp_trunc_len = 40
             cell_width = '10px'
