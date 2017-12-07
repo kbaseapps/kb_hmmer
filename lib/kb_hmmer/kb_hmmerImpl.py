@@ -2790,7 +2790,7 @@ class kb_hmmer:
             html_report_lines += ['</head>']
             html_report_lines += ['<body bgcolor="white">']
             if many_type_name == 'GenomeSet':
-                html_report_lines += ['<a href="'+html_profile_file+'" target="profile"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font></a> | <font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>SEARCH HITS</b></font>']
+                html_report_lines += ['<a href="'+html_profile_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font></a> | <font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>SEARCH HITS</b></font>']
                 html_report_lines += ['<p>']
             html_report_lines += ['<table cellpadding='+cellpadding+' cellspacing = '+cellspacing+' border='+border+'>']
             html_report_lines += ['<tr bgcolor="'+head_color+'">']
@@ -2928,7 +2928,7 @@ class kb_hmmer:
             html_report_lines += ['</style>']
             html_report_lines += ['</head>']
             html_report_lines += ['<body bgcolor="white">']
-            html_report_lines += ['<font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>TABULAR PROFILE</b></font> | <a href="'+html_search_file+'" target="search"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>SEARCH HITS</font></a>']
+            html_report_lines += ['<font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>TABULAR PROFILE</b></font> | <a href="'+html_search_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>SEARCH HITS</font></a>']
             html_report_lines += ['<p>']
 
             # genomes as rows
