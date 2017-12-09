@@ -1988,11 +1988,11 @@ class kb_hmmer:
         hit_cnt_by_genome_and_model = dict()
 
 
-        for i,input_msa_ref in enumerate(input_msa_refs):
+        for msa_i,input_msa_ref in enumerate(input_msa_refs):
 
             ### set paths
             #
-            input_msa_name = input_msa_names[i]
+            input_msa_name = input_msa_names[msa_i]
             hmmer_dir = os.path.join(self.output_dir, input_msa_name)  # this must match above
             input_MSA_file_path = os.path.join(hmmer_dir, input_msa_name+".clustal")
 
@@ -2220,10 +2220,6 @@ class kb_hmmer:
             ### Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
             #
             self.log(console, 'PARSING HMMER SEARCH TAB OUTPUT')
-            if not os.path.isfile(output_hit_TAB_file_path):
-                raise ValueError("failed to create HMMER output: "+output_hit_TAB_file_path)
-            elif not os.path.getsize(output_hit_TAB_file_path) > 0:
-                raise ValueError("created empty file for HMMER output: "+output_hit_TAB_file_path)
             hit_seq_ids = dict()
             accept_fids = dict()
             output_hit_TAB_file_handle = open (output_hit_TAB_file_path, "r", 0)
@@ -2746,9 +2742,9 @@ class kb_hmmer:
 
                         output_featureSet['element_ordering'] = coalesce_featureIds_element_ordering
                         output_featureSet['elements'] = dict()
-                        for i,fId in enumerate(output_featureSet['element_ordering']):
+                        for f_i,fId in enumerate(output_featureSet['element_ordering']):
                             output_featureSet['elements'][fId] = []
-                            output_featureSet['elements'][fId].append(coalesce_featureIds_genome_ordering[i])
+                            output_featureSet['elements'][fId].append(coalesce_featureIds_genome_ordering[f_i])
 
                         new_obj_info = ws.save_objects({
                                 'workspace': params['workspace_name'],
@@ -2845,7 +2841,7 @@ class kb_hmmer:
                 if total_hit_cnt[msa_i] == 0:
                     html_report_lines += ['<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>']
                 else:
-                    #html_report_lines.extend(html_report_chunks[i])
+                    #html_report_lines.extend(html_report_chunks[msa_i])
                     html_report_lines += [ html_report_chunks[msa_i] ]
                 html_report_lines += ['<tr><td colspan=table_col_width>'+sp+'</td></tr>']
 
@@ -3165,10 +3161,10 @@ class kb_hmmer:
                 for object_created_ref in objects_created_refs:
                     reportObj['objects_created'].append({'ref':object_created_ref, 'description':'Coalesced'+' '+search_tool_name+' hits'})
             else:
-                for i,input_msa_name in enumerate(input_msa_names):
-                    if total_hit_cnt[i] == 0:
+                for msa_i,input_msa_name in enumerate(input_msa_names):
+                    if total_hit_cnt[msa_i] == 0:
                         continue
-                    reportObj['objects_created'].append({'ref':objects_created_refs[i], 'description':input_msa_name+' '+search_tool_name+' hits'})
+                    reportObj['objects_created'].append({'ref':objects_created_refs[msa_i], 'description':input_msa_name+' '+search_tool_name+' hits'})
                 
 
             # save report object
