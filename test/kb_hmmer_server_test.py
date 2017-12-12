@@ -452,11 +452,7 @@ class kb_hmmerTest(unittest.TestCase):
         # check created obj
         #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
         report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
-        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
-
-        created_obj_0_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})[0]
-        self.assertEqual(created_obj_0_info[NAME_I], obj_out_name)
-        self.assertEqual(created_obj_0_info[TYPE_I].split('-')[0], obj_out_type)
+        self.assertIsNone(report_obj['objects_created'])
         pass
 
 
@@ -500,10 +496,5 @@ class kb_hmmerTest(unittest.TestCase):
         # check created obj
         #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
         report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
-        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
-
-        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
-        for created_obj_info in created_objs_info:
-            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
-            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        self.assertIsNone(report_obj['objects_created'])
         pass
