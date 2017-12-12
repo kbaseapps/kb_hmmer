@@ -2023,6 +2023,8 @@ class kb_hmmer:
             # init hit counts
             total_hit_cnts.append(0)
             accepted_hit_cnts.append(0)
+            html_report_chunks.append(None)
+
 
             ### set paths
             #
@@ -2546,7 +2548,7 @@ class kb_hmmer:
 
             #### Build output report chunks
             ##
-            self.log(console,"BUILDING REPORT CHUNK")  # DEBUG
+            self.log(console,"BUILDING REPORT CHUNK for MSA["+str(msa_i)+"] "+input_msa_names[msa_i])  # DEBUG
             if len(invalid_msgs) == 0:
 
                 # text report
@@ -2734,10 +2736,11 @@ class kb_hmmer:
 
                 # attach chunk
                 if total_hit_cnts[msa_i] == 0:
+                    self.log(console, "NO HITS FOR MSA["+str(msa_i)+"] "+input_msa_names[msa_i]+".  NOT ADDING TO HTML HIT REPORT.")
                     html_report_chunk_str = '<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>'
                 else:
                     html_report_chunk_str = "\n".join(html_report_chunk)
-                html_report_chunks.append(html_report_chunk_str)
+                html_report_chunks[msa_i] = html_report_chunk_str
                 #self.log(console, "HTML_REPORT_CHUNK: '"+str(html_report_chunk_str)+"'")  # DEBUG
 
 
@@ -2867,8 +2870,11 @@ class kb_hmmer:
 
             for msa_i,input_msa_name in enumerate(input_msa_names):
                 html_report_lines += ['<tr><td colspan=table_col_width>Hits to <b>'+str(input_msa_name)+'</b></td></tr>']
-                #html_report_lines.extend(html_report_chunks[msa_i])
-                html_report_lines += [ html_report_chunks[msa_i] ]
+                if total_hit_cnt[msa_i] == 0 or html_report_chunks[msa_i] == None or html_report_chunks[msa_i] == '':
+                    html_report_lines += ['<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>']
+                else:
+                    #html_report_lines.extend(html_report_chunks[msa_i])
+                    html_report_lines += [ html_report_chunks[msa_i] ]
                 html_report_lines += ['<tr><td colspan=table_col_width>'+sp+'</td></tr>']
 
             html_report_lines += ['</table>']
