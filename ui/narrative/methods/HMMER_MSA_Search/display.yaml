@@ -55,6 +55,11 @@ parameters :
             Bit Score
         short-hint : |
             threshold for hits
+    overlap_perc:
+        ui-name : |
+            Alignment Overlap Threshold (%)
+        short-hint : |
+            overlap threshold is with respect to hit sequence length
     maxaccepts:
         ui-name : |
             Max Accepts

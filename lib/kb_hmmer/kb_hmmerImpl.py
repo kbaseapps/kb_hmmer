@@ -55,8 +55,8 @@ class kb_hmmer:
     # the latter method is running.
     ######################################### noqa
     VERSION = "1.1.2"
-    GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "8c8caa67f5a699fefb9a1f4f8590232d0b779ef0"
+    GIT_URL = "https://github.com/dcchivian/kb_hmmer"
+    GIT_COMMIT_HASH = "5eef1fc77ffc453d95dd8fb8deb4b1aa13e3273a"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -253,7 +253,7 @@ class kb_hmmer:
            "input_msa_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "e_value" of Double, parameter "bitscore" of Double, parameter
-           "maxaccepts" of Double
+           "overlap_perc" of Double, parameter "maxaccepts" of Double
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"
@@ -600,6 +600,21 @@ class kb_hmmer:
         else:
             raise ValueError('Cannot yet handle input_many type of: '+many_type_name)            
 
+
+        # Get total number of sequences in input_many search db
+        #
+        seq_total = 0
+        if many_type_name == 'SequenceSet':
+            seq_total = len(input_many_sequenceSet['sequences'])
+        elif many_type_name == 'FeatureSet':
+            seq_total = len(input_many_featureSet['elements'].keys())
+        elif many_type_name == 'Genome':
+            seq_total = len(feature_ids)
+        elif many_type_name == 'GenomeSet':
+            for genome_id in feature_ids_by_genome_id.keys():
+                seq_total += len(feature_ids_by_genome_id[genome_id])
+
+
         # check for failed input file creation
         #
 #        if not appropriate_sequence_found_in_one_input:
@@ -725,9 +740,9 @@ class kb_hmmer:
             raise ValueError("HMMER_BUILD created empty HMM file '"+HMM_file_path+"'")
 
         # DEBUG
-        with open (HMM_file_path, 'r') as HMM_file_handle:
-            for line in HMM_file_handle.readlines():
-                self.log(console, "HMM_FILE: '"+str(line)+"'")
+        #with open (HMM_file_path, 'r') as HMM_file_handle:
+        #    for line in HMM_file_handle.readlines():
+        #        self.log(console, "HMM_FILE: '"+str(line)+"'")
 
 
         ### Construct the HMMER_SEARCH command
@@ -821,23 +836,83 @@ class kb_hmmer:
 #                report += line+"\n"
 
 
+        # Parse the hit beg and end positions from Stockholm format MSA output for overlap filtering
+        #
+        self.log(console, 'PARSING HMMER SEARCH MSA OUTPUT')
+        hit_beg = dict()
+        hit_end = dict()
+        longest_alnlen = dict()
+        with open (output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
+            for MSA_out_line in output_hit_MSA_file_handle.readlines():
+                MSA_out_line = MSA_out_line.strip()
+                if MSA_out_line.startswith('#=GS '):
+                    hit_rec = re.sub('#=GS ', '', MSA_out_line)
+                    hit_rec = re.sub('\s+.*?$', '', hit_rec)
+                    hit_range = re.sub('^.*\/', '', hit_rec)
+                    hit_id = re.sub('\/[^\/]+$', '', hit_rec)
+                    (beg_str, end_str) = hit_range.split('-')
+                    beg = int(beg_str)
+                    end = int(end_str)
+                    this_alnlen = abs(end-beg)+1
+                    if hit_id in hit_beg:
+                        if this_alnlen > longest_alnlen[hit_id]:
+                            hit_beg[hit_id] = beg
+                            hit_end[hit_id] = end
+                            longest_alnlen[hit_id] = this_alnlen
+                    else:
+                        hit_beg[hit_id] = beg
+                        hit_end[hit_id] = end
+                        longest_alnlen[hit_id] = this_alnlen
+
+
+        # Measure length of hit sequences
+        #
+        self.log(console, 'MEASURING HIT GENES LENGTHS')
+        hit_seq_len = dict()
+        with open (many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
+            last_id = None
+            last_buf = ''
+            for fasta_line in many_forward_reads_file_handle.readlines():
+                fasta_line = fasta_line.strip()
+                if fasta_line.startswith('>'):
+                    if last_id != None:
+                        id_untrans = last_id
+                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        #if id_untrans in hit_order or id_trans in hit_order:
+                        if id_untrans in hit_beg or id_trans in hit_beg:
+                            hit_seq_len[last_id] = len(last_buf)
+                    header = re.sub('^>', '', fasta_line)
+                    last_id = re.sub('\s+.*?$', '', header)
+                    last_buf = ''
+                else:
+                    last_buf += fasta_line
+            if last_id != None:
+                id_untrans = last_id
+                id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                #if id_untrans in hit_order or id_trans in hit_order:
+                if id_untrans in hit_beg or id_trans in hit_beg:
+                    hit_seq_len[last_id] = len(last_buf)
+
+
+        # DEBUG
+        for hit_id in hit_beg.keys():
+            print ("HIT_ID: '"+str(hit_id)+"' BEG: '"+str(hit_beg[hit_id])+"' END: '"+str(hit_end[hit_id])+"' SEQLEN: '"+str(hit_seq_len[hit_id])+"'")
+
+
         # Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
         #
-        self.log(console, 'PARSING HMMER SEARCH OUTPUT')
-        if not os.path.isfile(output_hit_TAB_file_path):
-            raise ValueError("failed to create HMMER output: "+output_hit_TAB_file_path)
-        elif not os.path.getsize(output_hit_TAB_file_path) > 0:
-            raise ValueError("created empty file for HMMER output: "+output_hit_TAB_file_path)
+        self.log(console, 'PARSING HMMER SEARCH TAB OUTPUT')
         hit_seq_ids = dict()
         accept_fids = dict()
         output_hit_TAB_file_handle = open (output_hit_TAB_file_path, "r", 0)
         output_aln_buf = output_hit_TAB_file_handle.readlines()
         output_hit_TAB_file_handle.close()
-        hit_total = 0
+        total_hit_cnt = 0
+        accepted_hit_cnt = 0
         high_bitscore_line = dict()
         high_bitscore_score = dict()
-        high_bitscore_ident = dict()
-        high_bitscore_alnlen = dict()
+        #high_bitscore_ident = dict()
+        #longest_alnlen = dict()
         hit_order = []
         hit_buf = []
         #header_done = False
@@ -879,6 +954,8 @@ class kb_hmmer:
                 high_bitscore_line[hit_seq_id] = line
 
         filtering_fields = dict()
+        total_hit_cnt = len(hit_order)
+
         for hit_seq_id in hit_order:
             hit_buf.append(high_bitscore_line[hit_seq_id])
             filtering_fields[hit_seq_id] = dict()
@@ -890,205 +967,159 @@ class kb_hmmer:
             if 'bitscore' in params and float(params['bitscore']) > float(high_bitscore_score[hit_seq_id]):
                 filter = True
                 filtering_fields[hit_seq_id]['bitscore'] = True
-            #if 'overlap_fraction' in params and float(params['overlap_fraction']) > float(high_bitscore_alnlen[hit_seq_id])/float(query_len):
-            #    continue
-            if 'maxaccepts' in params and params['maxaccepts'] != None and hit_total == int(params['maxaccepts']):
+            if 'overlap_perc' in params and float(params['overlap_perc']) > 100.0*float(longest_alnlen[hit_seq_id])/float(hit_seq_len[hit_seq_id]):
+                filter = True
+                filtering_fields[hit_seq_id]['overlap_perc'] = True
+            if 'maxaccepts' in params and params['maxaccepts'] != None and accepted_hit_cnt == int(params['maxaccepts']):
                 filter = True
                 filtering_fields[hit_seq_id]['maxaccepts'] = True
 
             if filter:
                 continue
             
-            hit_total += 1
+            accepted_hit_cnt += 1
             hit_seq_ids[hit_seq_id] = True
             self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
-        
+            self.log(console, "\t"+"BEG: "+str(hit_beg[hit_seq_id])+", END: "+str(hit_end[hit_seq_id])+" ,SEQLEN: "+str(hit_seq_len[hit_seq_id]))
 
-        # Measure length of hit sequences
+            
         #
-        hit_seq_len = dict()
-        with open (many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
-            last_id = None
-            last_buf = ''
-            for fasta_line in many_forward_reads_file_handle.readlines():
-                fasta_line = fasta_line.strip()
-                if fasta_line.startswith('>'):
-                    if last_id != None:
-                        id_untrans = last_id
-                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                        if id_untrans in hit_order or id_trans in hit_order:
-                            hit_seq_len[last_id] = len(last_buf)
-                    header = re.sub('^>', '', fasta_line)
-                    last_id = re.sub('\s+.*?$', '', header)
-                    last_buf = ''
+        ### Create output objects
+        #
+        if accepted_hit_cnt == 0:
+            self.log(console, 'THERE WERE NO ACCEPTED HITS.  NOT BUILDING OUTPUT OBJECT')
+        else:
+            self.log(console, 'EXTRACTING HITS FROM INPUT')
+            self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
+
+            # SequenceSet input -> SequenceSet output
+            #
+            if many_type_name == 'SequenceSet':
+                output_sequenceSet = dict()
+
+                if 'sequence_set_id' in input_many_sequenceSet and input_many_sequenceSet['sequence_set_id'] != None:
+                    output_sequenceSet['sequence_set_id'] = input_many_sequenceSet['sequence_set_id'] + "."+search_tool_name+"_Search_filtered"
                 else:
-                    last_buf += fasta_line
-            if last_id != None:
-                id_untrans = last_id
-                id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                if id_untrans in hit_order or id_trans in hit_order:
-                    hit_seq_len[last_id] = len(last_buf)
+                    output_sequenceSet['sequence_set_id'] = search_tool_name+"_Search_filtered"
+                if 'description' in input_many_sequenceSet and input_many_sequenceSet['description'] != None:
+                    output_sequenceSet['description'] = input_many_sequenceSet['description'] + " - "+search_tool_name+"_Search filtered"
+                else:
+                    output_sequenceSet['description'] = search_tool_anme+"_Search filtered"
 
+                self.log(console,"ADDING SEQUENCES TO SEQUENCESET")
+                output_sequenceSet['sequences'] = []
 
-        # Get hit beg and end positions from Stockholm format MSA output
-        #
-        hit_beg = dict()
-        hit_end = dict()
-        with open (output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
-            for MSA_out_line in output_hit_MSA_file_handle.readlines():
-                MSA_out_line = MSA_out_line.strip()
-                if MSA_out_line.startswith('#=GS '):
-                    hit_rec = re.sub('#=GS ', '', MSA_out_line)
-                    hit_rec = re.sub('\s+.*?$', '', hit_rec)
-                    hit_range = re.sub('^.*\/', '', hit_rec)
-                    hit_id = re.sub('\/[^\/]+$', '', hit_rec)
-                    (beg_str, end_str) = hit_range.split('-')
-                    hit_beg[hit_id] = int(beg_str)
-                    hit_end[hit_id] = int(end_str)
+                for seq_obj in input_many_sequenceSet['sequences']:
+                    header_id = seq_obj['sequence_id']
+                    #header_desc = seq_obj['description']
+                    #sequence_str = seq_obj['sequence']
 
-
-        self.log(console, 'EXTRACTING HITS FROM INPUT')
-        self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
-
-
-        # SequenceSet input -> SequenceSet output
-        #
-        if many_type_name == 'SequenceSet':
-            seq_total = len(input_many_sequenceSet['sequences'])
-
-            output_sequenceSet = dict()
-
-            if 'sequence_set_id' in input_many_sequenceSet and input_many_sequenceSet['sequence_set_id'] != None:
-                output_sequenceSet['sequence_set_id'] = input_many_sequenceSet['sequence_set_id'] + "."+search_tool_name+"_Search_filtered"
-            else:
-                output_sequenceSet['sequence_set_id'] = search_tool_name+"_Search_filtered"
-            if 'description' in input_many_sequenceSet and input_many_sequenceSet['description'] != None:
-                output_sequenceSet['description'] = input_many_sequenceSet['description'] + " - "+search_tool_name+"_Search filtered"
-            else:
-                output_sequenceSet['description'] = search_tool_anme+"_Search filtered"
-
-            self.log(console,"ADDING SEQUENCES TO SEQUENCESET")
-            output_sequenceSet['sequences'] = []
-
-            for seq_obj in input_many_sequenceSet['sequences']:
-                header_id = seq_obj['sequence_id']
-                #header_desc = seq_obj['description']
-                #sequence_str = seq_obj['sequence']
-
-                id_untrans = header_id
-                id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
-                    #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
-                    accept_fids[id_untrans] = True
-                    output_sequenceSet['sequences'].append(seq_obj)
-
-
-        # FeatureSet input -> FeatureSet output
-        #
-        elif many_type_name == 'FeatureSet':
-            seq_total = len(input_many_featureSet['elements'].keys())
-
-            output_featureSet = dict()
-            if 'description' in input_many_featureSet and input_many_featureSet['description'] != None:
-                output_featureSet['description'] = input_many_featureSet['description'] + " - "+search_tool_name+"_Search filtered"
-            else:
-                output_featureSet['description'] = search_tool_name+"_Search filtered"
-            output_featureSet['element_ordering'] = []
-            output_featureSet['elements'] = dict()
-
-            fId_list = input_many_featureSet['elements'].keys()
-            self.log(console,"ADDING FEATURES TO FEATURESET")
-            for fId in sorted(fId_list):
-                for genome_ref in input_many_featureSet['elements'][fId]:
-                    id_untrans = genome_ref+genome_id_feature_id_delim+fId
+                    id_untrans = header_id
                     id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                     if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
-                        #self.log(console, 'FOUND HIT '+fId)  # DEBUG
+                        #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
                         accept_fids[id_untrans] = True
-                        #fId = id_untrans  # don't change fId for output FeatureSet
-                        try:
-                            this_genome_ref_list = output_featureSet['elements'][fId]
-                        except:
-                            output_featureSet['elements'][fId] = []
-                            output_featureSet['element_ordering'].append(fId)
-                        output_featureSet['elements'][fId].append(genome_ref)
+                        output_sequenceSet['sequences'].append(seq_obj)
 
-        # Parse Genome hits into FeatureSet
-        #
-        elif many_type_name == 'Genome':
-            seq_total = 0
-            output_featureSet = dict()
-#            if 'scientific_name' in input_many_genome and input_many_genome['scientific_name'] != None:
-#                output_featureSet['description'] = input_many_genome['scientific_name'] + " - "+search_tool_name+"_Search filtered"
-#            else:
-#                output_featureSet['description'] = search_tool_name+"_Search filtered"
-            output_featureSet['description'] = search_tool_name+"_Search filtered"
-            output_featureSet['element_ordering'] = []
-            output_featureSet['elements'] = dict()
-            for fid in feature_ids:
-                seq_total += 1
-                id_untrans = fid
-                id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
-                    #self.log(console, 'FOUND HIT '+fid)  # DEBUG
-                    #output_featureSet['element_ordering'].append(fid)
-                    accept_fids[id_untrans] = True
-                    #fid = input_many_ref+genome_id_feature_id_delim+id_untrans  # don't change fId for output FeatureSet
-                    output_featureSet['element_ordering'].append(fid)
-                    output_featureSet['elements'][fid] = [input_many_ref]
 
-        # Parse GenomeSet hits into FeatureSet
-        #
-        elif many_type_name == 'GenomeSet':
-            seq_total = 0
+            # FeatureSet input -> FeatureSet output
+            #
+            elif many_type_name == 'FeatureSet':
+                output_featureSet = dict()
+                if 'description' in input_many_featureSet and input_many_featureSet['description'] != None:
+                    output_featureSet['description'] = input_many_featureSet['description'] + " - "+search_tool_name+"_Search filtered"
+                else:
+                    output_featureSet['description'] = search_tool_name+"_Search filtered"
+                output_featureSet['element_ordering'] = []
+                output_featureSet['elements'] = dict()
 
-            output_featureSet = dict()
-            if 'description' in input_many_genomeSet and input_many_genomeSet['description'] != None:
-                output_featureSet['description'] = input_many_genomeSet['description'] + " - "+search_tool_name+"_Search filtered"
-            else:
+                fId_list = input_many_featureSet['elements'].keys()
+                self.log(console,"ADDING FEATURES TO FEATURESET")
+                for fId in sorted(fId_list):
+                    for genome_ref in input_many_featureSet['elements'][fId]:
+                        id_untrans = genome_ref+genome_id_feature_id_delim+fId
+                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
+                            #self.log(console, 'FOUND HIT '+fId)  # DEBUG
+                            accept_fids[id_untrans] = True
+                            #fId = id_untrans  # don't change fId for output FeatureSet
+                            try:
+                                this_genome_ref_list = output_featureSet['elements'][fId]
+                            except:
+                                output_featureSet['elements'][fId] = []
+                                output_featureSet['element_ordering'].append(fId)
+                            output_featureSet['elements'][fId].append(genome_ref)
+
+            # Parse Genome hits into FeatureSet
+            #
+            elif many_type_name == 'Genome':
+                output_featureSet = dict()
+                #            if 'scientific_name' in input_many_genome and input_many_genome['scientific_name'] != None:
+                #                output_featureSet['description'] = input_many_genome['scientific_name'] + " - "+search_tool_name+"_Search filtered"
+                #            else:
+                #                output_featureSet['description'] = search_tool_name+"_Search filtered"
                 output_featureSet['description'] = search_tool_name+"_Search filtered"
-            output_featureSet['element_ordering'] = []
-            output_featureSet['elements'] = dict()
-
-            self.log(console,"READING HITS FOR GENOMES")  # DEBUG
-            for genome_id in feature_ids_by_genome_id.keys():
-                self.log(console,"READING HITS FOR GENOME "+genome_id)  # DEBUG
-                genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
-                for feature_id in feature_ids_by_genome_id[genome_id]:
-                    seq_total += 1
-                    id_untrans = genome_ref+genome_id_feature_id_delim+feature_id
+                output_featureSet['element_ordering'] = []
+                output_featureSet['elements'] = dict()
+                for fid in feature_ids:
+                    id_untrans = fid
                     id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                     if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
-                        #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
-                        #output_featureSet['element_ordering'].append(feature['id'])
+                        #self.log(console, 'FOUND HIT '+fid)  # DEBUG
+                        #output_featureSet['element_ordering'].append(fid)
                         accept_fids[id_untrans] = True
-                        #feature_id = id_untrans  # don't change fId for output FeatureSet
-                        try:
-                            this_genome_ref_list = output_featureSet['elements'][feature_id]
-                        except:
-                            output_featureSet['elements'][feature_id] = []
-                            output_featureSet['element_ordering'].append(feature_id)
-                        output_featureSet['elements'][feature_id].append(genome_ref)
+                        #fid = input_many_ref+genome_id_feature_id_delim+id_untrans  # don't change fId for output FeatureSet
+                        output_featureSet['element_ordering'].append(fid)
+                        output_featureSet['elements'][fid] = [input_many_ref]
+
+            # Parse GenomeSet hits into FeatureSet
+            #
+            elif many_type_name == 'GenomeSet':
+                output_featureSet = dict()
+                if 'description' in input_many_genomeSet and input_many_genomeSet['description'] != None:
+                    output_featureSet['description'] = input_many_genomeSet['description'] + " - "+search_tool_name+"_Search filtered"
+                else:
+                    output_featureSet['description'] = search_tool_name+"_Search filtered"
+                output_featureSet['element_ordering'] = []
+                output_featureSet['elements'] = dict()
+
+                self.log(console,"READING HITS FOR GENOMES")  # DEBUG
+                for genome_id in feature_ids_by_genome_id.keys():
+                    self.log(console,"READING HITS FOR GENOME "+genome_id)  # DEBUG
+                    genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
+                    for feature_id in feature_ids_by_genome_id[genome_id]:
+                        id_untrans = genome_ref+genome_id_feature_id_delim+feature_id
+                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
+                            #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
+                            #output_featureSet['element_ordering'].append(feature['id'])
+                            accept_fids[id_untrans] = True
+                            #feature_id = id_untrans  # don't change fId for output FeatureSet
+                            try:
+                                this_genome_ref_list = output_featureSet['elements'][feature_id]
+                            except:
+                                output_featureSet['elements'][feature_id] = []
+                                output_featureSet['element_ordering'].append(feature_id)
+                            output_featureSet['elements'][feature_id].append(genome_ref)
 
 
-        # load the method provenance from the context object
-        #
-        self.log(console,"SETTING PROVENANCE")  # DEBUG
-        provenance = [{}]
-        if 'provenance' in ctx:
-            provenance = ctx['provenance']
-        # add additional info to provenance here, in this case the input data object reference
-        provenance[0]['input_ws_objects'] = []
-#        provenance[0]['input_ws_objects'].append(input_one_ref)
-        provenance[0]['input_ws_objects'].append(input_msa_ref)
-        provenance[0]['input_ws_objects'].append(input_many_ref)
-        provenance[0]['service'] = 'kb_blast'
-        provenance[0]['method'] = search_tool_name+'_Search'
+            # load the method provenance from the context object
+            #
+            self.log(console,"SETTING PROVENANCE")  # DEBUG
+            provenance = [{}]
+            if 'provenance' in ctx:
+                provenance = ctx['provenance']
+            # add additional info to provenance here, in this case the input data object reference
+            provenance[0]['input_ws_objects'] = []
+            #        provenance[0]['input_ws_objects'].append(input_one_ref)
+            provenance[0]['input_ws_objects'].append(input_msa_ref)
+            provenance[0]['input_ws_objects'].append(input_many_ref)
+            provenance[0]['service'] = 'kb_blast'
+            provenance[0]['method'] = search_tool_name+'_Search'
 
 
-        # Upload results
-        #
-        if len(invalid_msgs) == 0 and len(hit_seq_ids.keys()) > 0:
+            # Upload results
+            #
             self.log(console,"UPLOADING RESULTS")  # DEBUG
 
             # input many SequenceSet -> save SequenceSet
@@ -1121,13 +1152,13 @@ class kb_hmmer:
         # build output report object
         #
         self.log(console,"BUILDING REPORT")  # DEBUG
-        if len(invalid_msgs) == 0 and len(hit_order) > 0:
+        if len(invalid_msgs) == 0 and total_hit_cnt > 0:
 
             # text report
             #
             report += 'sequences in search db: '+str(seq_total)+"\n"
-            report += 'sequences in hit set: '+str(len(hit_order))+"\n"
-            report += 'sequences in accepted hit set: '+str(hit_total)+"\n"
+            report += 'sequences in hit set: '+str(total_hit_cnt)+"\n"
+            report += 'sequences in accepted hit set: '+str(accepted_hit_cnt)+"\n"
             report += "\n"
             for line in hit_buf:
                 report += line
@@ -1197,7 +1228,7 @@ class kb_hmmer:
                 h_len = hit_seq_len[hit_id]
                 h_beg = hit_beg[hit_id]
                 h_end = hit_end[hit_id]
-                aln_len = h_end-h_beg+1
+                aln_len = abs(h_end-h_beg)+1
                 aln_len_perc = round (100.0*float(aln_len)/float(h_len), 1)
 
 
@@ -1245,8 +1276,6 @@ class kb_hmmer:
 
                     func_disp = feature_id_to_function[genome_ref][fid_lookup]
                     genome_sci_name = genome_ref_to_sci_name[genome_ref]
-
-                    #if 'overlap_fraction' in params and float(params['overlap_fraction']) > float(high_bitscore_alnlen[hit_seq_id])/float(query_len):
 
                     html_report_lines += ['<tr bgcolor="'+row_color+'">']
                     #html_report_lines += ['<tr bgcolor="'+'white'+'">']  # DEBUG
@@ -1299,11 +1328,11 @@ class kb_hmmer:
  #                   html_report_lines += ['<td align=center bgcolor="'+this_cell_color+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(identity)+'%</font></td>']
 
                     # aln len
- #                   if 'overlap_fraction' in filtering_fields[hit_id]:
- #                       this_cell_color = reject_cell_color
- #                   else:
- #                       this_cell_color = row_color
-                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
+                    if 'overlap_perc' in filtering_fields[hit_id]:
+                        this_cell_color = reject_cell_color
+                    else:
+                        this_cell_color = row_color
+                    html_report_lines += ['<td align=center bgcolor="'+str(this_cell_color)+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
 
                     # evalue
                     html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(e_value)+'</nobr></font></td>']
@@ -1433,7 +1462,8 @@ class kb_hmmer:
 #                                                'name': search_tool_name+'_Search-m'+str(params['output_extra_format'])+'.'+extension,
 #                                                'label': search_tool_name+' Results: m'+str(params['output_extra_format'])})
                             
-            reportObj['objects_created'].append({'ref':str(params['workspace_name'])+'/'+params['output_filtered_name'],'description':search_tool_name+' hits'})
+            if accepted_hit_cnt > 0:
+                reportObj['objects_created'].append({'ref':str(params['workspace_name'])+'/'+params['output_filtered_name'],'description':search_tool_name+' hits'})
             #reportObj['message'] = report
 
 
@@ -1445,7 +1475,7 @@ class kb_hmmer:
             report_info = reportClient.create_extended_report(reportObj)
 
         else:
-            if len(hit_order) == 0:  # no hits
+            if total_hit_cnt == 0:  # no hits
                 report += "No hits were found\n"
             else:  # data validation error
                 report += "FAILURE\n\n"+"\n".join(invalid_msgs)+"\n"
@@ -1513,9 +1543,10 @@ class kb_hmmer:
            "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "coalesce_output" of type "bool", parameter "e_value" of Double,
-           parameter "bitscore" of Double, parameter "maxaccepts" of Double,
-           parameter "heatmap" of type "bool", parameter "vertical" of type
-           "bool", parameter "show_blanks" of type "bool"
+           parameter "bitscore" of Double, parameter "overlap_perc" of
+           Double, parameter "maxaccepts" of Double, parameter "heatmap" of
+           type "bool", parameter "vertical" of type "bool", parameter
+           "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"
@@ -1732,6 +1763,20 @@ class kb_hmmer:
         #
         else:
             raise ValueError('Cannot yet handle input_many type of: '+many_type_name)            
+
+
+        # Get total number of sequences in input_many search db
+        #
+        seq_total = 0
+        if many_type_name == 'SequenceSet':
+            seq_total = len(input_many_sequenceSet['sequences'])
+        elif many_type_name == 'FeatureSet':
+            seq_total = len(input_many_featureSet['elements'].keys())
+        elif many_type_name == 'Genome':
+            seq_total = len(feature_ids)
+        elif many_type_name == 'GenomeSet':
+            for genome_id in feature_ids_by_genome_id.keys():
+                seq_total += len(feature_ids_by_genome_id[genome_id])
 
 
         #### Get the input_msa_refs
@@ -1959,7 +2004,8 @@ class kb_hmmer:
         
         #### iterate through MSAs and scan input_many DBs
         ##
-        total_hit_cnt = []
+        total_hit_cnts = []
+        accepted_hit_cnts = []
         output_hit_TAB_file_paths = []
         output_hit_MSA_file_paths = []
         output_filtered_fasta_file_paths = []
@@ -1972,11 +2018,17 @@ class kb_hmmer:
         hit_cnt_by_genome_and_model = dict()
 
 
-        for i,input_msa_ref in enumerate(input_msa_refs):
+        for msa_i,input_msa_ref in enumerate(input_msa_refs):
+
+            # init hit counts
+            total_hit_cnts.append(0)
+            accepted_hit_cnts.append(0)
+            html_report_chunks.append(None)
+
 
             ### set paths
             #
-            input_msa_name = input_msa_names[i]
+            input_msa_name = input_msa_names[msa_i]
             hmmer_dir = os.path.join(self.output_dir, input_msa_name)  # this must match above
             input_MSA_file_path = os.path.join(hmmer_dir, input_msa_name+".clustal")
 
@@ -2125,7 +2177,6 @@ class kb_hmmer:
                 #raise ValueError("HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
                 self.log(console,"HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
                 objects_created_refs.append(None)
-                total_hit_cnt.append(0)
                 continue
 
 
@@ -2143,23 +2194,77 @@ class kb_hmmer:
             #self.log(console, report)
 
 
+            # Get hit beg and end positions from Stockholm format MSA output
+            #
+            self.log(console, 'PARSING HMMER SEARCH MSA OUTPUT')
+            hit_beg = dict()
+            hit_end = dict()
+            longest_alnlen = dict()
+            with open (output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
+                for MSA_out_line in output_hit_MSA_file_handle.readlines():
+                    MSA_out_line = MSA_out_line.strip()
+                    if MSA_out_line.startswith('#=GS '):
+                        hit_rec = re.sub('#=GS ', '', MSA_out_line)
+                        hit_rec = re.sub('\s+.*?$', '', hit_rec)
+                        hit_range = re.sub('^.*\/', '', hit_rec)
+                        hit_id = re.sub('\/[^\/]+$', '', hit_rec)
+                        (beg_str, end_str) = hit_range.split('-')
+                        beg = int(beg_str)
+                        end = int(end_str)
+                        this_alnlen = abs(end-beg)+1
+                        if hit_id in hit_beg:
+                            if this_alnlen > longest_alnlen[hit_id]:
+                                hit_beg[hit_id] = int(beg_str)
+                                hit_end[hit_id] = int(end_str)
+                                longest_alnlen[hit_id] = this_alnlen
+                        else:
+                            hit_beg[hit_id] = int(beg_str)
+                            hit_end[hit_id] = int(end_str)
+                            longest_alnlen[hit_id] = this_alnlen
+
+
+            # Measure length of hit sequences
+            #
+            self.log(console, 'MEASURING HIT GENES LENGTHS')
+            hit_seq_len = dict()
+            with open (many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
+                last_id = None
+                last_buf = ''
+                for fasta_line in many_forward_reads_file_handle.readlines():
+                    fasta_line = fasta_line.strip()
+                    if fasta_line.startswith('>'):
+                        if last_id != None:
+                            id_untrans = last_id
+                            id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            #if id_untrans in hit_order or id_trans in hit_order:
+                            if id_untrans in hit_beg or id_trans in hit_beg:
+                                hit_seq_len[last_id] = len(last_buf)
+                        header = re.sub('^>', '', fasta_line)
+                        last_id = re.sub('\s+.*?$', '', header)
+                        last_buf = ''
+                    else:
+                        last_buf += fasta_line
+                if last_id != None:
+                    id_untrans = last_id
+                    id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                    #if id_untrans in hit_order or id_trans in hit_order:
+                    if id_untrans in hit_beg or id_trans in hit_beg:
+                        hit_seq_len[last_id] = len(last_buf)
+
+
             ### Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
             #
-            self.log(console, 'PARSING HMMER SEARCH OUTPUT')
-            if not os.path.isfile(output_hit_TAB_file_path):
-                raise ValueError("failed to create HMMER output: "+output_hit_TAB_file_path)
-            elif not os.path.getsize(output_hit_TAB_file_path) > 0:
-                raise ValueError("created empty file for HMMER output: "+output_hit_TAB_file_path)
+            self.log(console, 'PARSING HMMER SEARCH TAB OUTPUT')
             hit_seq_ids = dict()
             accept_fids = dict()
             output_hit_TAB_file_handle = open (output_hit_TAB_file_path, "r", 0)
             output_aln_buf = output_hit_TAB_file_handle.readlines()
             output_hit_TAB_file_handle.close()
-            hit_total = 0
+            accepted_hit_cnt = 0
             high_bitscore_line = dict()
             high_bitscore_score = dict()
-            high_bitscore_ident = dict()
-            high_bitscore_alnlen = dict()
+            #high_bitscore_ident = dict()
+            #longest_alnlen = dict()
             hit_order = []
             hit_buf = []
             hit_accept_something = False
@@ -2202,7 +2307,7 @@ class kb_hmmer:
                     high_bitscore_line[hit_seq_id] = line
 
             filtering_fields = dict()
-            total_hit_cnt.append (len(hit_order))
+            total_hit_cnts[msa_i] = len(hit_order)
 
             for hit_seq_id in hit_order:
                 hit_buf.append(high_bitscore_line[hit_seq_id])
@@ -2215,9 +2320,10 @@ class kb_hmmer:
                 if 'bitscore' in params and float(params['bitscore']) > float(high_bitscore_score[hit_seq_id]):
                     filter = True
                     filtering_fields[hit_seq_id]['bitscore'] = True
-                #if 'overlap_fraction' in params and float(params['overlap_fraction']) > float(high_bitscore_alnlen[hit_seq_id])/float(query_len):
-                #    continue
-                if 'maxaccepts' in params and params['maxaccepts'] != None and hit_total == int(params['maxaccepts']):
+                if 'overlap_perc' in params and float(params['overlap_perc']) > 100.0*float(longest_alnlen[hit_seq_id])/float(hit_seq_len[hit_seq_id]):
+                    filter = True
+                    filtering_fields[hit_seq_id]['overlap_perc'] = True
+                if 'maxaccepts' in params and params['maxaccepts'] != None and accepted_hit_cnt == int(params['maxaccepts']):
                     filter = True
                     filtering_fields[hit_seq_id]['maxaccepts'] = True
 
@@ -2225,7 +2331,7 @@ class kb_hmmer:
                     continue
             
                 hit_accept_something = True
-                hit_total += 1
+                accepted_hit_cnt += 1
                 hit_seq_ids[hit_seq_id] = True
                 self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
 
@@ -2239,230 +2345,181 @@ class kb_hmmer:
                     hit_cnt_by_genome_and_model[genome_ref][input_msa_name] = 0
                 hit_cnt_by_genome_and_model[genome_ref][input_msa_name] += 1
 
+            accepted_hit_cnts[msa_i] = accepted_hit_cnt
 
-            # Measure length of hit sequences
-            #
-            hit_seq_len = dict()
-            with open (many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
-                last_id = None
-                last_buf = ''
-                for fasta_line in many_forward_reads_file_handle.readlines():
-                    fasta_line = fasta_line.strip()
-                    if fasta_line.startswith('>'):
-                        if last_id != None:
-                            id_untrans = last_id
-                            id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                            if id_untrans in hit_order or id_trans in hit_order:
-                                hit_seq_len[last_id] = len(last_buf)
-                        header = re.sub('^>', '', fasta_line)
-                        last_id = re.sub('\s+.*?$', '', header)
-                        last_buf = ''
-                    else:
-                        last_buf += fasta_line
-                if last_id != None:
-                    id_untrans = last_id
-                    id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                    if id_untrans in hit_order or id_trans in hit_order:
-                        hit_seq_len[last_id] = len(last_buf)
-
-
-            # Get hit beg and end positions from Stockholm format MSA output
-            #
-            hit_beg = dict()
-            hit_end = dict()
-            with open (output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
-                for MSA_out_line in output_hit_MSA_file_handle.readlines():
-                    MSA_out_line = MSA_out_line.strip()
-                    if MSA_out_line.startswith('#=GS '):
-                        hit_rec = re.sub('#=GS ', '', MSA_out_line)
-                        hit_rec = re.sub('\s+.*?$', '', hit_rec)
-                        hit_range = re.sub('^.*\/', '', hit_rec)
-                        hit_id = re.sub('\/[^\/]+$', '', hit_rec)
-                        (beg_str, end_str) = hit_range.split('-')
-                        hit_beg[hit_id] = int(beg_str)
-                        hit_end[hit_id] = int(end_str)
 
             #
             ### Create output objects
             #
+            if accepted_hit_cnt == 0:
+                self.log(console, 'THERE WERE NO ACCEPTED HITS.  NOT BUILDING OUTPUT OBJECT')
+            else:
+                self.log(console, 'EXTRACTING ACCEPTED HITS FROM INPUT')
+                self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
 
-            self.log(console, 'EXTRACTING HITS FROM INPUT')
-            self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
+                # SequenceSet input -> SequenceSet output
+                #
+                if many_type_name == 'SequenceSet':
+                    output_sequenceSet = dict()
 
+                    if 'sequence_set_id' in input_many_sequenceSet and input_many_sequenceSet['sequence_set_id'] != None:
+                        output_sequenceSet['sequence_set_id'] = input_many_sequenceSet['sequence_set_id'] + "."+search_tool_name+"_Search_filtered"
+                    else:
+                        output_sequenceSet['sequence_set_id'] = search_tool_name+"_Search_filtered"
+                    if 'description' in input_many_sequenceSet and input_many_sequenceSet['description'] != None:
+                        output_sequenceSet['description'] = input_many_sequenceSet['description'] + " - "+search_tool_name+"_Search filtered"
+                    else:
+                        output_sequenceSet['description'] = search_tool_anme+"_Search filtered"
 
-            # SequenceSet input -> SequenceSet output
-            #
-            if many_type_name == 'SequenceSet':
-                seq_total = len(input_many_sequenceSet['sequences'])
+                    self.log(console,"ADDING SEQUENCES TO SEQUENCESET")
+                    output_sequenceSet['sequences'] = []
 
-                output_sequenceSet = dict()
+                    for seq_obj in input_many_sequenceSet['sequences']:
+                        header_id = seq_obj['sequence_id']
+                        #header_desc = seq_obj['description']
+                        #sequence_str = seq_obj['sequence']
 
-                if 'sequence_set_id' in input_many_sequenceSet and input_many_sequenceSet['sequence_set_id'] != None:
-                    output_sequenceSet['sequence_set_id'] = input_many_sequenceSet['sequence_set_id'] + "."+search_tool_name+"_Search_filtered"
-                else:
-                    output_sequenceSet['sequence_set_id'] = search_tool_name+"_Search_filtered"
-                if 'description' in input_many_sequenceSet and input_many_sequenceSet['description'] != None:
-                    output_sequenceSet['description'] = input_many_sequenceSet['description'] + " - "+search_tool_name+"_Search filtered"
-                else:
-                    output_sequenceSet['description'] = search_tool_anme+"_Search filtered"
-
-                self.log(console,"ADDING SEQUENCES TO SEQUENCESET")
-                output_sequenceSet['sequences'] = []
-
-                for seq_obj in input_many_sequenceSet['sequences']:
-                    header_id = seq_obj['sequence_id']
-                    #header_desc = seq_obj['description']
-                    #sequence_str = seq_obj['sequence']
-
-                    id_untrans = header_id
-                    id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                    if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
-                        #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
-                        accept_fids[id_untrans] = True
-                        output_sequenceSet['sequences'].append(seq_obj)
-
-
-            # FeatureSet input -> FeatureSet output
-            #
-            elif many_type_name == 'FeatureSet':
-                seq_total = len(input_many_featureSet['elements'].keys())
-
-                output_featureSet = dict()
-                if 'description' in input_many_featureSet and input_many_featureSet['description'] != None:
-                    output_featureSet['description'] = input_many_featureSet['description'] + " - "+search_tool_name+"_Search filtered"
-                else:
-                    output_featureSet['description'] = search_tool_name+"_Search filtered"
-                output_featureSet['element_ordering'] = []
-                output_featureSet['elements'] = dict()
-
-                fId_list = input_many_featureSet['elements'].keys()
-                self.log(console,"ADDING FEATURES TO FEATURESET")
-                for fId in sorted(fId_list):
-                    for genome_ref in input_many_featureSet['elements'][fId]:
-                        id_untrans = genome_ref+genome_id_feature_id_delim+fId
+                        id_untrans = header_id
                         id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                         if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
-                            #self.log(console, 'FOUND HIT '+fId)  # DEBUG
+                            #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
                             accept_fids[id_untrans] = True
-                            #fId = id_untrans  # don't change fId for output FeatureSet
-                            try:
-                                this_genome_ref_list = output_featureSet['elements'][fId]
-                            except:
-                                output_featureSet['elements'][fId] = []
-                                output_featureSet['element_ordering'].append(fId)
-                            output_featureSet['elements'][fId].append(genome_ref)
+                            output_sequenceSet['sequences'].append(seq_obj)
 
-            # Parse Genome hits into FeatureSet
-            #
-            elif many_type_name == 'Genome':
-                seq_total = 0
-                output_featureSet = dict()
-    #            if 'scientific_name' in input_many_genome and input_many_genome['scientific_name'] != None:
-    #                output_featureSet['description'] = input_many_genome['scientific_name'] + " - "+search_tool_name+"_Search filtered"
-    #            else:
-    #                output_featureSet['description'] = search_tool_name+"_Search filtered"
-                output_featureSet['description'] = search_tool_name+"_Search filtered"
-                output_featureSet['element_ordering'] = []
-                output_featureSet['elements'] = dict()
-                for fid in feature_ids:
-                    seq_total += 1
-                    id_untrans = fid
-                    id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
-                    if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
-                        #self.log(console, 'FOUND HIT '+fid)  # DEBUG
-                        #output_featureSet['element_ordering'].append(fid)
-                        accept_fids[id_untrans] = True
-                        #fid = input_many_ref+genome_id_feature_id_delim+id_untrans  # don't change fId for output FeatureSet
-                        output_featureSet['element_ordering'].append(fid)
-                        output_featureSet['elements'][fid] = [input_many_ref]
 
-            # Parse GenomeSet hits into FeatureSet
-            #
-            elif many_type_name == 'GenomeSet':
-                seq_total = 0
+                # FeatureSet input -> FeatureSet output
+                #
+                elif many_type_name == 'FeatureSet':
+                    output_featureSet = dict()
+                    if 'description' in input_many_featureSet and input_many_featureSet['description'] != None:
+                        output_featureSet['description'] = input_many_featureSet['description'] + " - "+search_tool_name+"_Search filtered"
+                    else:
+                        output_featureSet['description'] = search_tool_name+"_Search filtered"
+                    output_featureSet['element_ordering'] = []
+                    output_featureSet['elements'] = dict()
 
-                output_featureSet = dict()
-                if 'description' in input_many_genomeSet and input_many_genomeSet['description'] != None:
-                    output_featureSet['description'] = input_many_genomeSet['description'] + " - "+search_tool_name+"_Search filtered"
-                else:
+                    fId_list = input_many_featureSet['elements'].keys()
+                    self.log(console,"ADDING FEATURES TO FEATURESET")
+                    for fId in sorted(fId_list):
+                        for genome_ref in input_many_featureSet['elements'][fId]:
+                            id_untrans = genome_ref+genome_id_feature_id_delim+fId
+                            id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
+                                #self.log(console, 'FOUND HIT '+fId)  # DEBUG
+                                accept_fids[id_untrans] = True
+                                #fId = id_untrans  # don't change fId for output FeatureSet
+                                try:
+                                    this_genome_ref_list = output_featureSet['elements'][fId]
+                                except:
+                                    output_featureSet['elements'][fId] = []
+                                    output_featureSet['element_ordering'].append(fId)
+                                output_featureSet['elements'][fId].append(genome_ref)
+
+                # Parse Genome hits into FeatureSet
+                #
+                elif many_type_name == 'Genome':
+                    output_featureSet = dict()
+                    #            if 'scientific_name' in input_many_genome and input_many_genome['scientific_name'] != None:
+                    #                output_featureSet['description'] = input_many_genome['scientific_name'] + " - "+search_tool_name+"_Search filtered"
+                    #            else:
+                    #                output_featureSet['description'] = search_tool_name+"_Search filtered"
                     output_featureSet['description'] = search_tool_name+"_Search filtered"
-                output_featureSet['element_ordering'] = []
-                output_featureSet['elements'] = dict()
-
-                self.log(console,"READING HITS FOR GENOMES")  # DEBUG
-                for genome_id in feature_ids_by_genome_id.keys():
-                    self.log(console,"READING HITS FOR GENOME "+genome_id)  # DEBUG
-                    genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
-                    for feature_id in feature_ids_by_genome_id[genome_id]:
-                        seq_total += 1
-                        id_untrans = genome_ref+genome_id_feature_id_delim+feature_id
+                    output_featureSet['element_ordering'] = []
+                    output_featureSet['elements'] = dict()
+                    for fid in feature_ids:
+                        id_untrans = fid
                         id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                         if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
-                            #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
-                            #output_featureSet['element_ordering'].append(feature['id'])
+                            #self.log(console, 'FOUND HIT '+fid)  # DEBUG
+                            #output_featureSet['element_ordering'].append(fid)
                             accept_fids[id_untrans] = True
-                            #feature_id = id_untrans  # don't change fId for output FeatureSet
-                            try:
-                                this_genome_ref_list = output_featureSet['elements'][feature_id]
-                            except:
-                                output_featureSet['elements'][feature_id] = []
-                                output_featureSet['element_ordering'].append(feature_id)
-                            output_featureSet['elements'][feature_id].append(genome_ref)
+                            #fid = input_many_ref+genome_id_feature_id_delim+id_untrans  # don't change fId for output FeatureSet
+                            output_featureSet['element_ordering'].append(fid)
+                            output_featureSet['elements'][fid] = [input_many_ref]
+
+                # Parse GenomeSet hits into FeatureSet
+                #
+                elif many_type_name == 'GenomeSet':
+                    output_featureSet = dict()
+                    if 'description' in input_many_genomeSet and input_many_genomeSet['description'] != None:
+                        output_featureSet['description'] = input_many_genomeSet['description'] + " - "+search_tool_name+"_Search filtered"
+                    else:
+                        output_featureSet['description'] = search_tool_name+"_Search filtered"
+                    output_featureSet['element_ordering'] = []
+                    output_featureSet['elements'] = dict()
+
+                    self.log(console,"READING HITS FOR GENOMES")  # DEBUG
+                    for genome_id in feature_ids_by_genome_id.keys():
+                        self.log(console,"READING HITS FOR GENOME "+genome_id)  # DEBUG
+                        genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
+                        for feature_id in feature_ids_by_genome_id[genome_id]:
+                            id_untrans = genome_ref+genome_id_feature_id_delim+feature_id
+                            id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
+                                #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
+                                #output_featureSet['element_ordering'].append(feature['id'])
+                                accept_fids[id_untrans] = True
+                                #feature_id = id_untrans  # don't change fId for output FeatureSet
+                                try:
+                                    this_genome_ref_list = output_featureSet['elements'][feature_id]
+                                except:
+                                    output_featureSet['elements'][feature_id] = []
+                                    output_featureSet['element_ordering'].append(feature_id)
+                                output_featureSet['elements'][feature_id].append(genome_ref)
 
 
-            # load the method provenance from the context object
-            #
-            self.log(console,"SETTING PROVENANCE")  # DEBUG
-            provenance = [{}]
-            if 'provenance' in ctx:
-                provenance = ctx['provenance']
-            # add additional info to provenance here, in this case the input data object reference
-            provenance[0]['input_ws_objects'] = []
-    #        provenance[0]['input_ws_objects'].append(input_one_ref)
-            provenance[0]['input_ws_objects'].append(input_msa_ref)
-            provenance[0]['input_ws_objects'].append(input_many_ref)
-            provenance[0]['service'] = 'kb_blast'
-            provenance[0]['method'] = search_tool_name+'_Search'
+                # load the method provenance from the context object
+                #
+                self.log(console,"SETTING PROVENANCE")  # DEBUG
+                provenance = [{}]
+                if 'provenance' in ctx:
+                    provenance = ctx['provenance']
+                # add additional info to provenance here, in this case the input data object reference
+                provenance[0]['input_ws_objects'] = []
+                #        provenance[0]['input_ws_objects'].append(input_one_ref)
+                provenance[0]['input_ws_objects'].append(input_msa_ref)
+                provenance[0]['input_ws_objects'].append(input_many_ref)
+                provenance[0]['service'] = 'kb_blast'
+                provenance[0]['method'] = search_tool_name+'_Search'
 
 
-            ### Create output object
-            #
-            if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
-                if len(invalid_msgs) == 0:
-                    if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
-                        self.log(console,"No Object to Upload for MSA "+input_msa_name)  # DEBUG
-                        objects_created_refs.append(None)
-                        continue
+                ### Create output object
+                #
+                if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
+                    if len(invalid_msgs) == 0:
+                        if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
+                            self.log(console,"No Object to Upload for MSA "+input_msa_name)  # DEBUG
+                            objects_created_refs.append(None)
+                            continue
 
-                    # accumulate hits into coalesce object
-                    #
-                    if many_type_name == 'SequenceSet':  # input many SequenceSet -> save SequenceSet
-                        for seq_obj in output_sequenceSet['sequences']:
-                            coalesced_sequenceObjs.append(seq_obj)
+                        # accumulate hits into coalesce object
+                        #
+                        if many_type_name == 'SequenceSet':  # input many SequenceSet -> save SequenceSet
+                            for seq_obj in output_sequenceSet['sequences']:
+                                coalesced_sequenceObjs.append(seq_obj)
 
-                    else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+                        else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+                            for fId in output_featureSet['element_ordering']:
+                                coalesce_featureIds_element_ordering.append(fId)
+                                #coalesce_featureIds_genome_ordering.append(output_featureSet['elements'][fId][0])
+                                for this_genome_ref in output_featureSet['elements'][fId]:
+                                    coalesce_featureIds_genome_ordering.append(this_genome_ref)
 
-                        for fId in output_featureSet['element_ordering']:
-                            coalesce_featureIds_element_ordering.append(fId)
-                            #coalesce_featureIds_genome_ordering.append(output_featureSet['elements'][fId][0])
-                            for this_genome_ref in output_featureSet['elements'][fId]:
-                                coalesce_featureIds_genome_ordering.append(this_genome_ref)
+                else:  # keep output separate  Upload results if coalesce_output is 0
+                    output_name = input_msa_name+'-'+params['output_filtered_name']
 
-            else:  # keep output separate  Upload results if coalesce_output is 0
-                output_name = input_msa_name+'-'+params['output_filtered_name']
+                    if len(invalid_msgs) == 0:
+                        if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
+                            self.log(console,"No Object to Upload for MSA "+input_msa_name)  # DEBUG
+                            objects_created_refs.append(None)
+                            continue
 
-                if len(invalid_msgs) == 0:
-                    if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
-                        self.log(console,"No Object to Upload for MSA "+input_msa_name)  # DEBUG
-                        objects_created_refs.append(None)
-                        continue
+                        self.log(console,"Uploading results Object MSA "+input_msa_name)  # DEBUG
 
-                    self.log(console,"Uploading results Object MSA "+input_msa_name)  # DEBUG
-
-                    # input many SequenceSet -> save SequenceSet
-                    #
-                    if many_type_name == 'SequenceSet':
-                        new_obj_info = ws.save_objects({
+                        # input many SequenceSet -> save SequenceSet
+                        #
+                        if many_type_name == 'SequenceSet':
+                            new_obj_info = ws.save_objects({
                                     'workspace': params['workspace_name'],
                                     'objects':[{
                                             'type': 'KBaseSequences.SequenceSet',
@@ -2473,8 +2530,8 @@ class kb_hmmer:
                                         }]
                                 })[0]
 
-                    else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
-                        new_obj_info = ws.save_objects({
+                        else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+                            new_obj_info = ws.save_objects({
                                     'workspace': params['workspace_name'],
                                     'objects':[{
                                             'type': 'KBaseCollections.FeatureSet',
@@ -2485,20 +2542,21 @@ class kb_hmmer:
                                         }]
                                 })[0]
 
-                    [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
-                    objects_created_refs.append(str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I]))
+                        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+                        objects_created_refs.append(str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I]))
 
 
             #### Build output report chunks
             ##
-            self.log(console,"BUILDING REPORT CHUNK")  # DEBUG
+            self.log(console,"BUILDING REPORT CHUNK for MSA["+str(msa_i)+"] "+input_msa_names[msa_i])  # DEBUG
             if len(invalid_msgs) == 0:
 
                 # text report
                 #
+                report += 'MSA['+str(msa_i)+']: '+input_msa_names[msa_i]
                 report += 'sequences in search db: '+str(seq_total)+"\n"
-                report += 'sequences in hit set: '+str(len(hit_order))+"\n"
-                report += 'sequences in accepted hit set: '+str(hit_total)+"\n"
+                report += 'sequences in hit set: '+str(total_hit_cnts[msa_i])+"\n"
+                report += 'sequences in accepted hit set: '+str(accepted_hit_cnts[msa_i])+"\n"
                 report += "\n"
                 #for line in hit_buf:
                 #    report += line
@@ -2552,7 +2610,7 @@ class kb_hmmer:
                     h_len = hit_seq_len[hit_id]
                     h_beg = hit_beg[hit_id]
                     h_end = hit_end[hit_id]
-                    aln_len = h_end-h_beg+1
+                    aln_len = abs(h_end-h_beg)+1
                     aln_len_perc = round (100.0*float(aln_len)/float(h_len), 1)
 
 
@@ -2600,8 +2658,6 @@ class kb_hmmer:
 
                         func_disp = feature_id_to_function[genome_ref][fid_lookup]
                         genome_sci_name = genome_ref_to_sci_name[genome_ref]
-
-                        #if 'overlap_fraction' in params and float(params['overlap_fraction']) > float(high_bitscore_alnlen[hit_seq_id])/float(query_len):
 
                         html_report_chunk += ['<tr bgcolor="'+row_color+'">']
                         #html_report_chunk += ['<tr bgcolor="'+'white'+'">']  # DEBUG
@@ -2654,11 +2710,11 @@ class kb_hmmer:
      #                   html_report_chunk += ['<td align=center bgcolor="'+this_cell_color+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(identity)+'%</font></td>']
 
                         # aln len
-     #                   if 'overlap_fraction' in filtering_fields[hit_id]:
-     #                       this_cell_color = reject_cell_color
-     #                   else:
-     #                       this_cell_color = row_color
-                        html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
+                        if 'overlap_perc' in filtering_fields[hit_id]:
+                            this_cell_color = reject_cell_color
+                        else:
+                            this_cell_color = row_color
+                        html_report_chunk += ['<td align=center bgcolor="'+str(this_cell_color)+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
 
                         # evalue
                         html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(e_value)+'</nobr></font></td>']
@@ -2679,8 +2735,12 @@ class kb_hmmer:
                         html_report_chunk += ['</tr>']
 
                 # attach chunk
-                html_report_chunk_str = "\n".join(html_report_chunk)
-                html_report_chunks.append(html_report_chunk_str)
+                if total_hit_cnts[msa_i] == 0:
+                    self.log(console, "NO HITS FOR MSA["+str(msa_i)+"] "+input_msa_names[msa_i]+".  NOT ADDING TO HTML HIT REPORT.")
+                    html_report_chunk_str = '<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>'
+                else:
+                    html_report_chunk_str = "\n".join(html_report_chunk)
+                html_report_chunks[msa_i] = html_report_chunk_str
                 #self.log(console, "HTML_REPORT_CHUNK: '"+str(html_report_chunk_str)+"'")  # DEBUG
 
 
@@ -2714,9 +2774,9 @@ class kb_hmmer:
 
                         output_featureSet['element_ordering'] = coalesce_featureIds_element_ordering
                         output_featureSet['elements'] = dict()
-                        for i,fId in enumerate(output_featureSet['element_ordering']):
+                        for f_i,fId in enumerate(output_featureSet['element_ordering']):
                             output_featureSet['elements'][fId] = []
-                            output_featureSet['elements'][fId].append(coalesce_featureIds_genome_ordering[i])
+                            output_featureSet['elements'][fId].append(coalesce_featureIds_genome_ordering[f_i])
 
                         new_obj_info = ws.save_objects({
                                 'workspace': params['workspace_name'],
@@ -2790,7 +2850,7 @@ class kb_hmmer:
             html_report_lines += ['</head>']
             html_report_lines += ['<body bgcolor="white">']
             if many_type_name == 'GenomeSet':
-                html_report_lines += ['<a href="'+html_profile_file+'" target="profile"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font></a> | <font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>SEARCH HITS</b></font>']
+                html_report_lines += ['<a href="'+html_profile_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font></a> | <font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>SEARCH HITS</b></font>']
                 html_report_lines += ['<p>']
             html_report_lines += ['<table cellpadding='+cellpadding+' cellspacing = '+cellspacing+' border='+border+'>']
             html_report_lines += ['<tr bgcolor="'+head_color+'">']
@@ -2810,10 +2870,10 @@ class kb_hmmer:
 
             for msa_i,input_msa_name in enumerate(input_msa_names):
                 html_report_lines += ['<tr><td colspan=table_col_width>Hits to <b>'+str(input_msa_name)+'</b></td></tr>']
-                if total_hit_cnt[msa_i] == 0:
+                if total_hit_cnts[msa_i] == 0 or html_report_chunks[msa_i] == None or html_report_chunks[msa_i] == '':
                     html_report_lines += ['<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>']
                 else:
-                    #html_report_lines.extend(html_report_chunks[i])
+                    #html_report_lines.extend(html_report_chunks[msa_i])
                     html_report_lines += [ html_report_chunks[msa_i] ]
                 html_report_lines += ['<tr><td colspan=table_col_width>'+sp+'</td></tr>']
 
@@ -2884,7 +2944,8 @@ class kb_hmmer:
             #graph_width = 100
             #graph_char = "."
             graph_char = sp
-            color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e']
+            #color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e']
+            color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d']
             max_color = len(color_list)-1
             cat_disp_trunc_len = 40
             cell_width = '10px'
@@ -2928,7 +2989,7 @@ class kb_hmmer:
             html_report_lines += ['</style>']
             html_report_lines += ['</head>']
             html_report_lines += ['<body bgcolor="white">']
-            html_report_lines += ['<font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>TABULAR PROFILE</b></font> | <a href="'+html_search_file+'" target="search"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>SEARCH HITS</font></a>']
+            html_report_lines += ['<font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>TABULAR PROFILE</b></font> | <a href="'+html_search_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>SEARCH HITS</font></a>']
             html_report_lines += ['<p>']
 
             # genomes as rows
@@ -3063,7 +3124,7 @@ class kb_hmmer:
                 os.makedirs(output_hit_MSA_dir)
             
             for msa_i,input_msa_name in enumerate(input_msa_names):
-                if total_hit_cnt[msa_i] == 0:
+                if total_hit_cnts[msa_i] == 0:
                     self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR MSA '+input_msa_name)
                     continue
                 new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, input_msa_name+'.hitout.txt');
@@ -3128,14 +3189,15 @@ class kb_hmmer:
                                              'name': search_tool_name+'_Search.MSA.zip',
                                              'label': search_tool_name+' hits MSA'}
                                            ]
-            if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
-                for object_created_ref in objects_created_refs:
-                    reportObj['objects_created'].append({'ref':object_created_ref, 'description':'Coalesced'+' '+search_tool_name+' hits'})
-            else:
-                for i,input_msa_name in enumerate(input_msa_names):
-                    if total_hit_cnt[i] == 0:
-                        continue
-                    reportObj['objects_created'].append({'ref':objects_created_refs[i], 'description':input_msa_name+' '+search_tool_name+' hits'})
+            if hit_accept_something:
+                if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
+                    for object_created_ref in objects_created_refs:
+                        reportObj['objects_created'].append({'ref':object_created_ref, 'description':'Coalesced'+' '+search_tool_name+' hits'})
+                else:
+                    for msa_i,input_msa_name in enumerate(input_msa_names):
+                        if total_hit_cnts[msa_i] == 0:
+                            continue
+                        reportObj['objects_created'].append({'ref':objects_created_refs[msa_i], 'description':input_msa_name+' '+search_tool_name+' hits'})
                 
 
             # save report object

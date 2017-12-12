@@ -101,6 +101,7 @@ class kb_hmmerTest(unittest.TestCase):
 
         # Upload a few genomes
         cls.genome_refs = []
+#        for i,genome_filename in enumerate(['GCF_000018425.1_ASM1842v1_genomic.gbff']):  # DEBUG
         for i,genome_filename in enumerate(['GCF_000018425.1_ASM1842v1_genomic.gbff', \
                                             'GCF_000022285.1_ASM2228v1_genomic.gbff', \
                                             'GCF_001439985.1_wTPRE_1.0_genomic.gbff']): 
@@ -186,7 +187,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 01: Single Model against Single Genome
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_01_kb_hmmer_HMMER_MSA_Search_Genome()")
+    # HIDE @unittest.skip("skipped test test_01_kb_hmmer_HMMER_MSA_Search_Genome()")
     def test_01_kb_hmmer_HMMER_MSA_Search_Genome(self):
         test_name = 'test_01_kb_hmmer_HMMER_MSA_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
@@ -209,6 +210,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'e_value': ".001",
                        'bitscore': "50",
+                       'overlap_fraction': "50.0",
                        'maxaccepts': "1000"
                      }
         ret = self.getImpl().HMMER_MSA_Search(self.getContext(), parameters)[0]
@@ -228,7 +230,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 02: Single Model against GenomeSet
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet()")
+    # HIDE @unittest.skip("skipped test test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet()")
     def test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet(self):
         test_name = 'test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet'
         header_msg = "RUNNING "+test_name+"()"
@@ -251,6 +253,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'e_value': ".001",
                        'bitscore': "50",
+                       'overlap_fraction': "50.0",
                        'maxaccepts': "1000"
                      }
         ret = self.getImpl().HMMER_MSA_Search(self.getContext(), parameters)[0]
@@ -270,7 +273,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 03: All Models in workspace against Single Genome
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_03_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome()")
+    # HIDE @unittest.skip("skipped test test_03_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome()")
     def test_03_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome(self):
         test_name = 'test_03_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
@@ -295,6 +298,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'coalesce_output': 0,
                        'e_value': ".001",
                        'bitscore': "50",
+                       'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'vertical': "1",
@@ -343,6 +347,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'coalesce_output': 0,  # KEY
                        'e_value': ".001",
                        'bitscore': "50",
+                       'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'vertical': "1",
@@ -366,7 +371,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 05: All Models in workspace against GenomeSet, DO coalesce output
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_coalesce()")
+    # HIDE @unittest.skip("skipped test test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_coalesce()")
     def test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_coalesce(self):
         test_name = 'test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_coalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -391,6 +396,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'coalesce_output': 1,  # KEY
                        'e_value': ".001",
                        'bitscore': "50",
+                       'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'vertical': "1",
@@ -408,4 +414,87 @@ class kb_hmmerTest(unittest.TestCase):
         for created_obj_info in created_objs_info:
             #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
             self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 06: Single Model against Single Genome, threshold above all hits
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_06_kb_hmmer_HMMER_MSA_Search_Genome_removeALL()")
+    def test_06_kb_hmmer_HMMER_MSA_Search_Genome_removeALL(self):
+        test_name = 'test_06_kb_hmmer_HMMER_MSA_Search_Genome_removeALL'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_msa_ref': self.MSA_refs[0],      # Single MSA
+                       'input_many_ref': self.genome_refs[0],  # Single Genome
+                       'output_filtered_name': obj_out_name,
+                       'e_value': ".001",
+                       'bitscore': "5000000",
+                       'overlap_fraction': "100.0",
+                       'maxaccepts': "1000"
+                     }
+        ret = self.getImpl().HMMER_MSA_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created obj
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNone(report_obj['objects_created'])
+        pass
+
+
+    ### Test 07: All Models in workspace against Single Genome, threshold above all hits
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_07_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL()")
+    def test_07_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL(self):
+        test_name = 'test_07_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'use_all_local_MSAs': "0",
+                       'input_msa_refs': [self.MSA_refs[0], self.MSA_refs[1], self.MSA_refs[2]],  # Specific MSAs
+                       'input_many_ref': self.genome_refs[0],  # Single Genome
+                       'output_filtered_name': obj_out_name,
+                       'coalesce_output': 0,
+                       'e_value': ".001",
+                       'bitscore': "500000000",
+                       'overlap_fraction': "100.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_Local_MSA_Group_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created obj
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNone(report_obj['objects_created'])
         pass
