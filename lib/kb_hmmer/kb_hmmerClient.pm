@@ -131,7 +131,7 @@ HMMER_Params is a reference to a hash where the following keys are defined:
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	e_value has a value which is a float
 	bitscore has a value which is a float
-	overlap_fraction has a value which is a float
+	overlap_perc has a value which is a float
 	maxaccepts has a value which is a float
 workspace_name is a string
 data_obj_ref is a string
@@ -155,7 +155,7 @@ HMMER_Params is a reference to a hash where the following keys are defined:
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	e_value has a value which is a float
 	bitscore has a value which is a float
-	overlap_fraction has a value which is a float
+	overlap_perc has a value which is a float
 	maxaccepts has a value which is a float
 workspace_name is a string
 data_obj_ref is a string
@@ -249,7 +249,7 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	coalesce_output has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
-	overlap_fraction has a value which is a float
+	overlap_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
 	vertical has a value which is a kb_hmmer.bool
@@ -278,7 +278,7 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	coalesce_output has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
-	overlap_fraction has a value which is a float
+	overlap_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
 	vertical has a value which is a kb_hmmer.bool
@@ -605,7 +605,7 @@ input_msa_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 e_value has a value which is a float
 bitscore has a value which is a float
-overlap_fraction has a value which is a float
+overlap_perc has a value which is a float
 maxaccepts has a value which is a float
 
 </pre>
@@ -621,7 +621,7 @@ input_msa_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 e_value has a value which is a float
 bitscore has a value which is a float
-overlap_fraction has a value which is a float
+overlap_perc has a value which is a float
 maxaccepts has a value which is a float
 
 
@@ -692,7 +692,7 @@ output_filtered_name has a value which is a kb_hmmer.data_obj_name
 coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
-overlap_fraction has a value which is a float
+overlap_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
 vertical has a value which is a kb_hmmer.bool
@@ -712,7 +712,7 @@ output_filtered_name has a value which is a kb_hmmer.data_obj_name
 coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
-overlap_fraction has a value which is a float
+overlap_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
 vertical has a value which is a kb_hmmer.bool

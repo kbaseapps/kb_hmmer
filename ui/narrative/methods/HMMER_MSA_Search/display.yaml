@@ -55,7 +55,7 @@ parameters :
             Bit Score
         short-hint : |
             threshold for hits
-    overlap_fraction:
+    overlap_perc:
         ui-name : |
             Alignment Overlap Threshold (%)
         short-hint : |

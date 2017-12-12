@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "output_filtered_name",
     "e_value",
     "bitscore",
-    "overlap_fraction",
+    "overlap_perc",
     "maxaccepts"
 })
 public class HMMERParams {
@@ -44,8 +44,8 @@ public class HMMERParams {
     private Double eValue;
     @JsonProperty("bitscore")
     private Double bitscore;
-    @JsonProperty("overlap_fraction")
-    private Double overlapFraction;
+    @JsonProperty("overlap_perc")
+    private Double overlapPerc;
     @JsonProperty("maxaccepts")
     private Double maxaccepts;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -140,18 +140,18 @@ public class HMMERParams {
         return this;
     }
 
-    @JsonProperty("overlap_fraction")
-    public Double getOverlapFraction() {
-        return overlapFraction;
+    @JsonProperty("overlap_perc")
+    public Double getOverlapPerc() {
+        return overlapPerc;
     }
 
-    @JsonProperty("overlap_fraction")
-    public void setOverlapFraction(Double overlapFraction) {
-        this.overlapFraction = overlapFraction;
+    @JsonProperty("overlap_perc")
+    public void setOverlapPerc(Double overlapPerc) {
+        this.overlapPerc = overlapPerc;
     }
 
-    public HMMERParams withOverlapFraction(Double overlapFraction) {
-        this.overlapFraction = overlapFraction;
+    public HMMERParams withOverlapPerc(Double overlapPerc) {
+        this.overlapPerc = overlapPerc;
         return this;
     }
 
@@ -182,7 +182,7 @@ public class HMMERParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((("HMMERParams"+" [workspaceName=")+ workspaceName)+", inputManyRef=")+ inputManyRef)+", inputMsaRef=")+ inputMsaRef)+", outputFilteredName=")+ outputFilteredName)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", overlapFraction=")+ overlapFraction)+", maxaccepts=")+ maxaccepts)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((("HMMERParams"+" [workspaceName=")+ workspaceName)+", inputManyRef=")+ inputManyRef)+", inputMsaRef=")+ inputMsaRef)+", outputFilteredName=")+ outputFilteredName)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", overlapPerc=")+ overlapPerc)+", maxaccepts=")+ maxaccepts)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

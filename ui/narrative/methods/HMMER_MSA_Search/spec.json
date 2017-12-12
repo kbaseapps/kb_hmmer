@@ -70,7 +70,7 @@
             }
         },
         {
-            "id": "overlap_fraction",
+            "id": "overlap_perc",
             "optional": true,
             "advanced": true,
             "allow_multiple": false,
@@ -128,8 +128,8 @@
                     "target_property": "bitscore"
                 },
                 {
-                    "input_parameter": "overlap_fraction",
-                    "target_property": "overlap_fraction"
+                    "input_parameter": "overlap_perc",
+                    "target_property": "overlap_perc"
                 },
                 {
                     "input_parameter": "maxaccepts",

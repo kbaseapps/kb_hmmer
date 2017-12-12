@@ -36,7 +36,7 @@ module kb_hmmer {
 
 	float e_value;
 	float bitscore;
-	float overlap_fraction;
+	float overlap_perc;
 	float maxaccepts;
 
 /*	float ident_thresh;
@@ -82,7 +82,7 @@ module kb_hmmer {
 	bool  coalesce_output;
 	float e_value;
 	float bitscore;
-	float overlap_fraction;
+	float overlap_perc;
 	float maxaccepts;
 /*	float ident_thresh;
 */
