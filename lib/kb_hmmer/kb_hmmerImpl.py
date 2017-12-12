@@ -2870,7 +2870,7 @@ class kb_hmmer:
 
             for msa_i,input_msa_name in enumerate(input_msa_names):
                 html_report_lines += ['<tr><td colspan=table_col_width>Hits to <b>'+str(input_msa_name)+'</b></td></tr>']
-                if total_hit_cnt[msa_i] == 0 or html_report_chunks[msa_i] == None or html_report_chunks[msa_i] == '':
+                if total_hit_cnts[msa_i] == 0 or html_report_chunks[msa_i] == None or html_report_chunks[msa_i] == '':
                     html_report_lines += ['<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>']
                 else:
                     #html_report_lines.extend(html_report_chunks[msa_i])
