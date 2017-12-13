@@ -3687,7 +3687,7 @@
                                 },
                                 {
                                         "value": "1",
-                                        "display": "Merge all hits",
+                                        "display": "Merge hits within category",
                                         "id": "merge",
                                         "ui-name": "merge"
                                 }
