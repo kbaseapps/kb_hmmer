@@ -452,7 +452,7 @@ class kb_hmmerTest(unittest.TestCase):
         # check created obj
         #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
         report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
-        self.assertIsNone(report_obj['objects_created'])
+        self.assertTrue(len(report_obj['objects_created']) == 0)
         pass
 
 
@@ -496,5 +496,5 @@ class kb_hmmerTest(unittest.TestCase):
         # check created obj
         #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
         report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
-        self.assertIsNone(report_obj['objects_created'])
+        self.assertTrue(len(report_obj['objects_created']) == 0)
         pass
