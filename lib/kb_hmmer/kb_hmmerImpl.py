@@ -55,7 +55,7 @@ class kb_hmmer:
     # the latter method is running.
     ######################################### noqa
     VERSION = "1.2.0"
-    GIT_URL = "https://github.com/dcchivian/kb_hmmer"
+    GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
     GIT_COMMIT_HASH = "f590e5e0fc7bb9efd33ff57db8d9a1b9475f64a2"
 
     #BEGIN_CLASS_HEADER
