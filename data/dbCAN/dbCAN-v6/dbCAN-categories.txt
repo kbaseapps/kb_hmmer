@@ -1,0 +1,9 @@
+AA	Auxiliary Activities	redox enzymes that act in conjunction with CAZymes
+CBM	Carbohydrate-Binding Module   carbohydrate-binding activity
+CE	Carbohydrate Esterases	hydrolysis of carbohydrate esters
+cohesin	Cohesin Module		anchor the catalytic enzymes to the scaffoldin of cellulosomes
+dockerin	Dockerin Module	major building blocks of scaffoldins of cellulosomes
+GH	Glycoside Hydrolases	hydrolysis and/or rearrangement of glycosidic bonds
+GT	GlycosylTransferases	formation of glycosidic bonds
+PL	Polysaccharide Lyases	non-hydrolytic cleavage of glycosidic bonds
+SLH	S-Layer Homology	anchoring module of type II cellulosomes
