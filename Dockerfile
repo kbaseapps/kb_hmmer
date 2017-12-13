@@ -44,6 +44,13 @@ RUN \
   make
 
 
+# Install dbCAN HMM data
+#
+WORKDIR /kb/module
+RUN \
+  curl http://csbl.bmb.uga.edu/dbCAN/download/dbCAN-fam-HMMs.txt.v6 > data/dbCAN/dbCAN-v6/dbCAN-fam-HMMs.txt.v6
+
+
 ENTRYPOINT [ "./scripts/entrypoint.sh" ]
 
 CMD [ ]
