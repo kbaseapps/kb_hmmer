@@ -1,13 +1,10 @@
 #
 # define display information
 #
-name: HMMER Search & Functional Profile with Custom Models - v3.1b2
+name: HMMER Search of dbCAN models of CAZy families - v6
 tooltip: |
-    Search for matches to all MSAs that are within workspace using Hidden Markov Model (HMMER) Search.
-screenshots:
-
-    - HMMER_Local_MSA_Group_input_widget.png
-    - HMMER_output_table.png
+    Search for matches to dbCAN HMMs of CAZy carbohydrate active enzyme families
+screenshots: []
 
 icon: hmmer-cyan.png
 
@@ -30,11 +27,41 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
-    input_msa_refs:
+    input_dbCAN_GH_ids:
         ui-name : |
-            Select MSAs (leave blank to use ALL)
+            GH Fam (default: ALL)
         short-hint : |
-            Select MSAs from local set, or will use ALL if left blank
+            Select HMMs for Glycoside Hydrolase Families, or will use ALL if left blank
+    input_dbCAN_GT_ids:
+        ui-name : |
+            GT Fam (default: ALL)
+        short-hint : |
+            Select HMMs for GlycosylTransferase Families, or will use ALL if left blank
+    input_dbCAN_CE_ids:
+        ui-name : |
+            CE Fam (default: ALL)
+        short-hint : |
+            Select HMMs for Carbohydrate Esterase Families, or will use ALL if left blank
+    input_dbCAN_PL_ids:
+        ui-name : |
+            PL Fam (default: ALL)
+        short-hint : |
+            Select HMMs for Polysaccharide Lyase Families, or will use ALL if left blank
+    input_dbCAN_AA_ids:
+        ui-name : |
+            Auxiliary Activities Fam (default: ALL)
+        short-hint : |
+            Select HMMs for Auxiliary Activiies Families, or will use ALL if left blank
+    input_dbCAN_CBM_ids:
+        ui-name : |
+            CBM Fam (default: ALL)
+        short-hint : |
+            Select HMMs for Carbohydrate-Binding Module Families, or will use ALL if left blank
+    input_dbCAN_cellulosome_ids:
+        ui-name : |
+            Cellulosome Fam (default: ALL)
+        short-hint : |
+            Select HMMs for Cellulosome Families, or will use ALL if left blank
     input_many_ref:
         ui-name : |
             Targets Object

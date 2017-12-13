@@ -54,9 +54,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.1.2"
+    VERSION = "1.2.0"
     GIT_URL = "https://github.com/dcchivian/kb_hmmer"
-    GIT_COMMIT_HASH = "5eef1fc77ffc453d95dd8fb8deb4b1aa13e3273a"
+    GIT_COMMIT_HASH = "f590e5e0fc7bb9efd33ff57db8d9a1b9475f64a2"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -234,12 +234,12 @@ class kb_hmmer:
 
     def HMMER_MSA_Search(self, ctx, params):
         """
-        Methods for HMMER search of an MSA against many sequences 
+        Method for HMMER search of an MSA against many sequences 
         **
         **    overloading as follows:
         **        input_msa_ref: MSA
-        **        input_many_ref: SingleEndLibrary, FeatureSet, Genome, GenomeSet
-        **        output_name: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+        **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+        **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
         :param params: instance of type "HMMER_Params" (HMMER Input Params)
            -> structure: parameter "workspace_name" of type "workspace_name"
            (** The workspace object refs are of form: ** **    objects =
@@ -1522,14 +1522,13 @@ class kb_hmmer:
         # return the results
         return [returnVal]
 
-
     def HMMER_Local_MSA_Group_Search(self, ctx, params):
         """
-        Methods for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
+        Method for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
         **
         **    overloading as follows:
-        **        input_many_ref: SingleEndLibrary, FeatureSet, Genome, GenomeSet
-        **        output_name: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+        **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+        **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
         :param params: instance of type "HMMER_Local_MSA_Group_Params" (HMMER
            Local MSA Group Input Params) -> structure: parameter
            "workspace_name" of type "workspace_name" (** The workspace object
@@ -3254,6 +3253,52 @@ class kb_hmmer:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method HMMER_Local_MSA_Group_Search return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def HMMER_dbCAN_Search(self, ctx, params):
+        """
+        Method for HMMER search of dbCAN Markov Models of CAZy families
+        **
+        **    overloading as follows:
+        **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+        **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
+        :param params: instance of type "HMMER_dbCAN_Params" (HMMER dbCAN
+           Input Params) -> structure: parameter "workspace_name" of type
+           "workspace_name" (** The workspace object refs are of form: ** ** 
+           objects = ws.get_objects([{'ref':
+           params['workspace_id']+'/'+params['obj_name']}]) ** ** "ref" means
+           the entire name combining the workspace id and the object name **
+           "id" is a numerical identifier of the workspace or object, and
+           should just be used for workspace ** "name" is a string identifier
+           of a workspace or object.  This is received from Narrative.),
+           parameter "input_dbCAN_AA_ids" of type "data_obj_ref", parameter
+           "input_dbCAN_CBM_ids" of type "data_obj_ref", parameter
+           "input_dbCAN_CE_ids" of type "data_obj_ref", parameter
+           "input_dbCAN_GH_ids" of type "data_obj_ref", parameter
+           "input_dbCAN_GT_ids" of type "data_obj_ref", parameter
+           "input_dbCAN_PL_ids" of type "data_obj_ref", parameter
+           "input_dbCAN_cellulosome_ids" of type "data_obj_ref", parameter
+           "input_many_ref" of type "data_obj_ref", parameter
+           "output_filtered_name" of type "data_obj_name", parameter
+           "coalesce_output" of type "bool", parameter "e_value" of Double,
+           parameter "bitscore" of Double, parameter "overlap_perc" of
+           Double, parameter "maxaccepts" of Double, parameter "heatmap" of
+           type "bool", parameter "vertical" of type "bool", parameter
+           "show_blanks" of type "bool"
+        :returns: instance of type "HMMER_Output" (HMMER Output) ->
+           structure: parameter "report_name" of type "data_obj_name",
+           parameter "report_ref" of type "data_obj_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN HMMER_dbCAN_Search
+        #END HMMER_dbCAN_Search
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method HMMER_dbCAN_Search return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

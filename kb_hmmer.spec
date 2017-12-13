@@ -58,12 +58,12 @@ module kb_hmmer {
     } HMMER_Output;
 	
 
-    /*  Methods for HMMER search of an MSA against many sequences 
+    /*  Method for HMMER search of an MSA against many sequences 
     **
     **    overloading as follows:
     **        input_msa_ref: MSA
-    **        input_many_ref: SingleEndLibrary, FeatureSet, Genome, GenomeSet
-    **        output_name: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+    **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
     */
     funcdef HMMER_MSA_Search (HMMER_Params params)  returns (HMMER_Output) authentication required;
 
@@ -92,11 +92,50 @@ module kb_hmmer {
     } HMMER_Local_MSA_Group_Params;
 
 
-    /*  Methods for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
+    /*  Method for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
     **
     **    overloading as follows:
-    **        input_many_ref: SingleEndLibrary, FeatureSet, Genome, GenomeSet
-    **        output_name: SingleEndLibrary (if input_many is SELib), (else) FeatureSet
+    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+    **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
     */
     funcdef HMMER_Local_MSA_Group_Search (HMMER_Local_MSA_Group_Params params)  returns (HMMER_Output) authentication required;
+
+
+    /* HMMER dbCAN Input Params
+    */
+    typedef structure {
+        workspace_name workspace_name;
+/*	sequence       input_one_sequence;
+	data_obj_ref   input_one_ref;
+*/
+	data_obj_ref   input_dbCAN_AA_ids;
+	data_obj_ref   input_dbCAN_CBM_ids;
+	data_obj_ref   input_dbCAN_CE_ids;
+	data_obj_ref   input_dbCAN_GH_ids;
+	data_obj_ref   input_dbCAN_GT_ids;
+	data_obj_ref   input_dbCAN_PL_ids;
+	data_obj_ref   input_dbCAN_cellulosome_ids;
+	data_obj_ref   input_many_ref;
+        data_obj_name  output_filtered_name;
+
+	bool  coalesce_output;
+	float e_value;
+	float bitscore;
+	float overlap_perc;
+	float maxaccepts;
+/*	float ident_thresh;
+*/
+        bool  heatmap;
+	bool  vertical;  /* only supports true for now */
+	bool  show_blanks;
+    } HMMER_dbCAN_Params;
+
+
+    /*  Method for HMMER search of dbCAN Markov Models of CAZy families
+    **
+    **    overloading as follows:
+    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+    **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
+    */
+    funcdef HMMER_dbCAN_Search (HMMER_dbCAN_Params params)  returns (HMMER_Output) authentication required;
 };

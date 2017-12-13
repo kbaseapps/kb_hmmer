@@ -1,5 +1,5 @@
 {
-    "ver": "1.1.2",
+    "ver": "1.2.0",
     "authors": [
         "dylan"
     ],
@@ -12,14 +12,147 @@
     },
     "parameters": [ 
         {
-            "id": "input_msa_refs",
+            "id": "input_dbCAN_AA_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "" ],
-            "field_type": "text",
-            "text_options": {
-                "valid_ws_types": [ "KBaseTrees.MSA" ]
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "dbCAN_AA_none",
+                                        "ui-name": "dbCAN_AA_none"
+                                }
+                ]
+            }
+        },
+        {
+            "id": "input_dbCAN_CBM_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "dbCAN_CBM_none",
+                                        "ui-name": "dbCAN_CBM_none"
+                                }
+                ]
+            }
+        },
+        {
+            "id": "input_dbCAN_CE_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "dbCAN_CE_none",
+                                        "ui-name": "dbCAN_CE_none"
+                                }
+                ]
+            }
+        },
+        {
+            "id": "input_dbCAN_GH_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "dbCAN_GH_none",
+                                        "ui-name": "dbCAN_GH_none"
+                                }
+                ]
+            }
+        },
+        {
+            "id": "input_dbCAN_GT_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "dbCAN_GT_none",
+                                        "ui-name": "dbCAN_GT_none"
+                                }
+                ]
+            }
+        },
+        {
+            "id": "input_dbCAN_PL_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "dbCAN_PL_none",
+                                        "ui-name": "dbCAN_PL_none"
+                                }
+                ]
+            }
+        },
+        {
+            "id": "input_dbCAN_cellulosome_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "dbCAN_cellulosome_none",
+                                        "ui-name": "dbCAN_cellulosome_none"
+                                },
+                                {
+                                        "value": "dockerin",
+                                        "display": "dockerin",
+                                        "id": "dbCAN_cellulosome_dockerin",
+                                        "ui-name": "dbCAN_cellulosome_dockerin"
+                                },
+                                {
+                                        "value": "cohesin",
+                                        "display": "cohesin",
+                                        "id": "dbCAN_cellulosome_cohesin",
+                                        "ui-name": "dbCAN_cellulosome_cohesin"
+                                },
+                                {
+                                        "value": "SLH",
+                                        "display": "S-Layer Homology",
+                                        "id": "dbCAN_cellulosome_SLH",
+                                        "ui-name": "dbCAN_cellulosome_SLH"
+                                }
+                ]
             }
         },
         {
@@ -38,7 +171,7 @@
             "optional": false,
             "advanced": false,
             "allow_multiple": false,
-            "default_values": [ "HMMER_Local_MSA_Group.FeatureSet" ],
+            "default_values": [ "HMMER_dbCAN_Search.FeatureSet" ],
             "field_type": "text",
             "text_options": {
                 "valid_ws_types": [ "KBaseCollections.FeatureSet" ],
@@ -189,16 +322,39 @@
         "service-mapping": {
             "url": "",
             "name": "kb_hmmer",
-            "method": "HMMER_Local_MSA_Group_Search",
+            "method": "HMMER_dbCAN_Search",
             "input_mapping": [
                 {
                     "narrative_system_variable": "workspace",
                     "target_property": "workspace_name"
                 },
                 {
-                    "input_parameter": "input_msa_refs",
-                    "target_property": "input_msa_refs",
-		    "target_type_transform": "list<resolved-ref>"
+                    "input_parameter": "input_dbCAN_AA_ids",
+                    "target_property": "input_dbCAN_AA_ids"
+                },
+                {
+                    "input_parameter": "input_dbCAN_CBM_ids",
+                    "target_property": "input_dbCAN_CBM_ids"
+                },
+                {
+                    "input_parameter": "input_dbCAN_CE_ids",
+                    "target_property": "input_dbCAN_CE_ids"
+                },
+                {
+                    "input_parameter": "input_dbCAN_GH_ids",
+                    "target_property": "input_dbCAN_GH_ids"
+                },
+                {
+                    "input_parameter": "input_dbCAN_GT_ids",
+                    "target_property": "input_dbCAN_GT_ids"
+                },
+                {
+                    "input_parameter": "input_dbCAN_PL_ids",
+                    "target_property": "input_dbCAN_PL_ids"
+                },
+                {
+                    "input_parameter": "input_dbCAN_cellulosome_ids",
+                    "target_property": "input_dbCAN_cellulosome_ids"
                 },
                 {
                     "input_parameter": "input_many_ref",
