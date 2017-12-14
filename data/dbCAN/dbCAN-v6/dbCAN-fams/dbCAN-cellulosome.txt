@@ -1,3 +1,3 @@
-cohesin
-dockerin
-SLH
+dockerin	Dockerin Module	major building blocks of scaffoldins of cellulosomes
+cohesin	Cohesin Module	anchor the catalytic enzymes to the scaffoldin of cellulosomes
+SLH	S-Layer Homology Module	anchoring module of type II cellulosomes
