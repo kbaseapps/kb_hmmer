@@ -104,7 +104,9 @@ class kb_hmmerTest(unittest.TestCase):
 #        for i,genome_filename in enumerate(['GCF_000018425.1_ASM1842v1_genomic.gbff']):  # DEBUG
         for i,genome_filename in enumerate(['GCF_000018425.1_ASM1842v1_genomic.gbff', \
                                             'GCF_000022285.1_ASM2228v1_genomic.gbff', \
-                                            'GCF_001439985.1_wTPRE_1.0_genomic.gbff']): 
+                                            'GCF_001439985.1_wTPRE_1.0_genomic.gbff', \
+                                            'GCF_000015865.1_ASM1586v1_genomic.gbff', \
+                                            'GCF_000164865.1_ASM16486v1_genomic.gbff']): 
                                             #'GCF_000287295.1_ASM28729v1_genomic.gbff', \
                                             #'GCF_000306885.1_ASM30688v1_genomic.gbff', \
 
@@ -525,7 +527,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_dbCAN_GT_ids': [],
                        'input_dbCAN_PL_ids': [],
                        'input_dbCAN_cellulosome_ids': [],
-                       'input_many_ref': self.genome_refs[0],  # Single Genome
+                       'input_many_ref': self.genome_refs[3],  # Single Genome
                        'output_filtered_name': obj_out_name,
                        'coalesce_output': 0,
                        'e_value': ".001",
