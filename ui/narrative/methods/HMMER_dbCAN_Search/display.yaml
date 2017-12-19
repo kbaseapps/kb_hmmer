@@ -1,12 +1,12 @@
 #
 # define display information
 #
-name: HMMER Search of dbCAN models of CAZy families - v6
+name: Search with dbCAN HMMs of CAZy families - v6
 tooltip: |
-    Search for matches to dbCAN HMMs of CAZy carbohydrate active enzyme families
+    Search for matches to dbCAN HMMs of CAZy carbohydrate active enzyme families using HMMER 3
 screenshots: []
 
-icon: hmmer-cyan.png
+icon: dbCAN-cyan.png
 
 #
 # define a set of similar methods that might be useful to the user
