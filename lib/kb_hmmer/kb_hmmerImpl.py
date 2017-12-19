@@ -3573,9 +3573,9 @@ class kb_hmmer:
                         hmm_fam_config = hmm_fam_config_line.split("\t")
                         hmm_fam_id = hmm_fam_config[0]
                         if len(hmm_fam_config) > 1:
-                            input_hmm_descs[hmm_fam_id] = hmm_fam_config[1]
+                            input_HMM_descs[hmm_fam_id] = hmm_fam_config[1]
                         else:
-                            input_hmm_descs[hmm_fam_id] = hmm_fam_id
+                            input_HMM_descs[hmm_fam_id] = hmm_fam_id
                         all_HMM_ids[hmm_group].append(hmm_fam_id)
                         all_HMM_ids_order.append(hmm_fam_id)
 
@@ -4654,7 +4654,7 @@ class kb_hmmer:
                     if not cat_seen[cat] and not show_blanks:
                         continue
                     cat_disp = cat
-                    cell_title = input_hmm_descs[cat_i]
+                    cell_title = input_HMM_descs[cat_i]
                     if len(cat_disp) > cat_disp_trunc_len+1:
                         cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
                     html_report_lines += ['<td style="border-right:solid 2px '+border_cat_color+'; border-bottom:solid 2px '+border_cat_color+'" bgcolor="'+head_color_2+'"title="'+cell_title+'" valign=bottom align=center>']
@@ -4718,7 +4718,7 @@ class kb_hmmer:
                 cell_color = 'white'
                 if not cat_seen[cat] and not show_blanks:
                     cell_color = "#eeeeee"
-                desc = input_hmm_descs[cat_i]
+                desc = input_HMM_descs[cat_i]
                 cat_disp = cat
                 if len(cat_disp) > cat_disp_trunc_len+1:
                     cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
