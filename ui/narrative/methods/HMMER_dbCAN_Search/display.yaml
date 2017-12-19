@@ -1,0 +1,144 @@
+#
+# define display information
+#
+name: HMMER Search of dbCAN models of CAZy families - v6
+tooltip: |
+    Search for matches to dbCAN HMMs of CAZy carbohydrate active enzyme families
+screenshots: []
+
+icon: hmmer-cyan.png
+
+#
+# define a set of similar methods that might be useful to the user
+#
+suggestions:
+    apps:
+        related:
+            []
+        next:
+            []
+    methods:
+        related:
+            []
+        next:
+            []
+
+#
+# Configure the display and description of parameters
+#
+parameters :
+    input_dbCAN_GH_ids:
+        ui-name : |
+            GH Fam (default: ALL)
+        short-hint : |
+            Select HMMs for Glycoside Hydrolase Families, or will use ALL if left blank
+    input_dbCAN_GT_ids:
+        ui-name : |
+            GT Fam (default: ALL)
+        short-hint : |
+            Select HMMs for GlycosylTransferase Families, or will use ALL if left blank
+    input_dbCAN_CE_ids:
+        ui-name : |
+            CE Fam (default: ALL)
+        short-hint : |
+            Select HMMs for Carbohydrate Esterase Families, or will use ALL if left blank
+    input_dbCAN_PL_ids:
+        ui-name : |
+            PL Fam (default: ALL)
+        short-hint : |
+            Select HMMs for Polysaccharide Lyase Families, or will use ALL if left blank
+    input_dbCAN_AA_ids:
+        ui-name : |
+            Auxiliary Activities Fam (default: ALL)
+        short-hint : |
+            Select HMMs for Auxiliary Activiies Families, or will use ALL if left blank
+    input_dbCAN_CBM_ids:
+        ui-name : |
+            CBM Fam (default: ALL)
+        short-hint : |
+            Select HMMs for Carbohydrate-Binding Module Families, or will use ALL if left blank
+    input_dbCAN_cellulosome_ids:
+        ui-name : |
+            Cellulosome Fam (default: ALL)
+        short-hint : |
+            Select HMMs for Cellulosome Families, or will use ALL if left blank
+    input_many_ref:
+        ui-name : |
+            Targets Object
+        short-hint : |
+            PROTEIN Targets object to be searched.  Data types may be FeatureSet, Genome, or GenomeSet.
+    output_filtered_name:
+        ui-name : |
+            Output Object
+        short-hint : |
+            Object containing matches.  Output will be will be FeatureSet.
+    coalesce_output:
+        ui-name : |
+            Coalesce output (recommended)
+        short-hint : |
+            Combine output for each CAZy category (GH, GT, CE, PL, AA, cellulosome) into one object instead of splitting into a separate object per HMM Search
+    e_value:
+        ui-name : |
+            E-value
+        short-hint : |
+            threshold for hits
+    bitscore:
+        ui-name : |
+            Bit Score
+        short-hint : |
+            threshold for hits
+    overlap_perc:
+        ui-name : |
+            Alignment Overlap Threshold (%)
+        short-hint : |
+            overlap threshold is with respect to hit sequence length
+    maxaccepts:
+        ui-name : |
+            Max Accepts
+        short-hint : |
+            limits the number of hits in result.  Default: 1000
+    heatmap :
+        ui-name : |
+            View GenomeSet profile as
+        short-hint : |
+            Display as heatmap or numerical table (if input is GenomeSet)
+        long-hint  : |
+            Display as heatmap or numerical table (if input is GenomeSet)
+    vertical :
+        ui-name : |
+            View GenomeSet profile genomes as
+        short-hint : |
+            Show table with genomes as rows
+        long-hint  : |
+            Show table with genomes as rows
+    show_blanks :
+        ui-name : |
+            Show GenomeSet profile empty categories
+        short-hint : |
+            Show categories or families that have no counts
+        long-hint  : |
+            Show categories or families that have no counts
+
+description : |
+    <p>This method performs a set of Hidden Markov Model (HMM) searches on protein sequences using HMMER models built for a Group of MSAs.</p>
+    <p><hr></p>
+    <p>HMMER v3.1b2 from <A HREF="http://hmmer.org">HMMER.ORG</A></p>
+    <p><i>Please cite:</i></p>
+    <p><b>HMMER:</b><br><ul><li>Eddy SR. (2011) Accelerated Profile HMM Searches. <A HREF="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195">PLoS Comp. Biol., 7:e1002195</A> doi:10.1371/journal.pcbi.1002195</ul></p>
+    <p><hr></p>
+    <p><i>Implemented for KBase by <a href="https://github.com/dcchivian">Dylan Chivian</a> (<a href="mailto:DCChivian@lbl.gov">DCChivian@lbl.gov</a>)</i></p>
+    <p><hr></p>
+    <p><i>HMMER Search & Functional Profile with Custom Models</i> performs multiple HMMER searches.  It reads the objects in the Narrative to find the Multiple Sequence Alignments (MSAs) and uses those MSAs to create a set of Hidden Markov Models (HMMs) which are used in turn to search a protein sequence database.  The MSAs must first be generated using a tool such as MUSCLE that builds an MSA from a FeatureSet object.  The KBase implementation permits searching through the genes in a Genome object, the genes in the Genome members of a GenomeSet, or the genes in a FeatureSet.  The output object of these searches is a FeatureSet containing those genes that pass the thresholds given by the user.  The App also provides a table of the hits (with those hits that are below the thresholds in gray) and links to download the table of hits and a Stockholm format MSA.  A separate table for each MSA/HMM is provided, whereas the user may select whether to combine the hits into a single FeatureSet or produce a separate FeatureSet object for each MSA/HMM.</p>
+    <p><hr></p>
+    <p><b>Configuration:</b></p>
+    <p><b><i>Targets Object:</i></b> The Targets Object may be a FeatureSet of genes, a Genome, or a GenomeSet.  A HMMER search database will be automatically generated from the Targets Object.</p>
+    <p><b><i>Output Object:</i></b> This is the set of genes that are both hit and pass user-defined thresholds.</p>
+    <p><b><i>Coalesce Output:</i></b> Select whether to combine all hits into a single FeatureSet (which may be used in subsequent Functional Profiling) or make a separate FeatureSet of hits for each MSA/HMM.</p> 
+    <p><b><i>E-value:</i></b> This bounds the e-value for the weakest hit to consider viable.  Values below this do not get reported in the table or the HMMER output text downloads.</p>
+    <p><b><i>Bitscore:</i></b> This bounds the bitscore for the weakest hit to include in the FeatureSet output object.  Hits below this threshold are still reported in the table and HMMER text downloads.</p>
+    <p><b><i>Max Accepts:</i></b> Hard cap on how many hits to report (Default: 1000)</p>
+    <p><hr></p>
+    <p><b>Output:</b></p>
+    <p><b><i>Output Object:</i></b> Gene hits are captured in a FeatureSet output object.  If there are additional user-defined thresholds, those are filtered out and do not appear in the object, even if they are shown in the output table.  The Output object name is used as a basename to which the MSA/HMM name is prepended if the user has selected to separate FeatureSets.</p>
+    <p><b><i>Output HTML Table:</i></b> The tab-delimited hit table is HTML formatted and additionally shows the region of the hit sequence (as there is no query sequence) covered by the HMMER alignment.  Hits that are above the e-value threshold but below other thresholds and are not included in the FeatureSet output object are shown in gray, with the attributes that were below the threshold in red.  A separate table is made for each MSA/HMM.</p>
+    <p><b><i>Downloadable files:</i></b> HMMER table and Stockholm format MSA are available for download.  These are not altered from the direct output from the HMMER run.  The text output is generated for each MSA/HMM.</p>

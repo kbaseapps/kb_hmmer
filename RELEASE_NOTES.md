@@ -1,3 +1,7 @@
+### Version 1.2.0
+__Changes__
+- added App HMMER_dbCAN_Search()
+
 ### Version 1.1.2
 __Changes__
 - added HTML profile output for GenomeSet input to HMMER_Local_MSA_Group_Search()

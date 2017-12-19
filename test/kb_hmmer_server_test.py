@@ -104,7 +104,9 @@ class kb_hmmerTest(unittest.TestCase):
 #        for i,genome_filename in enumerate(['GCF_000018425.1_ASM1842v1_genomic.gbff']):  # DEBUG
         for i,genome_filename in enumerate(['GCF_000018425.1_ASM1842v1_genomic.gbff', \
                                             'GCF_000022285.1_ASM2228v1_genomic.gbff', \
-                                            'GCF_001439985.1_wTPRE_1.0_genomic.gbff']): 
+                                            'GCF_001439985.1_wTPRE_1.0_genomic.gbff', \
+                                            'GCF_000015865.1_ASM1586v1_genomic.gbff', \
+                                            'GCF_000164865.1_ASM16486v1_genomic.gbff']): 
                                             #'GCF_000287295.1_ASM28729v1_genomic.gbff', \
                                             #'GCF_000306885.1_ASM30688v1_genomic.gbff', \
 
@@ -291,7 +293,6 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params
         parameters = { 'workspace_name': self.getWsName(),
-                       'use_all_local_MSAs': "0",
                        'input_msa_refs': [self.MSA_refs[0], self.MSA_refs[1], self.MSA_refs[2]],  # Specific MSAs
                        'input_many_ref': self.genome_refs[0],  # Single Genome
                        'output_filtered_name': obj_out_name,
@@ -340,7 +341,6 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params        
         parameters = { 'workspace_name': self.getWsName(),
-                       'use_all_local_MSAs': "1",
                        #'input_msa_refs': [self.MSA_refs[0]],         # Single MSA
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
@@ -389,7 +389,6 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params        
         parameters = { 'workspace_name': self.getWsName(),
-                       'use_all_local_MSAs': "1",
                        #'input_msa_ref': [self.MSA_refs[0]],         # Single MSA
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
@@ -452,7 +451,7 @@ class kb_hmmerTest(unittest.TestCase):
         # check created obj
         #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
         report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
-        self.assertIsNone(report_obj['objects_created'])
+        self.assertTrue(len(report_obj['objects_created']) == 0)
         pass
 
 
@@ -477,7 +476,6 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params
         parameters = { 'workspace_name': self.getWsName(),
-                       'use_all_local_MSAs': "0",
                        'input_msa_refs': [self.MSA_refs[0], self.MSA_refs[1], self.MSA_refs[2]],  # Specific MSAs
                        'input_many_ref': self.genome_refs[0],  # Single Genome
                        'output_filtered_name': obj_out_name,
@@ -496,5 +494,170 @@ class kb_hmmerTest(unittest.TestCase):
         # check created obj
         #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
         report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
-        self.assertIsNone(report_obj['objects_created'])
+        self.assertTrue(len(report_obj['objects_created']) == 0)
+        pass
+
+
+    ### Test 08: dbCAN Models against Single Genome
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_08_kb_hmmer_HMMER_dbCAN_Search_Genome()")
+    def test_08_kb_hmmer_HMMER_dbCAN_Search_Genome(self):
+        test_name = 'test_08_kb_hmmer_HMMER_dbCAN_Search_Genome'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       #'input_msa_refs': [self.MSA_refs[0], self.MSA_refs[1], self.MSA_refs[2]],  # Specific MSAs
+                       'input_dbCAN_AA_ids': [],
+                       'input_dbCAN_CBM_ids': [],
+                       'input_dbCAN_CE_ids': [],
+                       'input_dbCAN_GH_ids': [],
+                       'input_dbCAN_GT_ids': [],
+                       'input_dbCAN_PL_ids': [],
+                       'input_dbCAN_cellulosome_ids': [],
+                       'input_many_ref': self.genome_refs[3],  # Single Genome
+                       'output_filtered_name': obj_out_name,
+                       'coalesce_output': 0,
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'overlap_fraction': "50.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_dbCAN_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created obj
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 09: dbCAN Models against GenomeSet, DON'T coalesce output
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_09_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce()")
+    def test_09_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce(self):
+        test_name = 'test_09_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params        
+        parameters = { 'workspace_name': self.getWsName(),
+                       #'input_msa_refs': [self.MSA_refs[0]],         # Single MSA
+                       'input_dbCAN_AA_ids': [],
+                       'input_dbCAN_CBM_ids': [],
+                       'input_dbCAN_CE_ids': [],
+                       'input_dbCAN_GH_ids': [],
+                       'input_dbCAN_GT_ids': [],
+                       'input_dbCAN_PL_ids': [],
+                       'input_dbCAN_cellulosome_ids': [],
+                       'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
+                       'output_filtered_name': obj_out_name,
+                       'coalesce_output': 0,  # KEY
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'overlap_fraction': "50.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_dbCAN_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created objs
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 10: dbCAN Models against GenomeSet, DO coalesce output
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_10_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce()")
+    def test_10_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce(self):
+        test_name = 'test_10_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params        
+        parameters = { 'workspace_name': self.getWsName(),
+                       #'input_msa_ref': [self.MSA_refs[0]],         # Single MSA
+                       'input_dbCAN_AA_ids': [],
+                       'input_dbCAN_CBM_ids': [],
+                       'input_dbCAN_CE_ids': [],
+                       'input_dbCAN_GH_ids': [],
+                       'input_dbCAN_GT_ids': [],
+                       'input_dbCAN_PL_ids': [],
+                       'input_dbCAN_cellulosome_ids': [],
+                       'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
+                       'output_filtered_name': obj_out_name,
+                       'coalesce_output': 1,  # KEY
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'overlap_fraction': "50.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_dbCAN_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created objs
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
         pass
