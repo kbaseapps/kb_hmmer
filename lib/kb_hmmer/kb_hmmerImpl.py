@@ -82,7 +82,7 @@ class kb_hmmer:
     # dbCAN CAZy search App
     dbCAN_version     = 'v6'
     dbCAN_HMMS_DIR    = os.path.join(os.sep, 'kb', 'module', 'data', 'dbCAN', 'dbCAN-'+dbCAN_version)
-    dbCAN_HMMS_PATH   = os.path.join(dbCAM_HMMS_DIR, 'dbCAN-fam-HMMs.txt.'+dbCAN_version)
+    dbCAN_HMMS_PATH   = os.path.join(dbCAN_HMMS_DIR, 'dbCAN-fam-HMMs.txt.'+dbCAN_version)
 
 
     # target is a list for collecting log messages
@@ -731,7 +731,7 @@ class kb_hmmer:
         while True:
             line = p.stdout.readline()
             if not line: break
-            self.log(console, line.replace('\n', ''))
+            #self.log(console, line.replace('\n', ''))
 
         p.stdout.close()
         p.wait()
@@ -811,7 +811,7 @@ class kb_hmmer:
         while True:
             line = p.stdout.readline()
             if not line: break
-            self.log(console, line.replace('\n', ''))
+            #self.log(console, line.replace('\n', ''))
 
         p.stdout.close()
         p.wait()
@@ -2084,7 +2084,7 @@ class kb_hmmer:
             while True:
                 line = p.stdout.readline()
                 if not line: break
-                self.log(console, line.replace('\n', ''))
+                #self.log(console, line.replace('\n', ''))
 
             p.stdout.close()
             p.wait()
@@ -2163,7 +2163,7 @@ class kb_hmmer:
             while True:
                 line = p.stdout.readline()
                 if not line: break
-                self.log(console, line.replace('\n', ''))
+                #self.log(console, line.replace('\n', ''))
 
             p.stdout.close()
             p.wait()
@@ -2560,7 +2560,7 @@ class kb_hmmer:
 
                 # text report
                 #
-                report += 'MSA['+str(msa_i)+']: '+input_msa_names[msa_i]
+                report += 'MSA['+str(msa_i)+']: '+input_msa_names[msa_i]+"\n"
                 report += 'sequences in search db: '+str(seq_total)+"\n"
                 report += 'sequences in hit set: '+str(total_hit_cnts[msa_i])+"\n"
                 report += 'sequences in accepted hit set: '+str(accepted_hit_cnts[msa_i])+"\n"
@@ -3667,8 +3667,12 @@ class kb_hmmer:
         hit_accept_something = dict()
         output_hit_TAB_file_paths = dict()
         output_hit_MSA_file_paths = dict()
+        objects_created_refs_coalesce = dict()
+        objects_created_refs_by_hmm_id = dict()
 
         for hmm_group in all_HMM_groups_order:
+            self.log(console, "PROCESSING HMM GROUP: "+hmm_group)  # DEBUG
+
             hit_accept_something[hmm_group] = False
 
             if hmm_group not in hmm_groups_used:
@@ -3681,15 +3685,15 @@ class kb_hmmer:
             #
             output_filtered_fasta_file_paths = []
             output_hits_flags = []
-            objects_created_refs = dict()
             coalesced_sequenceObjs = []
             coalesce_featureIds_element_ordering = []
             coalesce_featureIds_genome_ordering = []
             html_report_chunks = []
-            objects_created_refs[hmm_group] = []
 
             # HMM loop
             for hmm_i,hmm_id in enumerate(input_HMM_ids[hmm_group]):
+
+                self.log(console, "PROCESSING HMM: "+hmm_id)  # DEBUG
 
                 # init hit counts
                 total_hit_cnts[hmm_id] = 0
@@ -3700,12 +3704,14 @@ class kb_hmmer:
                 # set paths
                 #
                 hmmer_dir = os.path.join(self.output_dir, hmm_id)  # this must match above
+                if not os.path.exists(hmmer_dir):
+                    os.makedirs(hmmer_dir)
                 HMM_file_path = os.path.join(hmmer_dir, hmm_id+".hmm")
 
                 
                 # create HMM file
                 with open (HMM_file_path, 'w', 0) as hmm_handle:
-                    hmm_handle.write("\n".join(HMM_bufs[hmm_id]+"\n"))
+                    hmm_handle.write("\n".join(HMM_bufs[hmm_id])+"\n")
 
                 if not os.path.isfile(HMM_file_path):
                     raise ValueError("HMMER_BUILD failed to create HMM file '"+HMM_file_path+"'")
@@ -3736,7 +3742,7 @@ class kb_hmmer:
 
                 output_hit_TAB_file_path = os.path.join(hmmer_dir, hmm_id+'.hitout.txt');
                 output_hit_MSA_file_path = os.path.join(hmmer_dir, hmm_id+'.msaout.txt');
-                output_filtered_fasta_file_path = os.path.join(hmmer_dir, input_msa_name+'.output_filtered.fasta');
+                output_filtered_fasta_file_path = os.path.join(hmmer_dir, hmm_id+'.output_filtered.fasta');
                 output_hit_TAB_file_paths[hmm_id] = output_hit_TAB_file_path
                 output_hit_MSA_file_paths[hmm_id] = output_hit_MSA_file_path
                 output_filtered_fasta_file_paths.append(output_filtered_fasta_file_path)
@@ -3762,8 +3768,8 @@ class kb_hmmer:
                 
                 # Run HMMER, capture output as it happens
                 #
-                self.log(console, 'RUNNING HMMER_SEARCH:')
-                self.log(console, '    '+' '.join(hmmer_search_cmd))
+                #self.log(console, 'RUNNING HMMER_SEARCH:')
+                #self.log(console, '    '+' '.join(hmmer_search_cmd))
                 #report += "\n"+'running HMMER_SEARCH:'+"\n"
                 #report += '    '+' '.join(hmmer_search_cmd)+"\n"
 
@@ -3776,11 +3782,11 @@ class kb_hmmer:
                 while True:
                     line = p.stdout.readline()
                     if not line: break
-                    self.log(console, line.replace('\n', ''))
+                    #self.log(console, line.replace('\n', ''))
 
                 p.stdout.close()
                 p.wait()
-                self.log(console, 'return code: ' + str(p.returncode))
+                #self.log(console, 'return code: ' + str(p.returncode))
                 if p.returncode != 0:
                     raise ValueError('Error running HMMER_SEARCH, return code: '+str(p.returncode) + 
                                      '\n\n'+ '\n'.join(console))
@@ -3795,8 +3801,8 @@ class kb_hmmer:
                     raise ValueError("HMMER_SEARCH failed to create MSA file '"+output_hit_MSA_file_path+"'")
                 elif not os.path.getsize(output_hit_MSA_file_path) > 0:
                     #raise ValueError("HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
-                    self.log(console,"HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
-                    objects_created_refs[hmm_group].append(None)
+                    #self.log(console,"HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
+                    self.log(console,"\tHMMER_SEARCH: No hits")
                     continue
 
 
@@ -3816,7 +3822,7 @@ class kb_hmmer:
 
                 # Get hit beg and end positions from Stockholm format MSA output
                 #
-                self.log(console, 'PARSING HMMER SEARCH MSA OUTPUT')
+                #self.log(console, 'PARSING HMMER SEARCH MSA OUTPUT')
                 hit_beg = dict()
                 hit_end = dict()
                 longest_alnlen = dict()
@@ -3837,15 +3843,17 @@ class kb_hmmer:
                                     hit_beg[hit_id] = int(beg_str)
                                     hit_end[hit_id] = int(end_str)
                                     longest_alnlen[hit_id] = this_alnlen
+                                    #self.log(console, "ADDING HIT_BEG for "+hit_id)  # DEBUG
                             else:
                                 hit_beg[hit_id] = int(beg_str)
                                 hit_end[hit_id] = int(end_str)
                                 longest_alnlen[hit_id] = this_alnlen
+                                #self.log(console, "ADDING HIT_BEG for "+hit_id)  # DEBUG
 
 
                 # Measure length of hit sequences
                 #
-                self.log(console, 'MEASURING HIT GENES LENGTHS')
+                #self.log(console, 'MEASURING HIT GENES LENGTHS')
                 hit_seq_len = dict()
                 with open (many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
                     last_id = None
@@ -3858,10 +3866,11 @@ class kb_hmmer:
                                 id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                                 #if id_untrans in hit_order or id_trans in hit_order:
                                 if id_untrans in hit_beg or id_trans in hit_beg:
-                                    hit_seq_len[last_id] = len(last_buf)
-                                header = re.sub('^>', '', fasta_line)
-                                last_id = re.sub('\s+.*?$', '', header)
-                                last_buf = ''
+                                    hit_seq_len[id_untrans] = len(last_buf)
+                                    #self.log(console, "ADDING HIT_SEQ_LEN for "+id_untrans)  # DEBUG
+                            header = re.sub('^>', '', fasta_line)
+                            last_id = re.sub('\s+.*?$', '', header)
+                            last_buf = ''
                         else:
                             last_buf += fasta_line
                     if last_id != None:
@@ -3869,12 +3878,13 @@ class kb_hmmer:
                         id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                         #if id_untrans in hit_order or id_trans in hit_order:
                         if id_untrans in hit_beg or id_trans in hit_beg:
-                            hit_seq_len[last_id] = len(last_buf)
+                            hit_seq_len[id_untrans] = len(last_buf)
+                            #self.log(console, "ADDING HIT_SEQ_LEN for "+id_untrans)  # DEBUG
 
 
                 ### Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
                 #
-                self.log(console, 'PARSING HMMER SEARCH TAB OUTPUT')
+                #self.log(console, 'PARSING HMMER SEARCH TAB OUTPUT')
                 hit_seq_ids = dict()
                 accept_fids = dict()
                 output_hit_TAB_file_handle = open (output_hit_TAB_file_path, "r", 0)
@@ -3952,12 +3962,12 @@ class kb_hmmer:
                     hit_accept_something[hmm_group] = True
                     accepted_hit_cnt += 1
                     hit_seq_ids[hit_seq_id] = True
-                    self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
+                    #self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
 
                     # capture accepted hit count by genome_ref and model
                     genome_ref = hit_seq_id.split(genome_id_feature_id_delim)[0]
-                    self.log(console, "DEBUG: genome_ref: '"+str(genome_ref)+"'")
-                    self.log(console, "DEBUG: input_hmm_name: '"+str(hmm_id)+"'")
+                    #self.log(console, "DEBUG: genome_ref: '"+str(genome_ref)+"'")
+                    #self.log(console, "DEBUG: input_hmm_name: '"+str(hmm_id)+"'")
                     if genome_ref not in hit_cnt_by_genome_and_model:
                         hit_cnt_by_genome_and_model[genome_ref] = dict()
                     if hmm_id not in hit_cnt_by_genome_and_model[genome_ref]:
@@ -3971,10 +3981,10 @@ class kb_hmmer:
                 ### Create output objects
                 #
                 if accepted_hit_cnt == 0:
-                    self.log(console, 'THERE WERE NO ACCEPTED HITS.  NOT BUILDING OUTPUT OBJECT')
+                    self.log(console, "\tNO ACCEPTED HITS ABOVE FILTERS")
                 else:
-                    self.log(console, 'EXTRACTING ACCEPTED HITS FROM INPUT')
-                    self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
+                    #self.log(console, "\tEXTRACTING ACCEPTED HITS FROM INPUT")
+                    ##self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
 
                     # SequenceSet input -> SequenceSet output
                     #
@@ -3990,7 +4000,7 @@ class kb_hmmer:
                         else:
                             output_sequenceSet['description'] = search_tool_anme+"_Search filtered"
                             
-                        self.log(console,"ADDING SEQUENCES TO SEQUENCESET")
+                        #self.log(console,"ADDING SEQUENCES TO SEQUENCESET")
                         output_sequenceSet['sequences'] = []
 
                         for seq_obj in input_many_sequenceSet['sequences']:
@@ -4018,7 +4028,7 @@ class kb_hmmer:
                         output_featureSet['elements'] = dict()
 
                         fId_list = input_many_featureSet['elements'].keys()
-                        self.log(console,"ADDING FEATURES TO FEATURESET")
+                        #self.log(console,"ADDING FEATURES TO FEATURESET")
                         for fId in sorted(fId_list):
                             for genome_ref in input_many_featureSet['elements'][fId]:
                                 id_untrans = genome_ref+genome_id_feature_id_delim+fId
@@ -4067,9 +4077,9 @@ class kb_hmmer:
                         output_featureSet['element_ordering'] = []
                         output_featureSet['elements'] = dict()
 
-                        self.log(console,"READING HITS FOR GENOMES")  # DEBUG
+                        #self.log(console,"READING HITS FOR GENOMES")  # DEBUG
                         for genome_id in feature_ids_by_genome_id.keys():
-                            self.log(console,"READING HITS FOR GENOME "+genome_id)  # DEBUG
+                            #self.log(console,"READING HITS FOR GENOME "+genome_id)  # DEBUG
                             genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
                             for feature_id in feature_ids_by_genome_id[genome_id]:
                                 id_untrans = genome_ref+genome_id_feature_id_delim+feature_id
@@ -4089,7 +4099,7 @@ class kb_hmmer:
 
                     # load the method provenance from the context object
                     #
-                    self.log(console,"SETTING PROVENANCE")  # DEBUG
+                    #self.log(console,"SETTING PROVENANCE")  # DEBUG
                     provenance = [{}]
                     if 'provenance' in ctx:
                         provenance = ctx['provenance']
@@ -4106,8 +4116,7 @@ class kb_hmmer:
                     if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
                         if len(invalid_msgs) == 0:
                             if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
-                                self.log(console,"No Object to Upload for HMM "+hmm_id)  # DEBUG
-                                objects_created_refs[hmm_group].append(None)
+                                #self.log(console,"No Object to Upload for HMM "+hmm_id)  # DEBUG
                                 continue
 
                             # accumulate hits into coalesce object
@@ -4124,15 +4133,14 @@ class kb_hmmer:
                                         coalesce_featureIds_genome_ordering.append(this_genome_ref)
 
                     else:  # keep output separate  Upload results if coalesce_output is 0
-                        output_name = input_msa_name+'-'+params['output_filtered_name']
+                        output_name = hmm_id+'-'+params['output_filtered_name']
 
                         if len(invalid_msgs) == 0:
                             if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
-                                self.log(console,"No Object to Upload for MSA "+input_msa_name)  # DEBUG
-                                objects_created_refs[hmm_group].append(None)
+                                #self.log(console,"No Object to Upload for HMM "+hmm_id)  # DEBUG
                                 continue
 
-                            self.log(console,"Uploading results Object MSA "+input_msa_name)  # DEBUG
+                            #self.log(console,"Uploading results Object HMM "+hmm_id)  # DEBUG
 
                             # input many SequenceSet -> save SequenceSet
                             #
@@ -4161,24 +4169,24 @@ class kb_hmmer:
                                 })[0]
 
                             [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
-                            objects_created_refs[hmm_group].append(str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I]))
+                            objects_created_refs_by_hmm_id[hmm_id] = str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I])
 
 
                 #### Build output report chunks
                 ##
-                self.log(console,"BUILDING REPORT CHUNK for MSA["+str(msa_i)+"] "+input_msa_names[msa_i])  # DEBUG
+                #self.log(console,"BUILDING REPORT CHUNK for HMM["+str(hmm_i)+"] "+hmm_id)  # DEBUG
                 if len(invalid_msgs) == 0:
 
                     # text report
                     #
-                    report += 'HMM['+str(hmm_i)+']: '+hmm_id
+                    report += 'HMM['+str(hmm_i)+']: '+hmm_id+"\n"
                     report += 'sequences in search db: '+str(seq_total)+"\n"
                     report += 'sequences in hit set: '+str(total_hit_cnts[hmm_id])+"\n"
                     report += 'sequences in accepted hit set: '+str(accepted_hit_cnts[hmm_id])+"\n"
                     report += "\n"
                     #for line in hit_buf:
                     #    report += line
-                    self.log (console, report)
+                    #self.log (console, report)
 
 
                     # build html report chunk
@@ -4354,7 +4362,7 @@ class kb_hmmer:
 
                     # attach chunk
                     if total_hit_cnts[hmm_id] == 0:
-                        self.log(console, "NO HITS FOR HMM["+str(hmm_i)+"] "+hmm_id+".  NOT ADDING TO HTML HIT REPORT.")
+                        #self.log(console, "NO HITS FOR HMM["+str(hmm_i)+"] "+hmm_id+".  NOT ADDING TO HTML HIT REPORT.")
                         html_report_chunk_str = '<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>'
                     else:
                         html_report_chunk_str = "\n".join(html_report_chunk)
@@ -4365,14 +4373,14 @@ class kb_hmmer:
             #### Create and Upload output objects if coalesce_output is true
             ##
             if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
-                output_name = hmm_group+'-'params['output_filtered_name']
+                output_name = hmm_group+'-'+params['output_filtered_name']
 
                 if len(invalid_msgs) == 0:
                     if not hit_accept_something[hmm_group]:
-                        self.log(console,"No Object to Upload for all HMMs")  # DEBUG
+                        self.log(console,"No Coalesced Hits Object to Upload for all HMMs")  # DEBUG
 
                     else:
-                        self.log(console,"Uploading results Object")  # DEBUG
+                        self.log(console,"Uploading Coalesced Hits Object")  # DEBUG
 
                         if many_type_name == 'SequenceSet':  # input many SequenceSet -> save SequenceSet
 
@@ -4408,7 +4416,7 @@ class kb_hmmer:
                                 })[0]
 
                         [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
-                        objects_created_refs[hmm_group].append(str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I]))
+                        objects_created_refs_coalesce[hmm_group] = str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I])
 
 
             #### Set paths for output HTML
@@ -4418,9 +4426,8 @@ class kb_hmmer:
                 os.makedirs(html_output_dir)
             html_search_file = search_tool_name+'_Search-'+str(hmm_i)+'-'+str(hmm_id)+'.html'
             html_search_path = os.path.join (html_output_dir, html_search_file)
-            # do profile for all hmm_groups later
-            #html_profile_file = search_tool_name+'_Profile.html'
-            #html_profile_path = os.path.join (html_output_dir, html_profile_file)
+            html_profile_file = search_tool_name+'_Profile.html'
+            html_profile_path = os.path.join (html_output_dir, html_profile_file)
 
 
             #### Build Search output report (and assemble html chunks)
@@ -4476,7 +4483,7 @@ class kb_hmmer:
                     else:
                         this_html_search_file = search_tool_name+'_Search-'+str(hmm_i)+'-'+str(hmm_id)+'.html'
                         html_report_lines += [' <a href="'+this_html_search_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>'+str(this_hmm_group)+' HITS</font></a> ']
-                    if this_hmm_group_i < len(hmm_group_used)-1:
+                    if this_hmm_group_i < len(hmm_groups_used)-1:
                         html_report_lines += [' | ']
 
                 html_report_lines += ['<p>']
@@ -4514,8 +4521,6 @@ class kb_hmmer:
                 html_report_str = "\n".join(html_report_lines)
                 with open (html_path, 'w', 0) as html_handle:
                     html_handle.write(html_report_str)
-
-# HERE
 
 
         #### Build Profile output report
@@ -4624,7 +4629,7 @@ class kb_hmmer:
             for this_hmm_group_i,this_hmm_group in enumerate(hmm_groups_used):
                 this_html_search_file = search_tool_name+'_Search-'+str(hmm_i)+'-'+str(hmm_id)+'.html'
                 html_report_lines += [' <a href="'+this_html_search_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>'+str(this_hmm_group)+' HITS</font></a> ']
-                if this_hmm_group_i < len(hmm_group_used)-1:
+                if this_hmm_group_i < len(hmm_groups_used)-1:
                     html_report_lines += [' | ']
             html_report_lines += ['<p>']
 
@@ -4761,7 +4766,7 @@ class kb_hmmer:
             
             for hmm_i,hmm_id in enumerate(all_HMM_ids_order):
                 if total_hit_cnts[hmm_id] == 0:
-                    self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR MSA '+input_msa_name)
+                    self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR MSA '+hmm_id)
                     continue
                 new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, hmm_id+'.hitout.txt');
                 new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, hmm_id+'.msaout.txt');
@@ -4828,13 +4833,12 @@ class kb_hmmer:
             for hmm_group in all_HMM_groups_order:
                 if hit_accept_something[hmm_group]:
                     if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
-                        for object_created_ref in objects_created_refs[hmm_group]:
-                            reportObj['objects_created'].append({'ref':object_created_ref, 'description':'Coalesced'+' '+hmm_group+' '+search_tool_name+' hits'})
+                        if hmm_group in objects_created_refs_coalesce:
+                            reportObj['objects_created'].append({'ref':object_created_refs_coalesce[hmm_group], 'description':'Coalesced'+' '+hmm_group+' '+search_tool_name+' hits'})
                     else:
                         for hmm_i,hmm_id in enumerate(all_HMM_ids[hmm_group]):
-                            if total_hit_cnts[hmm_id] == 0:
-                                continue
-                            reportObj['objects_created'].append({'ref':objects_created_refs[hmm_id], 'description': hmm_id+' '+search_tool_name+' hits'})
+                            if hmm_id in objects_created_refs_by_hmm_id:
+                                reportObj['objects_created'].append({'ref':objects_created_refs_by_hmm_id[hmm_id], 'description': hmm_id+' '+search_tool_name+' hits'})
                 
 
             # save report object
