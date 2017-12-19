@@ -3550,11 +3550,12 @@ class kb_hmmer:
                 this_buf.append(hmm_line)
 
 
-        #### Get the all the HMM cats and ids
+        #### Get all the HMM cats and ids
         ##
         all_HMM_groups_order = []
         all_HMM_ids = dict()
         all_HMM_ids_order = []
+        input_HMM_descs = dict()
         hmm_group_config_path = os.path.join(self.dbCAN_HMMS_DIR, 'dbCAN-categories.txt')
         HMM_fam_config_dir = os.path.join(self.dbCAN_HMMS_DIR, 'dbCAN-fams')
         HMM_fam_input_dir = os.path.join(self.output_dir, 'HMMs')
@@ -3569,7 +3570,12 @@ class kb_hmmer:
                 with open(HMM_fam_config_path, 'r', 0) as hmm_fam_config_handle:
                     for hmm_fam_config_line in hmm_fam_config_handle.readlines():
                         hmm_fam_config_line = hmm_fam_config_line.rstrip()
-                        hmm_fam_id = hmm_fam_config_line.split("\t")[0]
+                        hmm_fam_config = hmm_fam_config_line.split("\t")
+                        hmm_fam_id = hmm_fam_config[0]
+                        if len(hmm_fam_config) > 1:
+                            input_hmm_descs[hmm_fam_id] = hmm_fam_config[1]
+                        else:
+                            input_hmm_descs[hmm_fam_id] = hmm_fam_id
                         all_HMM_ids[hmm_group].append(hmm_fam_id)
                         all_HMM_ids_order.append(hmm_fam_id)
 
