@@ -3676,7 +3676,7 @@ class kb_hmmer:
         objects_created_refs_coalesce = dict()
         objects_created_refs_by_hmm_id = dict()
 
-        for hmm_group in all_HMM_groups_order:
+        for hmm_group_i,hmm_group in enumerate(all_HMM_groups_order):
             self.log(console, "PROCESSING HMM GROUP: "+hmm_group)  # DEBUG
 
             hit_accept_something[hmm_group] = False
@@ -4430,7 +4430,7 @@ class kb_hmmer:
             html_output_dir = os.path.join(self.output_dir,'html_output')
             if not os.path.exists(html_output_dir):
                 os.makedirs(html_output_dir)
-            html_search_file = search_tool_name+'_Search-'+str(hmm_i)+'-'+str(hmm_id)+'.html'
+            html_search_file = search_tool_name+'_Search-'+str(hmm_group_i)+'-'+str(hmm_group)+'.html'
             html_search_path = os.path.join (html_output_dir, html_search_file)
             html_profile_file = search_tool_name+'_Profile.html'
             html_profile_path = os.path.join (html_output_dir, html_profile_file)
@@ -4484,11 +4484,12 @@ class kb_hmmer:
                 if many_type_name == 'GenomeSet':
                     html_report_lines += ['<a href="'+html_profile_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font></a> | ']
                 for this_hmm_group_i,this_hmm_group in enumerate(hmm_groups_used):
+                    disp_hmm_group = this_hmm_group.capitalize()
                     if this_hmm_group == hmm_group:
-                        html_report_lines += [ ' <font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>'+this_hmm_group+' HITS</b></font> ']
+                        html_report_lines += [ ' <font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>'+disp_hmm_group+' HITS</b></font> ']
                     else:
-                        this_html_search_file = search_tool_name+'_Search-'+str(hmm_i)+'-'+str(hmm_id)+'.html'
-                        html_report_lines += [' <a href="'+this_html_search_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>'+str(this_hmm_group)+' HITS</font></a> ']
+                        this_html_search_file = search_tool_name+'_Search-'+str(this_hmm_group_i)+'-'+str(hmm_group)+'.html'
+                        html_report_lines += [' <a href="'+this_html_search_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>'+str(disp_hmm_group)+' HITS</font></a> ']
                     if this_hmm_group_i < len(hmm_groups_used)-1:
                         html_report_lines += [' | ']
 
@@ -4635,8 +4636,9 @@ class kb_hmmer:
             html_report_lines += ['<font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>TABULAR PROFILE</b></font> | ']
 
             for this_hmm_group_i,this_hmm_group in enumerate(hmm_groups_used):
-                this_html_search_file = search_tool_name+'_Search-'+str(hmm_i)+'-'+str(hmm_id)+'.html'
-                html_report_lines += [' <a href="'+this_html_search_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>'+str(this_hmm_group)+' HITS</font></a> ']
+                disp_hmm_group = this_hmm_group.capitalize()
+                this_html_search_file = search_tool_name+'_Search-'+str(this_hmm_group_i)+'-'+str(this_hmm_group)+'.html'
+                html_report_lines += [' <a href="'+this_html_search_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>'+str(disp_hmm_group)+' HITS</font></a> ']
                 if this_hmm_group_i < len(hmm_groups_used)-1:
                     html_report_lines += [' | ']
             html_report_lines += ['<p>']
