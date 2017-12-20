@@ -3681,13 +3681,13 @@
                 "options": [
                                 {
                                         "value": "0",
-                                        "display": "Separate by HMM",
+                                        "display": "Separate objects for each Model (makes many data objects)",
                                         "id": "sep",
                                         "ui-name": "sep"
                                 },
                                 {
                                         "value": "1",
-                                        "display": "Merge hits within category",
+                                        "display": "Merge hits within CAZy category (recommended)",
                                         "id": "merge",
                                         "ui-name": "merge"
                                 }
