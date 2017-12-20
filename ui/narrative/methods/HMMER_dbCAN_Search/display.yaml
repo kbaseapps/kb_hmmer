@@ -74,7 +74,7 @@ parameters :
             Object containing matches.  Output will be will be FeatureSet.
     coalesce_output:
         ui-name : |
-            Coalesce output (recommended)
+            Coalesce output
         short-hint : |
             Combine output for each CAZy category (GH, GT, CE, PL, AA, cellulosome) into one object instead of splitting into a separate object per HMM Search
     e_value:
