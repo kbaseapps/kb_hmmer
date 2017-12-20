@@ -29,39 +29,39 @@ suggestions:
 parameters :
     input_dbCAN_GH_ids:
         ui-name : |
-            GH Fam (default: ALL)
+            Glycoside Hydrolases - GH (default: ALL)
         short-hint : |
             Select HMMs for Glycoside Hydrolase Families, or will use ALL if left blank
     input_dbCAN_GT_ids:
         ui-name : |
-            GT Fam (default: ALL)
+            GlycosylTransferases - GT (default: ALL)
         short-hint : |
             Select HMMs for GlycosylTransferase Families, or will use ALL if left blank
     input_dbCAN_CE_ids:
         ui-name : |
-            CE Fam (default: ALL)
+            Carbohydrate Esterases - CE (default: ALL)
         short-hint : |
             Select HMMs for Carbohydrate Esterase Families, or will use ALL if left blank
     input_dbCAN_PL_ids:
         ui-name : |
-            PL Fam (default: ALL)
+            Polysaccharide Lyases - PL (default: ALL)
         short-hint : |
             Select HMMs for Polysaccharide Lyase Families, or will use ALL if left blank
     input_dbCAN_AA_ids:
         ui-name : |
-            Auxiliary Activities Fam (default: ALL)
+            Auxiliary Activities Fams (default: ALL)
         short-hint : |
             Select HMMs for Auxiliary Activiies Families, or will use ALL if left blank
     input_dbCAN_CBM_ids:
         ui-name : |
-            CBM Fam (default: ALL)
+            Carbohydrate-Binding Modules - CBM (default: ALL)
         short-hint : |
             Select HMMs for Carbohydrate-Binding Module Families, or will use ALL if left blank
     input_dbCAN_cellulosome_ids:
         ui-name : |
-            Cellulosome Fam (default: ALL)
+            Cellulosome Fams (default: ALL)
         short-hint : |
-            Select HMMs for Cellulosome Families, or will use ALL if left blank
+            Select HMMs for Cellulosome Families (dockerin, cohesin, S-Layer Homology), or will use ALL if left blank
     input_many_ref:
         ui-name : |
             Targets Object
