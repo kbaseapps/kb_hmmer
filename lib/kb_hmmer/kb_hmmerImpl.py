@@ -4383,10 +4383,10 @@ class kb_hmmer:
 
                 if len(invalid_msgs) == 0:
                     if not hit_accept_something[hmm_group]:
-                        self.log(console,"No Coalesced Hits Object to Upload for all HMMs")  # DEBUG
+                        self.log(console,"No Coalesced Hits Object to Upload for all HMMs in Group "+hmm_group)  # DEBUG
 
                     else:
-                        self.log(console,"Uploading Coalesced Hits Object")  # DEBUG
+                        self.log(console,"Uploading Coalesced Hits Object for HMM Group "+hmm_group)  # DEBUG
 
                         if many_type_name == 'SequenceSet':  # input many SequenceSet -> save SequenceSet
 
@@ -4542,6 +4542,8 @@ class kb_hmmer:
             overall_low_val  =  INSANE_VALUE
             overall_high_val = -INSANE_VALUE
             cat_seen = dict()
+            for cat in cats:
+                cat_seen[cat] = False
 
             # count raw
             for genome_ref in genome_refs:
