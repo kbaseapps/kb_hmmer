@@ -4774,7 +4774,7 @@ class kb_hmmer:
             
             for hmm_i,hmm_id in enumerate(all_HMM_ids_order):
                 if total_hit_cnts[hmm_id] == 0:
-                    self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR MSA '+hmm_id)
+                    self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR HMM '+hmm_id)
                     continue
                 new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, hmm_id+'.hitout.txt');
                 new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, hmm_id+'.msaout.txt');
@@ -4842,7 +4842,7 @@ class kb_hmmer:
                 if hit_accept_something[hmm_group]:
                     if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
                         if hmm_group in objects_created_refs_coalesce:
-                            reportObj['objects_created'].append({'ref':object_created_refs_coalesce[hmm_group], 'description':'Coalesced'+' '+hmm_group+' '+search_tool_name+' hits'})
+                            reportObj['objects_created'].append({'ref':objects_created_refs_coalesce[hmm_group], 'description':'Coalesced'+' '+hmm_group+' '+search_tool_name+' hits'})
                     else:
                         for hmm_i,hmm_id in enumerate(all_HMM_ids[hmm_group]):
                             if hmm_id in objects_created_refs_by_hmm_id:
