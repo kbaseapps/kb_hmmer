@@ -4484,11 +4484,11 @@ class kb_hmmer:
                 if many_type_name == 'GenomeSet':
                     html_report_lines += ['<a href="'+html_profile_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font></a> | ']
                 for this_hmm_group_i,this_hmm_group in enumerate(hmm_groups_used):
-                    disp_hmm_group = this_hmm_group.capitalize()
+                    disp_hmm_group = this_hmm_group[0].upper()+this_hmm_group[1:]
                     if this_hmm_group == hmm_group:
                         html_report_lines += [ ' <font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>'+disp_hmm_group+' HITS</b></font> ']
                     else:
-                        this_html_search_file = search_tool_name+'_Search-'+str(this_hmm_group_i)+'-'+str(hmm_group)+'.html'
+                        this_html_search_file = search_tool_name+'_Search-'+str(this_hmm_group_i)+'-'+str(this_hmm_group)+'.html'
                         html_report_lines += [' <a href="'+this_html_search_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>'+str(disp_hmm_group)+' HITS</font></a> ']
                     if this_hmm_group_i < len(hmm_groups_used)-1:
                         html_report_lines += [' | ']
@@ -4636,7 +4636,7 @@ class kb_hmmer:
             html_report_lines += ['<font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>TABULAR PROFILE</b></font> | ']
 
             for this_hmm_group_i,this_hmm_group in enumerate(hmm_groups_used):
-                disp_hmm_group = this_hmm_group.capitalize()
+                disp_hmm_group = this_hmm_group[0].upper()+this_hmm_group[1:]
                 this_html_search_file = search_tool_name+'_Search-'+str(this_hmm_group_i)+'-'+str(this_hmm_group)+'.html'
                 html_report_lines += [' <a href="'+this_html_search_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>'+str(disp_hmm_group)+' HITS</font></a> ']
                 if this_hmm_group_i < len(hmm_groups_used)-1:
@@ -4701,7 +4701,7 @@ class kb_hmmer:
                             else:
                                 this_text_color = cell_color
                                 this_graph_char = graph_char
-                                html_report_lines += ['<td align=center valign=middle title="'+cell_val+'" style="width:'+cell_width+'" bgcolor="'+cell_color+'"><font color="'+this_text_color+'" size='+cell_fontsize+'>'+this_graph_char+'</font></td>']
+                            html_report_lines += ['<td align=center valign=middle title="'+cell_val+'" style="width:'+cell_width+'" bgcolor="'+cell_color+'"><font color="'+this_text_color+'" size='+cell_fontsize+'>'+this_graph_char+'</font></td>']
                         else:
                             html_report_lines += ['<td align=center valign=middle style="'+cell_width+'; border-right:solid 2px '+border_color+'; border-bottom:solid 2px '+border_color+'"><font color="'+text_color+'" size='+cell_fontsize+'>'+cell_val+'</font></td>']
 
@@ -4714,6 +4714,7 @@ class kb_hmmer:
 
 
             # key table
+            CAZy_server_addr = 'www.cazy.org'
             html_report_lines += ['<p>']
             html_report_lines += ['<table cellpadding=3 cellspacing=2 border='+border+'>']
             html_report_lines += ['<tr><td valign=middle align=left colspan=2 style="border-bottom:solid 4px '+border_color+'"><font color="'+text_color+'"><b>KEY</b></font></td></tr>']
@@ -4726,9 +4727,22 @@ class kb_hmmer:
                 cat_disp = cat
                 if len(cat_disp) > cat_disp_trunc_len+1:
                     cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
+
+                if cat == 'GT2_Cellulose_synt':
+                    link_addr = 'http://'+CAZy_server_addr+'/'+cat+'.html'
+                    link_open = '<a href="'+link_addr+'" target="cazy_tab">'
+                    link_close = '</a>'
+                elif cat == 'dockerin' or cat == 'cohesin' or cat == 'SLH':
+                    link_open = ''
+                    link_close = ''
+                else:
+                    link_addr = 'http://'+CAZy_server_addr+'/'+cat+'.html'
+                    link_open = '<a href="'+link_addr+'" target="cazy_tab">'
+                    link_close = '</a>'
+
                 html_report_lines += ['<tr>']
-                html_report_lines += ['<td valign=middle align=left bgcolor="'+cell_color+'" style="border-right:solid 4px '+border_color+'"><font color="'+text_color+'" size='+graph_cat_fontsize+'>'+cat_disp+'</font></td>']
-                html_report_lines += ['<td valign=middle align=left bgcolor="'+cell_color+'"><font color="'+text_color+'" size='+graph_cat_fontsize+'>'+desc+'</font></td>']
+                html_report_lines += ['<td valign=middle align=left bgcolor="'+cell_color+'" style="border-right:solid 4px '+border_color+'">'+link_open+'<font color="'+text_color+'" size='+graph_cat_fontsize+'>'+cat_disp+'</font>'+link_close+'</td>']
+                html_report_lines += ['<td valign=middle align=left bgcolor="'+cell_color+'">'+link_open+'<font color="'+text_color+'" size='+graph_cat_fontsize+'>'+desc+'</font>'+link_close+'</td>']
                 html_report_lines += ['</tr>']
 
             html_report_lines += ['</table>']
