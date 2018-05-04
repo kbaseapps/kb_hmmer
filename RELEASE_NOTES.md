@@ -1,3 +1,12 @@
+### Version 1.2.2
+__Changes__
+- bugfix for HMMER Search with MSA index
+- changed base docker image to sdkbase2
+
+### Version 1.2.1
+__Changes__
+- updated Dockerfile cert install
+
 ### Version 1.2.0
 __Changes__
 - added App HMMER_dbCAN_Search()

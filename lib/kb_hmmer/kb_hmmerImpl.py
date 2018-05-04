@@ -54,9 +54,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.2.0"
+    VERSION = "1.2.2"
     GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "f590e5e0fc7bb9efd33ff57db8d9a1b9475f64a2"
+    GIT_COMMIT_HASH = "8bf695960d378594910650fbfcd97d49909376fe"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -1528,7 +1528,6 @@ class kb_hmmer:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
-
 
     def HMMER_Local_MSA_Group_Search(self, ctx, params):
         """
@@ -3263,7 +3262,6 @@ class kb_hmmer:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
-
 
     def HMMER_dbCAN_Search(self, ctx, params):
         """
