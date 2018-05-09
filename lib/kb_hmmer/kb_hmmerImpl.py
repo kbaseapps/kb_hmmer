@@ -425,14 +425,23 @@ class kb_hmmer:
             #
             self.log (console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
             PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
-            #NUC_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
+            DNA_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
             appropriate_sequence_found_in_MSA_input = True
-            for row_id in row_order:
-                #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
-                if not PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
-                    self.log(invalid_msgs,"BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
-                    appropriate_sequence_found_in_MSA_input = False
-                    break
+            if 'sequence_type' in MSA_in and (MSA_in['sequence_type'] == 'dna' or MSA_in['sequence_type'] == 'DNA'):
+                appropriate_sequence_found_in_MSA_input = False
+            else:
+                for row_id in row_order:
+                    #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
+                    if DNA_MSA_pattern.match(MSA_in['alignment'][row_id]):
+                        self.log(invalid_msgs,
+                                 "Require protein sequences in MSA. " +
+                                 "BAD nucleotide record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
+                        appropriate_sequence_found_in_MSA_input = False
+                        break
+                    elif not PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
+                        self.log(invalid_msgs,"BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
+                        appropriate_sequence_found_in_MSA_input = False
+                        break
 
         # Missing proper input_type
         #
@@ -475,8 +484,13 @@ class kb_hmmer:
                 sequence_str = seq_obj['sequence']
 
                 PROT_pattern = re.compile("^[acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
-                #DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
-                if not PROT_pattern.match(sequence_str):
+                DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
+                if DNA_pattern.match(sequence_str):
+                    self.log(invalid_msgs,
+                             "Require protein sequences for target. " +
+                             "BAD nucleotide record for sequence_id: "+header_id+"\n"+sequence_str+"\n")
+                    continue
+                elif not PROT_pattern.match(sequence_str):
                     self.log(invalid_msgs,"BAD record for sequence_id: "+header_id+"\n"+sequence_str+"\n")
                     continue
                 appropriate_sequence_found_in_many_input = True
@@ -1632,8 +1646,13 @@ class kb_hmmer:
                 sequence_str = seq_obj['sequence']
 
                 PROT_pattern = re.compile("^[acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
-                #DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
-                if not PROT_pattern.match(sequence_str):
+                DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
+                if DNA_pattern.match(sequence_str):
+                    self.log(invalid_msgs,
+                             "Require protein sequences for target. " +
+                             "BAD nucleotide record for sequence_id: "+header_id+"\n"+sequence_str+"\n")
+                    continue
+                elif not PROT_pattern.match(sequence_str):
                     self.log(invalid_msgs,"BAD record for sequence_id: "+header_id+"\n"+sequence_str+"\n")
                     continue
                 appropriate_sequence_found_in_many_input = True
@@ -1927,14 +1946,23 @@ class kb_hmmer:
                 #
                 self.log (console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
                 PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
-                #NUC_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
+                DNA_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
                 appropriate_sequence_found_in_MSA_input = True
-                for row_id in row_order:
-                    #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
-                    if not PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
-                        self.log(invalid_msgs,"BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
-                        appropriate_sequence_found_in_MSA_input = False
-                        break
+                if 'sequence_type' in MSA_in and (MSA_in['sequence_type'] == 'dna' or MSA_in['sequence_type'] == 'DNA'):
+                    appropriate_sequence_found_in_MSA_input = False
+                else:
+                    for row_id in row_order:
+                        #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
+                        if DNA_MSA_pattern.match(MSA_in['alignment'][row_id]):
+                            self.log(invalid_msgs,
+                                     "Require protein sequences in MSA. " +
+                                     "BAD nucleotide record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
+                            appropriate_sequence_found_in_MSA_input = False
+                            break
+                        elif not PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
+                            self.log(invalid_msgs,"BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
+                            appropriate_sequence_found_in_MSA_input = False
+                            break
 
                 if not appropriate_sequence_found_in_MSA_input:
                     self.log(invalid_msgs,"no protein sequences found in '"+input_msa_name+"'")
@@ -3372,8 +3400,13 @@ class kb_hmmer:
                 sequence_str = seq_obj['sequence']
 
                 PROT_pattern = re.compile("^[acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
-                #DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
-                if not PROT_pattern.match(sequence_str):
+                DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
+                if DNA_pattern.match(sequence_str):
+                    self.log(invalid_msgs,
+                             "Require protein sequences for target. " +
+                             "BAD nucleotide record for sequence_id: "+header_id+"\n"+sequence_str+"\n")
+                    continue
+                elif not PROT_pattern.match(sequence_str):
                     self.log(invalid_msgs,"BAD record for sequence_id: "+header_id+"\n"+sequence_str+"\n")
                     continue
                 appropriate_sequence_found_in_many_input = True
