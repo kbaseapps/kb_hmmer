@@ -1,6 +1,6 @@
 ### Version 1.2.2
 __Changes__
-- bugfix for HMMER Search with MSA index
+- made protein sequence checking stricter
 - changed base docker image to sdkbase2
 
 ### Version 1.2.1

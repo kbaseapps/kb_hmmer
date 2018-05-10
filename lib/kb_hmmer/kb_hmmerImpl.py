@@ -641,9 +641,9 @@ class kb_hmmer:
 #        if not appropriate_sequence_found_in_one_input:
 #            self.log(invalid_msgs,"no protein sequences found in '"+input_one_name+"'")
         if not appropriate_sequence_found_in_MSA_input:
-            self.log(invalid_msgs,"no protein sequences found in '"+input_msa_name+"'")
+            self.log(invalid_msgs,"Protein sequences not found in '"+input_msa_name+"'")
         if not appropriate_sequence_found_in_many_input:
-            self.log(invalid_msgs,"no protein sequences found in '"+input_many_name+"'")
+            self.log(invalid_msgs,"Protein sequences not found in '"+input_many_name+"'")
 
 
         # input data failed validation.  Need to return
@@ -1827,7 +1827,13 @@ class kb_hmmer:
         ##
         input_msa_names = []
         input_msa_descs = []
-        for input_msa_ref in input_msa_refs:
+        appropriate_sequence_found_in_MSA_input = False
+        msa_needs_skipping = False
+        keep_msa = []
+        msa_invalid_msgs = []
+        for msa_i,input_msa_ref in enumerate(input_msa_refs):
+            keep_msa.append(False)
+
             try:
                 ws = workspaceService(self.workspaceURL, token=ctx['token'])
                 #objects = ws.get_objects([{'ref': input_msa_ref}])
@@ -1846,11 +1852,12 @@ class kb_hmmer:
             if not os.path.exists(hmmer_dir):
                 os.makedirs(hmmer_dir)
 
-            if msa_type_name == 'MSA':
+            if msa_type_name != 'MSA':
+                raise ValueError('Cannot yet handle input_msa type of: '+msa_type_name)
+            else:
                 self.log (console, "\n\nPROCESSING MSA "+input_msa_name+"\n")  # DEBUG
 
                 input_msa_names.append(input_msa_name)
-
                 MSA_in = input_msa_data
                 if 'description' in MSA_in and MSA_in['description'] != None and MSA_in['description'] != '':
                     input_msa_descs.append(MSA_in['description'])
@@ -1947,31 +1954,49 @@ class kb_hmmer:
                 self.log (console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
                 PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
                 DNA_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
-                appropriate_sequence_found_in_MSA_input = True
+                this_appropriate_sequence_found_in_MSA_input = True
                 if 'sequence_type' in MSA_in and (MSA_in['sequence_type'] == 'dna' or MSA_in['sequence_type'] == 'DNA'):
-                    appropriate_sequence_found_in_MSA_input = False
+                    this_appropriate_sequence_found_in_MSA_input = False
                 else:
                     for row_id in row_order:
                         #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
                         if DNA_MSA_pattern.match(MSA_in['alignment'][row_id]):
-                            self.log(invalid_msgs,
+                            self.log(msa_invalid_msgs,
                                      "Require protein sequences in MSA. " +
                                      "BAD nucleotide record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
-                            appropriate_sequence_found_in_MSA_input = False
+                            this_appropriate_sequence_found_in_MSA_input = False
                             break
                         elif not PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
-                            self.log(invalid_msgs,"BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
-                            appropriate_sequence_found_in_MSA_input = False
+                            self.log(msa_invalid_msgs,"BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
+                            this_appropriate_sequence_found_in_MSA_input = False
                             break
 
-                if not appropriate_sequence_found_in_MSA_input:
-                    self.log(invalid_msgs,"no protein sequences found in '"+input_msa_name+"'")
+                if this_appropriate_sequence_found_in_MSA_input:
+                    keep_msa[msa_i] = True
+                    appropriate_sequence_found_in_MSA_input = True
+                else:
+                    keep_msa[msa_i] = False
+                    msa_needs_skipping = True
+                    self.log(msa_invalid_msgs,"no protein sequences found in '"+input_msa_name+"'")
 
-
-            # Missing proper input_type
-            #
-            else:
-                raise ValueError('Cannot yet handle input_msa type of: '+msa_type_name)
+        # revise MSA lists to remove non-protein MSAs
+        if not appropriate_sequence_found_in_MSA_input:
+            self.log(invalid_msgs,"no protein sequences found in any MSA")
+            self.log(invalid_msgs,"\n".join(msa_invalid_msgs))
+        elif msa_needs_skipping:
+            new_msa_refs  = []
+            new_msa_names = []
+            new_msa_descs = []
+            self.log(console,"SKIPPING non-protein MSA "+input_msa_names[msa_i])
+            self.log(console,"\n".join(msa_invalid_msgs))
+            for msa_i,msa_ref in enumerate(input_msa_refs):
+                if keep_msa[msa_i]:
+                    new_msa_refs.append(input_msa_refs[msa_i])
+                    new_msa_names.append(input_msa_names[msa_i])
+                    new_msa_descs.append(input_msa_descs[msa_i])
+            input_msa_refs  = new_msa_refs
+            input_msa_names = new_msa_names
+            input_msa_descs = new_msa_descs
 
 
         # check for failed input file creation
