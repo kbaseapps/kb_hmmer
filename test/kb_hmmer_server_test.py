@@ -583,7 +583,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 10: dbCAN Models against Single Genome
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_10_kb_hmmer_HMMER_dbCAN_Search_Genome()")
+    # HIDE @unittest.skip("skipped test test_10_kb_hmmer_HMMER_dbCAN_Search_Genome()")
     def test_10_kb_hmmer_HMMER_dbCAN_Search_Genome(self):
         test_name = 'test_10_kb_hmmer_HMMER_dbCAN_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
@@ -638,7 +638,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 11: dbCAN Models against GenomeSet, DON'T coalesce output
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_11_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce()")
+    # HIDE @unittest.skip("skipped test test_11_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce()")
     def test_11_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce(self):
         test_name = 'test_11_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -693,7 +693,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 12: dbCAN Models against GenomeSet, DO coalesce output
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_12_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce()")
+    # HIDE @unittest.skip("skipped test test_12_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce()")
     def test_12_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce(self):
         test_name = 'test_12_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce'
         header_msg = "RUNNING "+test_name+"()"
