@@ -1,3 +1,7 @@
+### Version 1.2.1
+__Changes__
+- changed citation to PLOS format
+
 ### Version 1.2.0
 __Changes__
 - added App HMMER_dbCAN_Search()
