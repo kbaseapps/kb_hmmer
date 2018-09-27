@@ -380,7 +380,6 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params        
         parameters = { 'workspace_name': self.getWsName(),
-                       #'input_msa_refs': [self.MSA_refs[1]],         # Single MSA
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
                        'coalesce_output': 0,  # KEY
@@ -428,7 +427,6 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params        
         parameters = { 'workspace_name': self.getWsName(),
-                       #'input_msa_ref': [self.MSA_refs[1]],         # Single MSA
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
                        'coalesce_output': 1,  # KEY
@@ -601,7 +599,6 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params
         parameters = { 'workspace_name': self.getWsName(),
-                       #'input_msa_refs': [self.MSA_refs[1], self.MSA_refs[2], self.MSA_refs[3]],  # Specific MSAs
                        'input_dbCAN_AA_ids': [],
                        'input_dbCAN_CBM_ids': [],
                        'input_dbCAN_CE_ids': [],
@@ -656,7 +653,6 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params        
         parameters = { 'workspace_name': self.getWsName(),
-                       #'input_msa_refs': [self.MSA_refs[1]],         # Single MSA
                        'input_dbCAN_AA_ids': [],
                        'input_dbCAN_CBM_ids': [],
                        'input_dbCAN_CE_ids': [],
@@ -711,7 +707,6 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params        
         parameters = { 'workspace_name': self.getWsName(),
-                       #'input_msa_ref': [self.MSA_refs[1]],         # Single MSA
                        'input_dbCAN_AA_ids': [],
                        'input_dbCAN_CBM_ids': [],
                        'input_dbCAN_CE_ids': [],
