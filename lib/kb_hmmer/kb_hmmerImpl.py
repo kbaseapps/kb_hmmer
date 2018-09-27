@@ -135,75 +135,61 @@ class kb_hmmer:
         else:
             return result["data"]
 
+    def _check_MSA_sequence_type_correct (self, msa=MSA_in, seq_type=seq_type):
+        PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
+        DNA_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
+        this_appropriate_sequence_found_in_MSA_input = True
 
-    def upload_SingleEndLibrary_to_shock_and_ws (self,
-                                                 ctx,
-                                                 console,  # DEBUG
-                                                 workspace_name,
-                                                 obj_name,
-                                                 file_path,
-                                                 provenance,
-                                                 sequencing_tech):
+        # Check for PROTEIN sequence type
+        #
+        if seq_type.startswith ('P') or seq_type.startswith ('p'):
+            if 'sequence_type' in MSA_in and (MSA_in['sequence_type'] == 'dna' or MSA_in['sequence_type'] == 'DNA'):
+                this_appropriate_sequence_found_in_MSA_input = False
+            else:
+                for row_id in row_order:
+                    #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
+                    if DNA_MSA_pattern.match(MSA_in['alignment'][row_id]):
+                        self.log(msa_invalid_msgs,
+                             "Finding nucleotide instead of protein sequences in MSA. " +
+                             "BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
+                        this_appropriate_sequence_found_in_MSA_input = False
+                        break
+                    elif not PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
+                        self.log(msa_invalid_msgs,
+                             "Not finding protein sequence in MSA. " +
+                             "BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
+                        this_appropriate_sequence_found_in_MSA_input = False
+                        break
 
-        self.log(console,'UPLOADING FILE '+file_path+' TO '+workspace_name+'/'+obj_name)
+        # Check for NUCLEOTIDE sequence type
+        #
+        elif seq_type.startswith ('N') or seq_type.startswith ('n'):
+            if 'sequence_type' in MSA_in and (MSA_in['sequence_type'] != 'dna' and MSA_in['sequence_type'] != 'DNA'):
+                this_appropriate_sequence_found_in_MSA_input = False
+            else:
+                for row_id in row_order:
+                    #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
+                    if not DNA_MSA_pattern.match(MSA_in['alignment'][row_id]):
+                        self.log(msa_invalid_msgs,
+                             "Not Finding nucleotide in MSA. " +
+                             "BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
+                        this_appropriate_sequence_found_in_MSA_input = False
+                        break
+                    elif PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
+                        self.log(msa_invalid_msgs,
+                             "Finding protein sequence instead of nucleotide sequences in MSA. " +
+                             "BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
+                        this_appropriate_sequence_found_in_MSA_input = False
+                        break
 
-        # 1) upload files to shock
-        token = ctx['token']
-        forward_shock_file = self.upload_file_to_shock(
-            console,  # DEBUG
-            shock_service_url = self.shockURL,
-            filePath = file_path,
-            token = token
-            )
-        #pprint(forward_shock_file)
-        self.log(console,'SHOCK UPLOAD DONE')
+        else:
+            raise ValueError ("Incorrectly formatted call of _check_MSA_sequence_type_correct() method")
 
-        # 2) create handle
-        self.log(console,'GETTING HANDLE')
-        hs = HandleService(url=self.handleURL, token=token)
-        forward_handle = hs.persist_handle({
-                                        'id' : forward_shock_file['id'], 
-                                        'type' : 'shock',
-                                        'url' : self.shockURL,
-                                        'file_name': forward_shock_file['file']['name'],
-                                        'remote_md5': forward_shock_file['file']['checksum']['md5']})
+        # return sequence type check logical
+        #
+        return this_appropriate_sequence_found_in_MSA_input
 
-        
-        # 3) save to WS
-        self.log(console,'SAVING TO WORKSPACE')
-        single_end_library = {
-            'lib': {
-                'file': {
-                    'hid':forward_handle,
-                    'file_name': forward_shock_file['file']['name'],
-                    'id': forward_shock_file['id'],
-                    'url': self.shockURL,
-                    'type':'shock',
-                    'remote_md5':forward_shock_file['file']['checksum']['md5']
-                },
-                'encoding':'UTF8',
-                'type':'fasta',
-                'size':forward_shock_file['file']['size']
-            },
-            'sequencing_tech':sequencing_tech
-        }
-        self.log(console,'GETTING WORKSPACE SERVICE OBJECT')
-        ws = workspaceService(self.workspaceURL, token=ctx['token'])
-        self.log(console,'SAVE OPERATION...')
-        new_obj_info = ws.save_objects({
-                        'workspace':workspace_name,
-                        'objects':[
-                            {
-                                'type':'KBaseFile.SingleEndLibrary',
-                                'data':single_end_library,
-                                'name':obj_name,
-                                'meta':{},
-                                'provenance':provenance
-                            }]
-                        })[0]
-        self.log(console,'SAVED TO WORKSPACE')
 
-        return new_obj_info[0]
     #END_CLASS_HEADER
 
     # config contains contents of config file in a hash or None if it couldn't
@@ -325,7 +311,11 @@ class kb_hmmer:
             raise ValueError('Unable to fetch input_msa_name object from workspace: ' + str(e))
             #to get the full stack trace: traceback.format_exc()
 
-        if msa_type_name == 'MSA':
+        if msa_type_name != 'MSA':
+            raise ValueError('Cannot yet handle input_msa type of: '+msa_type_name)
+        else:
+            self.log (console, "\n\nPROCESSING MSA "+input_msa_name+"\n")  # DEBUG
+
             MSA_in = input_msa_data
             row_order = []
             default_row_labels = dict()
@@ -424,29 +414,7 @@ class kb_hmmer:
             # Determine whether nuc or protein sequences
             #
             self.log (console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
-            PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
-            DNA_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
-            appropriate_sequence_found_in_MSA_input = True
-            if 'sequence_type' in MSA_in and (MSA_in['sequence_type'] == 'dna' or MSA_in['sequence_type'] == 'DNA'):
-                appropriate_sequence_found_in_MSA_input = False
-            else:
-                for row_id in row_order:
-                    #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
-                    if DNA_MSA_pattern.match(MSA_in['alignment'][row_id]):
-                        self.log(invalid_msgs,
-                                 "Require protein sequences in MSA. " +
-                                 "BAD nucleotide record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
-                        appropriate_sequence_found_in_MSA_input = False
-                        break
-                    elif not PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
-                        self.log(invalid_msgs,"BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
-                        appropriate_sequence_found_in_MSA_input = False
-                        break
-
-        # Missing proper input_type
-        #
-        else:
-            raise ValueError('Cannot yet handle input_msa type of: '+msa_type_name)
+            appropriate_sequence_found_in_MSA_input = self._check_MSA_sequence_type_correct (msa=MSA_in, seq_type='PROTEIN')
 
 
         #### Get the input_many object
@@ -1952,24 +1920,7 @@ class kb_hmmer:
                 # Determine whether nuc or protein sequences
                 #
                 self.log (console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
-                PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
-                DNA_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
-                this_appropriate_sequence_found_in_MSA_input = True
-                if 'sequence_type' in MSA_in and (MSA_in['sequence_type'] == 'dna' or MSA_in['sequence_type'] == 'DNA'):
-                    this_appropriate_sequence_found_in_MSA_input = False
-                else:
-                    for row_id in row_order:
-                        #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
-                        if DNA_MSA_pattern.match(MSA_in['alignment'][row_id]):
-                            self.log(msa_invalid_msgs,
-                                     "Require protein sequences in MSA. " +
-                                     "BAD nucleotide record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
-                            this_appropriate_sequence_found_in_MSA_input = False
-                            break
-                        elif not PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
-                            self.log(msa_invalid_msgs,"BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
-                            this_appropriate_sequence_found_in_MSA_input = False
-                            break
+                this_appropriate_sequence_found_in_MSA_input = self._check_MSA_sequence_type_correct (msa=MSA_in, seq_type='PROTEIN')
 
                 if this_appropriate_sequence_found_in_MSA_input:
                     keep_msa[msa_i] = True
