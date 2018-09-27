@@ -135,7 +135,7 @@ class kb_hmmer:
         else:
             return result["data"]
 
-    def _check_MSA_sequence_type_correct (self, msa=MSA_in, seq_type=seq_type):
+    def _check_MSA_sequence_type_correct (self, MSA_in=MSA_in, seq_type=seq_type):
         PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
         DNA_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
         this_appropriate_sequence_found_in_MSA_input = True
