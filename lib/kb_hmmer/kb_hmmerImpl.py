@@ -414,7 +414,7 @@ class kb_hmmer:
             # Determine whether nuc or protein sequences
             #
             self.log (console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
-            appropriate_sequence_found_in_MSA_input = self._check_MSA_sequence_type_correct (msa=MSA_in, seq_type='PROTEIN')
+            appropriate_sequence_found_in_MSA_input = self._check_MSA_sequence_type_correct (MSA_in=MSA_in, seq_type='PROTEIN')
 
 
         #### Get the input_many object
@@ -1920,7 +1920,7 @@ class kb_hmmer:
                 # Determine whether nuc or protein sequences
                 #
                 self.log (console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
-                this_appropriate_sequence_found_in_MSA_input = self._check_MSA_sequence_type_correct (msa=MSA_in, seq_type='PROTEIN')
+                this_appropriate_sequence_found_in_MSA_input = self._check_MSA_sequence_type_correct (MSA_in=MSA_in, seq_type='PROTEIN')
 
                 if this_appropriate_sequence_found_in_MSA_input:
                     keep_msa[msa_i] = True
