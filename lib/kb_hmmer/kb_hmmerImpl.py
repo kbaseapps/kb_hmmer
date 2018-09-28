@@ -136,10 +136,11 @@ class kb_hmmer:
         else:
             return result["data"]
 
-    def _check_MSA_sequence_type_correct(self, MSA_in, seq_type):
+    def _check_MSA_sequence_type_correct(self, MSA_in, row_order, seq_type):
         PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
         DNA_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
         this_appropriate_sequence_found_in_MSA_input = True
+        msa_invalid_msgs = []
 
         # Check for PROTEIN sequence type
         #
@@ -188,7 +189,7 @@ class kb_hmmer:
 
         # return sequence type check logical
         #
-        return this_appropriate_sequence_found_in_MSA_input
+        return (this_appropriate_sequence_found_in_MSA_input, msa_invalid_msgs)
 
     #END_CLASS_HEADER
 
@@ -409,7 +410,9 @@ class kb_hmmer:
             # Determine whether nuc or protein sequences
             #
             self.log(console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
-            appropriate_sequence_found_in_MSA_input = self._check_MSA_sequence_type_correct(MSA_in, 'PROTEIN')
+            (appropriate_sequence_found_in_MSA_input, these_msa_invalid_msgs) = \
+                self._check_MSA_sequence_type_correct(MSA_in, row_order, 'PROTEIN')
+            msa_invalid_msgs.extend(these_msa_invalid_msgs)
 
         #### Get the input_many object
         ##
@@ -1912,7 +1915,9 @@ class kb_hmmer:
                 # Determine whether nuc or protein sequences
                 #
                 self.log(console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
-                this_appropriate_sequence_found_in_MSA_input = self._check_MSA_sequence_type_correct(MSA_in, 'PROTEIN')
+                (this_appropriate_sequence_found_in_MSA_input, these_msa_invalid_msgs) = \
+                    self._check_MSA_sequence_type_correct(MSA_in, row_order, 'PROTEIN')
+                msa_invalid_msgs.extend(these_msa_invalid_msgs)
 
                 if this_appropriate_sequence_found_in_MSA_input:
                     keep_msa[msa_i] = True
