@@ -257,6 +257,7 @@ class kb_hmmer:
         #BEGIN HMMER_MSA_Search
         console = []
         invalid_msgs = []
+        msa_invalid_msgs = []
         search_tool_name = 'HMMER_MSA_prot'
         self.log(console, 'Running ' + search_tool_name + '_Search with params=')
         self.log(console, "\n" + pformat(params))
@@ -1549,6 +1550,7 @@ class kb_hmmer:
         #BEGIN HMMER_Local_MSA_Group_Search
         console = []
         invalid_msgs = []
+        msa_invalid_msgs = []
         search_tool_name = 'HMMER_Local_MSA_Group_prot'
         self.log(console, 'Running ' + search_tool_name + '_Search with params=')
         self.log(console, "\n" + pformat(params))
@@ -3322,6 +3324,7 @@ class kb_hmmer:
         #BEGIN HMMER_dbCAN_Search
         console = []
         invalid_msgs = []
+        msa_invalid_msgs = []
         search_tool_name = 'HMMER_dbCAN'
         self.log(console, 'Running ' + search_tool_name + '_Search with params=')
         self.log(console, "\n" + pformat(params))
