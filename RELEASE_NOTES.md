@@ -2,7 +2,6 @@
 __Changes__
 - made protein sequence checking stricter
 - changed base docker image to sdkbase2
-- updated Dockerfile cert install
 
 ### Version 1.2.1
 __Changes__
