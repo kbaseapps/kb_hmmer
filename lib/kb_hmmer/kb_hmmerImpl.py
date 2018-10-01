@@ -54,25 +54,25 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.2.0"
+    VERSION = "1.2.2"
     GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "f590e5e0fc7bb9efd33ff57db8d9a1b9475f64a2"
+    GIT_COMMIT_HASH = "4b495b811a6bcf532801133d832d175ea5069ae1"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
-    shockURL     = None
-    handleURL    = None
-    callbackURL  = None
-    scratch      = None
+    shockURL = None
+    handleURL = None
+    callbackURL = None
+    scratch = None
 
-    HMMER_BIN        = os.path.join (os.sep, 'kb', 'module', 'hmmer', 'binaries')
-    HMMER_BUILD      = os.path.join (HMMER_BIN, 'hmmbuild')  # construct profile HMM(s) from MSA(s)
-    HMMER_MAKE_DB    = os.path.join (HMMER_BIN, 'makehmmerdb')  # build a HMMER binary db from a seq file
-    HMMER_SEARCH     = os.path.join (HMMER_BIN, 'hmmsearch')  # search profile(s) against a sequence db
+    HMMER_BIN = os.path.join(os.sep, 'kb', 'module', 'hmmer', 'binaries')
+    HMMER_BUILD = os.path.join(HMMER_BIN, 'hmmbuild')  # construct profile HMM(s) from MSA(s)
+    HMMER_MAKE_DB = os.path.join(HMMER_BIN, 'makehmmerdb')  # build a HMMER binary db from a seq file
+    HMMER_SEARCH = os.path.join(HMMER_BIN, 'hmmsearch')  # search profile(s) against a sequence db
 
-    HMMER_PHMMER     = os.path.join (HMMER_BIN, 'phmmer')  # search protein sequence(s) against a protein sequence db
-    HMMER_NHMMER     = os.path.join (HMMER_BIN, 'nhmmer')  # search nuc sequence(s) against a nuc sequence db
-    HMMER_JACKHAMMER = os.path.join (HMMER_BIN, 'jackhmmer')  # iteratively search sequence(s) against a protein db
+    HMMER_PHMMER = os.path.join(HMMER_BIN, 'phmmer')  # search protein sequence(s) against a protein sequence db
+    HMMER_NHMMER = os.path.join(HMMER_BIN, 'nhmmer')  # search nuc sequence(s) against a nuc sequence db
+    HMMER_JACKHAMMER = os.path.join(HMMER_BIN, 'jackhmmer')  # iteratively search sequence(s) against a protein db
 
     #HMMER_ALIGN      = '/kb/module/hmmer/binaries/hmmalign'  # align sequences to a profile HMM
     #HMMER_PRESS      = '/kb/module/hmmer/binaries/hmmpress'  # prepare HMM db for hmmscan
@@ -80,12 +80,12 @@ class kb_hmmer:
     #HMMER_NSCAN       = '/kb/module/hmmer/binaries/nhmmscan'  # scan nuc sequence(s) against nuc profile db
 
     # dbCAN CAZy search App
-    dbCAN_version     = 'v6'
-    dbCAN_HMMS_DIR    = os.path.join(os.sep, 'kb', 'module', 'data', 'dbCAN', 'dbCAN-'+dbCAN_version)
-    dbCAN_HMMS_PATH   = os.path.join(dbCAN_HMMS_DIR, 'dbCAN-fam-HMMs.txt.'+dbCAN_version)
-
+    dbCAN_version = 'v6'
+    dbCAN_HMMS_DIR = os.path.join(os.sep, 'kb', 'module', 'data', 'dbCAN', 'dbCAN-' + dbCAN_version)
+    dbCAN_HMMS_PATH = os.path.join(dbCAN_HMMS_DIR, 'dbCAN-fam-HMMs.txt.' + dbCAN_version)
 
     # target is a list for collecting log messages
+
     def log(self, target, message):
         # we should do something better here...
         if target is not None:
@@ -93,19 +93,19 @@ class kb_hmmer:
         print(message)
         sys.stdout.flush()
 
-
     # Helper script borrowed from the transform service, logger removed
     #
+
     def upload_file_to_shock(self,
                              console,  # DEBUG
-                             shock_service_url = None,
-                             filePath = None,
-                             ssl_verify = True,
-                             token = None):
+                             shock_service_url=None,
+                             filePath=None,
+                             ssl_verify=True,
+                             token=None):
         """
         Use HTTP multi-part POST to save a file to a SHOCK instance.
         """
-        self.log(console,"UPLOADING FILE "+filePath+" TO SHOCK")
+        self.log(console, "UPLOADING FILE " + filePath + " TO SHOCK")
 
         if token is None:
             raise Exception("Authentication token required!")
@@ -122,7 +122,8 @@ class kb_hmmer:
 
         #logger.info("Sending {0} to {1}".format(filePath,shock_service_url))
         try:
-            response = requests.post(shock_service_url + "/node", headers=header, data=m, allow_redirects=True, verify=ssl_verify)
+            response = requests.post(shock_service_url + "/node", headers=header,
+                                     data=m, allow_redirects=True, verify=ssl_verify)
             dataFile.close()
         except:
             dataFile.close()
@@ -135,79 +136,66 @@ class kb_hmmer:
         else:
             return result["data"]
 
+    def _check_MSA_sequence_type_correct(self, MSA_in, row_order, seq_type):
+        PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
+        DNA_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
+        this_appropriate_sequence_found_in_MSA_input = True
+        msa_invalid_msgs = []
 
-    def upload_SingleEndLibrary_to_shock_and_ws (self,
-                                                 ctx,
-                                                 console,  # DEBUG
-                                                 workspace_name,
-                                                 obj_name,
-                                                 file_path,
-                                                 provenance,
-                                                 sequencing_tech):
+        # Check for PROTEIN sequence type
+        #
+        if seq_type.startswith('P') or seq_type.startswith('p'):
+            if 'sequence_type' in MSA_in and (MSA_in['sequence_type'] == 'dna' or MSA_in['sequence_type'] == 'DNA'):
+                this_appropriate_sequence_found_in_MSA_input = False
+            else:
+                for row_id in row_order:
+                    #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
+                    if DNA_MSA_pattern.match(MSA_in['alignment'][row_id]):
+                        self.log(msa_invalid_msgs,
+                                 "Finding nucleotide instead of protein sequences in MSA. " +
+                                 "BAD record for MSA row_id: " + row_id + "\n" + MSA_in['alignment'][row_id] + "\n")
+                        this_appropriate_sequence_found_in_MSA_input = False
+                        break
+                    elif not PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
+                        self.log(msa_invalid_msgs,
+                                 "Not finding protein sequence in MSA. " +
+                                 "BAD record for MSA row_id: " + row_id + "\n" + MSA_in['alignment'][row_id] + "\n")
+                        this_appropriate_sequence_found_in_MSA_input = False
+                        break
 
-        self.log(console,'UPLOADING FILE '+file_path+' TO '+workspace_name+'/'+obj_name)
+        # Check for NUCLEOTIDE sequence type
+        #
+        elif seq_type.startswith('N') or seq_type.startswith('n'):
+            if 'sequence_type' in MSA_in and (MSA_in['sequence_type'] != 'dna' and MSA_in['sequence_type'] != 'DNA'):
+                this_appropriate_sequence_found_in_MSA_input = False
+            else:
+                for row_id in row_order:
+                    #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
+                    if not DNA_MSA_pattern.match(MSA_in['alignment'][row_id]):
+                        self.log(msa_invalid_msgs,
+                                 "Not Finding nucleotide in MSA. " +
+                                 "BAD record for MSA row_id: " + row_id + "\n" + MSA_in['alignment'][row_id] + "\n")
+                        this_appropriate_sequence_found_in_MSA_input = False
+                        break
+                    elif PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
+                        self.log(msa_invalid_msgs,
+                                 "Finding protein sequence instead of nucleotide sequences in MSA. " +
+                                 "BAD record for MSA row_id: " + row_id + "\n" + MSA_in['alignment'][row_id] + "\n")
+                        this_appropriate_sequence_found_in_MSA_input = False
+                        break
 
-        # 1) upload files to shock
-        token = ctx['token']
-        forward_shock_file = self.upload_file_to_shock(
-            console,  # DEBUG
-            shock_service_url = self.shockURL,
-            filePath = file_path,
-            token = token
-            )
-        #pprint(forward_shock_file)
-        self.log(console,'SHOCK UPLOAD DONE')
+        else:
+            raise ValueError("Incorrectly formatted call of _check_MSA_sequence_type_correct() method")
 
-        # 2) create handle
-        self.log(console,'GETTING HANDLE')
-        hs = HandleService(url=self.handleURL, token=token)
-        forward_handle = hs.persist_handle({
-                                        'id' : forward_shock_file['id'], 
-                                        'type' : 'shock',
-                                        'url' : self.shockURL,
-                                        'file_name': forward_shock_file['file']['name'],
-                                        'remote_md5': forward_shock_file['file']['checksum']['md5']})
+        # return sequence type check logical
+        #
+        return (this_appropriate_sequence_found_in_MSA_input, msa_invalid_msgs)
 
-        
-        # 3) save to WS
-        self.log(console,'SAVING TO WORKSPACE')
-        single_end_library = {
-            'lib': {
-                'file': {
-                    'hid':forward_handle,
-                    'file_name': forward_shock_file['file']['name'],
-                    'id': forward_shock_file['id'],
-                    'url': self.shockURL,
-                    'type':'shock',
-                    'remote_md5':forward_shock_file['file']['checksum']['md5']
-                },
-                'encoding':'UTF8',
-                'type':'fasta',
-                'size':forward_shock_file['file']['size']
-            },
-            'sequencing_tech':sequencing_tech
-        }
-        self.log(console,'GETTING WORKSPACE SERVICE OBJECT')
-        ws = workspaceService(self.workspaceURL, token=ctx['token'])
-        self.log(console,'SAVE OPERATION...')
-        new_obj_info = ws.save_objects({
-                        'workspace':workspace_name,
-                        'objects':[
-                            {
-                                'type':'KBaseFile.SingleEndLibrary',
-                                'data':single_end_library,
-                                'name':obj_name,
-                                'meta':{},
-                                'provenance':provenance
-                            }]
-                        })[0]
-        self.log(console,'SAVED TO WORKSPACE')
-
-        return new_obj_info[0]
     #END_CLASS_HEADER
 
     # config contains contents of config file in a hash or None if it couldn't
     # be found
+
     def __init__(self, config):
         #BEGIN_CONSTRUCTOR
         self.workspaceURL = config['workspace-url']
@@ -218,18 +206,18 @@ class kb_hmmer:
 #        self.callbackURL = os.environ['SDK_CALLBACK_URL'] if os.environ['SDK_CALLBACK_URL'] != None else 'https://kbase.us/services/njs_wrapper'
         self.callbackURL = os.environ.get('SDK_CALLBACK_URL')
         if self.callbackURL == None:
-            raise ValueError ("SDK_CALLBACK_URL not set in environment")
+            raise ValueError("SDK_CALLBACK_URL not set in environment")
 
         self.scratch = os.path.abspath(config['scratch'])
         if self.scratch == None:
-            self.scratch = os.path.join('/kb','module','local_scratch')
+            self.scratch = os.path.join('/kb', 'module', 'local_scratch')
         if not os.path.exists(self.scratch):
             os.makedirs(self.scratch)
 
         # set i/o dirs
-        timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
-        self.input_dir = os.path.join(self.scratch,'input.'+str(timestamp))
-        self.output_dir = os.path.join(self.scratch,'output.'+str(timestamp))
+        timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds() * 1000)
+        self.input_dir = os.path.join(self.scratch, 'input.' + str(timestamp))
+        self.output_dir = os.path.join(self.scratch, 'output.' + str(timestamp))
         if not os.path.exists(self.input_dir):
             os.makedirs(self.input_dir)
         if not os.path.exists(self.output_dir):
@@ -237,7 +225,6 @@ class kb_hmmer:
 
         #END_CONSTRUCTOR
         pass
-
 
     def HMMER_MSA_Search(self, ctx, params):
         """
@@ -270,9 +257,10 @@ class kb_hmmer:
         #BEGIN HMMER_MSA_Search
         console = []
         invalid_msgs = []
+        msa_invalid_msgs = []
         search_tool_name = 'HMMER_MSA_prot'
-        self.log(console,'Running '+search_tool_name+'_Search with params=')
-        self.log(console, "\n"+pformat(params))
+        self.log(console, 'Running ' + search_tool_name + '_Search with params=')
+        self.log(console, "\n" + pformat(params))
         report = ''
 #        report = 'Running '+search_tool_name+'_Search with params='
 #        report += "\n"+pformat(params)
@@ -285,7 +273,6 @@ class kb_hmmer:
         hmmer_dir = os.path.join(self.output_dir, 'hmmer_run')
         if not os.path.exists(hmmer_dir):
             os.makedirs(hmmer_dir)
-
 
         #### do some basic checks
         #
@@ -300,12 +287,10 @@ class kb_hmmer:
         if 'output_filtered_name' not in params:
             raise ValueError('output_filtered_name parameter is required')
 
-
         # set local names
 #        input_one_ref = params['input_one_ref']
         input_msa_ref = params['input_msa_ref']
         input_many_ref = params['input_many_ref']
-        
 
         #### Get the input_msa object
         ##
@@ -315,7 +300,7 @@ class kb_hmmer:
         try:
             ws = workspaceService(self.workspaceURL, token=ctx['token'])
             #objects = ws.get_objects([{'ref': input_msa_ref}])
-            objects = ws.get_objects2({'objects':[{'ref': input_msa_ref}]})['data']
+            objects = ws.get_objects2({'objects': [{'ref': input_msa_ref}]})['data']
             input_msa_data = objects[0]['data']
             info = objects[0]['info']
             input_msa_name = str(info[1])
@@ -325,7 +310,11 @@ class kb_hmmer:
             raise ValueError('Unable to fetch input_msa_name object from workspace: ' + str(e))
             #to get the full stack trace: traceback.format_exc()
 
-        if msa_type_name == 'MSA':
+        if msa_type_name != 'MSA':
+            raise ValueError('Cannot yet handle input_msa type of: ' + msa_type_name)
+        else:
+            self.log(console, "\n\nPROCESSING MSA " + input_msa_name + "\n")  # DEBUG
+
             MSA_in = input_msa_data
             row_order = []
             default_row_labels = dict()
@@ -348,10 +337,9 @@ class kb_hmmer:
 #            if master_row_idx == 0:
 #                self.log(invalid_msgs,"Failed to find query id "+input_one_feature_id+" from Query Object "+input_one_name+" within MSA: "+input_msa_name)
 
-            
             # export features to CLUSTAL formatted MSA (HMMER BUILD seems to only take CLUSTAL)
-            input_MSA_file_path = os.path.join(hmmer_dir, input_msa_name+".clustal")
-            self.log(console, 'writing MSA file: '+input_MSA_file_path)
+            input_MSA_file_path = os.path.join(hmmer_dir, input_msa_name + ".clustal")
+            self.log(console, 'writing MSA file: ' + input_MSA_file_path)
 
             # set header
             header = 'CLUSTAL W (1.81) multiple sequence alignment'
@@ -381,38 +369,38 @@ class kb_hmmer:
             # break up MSA into 60 char chunks
             records = []
             chunk_len = 60
-            whole_chunks = int(math.floor(row_len/chunk_len))
+            whole_chunks = int(math.floor(row_len / chunk_len))
             if whole_chunks > 0:
                 for j in range(whole_chunks):
                     records.append('')
                     for row_id in row_order:
                         padding = ''
-                        if longest_row_id_len-len(row_id) > 0:
-                            for i in range(0,longest_row_id_len-len(row_id)):
+                        if longest_row_id_len - len(row_id) > 0:
+                            for i in range(0, longest_row_id_len - len(row_id)):
                                 padding += ' '
                         records.append(row_id + padding + " " +
-                                       MSA_in['alignment'][row_id][j*chunk_len:(j+1)*chunk_len])
+                                       MSA_in['alignment'][row_id][j * chunk_len:(j + 1) * chunk_len])
                     records.append(''.join([' ' for s in range(longest_row_id_len)]) + " " +
-                                   conservation_symbol[j*chunk_len:(j+1)*chunk_len])
+                                   conservation_symbol[j * chunk_len:(j + 1) * chunk_len])
 
             # add final rows
             if (row_len % chunk_len) != 0:
-                j=whole_chunks
+                j = whole_chunks
                 records.append('')
                 for row_id in row_order:
                     padding = ''
-                    if longest_row_id_len-len(row_id) > 0:
-                        for i in range(0,longest_row_id_len-len(row_id)):
+                    if longest_row_id_len - len(row_id) > 0:
+                        for i in range(0, longest_row_id_len - len(row_id)):
                             padding += ' '
                     records.append(row_id + padding + " " +
-                                   MSA_in['alignment'][row_id][j*chunk_len:row_len])
+                                   MSA_in['alignment'][row_id][j * chunk_len:row_len])
                 records.append(''.join([' ' for s in range(longest_row_id_len)]) + " " +
-                               conservation_symbol[j*chunk_len:row_len])
-            
+                               conservation_symbol[j * chunk_len:row_len])
+
             # write that sucker
-            with open(input_MSA_file_path,'w',0) as input_MSA_file_handle:
-                input_MSA_file_handle.write(header+"\n")
-                input_MSA_file_handle.write("\n".join(records)+"\n")
+            with open(input_MSA_file_path, 'w', 0) as input_MSA_file_handle:
+                input_MSA_file_handle.write(header + "\n")
+                input_MSA_file_handle.write("\n".join(records) + "\n")
 
             # DEBUG
             #report += "MSA:\n"
@@ -420,32 +408,19 @@ class kb_hmmer:
             #report += "\n".join(records)+"\n"
             #self.log(console,report)
 
-
             # Determine whether nuc or protein sequences
             #
-            self.log (console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
-            PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
-            #NUC_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
-            appropriate_sequence_found_in_MSA_input = True
-            for row_id in row_order:
-                #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
-                if not PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
-                    self.log(invalid_msgs,"BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
-                    appropriate_sequence_found_in_MSA_input = False
-                    break
-
-        # Missing proper input_type
-        #
-        else:
-            raise ValueError('Cannot yet handle input_msa type of: '+msa_type_name)
-
+            self.log(console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
+            (appropriate_sequence_found_in_MSA_input, these_msa_invalid_msgs) = \
+                self._check_MSA_sequence_type_correct(MSA_in, row_order, 'PROTEIN')
+            msa_invalid_msgs.extend(these_msa_invalid_msgs)
 
         #### Get the input_many object
         ##
         try:
             ws = workspaceService(self.workspaceURL, token=ctx['token'])
             #objects = ws.get_objects([{'ref': input_many_ref}])
-            objects = ws.get_objects2({'objects':[{'ref': input_many_ref}]})['data']
+            objects = ws.get_objects2({'objects': [{'ref': input_many_ref}]})['data']
             input_many_data = objects[0]['data']
             info = objects[0]['info']
             input_many_name = str(info[1])
@@ -454,7 +429,6 @@ class kb_hmmer:
         except Exception as e:
             raise ValueError('Unable to fetch input_many_name object from workspace: ' + str(e))
             #to get the full stack trace: traceback.format_exc()
-
 
         # Handle overloading (input_many can be SequenceSet, FeatureSet, Genome, or GenomeSet)
         #
@@ -466,25 +440,29 @@ class kb_hmmer:
                 raise ValueError('Unable to get SequenceSet: ' + str(e))
 
             header_id = input_many_sequenceSet['sequences'][0]['sequence_id']
-            many_forward_reads_file_path = os.path.join(self.output_dir, header_id+'.fasta')
+            many_forward_reads_file_path = os.path.join(self.output_dir, header_id + '.fasta')
             many_forward_reads_file_handle = open(many_forward_reads_file_path, 'w', 0)
-            self.log(console, 'writing reads file: '+str(many_forward_reads_file_path))
+            self.log(console, 'writing reads file: ' + str(many_forward_reads_file_path))
 
             for seq_obj in input_many_sequenceSet['sequences']:
                 header_id = seq_obj['sequence_id']
                 sequence_str = seq_obj['sequence']
 
                 PROT_pattern = re.compile("^[acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
-                #DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
-                if not PROT_pattern.match(sequence_str):
-                    self.log(invalid_msgs,"BAD record for sequence_id: "+header_id+"\n"+sequence_str+"\n")
+                DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
+                if DNA_pattern.match(sequence_str):
+                    self.log(invalid_msgs,
+                             "Require protein sequences for target. " +
+                             "BAD nucleotide record for sequence_id: " + header_id + "\n" + sequence_str + "\n")
+                    continue
+                elif not PROT_pattern.match(sequence_str):
+                    self.log(invalid_msgs, "BAD record for sequence_id: " + header_id + "\n" + sequence_str + "\n")
                     continue
                 appropriate_sequence_found_in_many_input = True
-                many_forward_reads_file_handle.write('>'+header_id+"\n")
-                many_forward_reads_file_handle.write(sequence_str+"\n")
-            many_forward_reads_file_handle.close();
+                many_forward_reads_file_handle.write('>' + header_id + "\n")
+                many_forward_reads_file_handle.write(sequence_str + "\n")
+            many_forward_reads_file_handle.close()
             self.log(console, 'done')
-
 
         # FeatureSet
         #
@@ -492,30 +470,30 @@ class kb_hmmer:
             # retrieve sequences for features
             input_many_featureSet = input_many_data
             many_forward_reads_file_dir = self.output_dir
-            many_forward_reads_file = input_many_name+".fasta"
+            many_forward_reads_file = input_many_name + ".fasta"
 
             # DEBUG
             #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             FeatureSetToFASTA_params = {
-                'featureSet_ref':      input_many_ref,
-                'file':                many_forward_reads_file,
-                'dir':                 many_forward_reads_file_dir,
-                'console':             console,
-                'invalid_msgs':        invalid_msgs,
-                'residue_type':        'protein',
-                'feature_type':        'CDS',
-                'record_id_pattern':   '%%genome_ref%%'+genome_id_feature_id_delim+'%%feature_id%%',
+                'featureSet_ref': input_many_ref,
+                'file': many_forward_reads_file,
+                'dir': many_forward_reads_file_dir,
+                'console': console,
+                'invalid_msgs': invalid_msgs,
+                'residue_type': 'protein',
+                'feature_type': 'CDS',
+                'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
                 'record_desc_pattern': '[%%genome_ref%%]',
-                'case':                'upper',
-                'linewrap':            50,
-                'merge_fasta_files':   'TRUE'
-                }
+                'case': 'upper',
+                'linewrap': 50,
+                'merge_fasta_files': 'TRUE'
+            }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
             #SERVICE_VER = 'release'
             SERVICE_VER = 'dev'
-            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-            FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA (FeatureSetToFASTA_params)
+            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+            FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA(FeatureSetToFASTA_params)
             many_forward_reads_file_path = FeatureSetToFASTA_retVal['fasta_file_path']
             feature_ids_by_genome_ref = FeatureSetToFASTA_retVal['feature_ids_by_genome_ref']
             if len(feature_ids_by_genome_ref.keys()) > 0:
@@ -525,34 +503,33 @@ class kb_hmmer:
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
 
-
         # Genome
         #
         elif many_type_name == 'Genome':
             many_forward_reads_file_dir = self.output_dir
-            many_forward_reads_file = input_many_name+".fasta"
+            many_forward_reads_file = input_many_name + ".fasta"
 
             # DEBUG
             #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             GenomeToFASTA_params = {
-                'genome_ref':          input_many_ref,
-                'file':                many_forward_reads_file,
-                'dir':                 many_forward_reads_file_dir,
-                'console':             console,
-                'invalid_msgs':        invalid_msgs,
-                'residue_type':        'protein',
-                'feature_type':        'CDS',
-                'record_id_pattern':   '%%feature_id%%',
+                'genome_ref': input_many_ref,
+                'file': many_forward_reads_file,
+                'dir': many_forward_reads_file_dir,
+                'console': console,
+                'invalid_msgs': invalid_msgs,
+                'residue_type': 'protein',
+                'feature_type': 'CDS',
+                'record_id_pattern': '%%feature_id%%',
                 'record_desc_pattern': '[%%genome_id%%]',
-                'case':                'upper',
-                'linewrap':            50
-                }
+                'case': 'upper',
+                'linewrap': 50
+            }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
             #SERVICE_VER = 'release'
             SERVICE_VER = 'dev'
-            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-            GenomeToFASTA_retVal = DOTFU.GenomeToFASTA (GenomeToFASTA_params)
+            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+            GenomeToFASTA_retVal = DOTFU.GenomeToFASTA(GenomeToFASTA_params)
             many_forward_reads_file_path = GenomeToFASTA_retVal['fasta_file_path']
             feature_ids = GenomeToFASTA_retVal['feature_ids']
             if len(feature_ids) > 0:
@@ -561,37 +538,36 @@ class kb_hmmer:
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
-            
 
         # GenomeSet
         #
         elif many_type_name == 'GenomeSet':
             input_many_genomeSet = input_many_data
             many_forward_reads_file_dir = self.output_dir
-            many_forward_reads_file = input_many_name+".fasta"
+            many_forward_reads_file = input_many_name + ".fasta"
 
             # DEBUG
             #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             GenomeSetToFASTA_params = {
-                'genomeSet_ref':       input_many_ref,
-                'file':                many_forward_reads_file,
-                'dir':                 many_forward_reads_file_dir,
-                'console':             console,
-                'invalid_msgs':        invalid_msgs,
-                'residue_type':        'protein',
-                'feature_type':        'CDS',
-                'record_id_pattern':   '%%genome_ref%%'+genome_id_feature_id_delim+'%%feature_id%%',
+                'genomeSet_ref': input_many_ref,
+                'file': many_forward_reads_file,
+                'dir': many_forward_reads_file_dir,
+                'console': console,
+                'invalid_msgs': invalid_msgs,
+                'residue_type': 'protein',
+                'feature_type': 'CDS',
+                'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
                 'record_desc_pattern': '[%%genome_ref%%]',
-                'case':                'upper',
-                'linewrap':            50,
-                'merge_fasta_files':   'TRUE'
-                }
+                'case': 'upper',
+                'linewrap': 50,
+                'merge_fasta_files': 'TRUE'
+            }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
             #SERVICE_VER = 'release'
             SERVICE_VER = 'dev'
-            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-            GenomeSetToFASTA_retVal = DOTFU.GenomeSetToFASTA (GenomeSetToFASTA_params)
+            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+            GenomeSetToFASTA_retVal = DOTFU.GenomeSetToFASTA(GenomeSetToFASTA_params)
             many_forward_reads_file_path = GenomeSetToFASTA_retVal['fasta_file_path_list'][0]
             feature_ids_by_genome_id = GenomeSetToFASTA_retVal['feature_ids_by_genome_id']
             if len(feature_ids_by_genome_id.keys()) > 0:
@@ -601,12 +577,10 @@ class kb_hmmer:
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
 
-
         # Missing proper input_many_type
         #
         else:
-            raise ValueError('Cannot yet handle input_many type of: '+many_type_name)            
-
+            raise ValueError('Cannot yet handle input_many type of: ' + many_type_name)
 
         # Get total number of sequences in input_many search db
         #
@@ -621,16 +595,14 @@ class kb_hmmer:
             for genome_id in feature_ids_by_genome_id.keys():
                 seq_total += len(feature_ids_by_genome_id[genome_id])
 
-
         # check for failed input file creation
         #
 #        if not appropriate_sequence_found_in_one_input:
 #            self.log(invalid_msgs,"no protein sequences found in '"+input_one_name+"'")
         if not appropriate_sequence_found_in_MSA_input:
-            self.log(invalid_msgs,"no protein sequences found in '"+input_msa_name+"'")
+            self.log(invalid_msgs, "Protein sequences not found in '" + input_msa_name + "'")
         if not appropriate_sequence_found_in_many_input:
-            self.log(invalid_msgs,"no protein sequences found in '"+input_many_name+"'")
-
+            self.log(invalid_msgs, "Protein sequences not found in '" + input_many_name + "'")
 
         # input data failed validation.  Need to return
         #
@@ -638,7 +610,7 @@ class kb_hmmer:
 
             # load the method provenance from the context object
             #
-            self.log(console,"SETTING PROVENANCE")  # DEBUG
+            self.log(console, "SETTING PROVENANCE")  # DEBUG
             provenance = [{}]
             if 'provenance' in ctx:
                 provenance = ctx['provenance']
@@ -648,48 +620,45 @@ class kb_hmmer:
             provenance[0]['input_ws_objects'].append(input_msa_ref)
             provenance[0]['input_ws_objects'].append(input_many_ref)
             provenance[0]['service'] = 'kb_hmmer'
-            provenance[0]['method'] = search_tool_name+'_Search'
-
+            provenance[0]['method'] = search_tool_name + '_Search'
 
             # build output report object
             #
-            self.log(console,"BUILDING REPORT")  # DEBUG
-            report += "FAILURE:\n\n"+"\n".join(invalid_msgs)+"\n"
+            self.log(console, "BUILDING REPORT")  # DEBUG
+            report += "FAILURE:\n\n" + "\n".join(invalid_msgs) + "\n"
             reportObj = {
-                'objects_created':[],
-                'text_message':report
-                }
+                'objects_created': [],
+                'text_message': report
+            }
 
-            reportName = 'hmmer_report_'+str(uuid.uuid4())
+            reportName = 'hmmer_report_' + str(uuid.uuid4())
             ws = workspaceService(self.workspaceURL, token=ctx['token'])
             report_obj_info = ws.save_objects({
-                    #'id':info[6],
-                    'workspace':params['workspace_name'],
-                    'objects':[
-                        {
-                        'type':'KBaseReport.Report',
-                        'data':reportObj,
-                        'name':reportName,
-                        'meta':{},
-                        'hidden':1,
-                        'provenance':provenance  # DEBUG
-                        }
-                        ]
-                    })[0]
+                #'id':info[6],
+                'workspace': params['workspace_name'],
+                'objects': [
+                    {
+                        'type': 'KBaseReport.Report',
+                        'data': reportObj,
+                        'name': reportName,
+                        'meta': {},
+                        'hidden': 1,
+                        'provenance': provenance  # DEBUG
+                    }
+                ]
+            })[0]
 
-            self.log(console,"BUILDING RETURN OBJECT")
-            returnVal = { 'report_name': reportName,
-                      'report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
-                      }
-            self.log(console,search_tool_name+"_Search DONE")
+            self.log(console, "BUILDING RETURN OBJECT")
+            returnVal = {'report_name': reportName,
+                         'report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
+                         }
+            self.log(console, search_tool_name + "_Search DONE")
             return [returnVal]
-
 
         # Set output paths
         #output_aln_file_path = os.path.join(hmmer_dir, 'alnout.txt');
         #output_extra_file_path = os.path.join(hmmer_dir, 'alnout_extra.txt');
         #output_filtered_fasta_file_path = os.path.join(hmmer_dir, 'output_filtered.faa');
-
 
         # Build HMM from MSA
         #
@@ -702,13 +671,13 @@ class kb_hmmer:
 
         # check for necessary files
         if not os.path.isfile(hmmer_build_bin):
-            raise ValueError("no such file '"+hmmer_build_bin+"'")
+            raise ValueError("no such file '" + hmmer_build_bin + "'")
         if not os.path.isfile(input_MSA_file_path):
-            raise ValueError("no such file '"+input_MSA_file_path+"'")
+            raise ValueError("no such file '" + input_MSA_file_path + "'")
         elif not os.path.getsize(input_MSA_file_path) > 0:
-            raise ValueError("empty file '"+input_MSA_file_path+"'")
+            raise ValueError("empty file '" + input_MSA_file_path + "'")
 
-        HMM_file_path = input_MSA_file_path+".HMM"
+        HMM_file_path = input_MSA_file_path + ".HMM"
 
         hmmer_build_cmd.append('--informat')
         hmmer_build_cmd.append('CLUSTAL')
@@ -718,39 +687,39 @@ class kb_hmmer:
         # Run HMMER_BUILD, capture output as it happens
         #
         self.log(console, 'RUNNING HMMER_BUILD:')
-        self.log(console, '    '+' '.join(hmmer_build_cmd))
+        self.log(console, '    ' + ' '.join(hmmer_build_cmd))
 #        report += "\n"+'running HMMER_BUILD:'+"\n"
 #        report += '    '+' '.join(hmmer_build_cmd)+"\n"
 
-        p = subprocess.Popen(hmmer_build_cmd, \
-                             cwd = self.output_dir, \
-                             stdout = subprocess.PIPE, \
-                             stderr = subprocess.STDOUT, \
-                             shell = False)
+        p = subprocess.Popen(hmmer_build_cmd,
+                             cwd=self.output_dir,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.STDOUT,
+                             shell=False)
 
         while True:
             line = p.stdout.readline()
-            if not line: break
+            if not line:
+                break
             #self.log(console, line.replace('\n', ''))
 
         p.stdout.close()
         p.wait()
         self.log(console, 'return code: ' + str(p.returncode))
         if p.returncode != 0:
-            raise ValueError('Error running HMMER_BUILD, return code: '+str(p.returncode) + 
-                '\n\n'+ '\n'.join(console))
+            raise ValueError('Error running HMMER_BUILD, return code: ' + str(p.returncode) +
+                             '\n\n' + '\n'.join(console))
 
         # Check for HMM output
         if not os.path.isfile(HMM_file_path):
-            raise ValueError("HMMER_BUILD failed to create HMM file '"+HMM_file_path+"'")
+            raise ValueError("HMMER_BUILD failed to create HMM file '" + HMM_file_path + "'")
         elif not os.path.getsize(HMM_file_path) > 0:
-            raise ValueError("HMMER_BUILD created empty HMM file '"+HMM_file_path+"'")
+            raise ValueError("HMMER_BUILD created empty HMM file '" + HMM_file_path + "'")
 
         # DEBUG
         #with open (HMM_file_path, 'r') as HMM_file_handle:
         #    for line in HMM_file_handle.readlines():
         #        self.log(console, "HMM_FILE: '"+str(line)+"'")
-
 
         ### Construct the HMMER_SEARCH command
         #
@@ -763,19 +732,19 @@ class kb_hmmer:
 
         # check for necessary files
         if not os.path.isfile(hmmer_search_bin):
-            raise ValueError("no such file '"+hmmer_search_bin+"'")
+            raise ValueError("no such file '" + hmmer_search_bin + "'")
         if not os.path.isfile(HMM_file_path):
-            raise ValueError("no such file '"+HMM_file_path+"'")
+            raise ValueError("no such file '" + HMM_file_path + "'")
         elif not os.path.getsize(HMM_file_path):
-            raise ValueError("empty file '"+HMM_file_path+"'")
+            raise ValueError("empty file '" + HMM_file_path + "'")
         if not os.path.isfile(many_forward_reads_file_path):
-            raise ValueError("no such file '"+many_forward_reads_file_path+"'")
+            raise ValueError("no such file '" + many_forward_reads_file_path + "'")
         elif not os.path.getsize(many_forward_reads_file_path):
-            raise ValueError("empty file '"+many_forward_reads_file_path+"'")
+            raise ValueError("empty file '" + many_forward_reads_file_path + "'")
 
-        output_hit_TAB_file_path = os.path.join(hmmer_dir, 'hitout.txt');
-        output_hit_MSA_file_path = os.path.join(hmmer_dir, 'msaout.txt');
-        output_filtered_fasta_file_path = os.path.join(hmmer_dir, 'output_filtered.fasta');
+        output_hit_TAB_file_path = os.path.join(hmmer_dir, 'hitout.txt')
+        output_hit_MSA_file_path = os.path.join(hmmer_dir, 'msaout.txt')
+        output_filtered_fasta_file_path = os.path.join(hmmer_dir, 'output_filtered.fasta')
 
         # this is command for basic search mode
         hmmer_search_cmd.append('--tblout')
@@ -798,39 +767,38 @@ class kb_hmmer:
         # Run HMMER, capture output as it happens
         #
         self.log(console, 'RUNNING HMMER_SEARCH:')
-        self.log(console, '    '+' '.join(hmmer_search_cmd))
+        self.log(console, '    ' + ' '.join(hmmer_search_cmd))
 #        report += "\n"+'running HMMER_SEARCH:'+"\n"
 #        report += '    '+' '.join(hmmer_search_cmd)+"\n"
 
-        p = subprocess.Popen(hmmer_search_cmd, \
-                             cwd = self.output_dir, \
-                             stdout = subprocess.PIPE, \
-                             stderr = subprocess.STDOUT, \
-                             shell = False)
+        p = subprocess.Popen(hmmer_search_cmd,
+                             cwd=self.output_dir,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.STDOUT,
+                             shell=False)
 
         while True:
             line = p.stdout.readline()
-            if not line: break
+            if not line:
+                break
             #self.log(console, line.replace('\n', ''))
 
         p.stdout.close()
         p.wait()
         self.log(console, 'return code: ' + str(p.returncode))
         if p.returncode != 0:
-            raise ValueError('Error running HMMER_SEARCH, return code: '+str(p.returncode) + 
-                '\n\n'+ '\n'.join(console))
-
+            raise ValueError('Error running HMMER_SEARCH, return code: ' + str(p.returncode) +
+                             '\n\n' + '\n'.join(console))
 
         # Check for output
         if not os.path.isfile(output_hit_TAB_file_path):
-            raise ValueError("HMMER_SEARCH failed to create TAB file '"+output_hit_TAB_file_path+"'")
+            raise ValueError("HMMER_SEARCH failed to create TAB file '" + output_hit_TAB_file_path + "'")
         elif not os.path.getsize(output_hit_TAB_file_path) > 0:
-            raise ValueError("HMMER_SEARCH created empty TAB file '"+output_hit_TAB_file_path+"'")
+            raise ValueError("HMMER_SEARCH created empty TAB file '" + output_hit_TAB_file_path + "'")
         if not os.path.isfile(output_hit_MSA_file_path):
-            raise ValueError("HMMER_SEARCH failed to create MSA file '"+output_hit_MSA_file_path+"'")
+            raise ValueError("HMMER_SEARCH failed to create MSA file '" + output_hit_MSA_file_path + "'")
         elif not os.path.getsize(output_hit_MSA_file_path) > 0:
-            raise ValueError("HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
-
+            raise ValueError("HMMER_SEARCH created empty MSA file '" + output_hit_MSA_file_path + "'")
 
         # DEBUG
 #        report = "TAB:\n\n"
@@ -842,14 +810,13 @@ class kb_hmmer:
 #            for line in output_handle:
 #                report += line+"\n"
 
-
         # Parse the hit beg and end positions from Stockholm format MSA output for overlap filtering
         #
         self.log(console, 'PARSING HMMER SEARCH MSA OUTPUT')
         hit_beg = dict()
         hit_end = dict()
         longest_alnlen = dict()
-        with open (output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
+        with open(output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
             for MSA_out_line in output_hit_MSA_file_handle.readlines():
                 MSA_out_line = MSA_out_line.strip()
                 if MSA_out_line.startswith('#=GS '):
@@ -860,7 +827,7 @@ class kb_hmmer:
                     (beg_str, end_str) = hit_range.split('-')
                     beg = int(beg_str)
                     end = int(end_str)
-                    this_alnlen = abs(end-beg)+1
+                    this_alnlen = abs(end - beg) + 1
                     if hit_id in hit_beg:
                         if this_alnlen > longest_alnlen[hit_id]:
                             hit_beg[hit_id] = beg
@@ -871,12 +838,11 @@ class kb_hmmer:
                         hit_end[hit_id] = end
                         longest_alnlen[hit_id] = this_alnlen
 
-
         # Measure length of hit sequences
         #
         self.log(console, 'MEASURING HIT GENES LENGTHS')
         hit_seq_len = dict()
-        with open (many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
+        with open(many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
             last_id = None
             last_buf = ''
             for fasta_line in many_forward_reads_file_handle.readlines():
@@ -884,7 +850,8 @@ class kb_hmmer:
                 if fasta_line.startswith('>'):
                     if last_id != None:
                         id_untrans = last_id
-                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        id_trans = re.sub('\|', ':', id_untrans)
                         #if id_untrans in hit_order or id_trans in hit_order:
                         if id_untrans in hit_beg or id_trans in hit_beg:
                             hit_seq_len[last_id] = len(last_buf)
@@ -895,23 +862,23 @@ class kb_hmmer:
                     last_buf += fasta_line
             if last_id != None:
                 id_untrans = last_id
-                id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                id_trans = re.sub('\|', ':', id_untrans)
                 #if id_untrans in hit_order or id_trans in hit_order:
                 if id_untrans in hit_beg or id_trans in hit_beg:
                     hit_seq_len[last_id] = len(last_buf)
 
-
         # DEBUG
         for hit_id in hit_beg.keys():
-            print ("HIT_ID: '"+str(hit_id)+"' BEG: '"+str(hit_beg[hit_id])+"' END: '"+str(hit_end[hit_id])+"' SEQLEN: '"+str(hit_seq_len[hit_id])+"'")
-
+            print ("HIT_ID: '" + str(hit_id) + "' BEG: '" +
+                   str(hit_beg[hit_id]) + "' END: '" + str(hit_end[hit_id]) + "' SEQLEN: '" + str(hit_seq_len[hit_id]) + "'")
 
         # Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
         #
         self.log(console, 'PARSING HMMER SEARCH TAB OUTPUT')
         hit_seq_ids = dict()
         accept_fids = dict()
-        output_hit_TAB_file_handle = open (output_hit_TAB_file_path, "r", 0)
+        output_hit_TAB_file_handle = open(output_hit_TAB_file_path, "r", 0)
         output_aln_buf = output_hit_TAB_file_handle.readlines()
         output_hit_TAB_file_handle.close()
         total_hit_cnt = 0
@@ -930,26 +897,26 @@ class kb_hmmer:
                 continue
             #header_done = True
             #self.log(console,'HIT LINE: '+line)  # DEBUG
-            hit_info = re.split ('\s+', line)
-            hit_seq_id            = hit_info[0]
-            hit_accession         = hit_info[1]
-            query_name            = hit_info[2]
-            query_accession       = hit_info[3]
-            hit_e_value           = float(hit_info[4])
-            hit_bitscore          = float(hit_info[5])
-            hit_bias              = float(hit_info[6])
-            hit_e_value_best_dom  = float(hit_info[7])
+            hit_info = re.split('\s+', line)
+            hit_seq_id = hit_info[0]
+            hit_accession = hit_info[1]
+            query_name = hit_info[2]
+            query_accession = hit_info[3]
+            hit_e_value = float(hit_info[4])
+            hit_bitscore = float(hit_info[5])
+            hit_bias = float(hit_info[6])
+            hit_e_value_best_dom = float(hit_info[7])
             hit_bitscore_best_dom = float(hit_info[8])
-            hit_bias_best_dom     = float(hit_info[9])
-            hit_expected_dom_n    = float(hit_info[10])
-            hit_regions           = float(hit_info[11])
-            hit_regions_multidom  = float(hit_info[12])
-            hit_overlaps          = float(hit_info[13])
-            hit_envelopes         = float(hit_info[14])
-            hit_dom_n             = float(hit_info[15])
+            hit_bias_best_dom = float(hit_info[9])
+            hit_expected_dom_n = float(hit_info[10])
+            hit_regions = float(hit_info[11])
+            hit_regions_multidom = float(hit_info[12])
+            hit_overlaps = float(hit_info[13])
+            hit_envelopes = float(hit_info[14])
+            hit_dom_n = float(hit_info[15])
             hit_doms_within_rep_thresh = float(hit_info[16])
             hit_doms_within_inc_thresh = float(hit_info[17])
-            hit_desc                   = hit_info[18]
+            hit_desc = hit_info[18]
 
             try:
                 if hit_bitscore > high_bitscore_score[hit_seq_id]:
@@ -974,7 +941,7 @@ class kb_hmmer:
             if 'bitscore' in params and float(params['bitscore']) > float(high_bitscore_score[hit_seq_id]):
                 filter = True
                 filtering_fields[hit_seq_id]['bitscore'] = True
-            if 'overlap_perc' in params and float(params['overlap_perc']) > 100.0*float(longest_alnlen[hit_seq_id])/float(hit_seq_len[hit_seq_id]):
+            if 'overlap_perc' in params and float(params['overlap_perc']) > 100.0 * float(longest_alnlen[hit_seq_id]) / float(hit_seq_len[hit_seq_id]):
                 filter = True
                 filtering_fields[hit_seq_id]['overlap_perc'] = True
             if 'maxaccepts' in params and params['maxaccepts'] != None and accepted_hit_cnt == int(params['maxaccepts']):
@@ -983,13 +950,13 @@ class kb_hmmer:
 
             if filter:
                 continue
-            
+
             accepted_hit_cnt += 1
             hit_seq_ids[hit_seq_id] = True
-            self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
-            self.log(console, "\t"+"BEG: "+str(hit_beg[hit_seq_id])+", END: "+str(hit_end[hit_seq_id])+" ,SEQLEN: "+str(hit_seq_len[hit_seq_id]))
+            self.log(console, "HIT: '" + hit_seq_id + "'")  # DEBUG
+            self.log(console, "\t" + "BEG: " + str(hit_beg[hit_seq_id]) + ", END: " +
+                     str(hit_end[hit_seq_id]) + " ,SEQLEN: " + str(hit_seq_len[hit_seq_id]))
 
-            
         #
         ### Create output objects
         #
@@ -997,7 +964,7 @@ class kb_hmmer:
             self.log(console, 'THERE WERE NO ACCEPTED HITS.  NOT BUILDING OUTPUT OBJECT')
         else:
             self.log(console, 'EXTRACTING HITS FROM INPUT')
-            self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
+            self.log(console, 'MANY_TYPE_NAME: ' + many_type_name)  # DEBUG
 
             # SequenceSet input -> SequenceSet output
             #
@@ -1005,15 +972,17 @@ class kb_hmmer:
                 output_sequenceSet = dict()
 
                 if 'sequence_set_id' in input_many_sequenceSet and input_many_sequenceSet['sequence_set_id'] != None:
-                    output_sequenceSet['sequence_set_id'] = input_many_sequenceSet['sequence_set_id'] + "."+search_tool_name+"_Search_filtered"
+                    output_sequenceSet['sequence_set_id'] = input_many_sequenceSet['sequence_set_id'] + \
+                        "." + search_tool_name + "_Search_filtered"
                 else:
-                    output_sequenceSet['sequence_set_id'] = search_tool_name+"_Search_filtered"
+                    output_sequenceSet['sequence_set_id'] = search_tool_name + "_Search_filtered"
                 if 'description' in input_many_sequenceSet and input_many_sequenceSet['description'] != None:
-                    output_sequenceSet['description'] = input_many_sequenceSet['description'] + " - "+search_tool_name+"_Search filtered"
+                    output_sequenceSet['description'] = input_many_sequenceSet['description'] + \
+                        " - " + search_tool_name + "_Search filtered"
                 else:
-                    output_sequenceSet['description'] = search_tool_anme+"_Search filtered"
+                    output_sequenceSet['description'] = search_tool_anme + "_Search filtered"
 
-                self.log(console,"ADDING SEQUENCES TO SEQUENCESET")
+                self.log(console, "ADDING SEQUENCES TO SEQUENCESET")
                 output_sequenceSet['sequences'] = []
 
                 for seq_obj in input_many_sequenceSet['sequences']:
@@ -1022,30 +991,32 @@ class kb_hmmer:
                     #sequence_str = seq_obj['sequence']
 
                     id_untrans = header_id
-                    id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                    # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                    id_trans = re.sub('\|', ':', id_untrans)
                     if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                         #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
                         accept_fids[id_untrans] = True
                         output_sequenceSet['sequences'].append(seq_obj)
-
 
             # FeatureSet input -> FeatureSet output
             #
             elif many_type_name == 'FeatureSet':
                 output_featureSet = dict()
                 if 'description' in input_many_featureSet and input_many_featureSet['description'] != None:
-                    output_featureSet['description'] = input_many_featureSet['description'] + " - "+search_tool_name+"_Search filtered"
+                    output_featureSet['description'] = input_many_featureSet['description'] + \
+                        " - " + search_tool_name + "_Search filtered"
                 else:
-                    output_featureSet['description'] = search_tool_name+"_Search filtered"
+                    output_featureSet['description'] = search_tool_name + "_Search filtered"
                 output_featureSet['element_ordering'] = []
                 output_featureSet['elements'] = dict()
 
                 fId_list = input_many_featureSet['elements'].keys()
-                self.log(console,"ADDING FEATURES TO FEATURESET")
+                self.log(console, "ADDING FEATURES TO FEATURESET")
                 for fId in sorted(fId_list):
                     for genome_ref in input_many_featureSet['elements'][fId]:
-                        id_untrans = genome_ref+genome_id_feature_id_delim+fId
-                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        id_untrans = genome_ref + genome_id_feature_id_delim + fId
+                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        id_trans = re.sub('\|', ':', id_untrans)
                         if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                             #self.log(console, 'FOUND HIT '+fId)  # DEBUG
                             accept_fids[id_untrans] = True
@@ -1065,12 +1036,13 @@ class kb_hmmer:
                 #                output_featureSet['description'] = input_many_genome['scientific_name'] + " - "+search_tool_name+"_Search filtered"
                 #            else:
                 #                output_featureSet['description'] = search_tool_name+"_Search filtered"
-                output_featureSet['description'] = search_tool_name+"_Search filtered"
+                output_featureSet['description'] = search_tool_name + "_Search filtered"
                 output_featureSet['element_ordering'] = []
                 output_featureSet['elements'] = dict()
                 for fid in feature_ids:
                     id_untrans = fid
-                    id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                    # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                    id_trans = re.sub('\|', ':', id_untrans)
                     if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                         #self.log(console, 'FOUND HIT '+fid)  # DEBUG
                         #output_featureSet['element_ordering'].append(fid)
@@ -1084,19 +1056,21 @@ class kb_hmmer:
             elif many_type_name == 'GenomeSet':
                 output_featureSet = dict()
                 if 'description' in input_many_genomeSet and input_many_genomeSet['description'] != None:
-                    output_featureSet['description'] = input_many_genomeSet['description'] + " - "+search_tool_name+"_Search filtered"
+                    output_featureSet['description'] = input_many_genomeSet['description'] + \
+                        " - " + search_tool_name + "_Search filtered"
                 else:
-                    output_featureSet['description'] = search_tool_name+"_Search filtered"
+                    output_featureSet['description'] = search_tool_name + "_Search filtered"
                 output_featureSet['element_ordering'] = []
                 output_featureSet['elements'] = dict()
 
-                self.log(console,"READING HITS FOR GENOMES")  # DEBUG
+                self.log(console, "READING HITS FOR GENOMES")  # DEBUG
                 for genome_id in feature_ids_by_genome_id.keys():
-                    self.log(console,"READING HITS FOR GENOME "+genome_id)  # DEBUG
+                    self.log(console, "READING HITS FOR GENOME " + genome_id)  # DEBUG
                     genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
                     for feature_id in feature_ids_by_genome_id[genome_id]:
-                        id_untrans = genome_ref+genome_id_feature_id_delim+feature_id
-                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        id_untrans = genome_ref + genome_id_feature_id_delim + feature_id
+                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        id_trans = re.sub('\|', ':', id_untrans)
                         if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                             #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
                             #output_featureSet['element_ordering'].append(feature['id'])
@@ -1109,10 +1083,9 @@ class kb_hmmer:
                                 output_featureSet['element_ordering'].append(feature_id)
                             output_featureSet['elements'][feature_id].append(genome_ref)
 
-
             # load the method provenance from the context object
             #
-            self.log(console,"SETTING PROVENANCE")  # DEBUG
+            self.log(console, "SETTING PROVENANCE")  # DEBUG
             provenance = [{}]
             if 'provenance' in ctx:
                 provenance = ctx['provenance']
@@ -1122,55 +1095,52 @@ class kb_hmmer:
             provenance[0]['input_ws_objects'].append(input_msa_ref)
             provenance[0]['input_ws_objects'].append(input_many_ref)
             provenance[0]['service'] = 'kb_blast'
-            provenance[0]['method'] = search_tool_name+'_Search'
-
+            provenance[0]['method'] = search_tool_name + '_Search'
 
             # Upload results
             #
-            self.log(console,"UPLOADING RESULTS")  # DEBUG
+            self.log(console, "UPLOADING RESULTS")  # DEBUG
 
             # input many SequenceSet -> save SequenceSet
             #
             if many_type_name == 'SequenceSet':
                 new_obj_info = ws.save_objects({
-                            'workspace': params['workspace_name'],
-                            'objects':[{
-                                    'type': 'KBaseSequences.SequenceSet',
-                                    'data': output_sequenceSet,
-                                    'name': params['output_filtered_name'],
-                                    'meta': {},
-                                    'provenance': provenance
+                    'workspace': params['workspace_name'],
+                    'objects': [{
+                                'type': 'KBaseSequences.SequenceSet',
+                                'data': output_sequenceSet,
+                                'name': params['output_filtered_name'],
+                                'meta': {},
+                                'provenance': provenance
                                 }]
-                        })[0]
+                })[0]
 
             else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
                 new_obj_info = ws.save_objects({
-                            'workspace': params['workspace_name'],
-                            'objects':[{
-                                    'type': 'KBaseCollections.FeatureSet',
-                                    'data': output_featureSet,
-                                    'name': params['output_filtered_name'],
-                                    'meta': {},
-                                    'provenance': provenance
+                    'workspace': params['workspace_name'],
+                    'objects': [{
+                                'type': 'KBaseCollections.FeatureSet',
+                                'data': output_featureSet,
+                                'name': params['output_filtered_name'],
+                                'meta': {},
+                                'provenance': provenance
                                 }]
-                        })[0]
-
+                })[0]
 
         # build output report object
         #
-        self.log(console,"BUILDING REPORT")  # DEBUG
+        self.log(console, "BUILDING REPORT")  # DEBUG
         if len(invalid_msgs) == 0 and total_hit_cnt > 0:
 
             # text report
             #
-            report += 'sequences in search db: '+str(seq_total)+"\n"
-            report += 'sequences in hit set: '+str(total_hit_cnt)+"\n"
-            report += 'sequences in accepted hit set: '+str(accepted_hit_cnt)+"\n"
+            report += 'sequences in search db: ' + str(seq_total) + "\n"
+            report += 'sequences in hit set: ' + str(total_hit_cnt) + "\n"
+            report += 'sequences in accepted hit set: ' + str(accepted_hit_cnt) + "\n"
             report += "\n"
             for line in hit_buf:
                 report += line
-            self.log (console, report)
-
+            self.log(console, report)
 
             # build html report
             if many_type_name == 'Genome':
@@ -1182,7 +1152,7 @@ class kb_hmmer:
             elif many_type_name == 'FeatureSet':
                 feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
                 genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
-                
+
             head_color = "#eeeeff"
             border_head_color = "#ffccff"
             accept_row_color = 'white'
@@ -1205,17 +1175,26 @@ class kb_hmmer:
             html_report_lines = []
             html_report_lines += ['<html>']
             html_report_lines += ['<body bgcolor="white">']
-            html_report_lines += ['<table cellpadding='+cellpadding+' cellspacing = '+cellspacing+' border='+border+'>']
-            html_report_lines += ['<tr bgcolor="'+head_color+'">']
-            html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'ALIGNMENT COVERAGE (HIT SEQ)'+'</font></td>']
-            html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'GENE ID'+'</font></td>']
-            html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'FUNCTION'+'</font></td>']
-            html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'GENOME'+'</font></td>']
+            html_report_lines += ['<table cellpadding=' + cellpadding +
+                                  ' cellspacing = ' + cellspacing + ' border=' + border + '>']
+            html_report_lines += ['<tr bgcolor="' + head_color + '">']
+            html_report_lines += ['<td style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' + border_head_color +
+                                  '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'ALIGNMENT COVERAGE (HIT SEQ)' + '</font></td>']
+            html_report_lines += ['<td style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'GENE ID' + '</font></td>']
+            html_report_lines += ['<td style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'FUNCTION' + '</font></td>']
+            html_report_lines += ['<td style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'GENOME' + '</font></td>']
 #            html_report_lines += ['<td align=center style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'IDENT'+'%</font></td>']
-            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'ALN_LEN'+'</font></td>']
-            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'E-VALUE'+'</font></td>']
-            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'BIT SCORE'+'</font></td>']
-            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'<nobr>H_BEG-H_END</nobr>'+'</font></td>']
+            html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'ALN_LEN' + '</font></td>']
+            html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'E-VALUE' + '</font></td>']
+            html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'BIT SCORE' + '</font></td>']
+            html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + '<nobr>H_BEG-H_END</nobr>' + '</font></td>']
 #            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'MIS MATCH'+'</font></td>']
 #            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'GAP OPEN'+'</font></td>']
             html_report_lines += ['</tr>']
@@ -1225,7 +1204,8 @@ class kb_hmmer:
                 if line == '' or line.startswith('#'):
                     continue
 
-                [hit_id, hit_accession, query_name, query_accession, e_value, bit_score, bias, e_value_best_dom, bit_score_best_dom, bias_best_dom, expected_dom_n, regions, regions_multidom, overlaps, envelopes, dom_n, doms_within_rep_thresh, doms_within_inc_thresh, hit_desc] = re.split('\s+',line)[0:19]
+                [hit_id, hit_accession, query_name, query_accession, e_value, bit_score, bias, e_value_best_dom, bit_score_best_dom, bias_best_dom, expected_dom_n,
+                    regions, regions_multidom, overlaps, envelopes, dom_n, doms_within_rep_thresh, doms_within_inc_thresh, hit_desc] = re.split('\s+', line)[0:19]
 
 #                [query_id, hit_id, identity, aln_len, mismatches, gap_openings, q_beg, q_end, h_beg, h_end, e_value, bit_score] = line.split("\t")[0:12]
 #                identity = str(round(float(identity), 1))
@@ -1235,9 +1215,8 @@ class kb_hmmer:
                 h_len = hit_seq_len[hit_id]
                 h_beg = hit_beg[hit_id]
                 h_end = hit_end[hit_id]
-                aln_len = abs(h_end-h_beg)+1
-                aln_len_perc = round (100.0*float(aln_len)/float(h_len), 1)
-
+                aln_len = abs(h_end - h_beg) + 1
+                aln_len_perc = round(100.0 * float(aln_len) / float(h_len), 1)
 
                 #if many_type_name == 'SingleEndLibrary':
                 #    pass
@@ -1258,7 +1237,8 @@ class kb_hmmer:
                     fid_lookup = None
                     for fid in feature_id_to_function[genome_ref].keys():
                         id_untrans = fid
-                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        id_trans = re.sub('\|', ':', id_untrans)
 
                         #self.log (console, "SCANNING FIDS.  HIT_FID: '"+str(hit_fid)+"' FID: '"+str(fid)+"' TRANS: '"+str(id_trans)+"'")  # DEBUG
 
@@ -1267,7 +1247,7 @@ class kb_hmmer:
                             if many_type_name == 'Genome':
                                 accept_id = fid
                             elif many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
-                                accept_id = genome_ref+genome_id_feature_id_delim+fid
+                                accept_id = genome_ref + genome_id_feature_id_delim + fid
                             if accept_id in accept_fids:
                                 row_color = accept_row_color
                             else:
@@ -1276,34 +1256,36 @@ class kb_hmmer:
                             break
                     #self.log (console, "HIT_FID: '"+str(hit_fid)+"' FID_LOOKUP: '"+str(fid_lookup)+"'")  # DEBUG
                     if fid_lookup == None:
-                        raise ValueError ("unable to find fid for hit_fid: '"+str(hit_fid))
+                        raise ValueError("unable to find fid for hit_fid: '" + str(hit_fid))
                     elif fid_lookup not in feature_id_to_function[genome_ref]:
-                        raise ValueError ("unable to find function for fid: '"+str(fid_lookup))
-                    fid_disp = re.sub (r"^.*\.([^\.]+)\.([^\.]+)$", r"\1.\2", fid_lookup)
+                        raise ValueError("unable to find function for fid: '" + str(fid_lookup))
+                    fid_disp = re.sub(r"^.*\.([^\.]+)\.([^\.]+)$", r"\1.\2", fid_lookup)
 
                     func_disp = feature_id_to_function[genome_ref][fid_lookup]
                     genome_sci_name = genome_ref_to_sci_name[genome_ref]
 
-                    html_report_lines += ['<tr bgcolor="'+row_color+'">']
+                    html_report_lines += ['<tr bgcolor="' + row_color + '">']
                     #html_report_lines += ['<tr bgcolor="'+'white'+'">']  # DEBUG
                     # add overlap bar
 
                     # coverage graphic (with respect to hit seq)
-                    html_report_lines += ['<td valign=middle align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'">']
-                    html_report_lines += ['<table style="height:'+str(bar_height)+'px; width:'+str(bar_width)+'px" border=0 cellpadding=0 cellspacing=0>']
+                    html_report_lines += ['<td valign=middle align=center style="border-right:solid 1px ' +
+                                          border_body_color + '; border-bottom:solid 1px ' + border_body_color + '">']
+                    html_report_lines += ['<table style="height:' +
+                                          str(bar_height) + 'px; width:' + str(bar_width) + 'px" border=0 cellpadding=0 cellspacing=0>']
                     full_len_pos = bar_width
-                    aln_beg_pos = int (float(bar_width) * float(int(h_beg)-1)/float(int(h_len)-1))
-                    aln_end_pos = int (float(bar_width) * float(int(h_end)-1)/float(int(h_len)-1))
-                    cell_pix_height = str(int(round(float(bar_height)/3.0, 0)))
+                    aln_beg_pos = int(float(bar_width) * float(int(h_beg) - 1) / float(int(h_len) - 1))
+                    aln_end_pos = int(float(bar_width) * float(int(h_end) - 1) / float(int(h_len) - 1))
+                    cell_pix_height = str(int(round(float(bar_height) / 3.0, 0)))
 
-                    cell_color = ['','','']
+                    cell_color = ['', '', '']
                     cell_width = []
                     cell_width.append(aln_beg_pos)
-                    cell_width.append(aln_end_pos-aln_beg_pos)
-                    cell_width.append(bar_width-aln_end_pos)
+                    cell_width.append(aln_end_pos - aln_beg_pos)
+                    cell_width.append(bar_width - aln_end_pos)
 
                     for row_i in range(3):
-                        html_report_lines += ['<tr style="height:'+cell_pix_height+'px">']
+                        html_report_lines += ['<tr style="height:' + cell_pix_height + 'px">']
                         unalign_color = row_color
                         if row_i == 1:
                             unalign_color = bar_line_color
@@ -1314,19 +1296,23 @@ class kb_hmmer:
                         for col_i in range(3):
                             cell_pix_width = str(cell_width[col_i])
                             cell_pix_color = cell_color[col_i]
-                            html_report_lines += ['<td style="height:'+cell_pix_height+'px; width:'+cell_pix_width+'px" bgcolor="'+cell_pix_color+'"></td>']
+                            html_report_lines += ['<td style="height:' + cell_pix_height +
+                                                  'px; width:' + cell_pix_width + 'px" bgcolor="' + cell_pix_color + '"></td>']
                         html_report_lines += ['</tr>']
                     html_report_lines += ['</table>']
                     html_report_lines += ['</td>']
 
                     # add other cells
                     # fid
-                    html_report_lines += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(fid_disp)+'</font></td>']
+                    html_report_lines += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                          border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + str(fid_disp) + '</font></td>']
 #                    html_report_lines += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(hit_accession)+'</font></td>']
                     # func
-                    html_report_lines += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+func_disp+'</font></td>']
+                    html_report_lines += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                          border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + func_disp + '</font></td>']
                     # sci name
-                    html_report_lines += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+genome_sci_name+'</font></td>']
+                    html_report_lines += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                          border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + genome_sci_name + '</font></td>']
                     # ident
 #                    if 'ident_thresh' in filtering_fields[hit_id]:
  #                       this_cell_color = reject_cell_color
@@ -1339,22 +1325,26 @@ class kb_hmmer:
                         this_cell_color = reject_cell_color
                     else:
                         this_cell_color = row_color
-                    html_report_lines += ['<td align=center bgcolor="'+str(this_cell_color)+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
+                    html_report_lines += ['<td align=center bgcolor="' + str(this_cell_color) + '" style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                          border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + str(aln_len) + ' (' + str(aln_len_perc) + '%)</font></td>']
 
                     # evalue
-                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(e_value)+'</nobr></font></td>']
+                    html_report_lines += ['<td align=center style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                          border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(e_value) + '</nobr></font></td>']
 
                     # bit score
                     if 'bitscore' in filtering_fields[hit_id]:
                         this_cell_color = reject_cell_color
                     else:
                         this_cell_color = row_color
-                    html_report_lines += ['<td align=center bgcolor="'+str(this_cell_color)+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bit_score)+'</nobr></font></td>']
+                    html_report_lines += ['<td align=center bgcolor="' + str(this_cell_color) + '" style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                          border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(bit_score) + '</nobr></font></td>']
                     # bias
 #                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bias)+'</nobr><br><nobr>('+str(bias_best_dom)+')</nobr></font></td>']
 
                     # aln coords only for hit seq
-                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(h_beg)+'-'+str(h_end)+'</nobr></font></td>']
+                    html_report_lines += ['<td align=center style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' + border_body_color +
+                                          '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(h_beg) + '-' + str(h_end) + '</nobr></font></td>']
 
                     # mismatches?
 #                    html_report_lines += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(mismatches)+'</font></td>']
@@ -1388,16 +1378,15 @@ class kb_hmmer:
             html_report_lines += ['</body>']
             html_report_lines += ['</html>']
 
-
             # write html to file and upload
             #
             html_report_str = "\n".join(html_report_lines)
-            html_output_dir = os.path.join(self.output_dir,'html_output')
+            html_output_dir = os.path.join(self.output_dir, 'html_output')
             if not os.path.exists(html_output_dir):
                 os.makedirs(html_output_dir)
-            html_file = search_tool_name+'_Search.html'
-            html_path = os.path.join (html_output_dir, html_file)
-            with open (html_path, 'w', 0) as html_handle:
+            html_file = search_tool_name + '_Search.html'
+            html_path = os.path.join(html_output_dir, html_file)
+            with open(html_path, 'w', 0) as html_handle:
                 html_handle.write(html_report_str)
 
             dfu = DFUClient(self.callbackURL)
@@ -1407,23 +1396,22 @@ class kb_hmmer:
                                                      'make_handle': 0,
                                                      'pack': 'zip'})
             except:
-                raise ValueError ('Logging exception loading HTML file to shock')
+                raise ValueError('Logging exception loading HTML file to shock')
             try:
                 TAB_upload_ret = dfu.file_to_shock({'file_path': output_hit_TAB_file_path,
                                                     'make_handle': 0})
-                                                    #'pack': 'zip'})
+                #'pack': 'zip'})
             except:
-                raise ValueError ('Logging exception loading TAB output to shock')
+                raise ValueError('Logging exception loading TAB output to shock')
             try:
                 MSA_upload_ret = dfu.file_to_shock({'file_path': output_hit_MSA_file_path,
                                                     'make_handle': 0})
-                                                    #'pack': 'zip'})
+                #'pack': 'zip'})
             except:
-                raise ValueError ('Logging exception loading MSA output to shock')
-
+                raise ValueError('Logging exception loading MSA output to shock')
 
             # create report object
-            reportName = 'hmmer_report_'+str(uuid.uuid4())
+            reportName = 'hmmer_report_' + str(uuid.uuid4())
             reportObj = {'objects_created': [],
                          #'text_message': '',  # or is it 'message'?
                          'message': '',  # or is it 'text_message'?
@@ -1441,16 +1429,16 @@ class kb_hmmer:
             reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_file,
-                                        'label': search_tool_name+' HTML Report'}
+                                        'label': search_tool_name + ' HTML Report'}
                                        ]
 
             reportObj['file_links'] = [{'shock_id': TAB_upload_ret['shock_id'],
-                                        'name': search_tool_name+'_Search.TAB',
-                                        'label': search_tool_name+' hits TABLE'},
+                                        'name': search_tool_name + '_Search.TAB',
+                                        'label': search_tool_name + ' hits TABLE'},
 
                                        {'shock_id': MSA_upload_ret['shock_id'],
-                                        'name': search_tool_name+'_Search.MSA',
-                                        'label': search_tool_name+' hits MSA'},
+                                        'name': search_tool_name + '_Search.MSA',
+                                        'label': search_tool_name + ' hits MSA'},
 
                                        ]
 #            if extra_output:
@@ -1468,11 +1456,11 @@ class kb_hmmer:
 #                reportObj['file_links'].append({'shock_id': extra_upload_ret['shock_id'],
 #                                                'name': search_tool_name+'_Search-m'+str(params['output_extra_format'])+'.'+extension,
 #                                                'label': search_tool_name+' Results: m'+str(params['output_extra_format'])})
-                            
-            if accepted_hit_cnt > 0:
-                reportObj['objects_created'].append({'ref':str(params['workspace_name'])+'/'+params['output_filtered_name'],'description':search_tool_name+' hits'})
-            #reportObj['message'] = report
 
+            if accepted_hit_cnt > 0:
+                reportObj['objects_created'].append(
+                    {'ref': str(params['workspace_name']) + '/' + params['output_filtered_name'], 'description': search_tool_name + ' hits'})
+            #reportObj['message'] = report
 
             # save report object
             #
@@ -1485,41 +1473,41 @@ class kb_hmmer:
             if total_hit_cnt == 0:  # no hits
                 report += "No hits were found\n"
             else:  # data validation error
-                report += "FAILURE\n\n"+"\n".join(invalid_msgs)+"\n"
+                report += "FAILURE\n\n" + "\n".join(invalid_msgs) + "\n"
 
             reportObj = {
-                'objects_created':[],
-                'text_message':report
-                }
+                'objects_created': [],
+                'text_message': report
+            }
 
-            reportName = 'hmmer_report_'+str(uuid.uuid4())
+            reportName = 'hmmer_report_' + str(uuid.uuid4())
             report_obj_info = ws.save_objects({
-                    #                'id':info[6],
-                    'workspace':params['workspace_name'],
-                    'objects':[
-                        {
-                            'type':'KBaseReport.Report',
-                            'data':reportObj,
-                            'name':reportName,
-                            'meta':{},
-                            'hidden':1,
-                            'provenance':provenance
-                            }
-                        ]
-                    })[0]
+                #                'id':info[6],
+                'workspace': params['workspace_name'],
+                'objects': [
+                    {
+                        'type': 'KBaseReport.Report',
+                        'data': reportObj,
+                        'name': reportName,
+                        'meta': {},
+                        'hidden': 1,
+                        'provenance': provenance
+                    }
+                ]
+            })[0]
             report_info = dict()
             report_info['name'] = report_obj_info[1]
-            report_info['ref'] = str(report_obj_info[6])+'/'+str(report_obj_info[0])+'/'+str(report_obj_info[4])
+            report_info['ref'] = str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4])
 
-        self.log(console,"BUILDING RETURN OBJECT")
+        self.log(console, "BUILDING RETURN OBJECT")
 #        returnVal = { 'output_report_name': reportName,
 #                      'output_report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
 #                      'output_filtered_ref': params['workspace_name']+'/'+params['output_filtered_name']
 #                      }
-        returnVal = { 'report_name': report_info['name'],
-                      'report_ref': report_info['ref']
-                      }
-        self.log(console,search_tool_name+"_Search DONE")
+        returnVal = {'report_name': report_info['name'],
+                     'report_ref': report_info['ref']
+                     }
+        self.log(console, search_tool_name + "_Search DONE")
         #END HMMER_MSA_Search
 
         # At some point might do deeper type checking...
@@ -1528,7 +1516,6 @@ class kb_hmmer:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
-
 
     def HMMER_Local_MSA_Group_Search(self, ctx, params):
         """
@@ -1563,9 +1550,10 @@ class kb_hmmer:
         #BEGIN HMMER_Local_MSA_Group_Search
         console = []
         invalid_msgs = []
+        msa_invalid_msgs = []
         search_tool_name = 'HMMER_Local_MSA_Group_prot'
-        self.log(console,'Running '+search_tool_name+'_Search with params=')
-        self.log(console, "\n"+pformat(params))
+        self.log(console, 'Running ' + search_tool_name + '_Search with params=')
+        self.log(console, "\n" + pformat(params))
         report = ''
 #        report = 'Running '+search_tool_name+'_Search with params='
 #        report += "\n"+pformat(params)
@@ -1573,7 +1561,6 @@ class kb_hmmer:
         appropriate_sequence_found_in_MSA_input = False
         appropriate_sequence_found_in_many_input = False
         genome_id_feature_id_delim = '.f:'
-
 
         #### do some basic checks
         #
@@ -1590,20 +1577,18 @@ class kb_hmmer:
         if 'coalesce_output' not in params:
             raise ValueError('coalesce_output parameter is required')
 
-
         # set local names and ids
 #        input_one_ref = params['input_one_ref']
         #input_msa_ref = params['input_msa_ref']
         input_many_ref = params['input_many_ref']
         ws_id = input_many_ref.split('/')[0]
-        
 
         #### Get the input_many object
         ##
         try:
             ws = workspaceService(self.workspaceURL, token=ctx['token'])
             #objects = ws.get_objects([{'ref': input_many_ref}])
-            objects = ws.get_objects2({'objects':[{'ref': input_many_ref}]})['data']
+            objects = ws.get_objects2({'objects': [{'ref': input_many_ref}]})['data']
             input_many_data = objects[0]['data']
             info = objects[0]['info']
             input_many_name = str(info[1])
@@ -1612,7 +1597,6 @@ class kb_hmmer:
         except Exception as e:
             raise ValueError('Unable to fetch input_many_name object from workspace: ' + str(e))
             #to get the full stack trace: traceback.format_exc()
-
 
         # Handle overloading (input_many can be SequenceSet, FeatureSet, Genome, or GenomeSet)
         #
@@ -1624,25 +1608,29 @@ class kb_hmmer:
                 raise ValueError('Unable to get SequenceSet: ' + str(e))
 
             header_id = input_many_sequenceSet['sequences'][0]['sequence_id']
-            many_forward_reads_file_path = os.path.join(self.output_dir, header_id+'.fasta')
+            many_forward_reads_file_path = os.path.join(self.output_dir, header_id + '.fasta')
             many_forward_reads_file_handle = open(many_forward_reads_file_path, 'w', 0)
-            self.log(console, 'writing reads file: '+str(many_forward_reads_file_path))
+            self.log(console, 'writing reads file: ' + str(many_forward_reads_file_path))
 
             for seq_obj in input_many_sequenceSet['sequences']:
                 header_id = seq_obj['sequence_id']
                 sequence_str = seq_obj['sequence']
 
                 PROT_pattern = re.compile("^[acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
-                #DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
-                if not PROT_pattern.match(sequence_str):
-                    self.log(invalid_msgs,"BAD record for sequence_id: "+header_id+"\n"+sequence_str+"\n")
+                DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
+                if DNA_pattern.match(sequence_str):
+                    self.log(invalid_msgs,
+                             "Require protein sequences for target. " +
+                             "BAD nucleotide record for sequence_id: " + header_id + "\n" + sequence_str + "\n")
+                    continue
+                elif not PROT_pattern.match(sequence_str):
+                    self.log(invalid_msgs, "BAD record for sequence_id: " + header_id + "\n" + sequence_str + "\n")
                     continue
                 appropriate_sequence_found_in_many_input = True
-                many_forward_reads_file_handle.write('>'+header_id+"\n")
-                many_forward_reads_file_handle.write(sequence_str+"\n")
-            many_forward_reads_file_handle.close();
+                many_forward_reads_file_handle.write('>' + header_id + "\n")
+                many_forward_reads_file_handle.write(sequence_str + "\n")
+            many_forward_reads_file_handle.close()
             self.log(console, 'done')
-
 
         # FeatureSet
         #
@@ -1650,30 +1638,30 @@ class kb_hmmer:
             # retrieve sequences for features
             input_many_featureSet = input_many_data
             many_forward_reads_file_dir = self.output_dir
-            many_forward_reads_file = input_many_name+".fasta"
+            many_forward_reads_file = input_many_name + ".fasta"
 
             # DEBUG
             #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             FeatureSetToFASTA_params = {
-                'featureSet_ref':      input_many_ref,
-                'file':                many_forward_reads_file,
-                'dir':                 many_forward_reads_file_dir,
-                'console':             console,
-                'invalid_msgs':        invalid_msgs,
-                'residue_type':        'protein',
-                'feature_type':        'CDS',
-                'record_id_pattern':   '%%genome_ref%%'+genome_id_feature_id_delim+'%%feature_id%%',
+                'featureSet_ref': input_many_ref,
+                'file': many_forward_reads_file,
+                'dir': many_forward_reads_file_dir,
+                'console': console,
+                'invalid_msgs': invalid_msgs,
+                'residue_type': 'protein',
+                'feature_type': 'CDS',
+                'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
                 'record_desc_pattern': '[%%genome_ref%%]',
-                'case':                'upper',
-                'linewrap':            50,
-                'merge_fasta_files':   'TRUE'
-                }
+                'case': 'upper',
+                'linewrap': 50,
+                'merge_fasta_files': 'TRUE'
+            }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
             #SERVICE_VER = 'release'
             SERVICE_VER = 'dev'
-            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-            FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA (FeatureSetToFASTA_params)
+            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+            FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA(FeatureSetToFASTA_params)
             many_forward_reads_file_path = FeatureSetToFASTA_retVal['fasta_file_path']
             feature_ids_by_genome_ref = FeatureSetToFASTA_retVal['feature_ids_by_genome_ref']
             if len(feature_ids_by_genome_ref.keys()) > 0:
@@ -1683,34 +1671,33 @@ class kb_hmmer:
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
 
-
         # Genome
         #
         elif many_type_name == 'Genome':
             many_forward_reads_file_dir = self.output_dir
-            many_forward_reads_file = input_many_name+".fasta"
+            many_forward_reads_file = input_many_name + ".fasta"
 
             # DEBUG
             #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             GenomeToFASTA_params = {
-                'genome_ref':          input_many_ref,
-                'file':                many_forward_reads_file,
-                'dir':                 many_forward_reads_file_dir,
-                'console':             console,
-                'invalid_msgs':        invalid_msgs,
-                'residue_type':        'protein',
-                'feature_type':        'CDS',
-                'record_id_pattern':   '%%feature_id%%',
+                'genome_ref': input_many_ref,
+                'file': many_forward_reads_file,
+                'dir': many_forward_reads_file_dir,
+                'console': console,
+                'invalid_msgs': invalid_msgs,
+                'residue_type': 'protein',
+                'feature_type': 'CDS',
+                'record_id_pattern': '%%feature_id%%',
                 'record_desc_pattern': '[%%genome_id%%]',
-                'case':                'upper',
-                'linewrap':            50
-                }
+                'case': 'upper',
+                'linewrap': 50
+            }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
             #SERVICE_VER = 'release'
             SERVICE_VER = 'dev'
-            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-            GenomeToFASTA_retVal = DOTFU.GenomeToFASTA (GenomeToFASTA_params)
+            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+            GenomeToFASTA_retVal = DOTFU.GenomeToFASTA(GenomeToFASTA_params)
             many_forward_reads_file_path = GenomeToFASTA_retVal['fasta_file_path']
             feature_ids = GenomeToFASTA_retVal['feature_ids']
             if len(feature_ids) > 0:
@@ -1719,14 +1706,13 @@ class kb_hmmer:
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
-            
 
         # GenomeSet
         #
         elif many_type_name == 'GenomeSet':
             input_many_genomeSet = input_many_data
             many_forward_reads_file_dir = self.output_dir
-            many_forward_reads_file = input_many_name+".fasta"
+            many_forward_reads_file = input_many_name + ".fasta"
 
             genome_refs = []
             for genome_id in input_many_genomeSet['elements']:
@@ -1737,25 +1723,25 @@ class kb_hmmer:
             # DEBUG
             #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             GenomeSetToFASTA_params = {
-                'genomeSet_ref':       input_many_ref,
-                'file':                many_forward_reads_file,
-                'dir':                 many_forward_reads_file_dir,
-                'console':             console,
-                'invalid_msgs':        invalid_msgs,
-                'residue_type':        'protein',
-                'feature_type':        'CDS',
-                'record_id_pattern':   '%%genome_ref%%'+genome_id_feature_id_delim+'%%feature_id%%',
+                'genomeSet_ref': input_many_ref,
+                'file': many_forward_reads_file,
+                'dir': many_forward_reads_file_dir,
+                'console': console,
+                'invalid_msgs': invalid_msgs,
+                'residue_type': 'protein',
+                'feature_type': 'CDS',
+                'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
                 'record_desc_pattern': '[%%genome_ref%%]',
-                'case':                'upper',
-                'linewrap':            50,
-                'merge_fasta_files':   'TRUE'
-                }
+                'case': 'upper',
+                'linewrap': 50,
+                'merge_fasta_files': 'TRUE'
+            }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
             #SERVICE_VER = 'release'
             SERVICE_VER = 'dev'
-            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-            GenomeSetToFASTA_retVal = DOTFU.GenomeSetToFASTA (GenomeSetToFASTA_params)
+            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+            GenomeSetToFASTA_retVal = DOTFU.GenomeSetToFASTA(GenomeSetToFASTA_params)
             many_forward_reads_file_path = GenomeSetToFASTA_retVal['fasta_file_path_list'][0]
             feature_ids_by_genome_id = GenomeSetToFASTA_retVal['feature_ids_by_genome_id']
             if len(feature_ids_by_genome_id.keys()) > 0:
@@ -1765,12 +1751,10 @@ class kb_hmmer:
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
 
-
         # Missing proper input_many_type
         #
         else:
-            raise ValueError('Cannot yet handle input_many type of: '+many_type_name)            
-
+            raise ValueError('Cannot yet handle input_many type of: ' + many_type_name)
 
         # Get total number of sequences in input_many search db
         #
@@ -1785,7 +1769,6 @@ class kb_hmmer:
             for genome_id in feature_ids_by_genome_id.keys():
                 seq_total += len(feature_ids_by_genome_id[genome_id])
 
-
         #### Get the input_msa_refs
         ##
         if 'input_msa_refs' in params and len(params['input_msa_refs']) != 0:
@@ -1794,33 +1777,40 @@ class kb_hmmer:
             input_msa_refs = []
             ws = workspaceService(self.workspaceURL, token=ctx['token'])
             try:
-                msa_obj_info_list = ws.list_objects({'ids':[ws_id],'type':"KBaseTrees.MSA"})
+                msa_obj_info_list = ws.list_objects({'ids': [ws_id], 'type': "KBaseTrees.MSA"})
             except Exception as e:
-                raise ValueError ("Unable to list MSA objects from workspace: "+str(params['workspace_name'])+" "+str(e))
+                raise ValueError("Unable to list MSA objects from workspace: " +
+                                 str(params['workspace_name']) + " " + str(e))
 
             for info in msa_obj_info_list:
-                [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
-                
-                input_msa_ref = str(info[WSID_I])+'/'+str(info[OBJID_I])+'/'+str(info[VERSION_I])
-                input_msa_refs.append(input_msa_ref)
+                [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I,
+                    WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
 
+                input_msa_ref = str(info[WSID_I]) + '/' + str(info[OBJID_I]) + '/' + str(info[VERSION_I])
+                input_msa_refs.append(input_msa_ref)
 
         #### write the MSAs to file and collect names and desc
         ##
         input_msa_names = []
         input_msa_descs = []
-        for input_msa_ref in input_msa_refs:
+        appropriate_sequence_found_in_MSA_input = False
+        msa_needs_skipping = False
+        keep_msa = []
+        msa_invalid_msgs = []
+        for msa_i, input_msa_ref in enumerate(input_msa_refs):
+            keep_msa.append(False)
+
             try:
                 ws = workspaceService(self.workspaceURL, token=ctx['token'])
                 #objects = ws.get_objects([{'ref': input_msa_ref}])
-                objects = ws.get_objects2({'objects':[{'ref': input_msa_ref}]})['data']
+                objects = ws.get_objects2({'objects': [{'ref': input_msa_ref}]})['data']
                 input_msa_data = objects[0]['data']
                 info = objects[0]['info']
                 input_msa_name = str(info[1])
                 msa_type_name = info[2].split('.')[1].split('-')[0]
 
             except Exception as e:
-                raise ValueError('Unable to fetch '+input_msa_name+' object from workspace: ' + str(e))
+                raise ValueError('Unable to fetch ' + input_msa_name + ' object from workspace: ' + str(e))
                 #to get the full stack trace: traceback.format_exc()
 
             # set hmmer_dir
@@ -1828,11 +1818,12 @@ class kb_hmmer:
             if not os.path.exists(hmmer_dir):
                 os.makedirs(hmmer_dir)
 
-            if msa_type_name == 'MSA':
-                self.log (console, "\n\nPROCESSING MSA "+input_msa_name+"\n")  # DEBUG
+            if msa_type_name != 'MSA':
+                raise ValueError('Cannot yet handle input_msa type of: ' + msa_type_name)
+            else:
+                self.log(console, "\n\nPROCESSING MSA " + input_msa_name + "\n")  # DEBUG
 
                 input_msa_names.append(input_msa_name)
-
                 MSA_in = input_msa_data
                 if 'description' in MSA_in and MSA_in['description'] != None and MSA_in['description'] != '':
                     input_msa_descs.append(MSA_in['description'])
@@ -1853,8 +1844,8 @@ class kb_hmmer:
                         default_row_labels[row_id] = row_id
 
                 # export features to CLUSTAL formatted MSA (HMMER BUILD seems to only take CLUSTAL)
-                input_MSA_file_path = os.path.join(hmmer_dir, input_msa_name+".clustal")
-                self.log(console, 'writing MSA file: '+input_MSA_file_path)
+                input_MSA_file_path = os.path.join(hmmer_dir, input_msa_name + ".clustal")
+                self.log(console, 'writing MSA file: ' + input_MSA_file_path)
 
                 # set header
                 header = 'CLUSTAL W (1.81) multiple sequence alignment'
@@ -1884,38 +1875,38 @@ class kb_hmmer:
                 # break up MSA into 60 char chunks
                 records = []
                 chunk_len = 60
-                whole_chunks = int(math.floor(row_len/chunk_len))
+                whole_chunks = int(math.floor(row_len / chunk_len))
                 if whole_chunks > 0:
                     for j in range(whole_chunks):
                         records.append('')
                         for row_id in row_order:
                             padding = ''
-                            if longest_row_id_len-len(row_id) > 0:
-                                for i in range(0,longest_row_id_len-len(row_id)):
+                            if longest_row_id_len - len(row_id) > 0:
+                                for i in range(0, longest_row_id_len - len(row_id)):
                                     padding += ' '
                             records.append(row_id + padding + " " +
-                                       MSA_in['alignment'][row_id][j*chunk_len:(j+1)*chunk_len])
+                                           MSA_in['alignment'][row_id][j * chunk_len:(j + 1) * chunk_len])
                         records.append(''.join([' ' for s in range(longest_row_id_len)]) + " " +
-                                   conservation_symbol[j*chunk_len:(j+1)*chunk_len])
+                                       conservation_symbol[j * chunk_len:(j + 1) * chunk_len])
 
                 # add final rows
                 if (row_len % chunk_len) != 0:
-                    j=whole_chunks
+                    j = whole_chunks
                     records.append('')
                     for row_id in row_order:
                         padding = ''
-                        if longest_row_id_len-len(row_id) > 0:
-                            for i in range(0,longest_row_id_len-len(row_id)):
+                        if longest_row_id_len - len(row_id) > 0:
+                            for i in range(0, longest_row_id_len - len(row_id)):
                                 padding += ' '
                         records.append(row_id + padding + " " +
-                                   MSA_in['alignment'][row_id][j*chunk_len:row_len])
+                                       MSA_in['alignment'][row_id][j * chunk_len:row_len])
                     records.append(''.join([' ' for s in range(longest_row_id_len)]) + " " +
-                               conservation_symbol[j*chunk_len:row_len])
-            
+                                   conservation_symbol[j * chunk_len:row_len])
+
                 # write that sucker
-                with open(input_MSA_file_path,'w',0) as input_MSA_file_handle:
-                    input_MSA_file_handle.write(header+"\n")
-                    input_MSA_file_handle.write("\n".join(records)+"\n")
+                with open(input_MSA_file_path, 'w', 0) as input_MSA_file_handle:
+                    input_MSA_file_handle.write(header + "\n")
+                    input_MSA_file_handle.write("\n".join(records) + "\n")
 
                 # DEBUG
                 #report += "MSA:\n"
@@ -1923,37 +1914,46 @@ class kb_hmmer:
                 #report += "\n".join(records)+"\n"
                 #self.log(console,report)
 
-
                 # Determine whether nuc or protein sequences
                 #
-                self.log (console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
-                PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
-                #NUC_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
-                appropriate_sequence_found_in_MSA_input = True
-                for row_id in row_order:
-                    #self.log(console, row_id+": '"+MSA_in['alignment'][row_id]+"'")    # DEBUG
-                    if not PROT_MSA_pattern.match(MSA_in['alignment'][row_id]):
-                        self.log(invalid_msgs,"BAD record for MSA row_id: "+row_id+"\n"+MSA_in['alignment'][row_id]+"\n")
-                        appropriate_sequence_found_in_MSA_input = False
-                        break
+                self.log(console, "CHECKING MSA for PROTEIN seqs...")  # DEBUG
+                (this_appropriate_sequence_found_in_MSA_input, these_msa_invalid_msgs) = \
+                    self._check_MSA_sequence_type_correct(MSA_in, row_order, 'PROTEIN')
+                msa_invalid_msgs.extend(these_msa_invalid_msgs)
 
-                if not appropriate_sequence_found_in_MSA_input:
-                    self.log(invalid_msgs,"no protein sequences found in '"+input_msa_name+"'")
+                if this_appropriate_sequence_found_in_MSA_input:
+                    keep_msa[msa_i] = True
+                    appropriate_sequence_found_in_MSA_input = True
+                else:
+                    keep_msa[msa_i] = False
+                    msa_needs_skipping = True
+                    self.log(msa_invalid_msgs, "no protein sequences found in '" + input_msa_name + "'")
 
-
-            # Missing proper input_type
-            #
-            else:
-                raise ValueError('Cannot yet handle input_msa type of: '+msa_type_name)
-
+        # revise MSA lists to remove non-protein MSAs
+        if not appropriate_sequence_found_in_MSA_input:
+            self.log(invalid_msgs, "no protein sequences found in any MSA")
+            self.log(invalid_msgs, "\n".join(msa_invalid_msgs))
+        elif msa_needs_skipping:
+            new_msa_refs = []
+            new_msa_names = []
+            new_msa_descs = []
+            self.log(console, "SKIPPING non-protein MSA " + input_msa_names[msa_i])
+            self.log(console, "\n".join(msa_invalid_msgs))
+            for msa_i, msa_ref in enumerate(input_msa_refs):
+                if keep_msa[msa_i]:
+                    new_msa_refs.append(input_msa_refs[msa_i])
+                    new_msa_names.append(input_msa_names[msa_i])
+                    new_msa_descs.append(input_msa_descs[msa_i])
+            input_msa_refs = new_msa_refs
+            input_msa_names = new_msa_names
+            input_msa_descs = new_msa_descs
 
         # check for failed input file creation
         #
 #        if not appropriate_sequence_found_in_one_input:
 #            self.log(invalid_msgs,"no protein sequences found in '"+input_one_name+"'")
         if not appropriate_sequence_found_in_many_input:
-            self.log(invalid_msgs,"no protein sequences found in '"+input_many_name+"'")
-
+            self.log(invalid_msgs, "no protein sequences found in '" + input_many_name + "'")
 
         # input data failed validation.  Need to return
         #
@@ -1961,7 +1961,7 @@ class kb_hmmer:
 
             # load the method provenance from the context object
             #
-            self.log(console,"SETTING PROVENANCE")  # DEBUG
+            self.log(console, "SETTING PROVENANCE")  # DEBUG
             provenance = [{}]
             if 'provenance' in ctx:
                 provenance = ctx['provenance']
@@ -1972,43 +1972,41 @@ class kb_hmmer:
             for input_msa_ref in input_msa_refs:
                 provenance[0]['input_ws_objects'].append(input_msa_ref)
             provenance[0]['service'] = 'kb_hmmer'
-            provenance[0]['method'] = search_tool_name+'_Search'
-
+            provenance[0]['method'] = search_tool_name + '_Search'
 
             # build output report object
             #
-            self.log(console,"BUILDING REPORT")  # DEBUG
-            report += "FAILURE:\n\n"+"\n".join(invalid_msgs)+"\n"
+            self.log(console, "BUILDING REPORT")  # DEBUG
+            report += "FAILURE:\n\n" + "\n".join(invalid_msgs) + "\n"
             reportObj = {
-                'objects_created':[],
-                'text_message':report
-                }
+                'objects_created': [],
+                'text_message': report
+            }
 
-            reportName = 'hmmer_report_'+str(uuid.uuid4())
+            reportName = 'hmmer_report_' + str(uuid.uuid4())
             ws = workspaceService(self.workspaceURL, token=ctx['token'])
             report_obj_info = ws.save_objects({
-                    #'id':info[6],
-                    'workspace':params['workspace_name'],
-                    'objects':[
-                        {
-                        'type':'KBaseReport.Report',
-                        'data':reportObj,
-                        'name':reportName,
-                        'meta':{},
-                        'hidden':1,
-                        'provenance':provenance  # DEBUG
-                        }
-                        ]
-                    })[0]
+                #'id':info[6],
+                'workspace': params['workspace_name'],
+                'objects': [
+                    {
+                        'type': 'KBaseReport.Report',
+                        'data': reportObj,
+                        'name': reportName,
+                        'meta': {},
+                        'hidden': 1,
+                        'provenance': provenance  # DEBUG
+                    }
+                ]
+            })[0]
 
-            self.log(console,"BUILDING RETURN OBJECT")
-            returnVal = { 'report_name': reportName,
-                      'report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
-                      }
-            self.log(console,search_tool_name+"_Search DONE")
+            self.log(console, "BUILDING RETURN OBJECT")
+            returnVal = {'report_name': reportName,
+                         'report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
+                         }
+            self.log(console, search_tool_name + "_Search DONE")
             return [returnVal]
 
-        
         #### iterate through MSAs and scan input_many DBs
         ##
         total_hit_cnts = []
@@ -2024,25 +2022,22 @@ class kb_hmmer:
         html_report_chunks = []
         hit_cnt_by_genome_and_model = dict()
 
-
-        for msa_i,input_msa_ref in enumerate(input_msa_refs):
+        for msa_i, input_msa_ref in enumerate(input_msa_refs):
 
             # init hit counts
             total_hit_cnts.append(0)
             accepted_hit_cnts.append(0)
             html_report_chunks.append(None)
 
-
             ### set paths
             #
             input_msa_name = input_msa_names[msa_i]
             hmmer_dir = os.path.join(self.output_dir, input_msa_name)  # this must match above
-            input_MSA_file_path = os.path.join(hmmer_dir, input_msa_name+".clustal")
+            input_MSA_file_path = os.path.join(hmmer_dir, input_msa_name + ".clustal")
 
             #output_aln_file_path = os.path.join(hmmer_dir, input_msa_name+'.alnout.txt');
             #output_extra_file_path = os.path.join(hmmer_dir, input_msa_name+'.alnout_extra.txt');
             #output_filtered_fasta_file_path = os.path.join(hmmer_dir, input_msa_name+'.output_filtered.faa');
-
 
             ### Build HMM from MSA
             #
@@ -2055,13 +2050,13 @@ class kb_hmmer:
 
             # check for necessary files
             if not os.path.isfile(hmmer_build_bin):
-                raise ValueError("no such file '"+hmmer_build_bin+"'")
+                raise ValueError("no such file '" + hmmer_build_bin + "'")
             if not os.path.isfile(input_MSA_file_path):
-                raise ValueError("no such file '"+input_MSA_file_path+"'")
+                raise ValueError("no such file '" + input_MSA_file_path + "'")
             elif not os.path.getsize(input_MSA_file_path) > 0:
-                raise ValueError("empty file '"+input_MSA_file_path+"'")
+                raise ValueError("empty file '" + input_MSA_file_path + "'")
 
-            HMM_file_path = input_MSA_file_path+".HMM"
+            HMM_file_path = input_MSA_file_path + ".HMM"
 
             hmmer_build_cmd.append('--informat')
             hmmer_build_cmd.append('CLUSTAL')
@@ -2071,34 +2066,34 @@ class kb_hmmer:
             # Run HMMER_BUILD, capture output as it happens
             #
             self.log(console, 'RUNNING HMMER_BUILD:')
-            self.log(console, '    '+' '.join(hmmer_build_cmd))
+            self.log(console, '    ' + ' '.join(hmmer_build_cmd))
             #report += "\n"+'running HMMER_BUILD:'+"\n"
             #report += '    '+' '.join(hmmer_build_cmd)+"\n"
 
-            p = subprocess.Popen(hmmer_build_cmd, \
-                                     cwd = self.output_dir, \
-                                     stdout = subprocess.PIPE, \
-                                     stderr = subprocess.STDOUT, \
-                                     shell = False)
+            p = subprocess.Popen(hmmer_build_cmd,
+                                 cwd=self.output_dir,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.STDOUT,
+                                 shell=False)
 
             while True:
                 line = p.stdout.readline()
-                if not line: break
+                if not line:
+                    break
                 #self.log(console, line.replace('\n', ''))
 
             p.stdout.close()
             p.wait()
             self.log(console, 'return code: ' + str(p.returncode))
             if p.returncode != 0:
-                raise ValueError('Error running HMMER_BUILD, return code: '+str(p.returncode) + 
-                                 '\n\n'+ '\n'.join(console))
+                raise ValueError('Error running HMMER_BUILD, return code: ' + str(p.returncode) +
+                                 '\n\n' + '\n'.join(console))
 
             # Check for HMM output
             if not os.path.isfile(HMM_file_path):
-                raise ValueError("HMMER_BUILD failed to create HMM file '"+HMM_file_path+"'")
+                raise ValueError("HMMER_BUILD failed to create HMM file '" + HMM_file_path + "'")
             elif not os.path.getsize(HMM_file_path) > 0:
-                raise ValueError("HMMER_BUILD created empty HMM file '"+HMM_file_path+"'")
-
+                raise ValueError("HMMER_BUILD created empty HMM file '" + HMM_file_path + "'")
 
             ### Construct the HMMER_SEARCH command
             #
@@ -2111,23 +2106,22 @@ class kb_hmmer:
 
             # check for necessary files
             if not os.path.isfile(hmmer_search_bin):
-                raise ValueError("no such file '"+hmmer_search_bin+"'")
+                raise ValueError("no such file '" + hmmer_search_bin + "'")
             if not os.path.isfile(HMM_file_path):
-                raise ValueError("no such file '"+HMM_file_path+"'")
+                raise ValueError("no such file '" + HMM_file_path + "'")
             elif not os.path.getsize(HMM_file_path):
-                raise ValueError("empty file '"+HMM_file_path+"'")
+                raise ValueError("empty file '" + HMM_file_path + "'")
             if not os.path.isfile(many_forward_reads_file_path):
-                raise ValueError("no such file '"+many_forward_reads_file_path+"'")
+                raise ValueError("no such file '" + many_forward_reads_file_path + "'")
             elif not os.path.getsize(many_forward_reads_file_path):
-                raise ValueError("empty file '"+many_forward_reads_file_path+"'")
+                raise ValueError("empty file '" + many_forward_reads_file_path + "'")
 
-            output_hit_TAB_file_path = os.path.join(hmmer_dir, input_msa_name+'.hitout.txt');
-            output_hit_MSA_file_path = os.path.join(hmmer_dir, input_msa_name+'.msaout.txt');
-            output_filtered_fasta_file_path = os.path.join(hmmer_dir, input_msa_name+'.output_filtered.fasta');
-            output_hit_TAB_file_paths.append (output_hit_TAB_file_path)
-            output_hit_MSA_file_paths.append (output_hit_MSA_file_path)
+            output_hit_TAB_file_path = os.path.join(hmmer_dir, input_msa_name + '.hitout.txt')
+            output_hit_MSA_file_path = os.path.join(hmmer_dir, input_msa_name + '.msaout.txt')
+            output_filtered_fasta_file_path = os.path.join(hmmer_dir, input_msa_name + '.output_filtered.fasta')
+            output_hit_TAB_file_paths.append(output_hit_TAB_file_path)
+            output_hit_MSA_file_paths.append(output_hit_MSA_file_path)
             output_filtered_fasta_file_paths.append(output_filtered_fasta_file_path)
-
 
             # this is command for basic search mode
             hmmer_search_cmd.append('--tblout')
@@ -2146,46 +2140,45 @@ class kb_hmmer:
             #    if params['maxaccepts']:
             #        hmmer_search_cmd.append('-max_target_seqs')
             #        hmmer_search_cmd.append(str(params['maxaccepts']))
-            
+
             # Run HMMER, capture output as it happens
             #
             self.log(console, 'RUNNING HMMER_SEARCH:')
-            self.log(console, '    '+' '.join(hmmer_search_cmd))
+            self.log(console, '    ' + ' '.join(hmmer_search_cmd))
             #report += "\n"+'running HMMER_SEARCH:'+"\n"
             #report += '    '+' '.join(hmmer_search_cmd)+"\n"
 
-            p = subprocess.Popen(hmmer_search_cmd, \
-                                     cwd = self.output_dir, \
-                                     stdout = subprocess.PIPE, \
-                                     stderr = subprocess.STDOUT, \
-                                     shell = False)
+            p = subprocess.Popen(hmmer_search_cmd,
+                                 cwd=self.output_dir,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.STDOUT,
+                                 shell=False)
 
             while True:
                 line = p.stdout.readline()
-                if not line: break
+                if not line:
+                    break
                 #self.log(console, line.replace('\n', ''))
 
             p.stdout.close()
             p.wait()
             self.log(console, 'return code: ' + str(p.returncode))
             if p.returncode != 0:
-                raise ValueError('Error running HMMER_SEARCH, return code: '+str(p.returncode) + 
-                                 '\n\n'+ '\n'.join(console))
-
+                raise ValueError('Error running HMMER_SEARCH, return code: ' + str(p.returncode) +
+                                 '\n\n' + '\n'.join(console))
 
             # Check for output
             if not os.path.isfile(output_hit_TAB_file_path):
-                raise ValueError("HMMER_SEARCH failed to create TAB file '"+output_hit_TAB_file_path+"'")
+                raise ValueError("HMMER_SEARCH failed to create TAB file '" + output_hit_TAB_file_path + "'")
             elif not os.path.getsize(output_hit_TAB_file_path) > 0:
-                raise ValueError("HMMER_SEARCH created empty TAB file '"+output_hit_TAB_file_path+"'")
+                raise ValueError("HMMER_SEARCH created empty TAB file '" + output_hit_TAB_file_path + "'")
             if not os.path.isfile(output_hit_MSA_file_path):
-                raise ValueError("HMMER_SEARCH failed to create MSA file '"+output_hit_MSA_file_path+"'")
+                raise ValueError("HMMER_SEARCH failed to create MSA file '" + output_hit_MSA_file_path + "'")
             elif not os.path.getsize(output_hit_MSA_file_path) > 0:
                 #raise ValueError("HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
-                self.log(console,"HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
+                self.log(console, "HMMER_SEARCH created empty MSA file '" + output_hit_MSA_file_path + "'")
                 objects_created_refs.append(None)
                 continue
-
 
             # DEBUG
             #self.log(console, "DEBUG: output_hit_TAB_file_path: '"+str(output_hit_TAB_file_path))
@@ -2200,14 +2193,13 @@ class kb_hmmer:
             #        report += line+"\n"
             #self.log(console, report)
 
-
             # Get hit beg and end positions from Stockholm format MSA output
             #
             self.log(console, 'PARSING HMMER SEARCH MSA OUTPUT')
             hit_beg = dict()
             hit_end = dict()
             longest_alnlen = dict()
-            with open (output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
+            with open(output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
                 for MSA_out_line in output_hit_MSA_file_handle.readlines():
                     MSA_out_line = MSA_out_line.strip()
                     if MSA_out_line.startswith('#=GS '):
@@ -2218,7 +2210,7 @@ class kb_hmmer:
                         (beg_str, end_str) = hit_range.split('-')
                         beg = int(beg_str)
                         end = int(end_str)
-                        this_alnlen = abs(end-beg)+1
+                        this_alnlen = abs(end - beg) + 1
                         if hit_id in hit_beg:
                             if this_alnlen > longest_alnlen[hit_id]:
                                 hit_beg[hit_id] = int(beg_str)
@@ -2229,12 +2221,11 @@ class kb_hmmer:
                             hit_end[hit_id] = int(end_str)
                             longest_alnlen[hit_id] = this_alnlen
 
-
             # Measure length of hit sequences
             #
             self.log(console, 'MEASURING HIT GENES LENGTHS')
             hit_seq_len = dict()
-            with open (many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
+            with open(many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
                 last_id = None
                 last_buf = ''
                 for fasta_line in many_forward_reads_file_handle.readlines():
@@ -2242,7 +2233,8 @@ class kb_hmmer:
                     if fasta_line.startswith('>'):
                         if last_id != None:
                             id_untrans = last_id
-                            id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            id_trans = re.sub('\|', ':', id_untrans)
                             #if id_untrans in hit_order or id_trans in hit_order:
                             if id_untrans in hit_beg or id_trans in hit_beg:
                                 hit_seq_len[last_id] = len(last_buf)
@@ -2253,18 +2245,18 @@ class kb_hmmer:
                         last_buf += fasta_line
                 if last_id != None:
                     id_untrans = last_id
-                    id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                    # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                    id_trans = re.sub('\|', ':', id_untrans)
                     #if id_untrans in hit_order or id_trans in hit_order:
                     if id_untrans in hit_beg or id_trans in hit_beg:
                         hit_seq_len[last_id] = len(last_buf)
-
 
             ### Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
             #
             self.log(console, 'PARSING HMMER SEARCH TAB OUTPUT')
             hit_seq_ids = dict()
             accept_fids = dict()
-            output_hit_TAB_file_handle = open (output_hit_TAB_file_path, "r", 0)
+            output_hit_TAB_file_handle = open(output_hit_TAB_file_path, "r", 0)
             output_aln_buf = output_hit_TAB_file_handle.readlines()
             output_hit_TAB_file_handle.close()
             accepted_hit_cnt = 0
@@ -2283,26 +2275,26 @@ class kb_hmmer:
                     continue
                 #header_done = True
                 #self.log(console,'HIT LINE: '+line)  # DEBUG
-                hit_info = re.split ('\s+', line)
-                hit_seq_id            = hit_info[0]
-                hit_accession         = hit_info[1]
-                query_name            = hit_info[2]
-                query_accession       = hit_info[3]
-                hit_e_value           = float(hit_info[4])
-                hit_bitscore          = float(hit_info[5])
-                hit_bias              = float(hit_info[6])
-                hit_e_value_best_dom  = float(hit_info[7])
+                hit_info = re.split('\s+', line)
+                hit_seq_id = hit_info[0]
+                hit_accession = hit_info[1]
+                query_name = hit_info[2]
+                query_accession = hit_info[3]
+                hit_e_value = float(hit_info[4])
+                hit_bitscore = float(hit_info[5])
+                hit_bias = float(hit_info[6])
+                hit_e_value_best_dom = float(hit_info[7])
                 hit_bitscore_best_dom = float(hit_info[8])
-                hit_bias_best_dom     = float(hit_info[9])
-                hit_expected_dom_n    = float(hit_info[10])
-                hit_regions           = float(hit_info[11])
-                hit_regions_multidom  = float(hit_info[12])
-                hit_overlaps          = float(hit_info[13])
-                hit_envelopes         = float(hit_info[14])
-                hit_dom_n             = float(hit_info[15])
+                hit_bias_best_dom = float(hit_info[9])
+                hit_expected_dom_n = float(hit_info[10])
+                hit_regions = float(hit_info[11])
+                hit_regions_multidom = float(hit_info[12])
+                hit_overlaps = float(hit_info[13])
+                hit_envelopes = float(hit_info[14])
+                hit_dom_n = float(hit_info[15])
                 hit_doms_within_rep_thresh = float(hit_info[16])
                 hit_doms_within_inc_thresh = float(hit_info[17])
-                hit_desc                   = hit_info[18]
+                hit_desc = hit_info[18]
 
                 try:
                     if hit_bitscore > high_bitscore_score[hit_seq_id]:
@@ -2327,7 +2319,7 @@ class kb_hmmer:
                 if 'bitscore' in params and float(params['bitscore']) > float(high_bitscore_score[hit_seq_id]):
                     filter = True
                     filtering_fields[hit_seq_id]['bitscore'] = True
-                if 'overlap_perc' in params and float(params['overlap_perc']) > 100.0*float(longest_alnlen[hit_seq_id])/float(hit_seq_len[hit_seq_id]):
+                if 'overlap_perc' in params and float(params['overlap_perc']) > 100.0 * float(longest_alnlen[hit_seq_id]) / float(hit_seq_len[hit_seq_id]):
                     filter = True
                     filtering_fields[hit_seq_id]['overlap_perc'] = True
                 if 'maxaccepts' in params and params['maxaccepts'] != None and accepted_hit_cnt == int(params['maxaccepts']):
@@ -2336,16 +2328,16 @@ class kb_hmmer:
 
                 if filter:
                     continue
-            
+
                 hit_accept_something = True
                 accepted_hit_cnt += 1
                 hit_seq_ids[hit_seq_id] = True
-                self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
+                self.log(console, "HIT: '" + hit_seq_id + "'")  # DEBUG
 
                 # capture accepted hit count by genome_ref and model
                 genome_ref = hit_seq_id.split(genome_id_feature_id_delim)[0]
-                self.log(console, "DEBUG: genome_ref: '"+str(genome_ref)+"'")
-                self.log(console, "DEBUG: input_msa_name: '"+str(input_msa_name)+"'")
+                self.log(console, "DEBUG: genome_ref: '" + str(genome_ref) + "'")
+                self.log(console, "DEBUG: input_msa_name: '" + str(input_msa_name) + "'")
                 if genome_ref not in hit_cnt_by_genome_and_model:
                     hit_cnt_by_genome_and_model[genome_ref] = dict()
                 if input_msa_name not in hit_cnt_by_genome_and_model[genome_ref]:
@@ -2354,7 +2346,6 @@ class kb_hmmer:
 
             accepted_hit_cnts[msa_i] = accepted_hit_cnt
 
-
             #
             ### Create output objects
             #
@@ -2362,7 +2353,7 @@ class kb_hmmer:
                 self.log(console, 'THERE WERE NO ACCEPTED HITS.  NOT BUILDING OUTPUT OBJECT')
             else:
                 self.log(console, 'EXTRACTING ACCEPTED HITS FROM INPUT')
-                self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
+                self.log(console, 'MANY_TYPE_NAME: ' + many_type_name)  # DEBUG
 
                 # SequenceSet input -> SequenceSet output
                 #
@@ -2370,15 +2361,17 @@ class kb_hmmer:
                     output_sequenceSet = dict()
 
                     if 'sequence_set_id' in input_many_sequenceSet and input_many_sequenceSet['sequence_set_id'] != None:
-                        output_sequenceSet['sequence_set_id'] = input_many_sequenceSet['sequence_set_id'] + "."+search_tool_name+"_Search_filtered"
+                        output_sequenceSet['sequence_set_id'] = input_many_sequenceSet['sequence_set_id'] + \
+                            "." + search_tool_name + "_Search_filtered"
                     else:
-                        output_sequenceSet['sequence_set_id'] = search_tool_name+"_Search_filtered"
+                        output_sequenceSet['sequence_set_id'] = search_tool_name + "_Search_filtered"
                     if 'description' in input_many_sequenceSet and input_many_sequenceSet['description'] != None:
-                        output_sequenceSet['description'] = input_many_sequenceSet['description'] + " - "+search_tool_name+"_Search filtered"
+                        output_sequenceSet['description'] = input_many_sequenceSet['description'] + \
+                            " - " + search_tool_name + "_Search filtered"
                     else:
-                        output_sequenceSet['description'] = search_tool_anme+"_Search filtered"
+                        output_sequenceSet['description'] = search_tool_anme + "_Search filtered"
 
-                    self.log(console,"ADDING SEQUENCES TO SEQUENCESET")
+                    self.log(console, "ADDING SEQUENCES TO SEQUENCESET")
                     output_sequenceSet['sequences'] = []
 
                     for seq_obj in input_many_sequenceSet['sequences']:
@@ -2387,30 +2380,32 @@ class kb_hmmer:
                         #sequence_str = seq_obj['sequence']
 
                         id_untrans = header_id
-                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        id_trans = re.sub('\|', ':', id_untrans)
                         if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                             #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
                             accept_fids[id_untrans] = True
                             output_sequenceSet['sequences'].append(seq_obj)
-
 
                 # FeatureSet input -> FeatureSet output
                 #
                 elif many_type_name == 'FeatureSet':
                     output_featureSet = dict()
                     if 'description' in input_many_featureSet and input_many_featureSet['description'] != None:
-                        output_featureSet['description'] = input_many_featureSet['description'] + " - "+search_tool_name+"_Search filtered"
+                        output_featureSet['description'] = input_many_featureSet['description'] + \
+                            " - " + search_tool_name + "_Search filtered"
                     else:
-                        output_featureSet['description'] = search_tool_name+"_Search filtered"
+                        output_featureSet['description'] = search_tool_name + "_Search filtered"
                     output_featureSet['element_ordering'] = []
                     output_featureSet['elements'] = dict()
 
                     fId_list = input_many_featureSet['elements'].keys()
-                    self.log(console,"ADDING FEATURES TO FEATURESET")
+                    self.log(console, "ADDING FEATURES TO FEATURESET")
                     for fId in sorted(fId_list):
                         for genome_ref in input_many_featureSet['elements'][fId]:
-                            id_untrans = genome_ref+genome_id_feature_id_delim+fId
-                            id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            id_untrans = genome_ref + genome_id_feature_id_delim + fId
+                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            id_trans = re.sub('\|', ':', id_untrans)
                             if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                 #self.log(console, 'FOUND HIT '+fId)  # DEBUG
                                 accept_fids[id_untrans] = True
@@ -2430,12 +2425,13 @@ class kb_hmmer:
                     #                output_featureSet['description'] = input_many_genome['scientific_name'] + " - "+search_tool_name+"_Search filtered"
                     #            else:
                     #                output_featureSet['description'] = search_tool_name+"_Search filtered"
-                    output_featureSet['description'] = search_tool_name+"_Search filtered"
+                    output_featureSet['description'] = search_tool_name + "_Search filtered"
                     output_featureSet['element_ordering'] = []
                     output_featureSet['elements'] = dict()
                     for fid in feature_ids:
                         id_untrans = fid
-                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        id_trans = re.sub('\|', ':', id_untrans)
                         if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                             #self.log(console, 'FOUND HIT '+fid)  # DEBUG
                             #output_featureSet['element_ordering'].append(fid)
@@ -2449,19 +2445,21 @@ class kb_hmmer:
                 elif many_type_name == 'GenomeSet':
                     output_featureSet = dict()
                     if 'description' in input_many_genomeSet and input_many_genomeSet['description'] != None:
-                        output_featureSet['description'] = input_many_genomeSet['description'] + " - "+search_tool_name+"_Search filtered"
+                        output_featureSet['description'] = input_many_genomeSet['description'] + \
+                            " - " + search_tool_name + "_Search filtered"
                     else:
-                        output_featureSet['description'] = search_tool_name+"_Search filtered"
+                        output_featureSet['description'] = search_tool_name + "_Search filtered"
                     output_featureSet['element_ordering'] = []
                     output_featureSet['elements'] = dict()
 
-                    self.log(console,"READING HITS FOR GENOMES")  # DEBUG
+                    self.log(console, "READING HITS FOR GENOMES")  # DEBUG
                     for genome_id in feature_ids_by_genome_id.keys():
-                        self.log(console,"READING HITS FOR GENOME "+genome_id)  # DEBUG
+                        self.log(console, "READING HITS FOR GENOME " + genome_id)  # DEBUG
                         genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
                         for feature_id in feature_ids_by_genome_id[genome_id]:
-                            id_untrans = genome_ref+genome_id_feature_id_delim+feature_id
-                            id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            id_untrans = genome_ref + genome_id_feature_id_delim + feature_id
+                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            id_trans = re.sub('\|', ':', id_untrans)
                             if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                 #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
                                 #output_featureSet['element_ordering'].append(feature['id'])
@@ -2474,10 +2472,9 @@ class kb_hmmer:
                                     output_featureSet['element_ordering'].append(feature_id)
                                 output_featureSet['elements'][feature_id].append(genome_ref)
 
-
                 # load the method provenance from the context object
                 #
-                self.log(console,"SETTING PROVENANCE")  # DEBUG
+                self.log(console, "SETTING PROVENANCE")  # DEBUG
                 provenance = [{}]
                 if 'provenance' in ctx:
                     provenance = ctx['provenance']
@@ -2487,15 +2484,14 @@ class kb_hmmer:
                 provenance[0]['input_ws_objects'].append(input_msa_ref)
                 provenance[0]['input_ws_objects'].append(input_many_ref)
                 provenance[0]['service'] = 'kb_blast'
-                provenance[0]['method'] = search_tool_name+'_Search'
-
+                provenance[0]['method'] = search_tool_name + '_Search'
 
                 ### Create output object
                 #
                 if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
                     if len(invalid_msgs) == 0:
                         if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
-                            self.log(console,"No Object to Upload for MSA "+input_msa_name)  # DEBUG
+                            self.log(console, "No Object to Upload for MSA " + input_msa_name)  # DEBUG
                             objects_created_refs.append(None)
                             continue
 
@@ -2513,62 +2509,61 @@ class kb_hmmer:
                                     coalesce_featureIds_genome_ordering.append(this_genome_ref)
 
                 else:  # keep output separate  Upload results if coalesce_output is 0
-                    output_name = input_msa_name+'-'+params['output_filtered_name']
+                    output_name = input_msa_name + '-' + params['output_filtered_name']
 
                     if len(invalid_msgs) == 0:
                         if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
-                            self.log(console,"No Object to Upload for MSA "+input_msa_name)  # DEBUG
+                            self.log(console, "No Object to Upload for MSA " + input_msa_name)  # DEBUG
                             objects_created_refs.append(None)
                             continue
 
-                        self.log(console,"Uploading results Object MSA "+input_msa_name)  # DEBUG
+                        self.log(console, "Uploading results Object MSA " + input_msa_name)  # DEBUG
 
                         # input many SequenceSet -> save SequenceSet
                         #
                         if many_type_name == 'SequenceSet':
                             new_obj_info = ws.save_objects({
-                                    'workspace': params['workspace_name'],
-                                    'objects':[{
-                                            'type': 'KBaseSequences.SequenceSet',
-                                            'data': output_sequenceSet,
+                                'workspace': params['workspace_name'],
+                                'objects': [{
+                                    'type': 'KBaseSequences.SequenceSet',
+                                    'data': output_sequenceSet,
                                             'name': output_name,
                                             'meta': {},
                                             'provenance': provenance
-                                        }]
-                                })[0]
+                                }]
+                            })[0]
 
                         else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
                             new_obj_info = ws.save_objects({
-                                    'workspace': params['workspace_name'],
-                                    'objects':[{
-                                            'type': 'KBaseCollections.FeatureSet',
-                                            'data': output_featureSet,
+                                'workspace': params['workspace_name'],
+                                'objects': [{
+                                    'type': 'KBaseCollections.FeatureSet',
+                                    'data': output_featureSet,
                                             'name': output_name,
                                             'meta': {},
                                             'provenance': provenance
-                                        }]
-                                })[0]
+                                }]
+                            })[0]
 
-                        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
-                        objects_created_refs.append(str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I]))
-
+                        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I,
+                            WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+                        objects_created_refs.append(str(new_obj_info[WSID_I]) + '/' + str(new_obj_info[OBJID_I]))
 
             #### Build output report chunks
             ##
-            self.log(console,"BUILDING REPORT CHUNK for MSA["+str(msa_i)+"] "+input_msa_names[msa_i])  # DEBUG
+            self.log(console, "BUILDING REPORT CHUNK for MSA[" + str(msa_i) + "] " + input_msa_names[msa_i])  # DEBUG
             if len(invalid_msgs) == 0:
 
                 # text report
                 #
-                report += 'MSA['+str(msa_i)+']: '+input_msa_names[msa_i]+"\n"
-                report += 'sequences in search db: '+str(seq_total)+"\n"
-                report += 'sequences in hit set: '+str(total_hit_cnts[msa_i])+"\n"
-                report += 'sequences in accepted hit set: '+str(accepted_hit_cnts[msa_i])+"\n"
+                report += 'MSA[' + str(msa_i) + ']: ' + input_msa_names[msa_i] + "\n"
+                report += 'sequences in search db: ' + str(seq_total) + "\n"
+                report += 'sequences in hit set: ' + str(total_hit_cnts[msa_i]) + "\n"
+                report += 'sequences in accepted hit set: ' + str(accepted_hit_cnts[msa_i]) + "\n"
                 report += "\n"
                 #for line in hit_buf:
                 #    report += line
-                self.log (console, report)
-
+                self.log(console, report)
 
                 # build html report chunk
                 if many_type_name == 'Genome':
@@ -2607,7 +2602,8 @@ class kb_hmmer:
                     if line == '' or line.startswith('#'):
                         continue
 
-                    [hit_id, hit_accession, query_name, query_accession, e_value, bit_score, bias, e_value_best_dom, bit_score_best_dom, bias_best_dom, expected_dom_n, regions, regions_multidom, overlaps, envelopes, dom_n, doms_within_rep_thresh, doms_within_inc_thresh, hit_desc] = re.split('\s+',line)[0:19]
+                    [hit_id, hit_accession, query_name, query_accession, e_value, bit_score, bias, e_value_best_dom, bit_score_best_dom, bias_best_dom, expected_dom_n,
+                        regions, regions_multidom, overlaps, envelopes, dom_n, doms_within_rep_thresh, doms_within_inc_thresh, hit_desc] = re.split('\s+', line)[0:19]
 
     #                [query_id, hit_id, identity, aln_len, mismatches, gap_openings, q_beg, q_end, h_beg, h_end, e_value, bit_score] = line.split("\t")[0:12]
     #                identity = str(round(float(identity), 1))
@@ -2617,9 +2613,8 @@ class kb_hmmer:
                     h_len = hit_seq_len[hit_id]
                     h_beg = hit_beg[hit_id]
                     h_end = hit_end[hit_id]
-                    aln_len = abs(h_end-h_beg)+1
-                    aln_len_perc = round (100.0*float(aln_len)/float(h_len), 1)
-
+                    aln_len = abs(h_end - h_beg) + 1
+                    aln_len_perc = round(100.0 * float(aln_len) / float(h_len), 1)
 
                     #if many_type_name == 'SingleEndLibrary':
                     #    pass
@@ -2640,7 +2635,8 @@ class kb_hmmer:
                         fid_lookup = None
                         for fid in feature_id_to_function[genome_ref].keys():
                             id_untrans = fid
-                            id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            id_trans = re.sub('\|', ':', id_untrans)
 
                             #self.log (console, "SCANNING FIDS.  HIT_FID: '"+str(hit_fid)+"' FID: '"+str(fid)+"' TRANS: '"+str(id_trans)+"'")  # DEBUG
 
@@ -2649,7 +2645,7 @@ class kb_hmmer:
                                 if many_type_name == 'Genome':
                                     accept_id = fid
                                 elif many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
-                                    accept_id = genome_ref+genome_id_feature_id_delim+fid
+                                    accept_id = genome_ref + genome_id_feature_id_delim + fid
                                 if accept_id in accept_fids:
                                     row_color = accept_row_color
                                 else:
@@ -2658,34 +2654,36 @@ class kb_hmmer:
                                 break
                         #self.log (console, "HIT_FID: '"+str(hit_fid)+"' FID_LOOKUP: '"+str(fid_lookup)+"'")  # DEBUG
                         if fid_lookup == None:
-                            raise ValueError ("unable to find fid for hit_fid: '"+str(hit_fid))
+                            raise ValueError("unable to find fid for hit_fid: '" + str(hit_fid))
                         elif fid_lookup not in feature_id_to_function[genome_ref]:
-                            raise ValueError ("unable to find function for fid: '"+str(fid_lookup))
-                        fid_disp = re.sub (r"^.*\.([^\.]+)\.([^\.]+)$", r"\1.\2", fid_lookup)
+                            raise ValueError("unable to find function for fid: '" + str(fid_lookup))
+                        fid_disp = re.sub(r"^.*\.([^\.]+)\.([^\.]+)$", r"\1.\2", fid_lookup)
 
                         func_disp = feature_id_to_function[genome_ref][fid_lookup]
                         genome_sci_name = genome_ref_to_sci_name[genome_ref]
 
-                        html_report_chunk += ['<tr bgcolor="'+row_color+'">']
+                        html_report_chunk += ['<tr bgcolor="' + row_color + '">']
                         #html_report_chunk += ['<tr bgcolor="'+'white'+'">']  # DEBUG
                         # add overlap bar
 
                         # coverage graphic (with respect to hit seq)
-                        html_report_chunk += ['<td valign=middle align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'">']
-                        html_report_chunk += ['<table style="height:'+str(bar_height)+'px; width:'+str(bar_width)+'px" border=0 cellpadding=0 cellspacing=0>']
+                        html_report_chunk += ['<td valign=middle align=center style="border-right:solid 1px ' +
+                                              border_body_color + '; border-bottom:solid 1px ' + border_body_color + '">']
+                        html_report_chunk += ['<table style="height:' + str(bar_height) + 'px; width:' + str(
+                            bar_width) + 'px" border=0 cellpadding=0 cellspacing=0>']
                         full_len_pos = bar_width
-                        aln_beg_pos = int (float(bar_width) * float(int(h_beg)-1)/float(int(h_len)-1))
-                        aln_end_pos = int (float(bar_width) * float(int(h_end)-1)/float(int(h_len)-1))
-                        cell_pix_height = str(int(round(float(bar_height)/3.0, 0)))
+                        aln_beg_pos = int(float(bar_width) * float(int(h_beg) - 1) / float(int(h_len) - 1))
+                        aln_end_pos = int(float(bar_width) * float(int(h_end) - 1) / float(int(h_len) - 1))
+                        cell_pix_height = str(int(round(float(bar_height) / 3.0, 0)))
 
-                        cell_color = ['','','']
+                        cell_color = ['', '', '']
                         cell_width = []
                         cell_width.append(aln_beg_pos)
-                        cell_width.append(aln_end_pos-aln_beg_pos)
-                        cell_width.append(bar_width-aln_end_pos)
+                        cell_width.append(aln_end_pos - aln_beg_pos)
+                        cell_width.append(bar_width - aln_end_pos)
 
                         for row_i in range(3):
-                            html_report_chunk += ['<tr style="height:'+cell_pix_height+'px">']
+                            html_report_chunk += ['<tr style="height:' + cell_pix_height + 'px">']
                             unalign_color = row_color
                             if row_i == 1:
                                 unalign_color = bar_line_color
@@ -2696,19 +2694,23 @@ class kb_hmmer:
                             for col_i in range(3):
                                 cell_pix_width = str(cell_width[col_i])
                                 cell_pix_color = cell_color[col_i]
-                                html_report_chunk += ['<td style="height:'+cell_pix_height+'px; width:'+cell_pix_width+'px" bgcolor="'+cell_pix_color+'"></td>']
+                                html_report_chunk += ['<td style="height:' + cell_pix_height +
+                                                      'px; width:' + cell_pix_width + 'px" bgcolor="' + cell_pix_color + '"></td>']
                             html_report_chunk += ['</tr>']
                         html_report_chunk += ['</table>']
                         html_report_chunk += ['</td>']
 
                         # add other cells
                         # fid
-                        html_report_chunk += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(fid_disp)+'</font></td>']
+                        html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                              border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + str(fid_disp) + '</font></td>']
     #                    html_report_chunk += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(hit_accession)+'</font></td>']
                         # func
-                        html_report_chunk += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+func_disp+'</font></td>']
+                        html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                              border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + func_disp + '</font></td>']
                         # sci name
-                        html_report_chunk += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+genome_sci_name+'</font></td>']
+                        html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                              border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + genome_sci_name + '</font></td>']
                         # ident
     #                    if 'ident_thresh' in filtering_fields[hit_id]:
      #                       this_cell_color = reject_cell_color
@@ -2721,35 +2723,39 @@ class kb_hmmer:
                             this_cell_color = reject_cell_color
                         else:
                             this_cell_color = row_color
-                        html_report_chunk += ['<td align=center bgcolor="'+str(this_cell_color)+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
+                        html_report_chunk += ['<td align=center bgcolor="' + str(this_cell_color) + '" style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                              border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + str(aln_len) + ' (' + str(aln_len_perc) + '%)</font></td>']
 
                         # evalue
-                        html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(e_value)+'</nobr></font></td>']
+                        html_report_chunk += ['<td align=center style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                              border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(e_value) + '</nobr></font></td>']
 
                         # bit score
                         if 'bitscore' in filtering_fields[hit_id]:
                             this_cell_color = reject_cell_color
                         else:
                             this_cell_color = row_color
-                        html_report_chunk += ['<td align=center bgcolor="'+str(this_cell_color)+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bit_score)+'</nobr></font></td>']
+                        html_report_chunk += ['<td align=center bgcolor="' + str(this_cell_color) + '" style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                              border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(bit_score) + '</nobr></font></td>']
                         # bias
     #                    html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bias)+'</nobr><br><nobr>('+str(bias_best_dom)+')</nobr></font></td>']
 
                         # aln coords only for hit seq
-                        html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(h_beg)+'-'+str(h_end)+'</nobr></font></td>']
+                        html_report_chunk += ['<td align=center style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' + border_body_color +
+                                              '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(h_beg) + '-' + str(h_end) + '</nobr></font></td>']
 
                         # close chunk
                         html_report_chunk += ['</tr>']
 
                 # attach chunk
                 if total_hit_cnts[msa_i] == 0:
-                    self.log(console, "NO HITS FOR MSA["+str(msa_i)+"] "+input_msa_names[msa_i]+".  NOT ADDING TO HTML HIT REPORT.")
+                    self.log(console, "NO HITS FOR MSA[" + str(msa_i) + "] " +
+                             input_msa_names[msa_i] + ".  NOT ADDING TO HTML HIT REPORT.")
                     html_report_chunk_str = '<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>'
                 else:
                     html_report_chunk_str = "\n".join(html_report_chunk)
                 html_report_chunks[msa_i] = html_report_chunk_str
                 #self.log(console, "HTML_REPORT_CHUNK: '"+str(html_report_chunk_str)+"'")  # DEBUG
-
 
         #### Create and Upload output objects if coalesce_output is true
         ##
@@ -2758,62 +2764,61 @@ class kb_hmmer:
 
             if len(invalid_msgs) == 0:
                 if not hit_accept_something:
-                    self.log(console,"No Object to Upload for all MSAs")  # DEBUG
+                    self.log(console, "No Object to Upload for all MSAs")  # DEBUG
 
                 else:
-                    self.log(console,"Uploading results Object")  # DEBUG
+                    self.log(console, "Uploading results Object")  # DEBUG
 
                     if many_type_name == 'SequenceSet':  # input many SequenceSet -> save SequenceSet
 
                         output_sequenceSet['sequences'] = coalesced_sequenceObjs
                         new_obj_info = ws.save_objects({
-                                'workspace': params['workspace_name'],
-                                'objects':[{
-                                        'type': 'KBaseSequences.SequenceSet',
-                                        'data': output_sequenceSet,
+                            'workspace': params['workspace_name'],
+                            'objects': [{
+                                'type': 'KBaseSequences.SequenceSet',
+                                'data': output_sequenceSet,
                                         'name': output_name,
                                         'meta': {},
                                         'provenance': provenance
-                                        }]
-                                })[0]
+                            }]
+                        })[0]
 
                     else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
 
                         output_featureSet['element_ordering'] = coalesce_featureIds_element_ordering
                         output_featureSet['elements'] = dict()
-                        for f_i,fId in enumerate(output_featureSet['element_ordering']):
+                        for f_i, fId in enumerate(output_featureSet['element_ordering']):
                             output_featureSet['elements'][fId] = []
                             output_featureSet['elements'][fId].append(coalesce_featureIds_genome_ordering[f_i])
 
                         new_obj_info = ws.save_objects({
-                                'workspace': params['workspace_name'],
-                                'objects':[{
-                                        'type': 'KBaseCollections.FeatureSet',
-                                        'data': output_featureSet,
+                            'workspace': params['workspace_name'],
+                            'objects': [{
+                                'type': 'KBaseCollections.FeatureSet',
+                                'data': output_featureSet,
                                         'name': output_name,
                                         'meta': {},
                                         'provenance': provenance
-                                        }]
-                                })[0]
+                            }]
+                        })[0]
 
-                    [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
-                    objects_created_refs.append(str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I]))
-
+                    [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I,
+                        WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+                    objects_created_refs.append(str(new_obj_info[WSID_I]) + '/' + str(new_obj_info[OBJID_I]))
 
         #### Set paths for output HTML
         ##
-        html_output_dir = os.path.join(self.output_dir,'html_output')
+        html_output_dir = os.path.join(self.output_dir, 'html_output')
         if not os.path.exists(html_output_dir):
             os.makedirs(html_output_dir)
-        html_search_file = search_tool_name+'_Search.html'
-        html_search_path = os.path.join (html_output_dir, html_search_file)
-        html_profile_file = search_tool_name+'_Profile.html'
-        html_profile_path = os.path.join (html_output_dir, html_profile_file)
-
+        html_search_file = search_tool_name + '_Search.html'
+        html_search_path = os.path.join(html_output_dir, html_search_file)
+        html_profile_file = search_tool_name + '_Profile.html'
+        html_profile_path = os.path.join(html_output_dir, html_profile_file)
 
         #### Build Search output report (and assemble html chunks)
         ##
-        self.log(console,"BUILDING SEARCH REPORT ")  # DEBUG
+        self.log(console, "BUILDING SEARCH REPORT ")  # DEBUG
         if len(invalid_msgs) == 0:
 
             # build html report
@@ -2826,7 +2831,7 @@ class kb_hmmer:
             elif many_type_name == 'FeatureSet':
                 feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
                 genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
-                
+
             sp = '&nbsp;'
             head_color = "#eeeeff"
             border_head_color = "#ffccff"
@@ -2857,32 +2862,42 @@ class kb_hmmer:
             html_report_lines += ['</head>']
             html_report_lines += ['<body bgcolor="white">']
             if many_type_name == 'GenomeSet':
-                html_report_lines += ['<a href="'+html_profile_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font></a> | <font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>SEARCH HITS</b></font>']
+                html_report_lines += ['<a href="' + html_profile_file + '"><font color="' + header_tab_color + '" size=' + header_tab_fontsize +
+                                      '>TABULAR PROFILE</font></a> | <font color="' + header_tab_color + '" size=' + header_tab_fontsize + '><b>SEARCH HITS</b></font>']
                 html_report_lines += ['<p>']
-            html_report_lines += ['<table cellpadding='+cellpadding+' cellspacing = '+cellspacing+' border='+border+'>']
-            html_report_lines += ['<tr bgcolor="'+head_color+'">']
-            html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'ALIGNMENT COVERAGE (HIT SEQ)'+'</font></td>']
-            html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'GENE ID'+'</font></td>']
-            html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'FUNCTION'+'</font></td>']
-            html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'GENOME'+'</font></td>']
+            html_report_lines += ['<table cellpadding=' + cellpadding +
+                                  ' cellspacing = ' + cellspacing + ' border=' + border + '>']
+            html_report_lines += ['<tr bgcolor="' + head_color + '">']
+            html_report_lines += ['<td style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' + border_head_color +
+                                  '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'ALIGNMENT COVERAGE (HIT SEQ)' + '</font></td>']
+            html_report_lines += ['<td style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'GENE ID' + '</font></td>']
+            html_report_lines += ['<td style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'FUNCTION' + '</font></td>']
+            html_report_lines += ['<td style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'GENOME' + '</font></td>']
 #            html_report_lines += ['<td align=center style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'IDENT'+'%</font></td>']
-            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'ALN_LEN'+'</font></td>']
-            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'E-VALUE'+'</font></td>']
-            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'BIT SCORE'+'</font></td>']
-            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'<nobr>H_BEG-H_END</nobr>'+'</font></td>']
+            html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'ALN_LEN' + '</font></td>']
+            html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'E-VALUE' + '</font></td>']
+            html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'BIT SCORE' + '</font></td>']
+            html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                  border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + '<nobr>H_BEG-H_END</nobr>' + '</font></td>']
 #            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'MIS MATCH'+'</font></td>']
 #            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'GAP OPEN'+'</font></td>']
             html_report_lines += ['</tr>']
 
-
-            for msa_i,input_msa_name in enumerate(input_msa_names):
-                html_report_lines += ['<tr><td colspan=table_col_width>Hits to <b>'+str(input_msa_name)+'</b></td></tr>']
+            for msa_i, input_msa_name in enumerate(input_msa_names):
+                html_report_lines += ['<tr><td colspan=table_col_width>Hits to <b>' +
+                                      str(input_msa_name) + '</b></td></tr>']
                 if total_hit_cnts[msa_i] == 0 or html_report_chunks[msa_i] == None or html_report_chunks[msa_i] == '':
                     html_report_lines += ['<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>']
                 else:
                     #html_report_lines.extend(html_report_chunks[msa_i])
-                    html_report_lines += [ html_report_chunks[msa_i] ]
-                html_report_lines += ['<tr><td colspan=table_col_width>'+sp+'</td></tr>']
+                    html_report_lines += [html_report_chunks[msa_i]]
+                html_report_lines += ['<tr><td colspan=table_col_width>' + sp + '</td></tr>']
 
             html_report_lines += ['</table>']
             html_report_lines += ['</body>']
@@ -2891,13 +2906,12 @@ class kb_hmmer:
             # write html to file
             html_path = html_search_path
             html_report_str = "\n".join(html_report_lines)
-            with open (html_path, 'w', 0) as html_handle:
+            with open(html_path, 'w', 0) as html_handle:
                 html_handle.write(html_report_str)
-
 
         #### Build Profile output report
         ##
-        self.log(console,"BUILDING PROFILE REPORT ")  # DEBUG
+        self.log(console, "BUILDING PROFILE REPORT ")  # DEBUG
         if len(invalid_msgs) == 0 and many_type_name == 'GenomeSet':
 
             # calculate table
@@ -2905,7 +2919,7 @@ class kb_hmmer:
             cats = input_msa_names
             table_data = dict()
             INSANE_VALUE = 10000000000000000
-            overall_low_val  =  INSANE_VALUE
+            overall_low_val = INSANE_VALUE
             overall_high_val = -INSANE_VALUE
             cat_seen = dict()
 
@@ -2915,7 +2929,7 @@ class kb_hmmer:
                     table_data[genome_ref] = dict()
                 for cat in cats:
                     table_data[genome_ref][cat] = 0
-                    
+
                 if genome_ref not in hit_cnt_by_genome_and_model:
                     continue
 
@@ -2929,19 +2943,19 @@ class kb_hmmer:
             for genome_ref in genome_refs:
                 for cat in cats:
                     val = table_data[genome_ref][cat]
-                    if val == 0:  continue
+                    if val == 0:
+                        continue
                     #self.log (console, "HIGH VAL SCAN CAT: '"+cat+"' VAL: '"+str(val)+"'")  # DEBUG
                     if val > overall_high_val:
                         overall_high_val = val
                     if val < overall_low_val:
                         overall_low_val = val
             if overall_high_val == -INSANE_VALUE:
-                raise ValueError ("unable to find any counts")
-
+                raise ValueError("unable to find any counts")
 
             # build html report
             sp = '&nbsp;'
-            text_color   = "#606060"
+            text_color = "#606060"
             text_color_2 = "#606060"
             head_color_1 = "#eeeeee"
             head_color_2 = "#eeeeee"
@@ -2952,8 +2966,8 @@ class kb_hmmer:
             #graph_char = "."
             graph_char = sp
             #color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e']
-            color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d']
-            max_color = len(color_list)-1
+            color_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd']
+            max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
             cell_width = '10px'
             if len(genome_refs) > 20:
@@ -2961,14 +2975,14 @@ class kb_hmmer:
 #            elif len(genome_refs) > 10:
 #                graph_gen_fontsize = "2"
             else:
-#                graph_gen_fontsize = "3"
+                #                graph_gen_fontsize = "3"
                 graph_gen_fontsize = "2"
             if len(cats) > 20:
                 graph_cat_fontsize = "1"
 #            elif len(cats) > 5:
 #                graph_cat_fontsize = "2"
             else:
-#                graph_cat_fontsize = "3"
+                #                graph_cat_fontsize = "3"
                 graph_cat_fontsize = "2"
             if int(graph_cat_fontsize) < int(graph_gen_fontsize):
                 cell_fontsize = graph_gen_fontsize = graph_cat_fontsize
@@ -2991,35 +3005,40 @@ class kb_hmmer:
             html_report_lines += ['<head>']
             html_report_lines += ['<title>KBase HMMER Custom Model Profile</title>']
             html_report_lines += ['<style>']
-            html_report_lines += [".vertical-text {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
-            html_report_lines += [".vertical-text_title {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+            html_report_lines += [
+                ".vertical-text {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+            html_report_lines += [
+                ".vertical-text_title {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
             html_report_lines += ['</style>']
             html_report_lines += ['</head>']
             html_report_lines += ['<body bgcolor="white">']
-            html_report_lines += ['<font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>TABULAR PROFILE</b></font> | <a href="'+html_search_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>SEARCH HITS</font></a>']
+            html_report_lines += ['<font color="' + header_tab_color + '" size=' + header_tab_fontsize + '><b>TABULAR PROFILE</b></font> | <a href="' +
+                                  html_search_file + '"><font color="' + header_tab_color + '" size=' + header_tab_fontsize + '>SEARCH HITS</font></a>']
             html_report_lines += ['<p>']
 
             # genomes as rows
             if 'vertical' in params and int(params['vertical']) == 1:
                 # table header
-                html_report_lines += ['<table cellpadding='+graph_padding+' cellspacing='+graph_spacing+' border='+border+'>']
+                html_report_lines += ['<table cellpadding=' + graph_padding +
+                                      ' cellspacing=' + graph_spacing + ' border=' + border + '>']
                 corner_rowspan = "1"
                 label = ''
                 html_report_lines += ['<tr>']
-                html_report_lines += ['<td valign=bottom align=right rowspan='+corner_rowspan+'><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="'+text_color+'">'+label+'</font></div></div></td>']
-
+                html_report_lines += ['<td valign=bottom align=right rowspan=' + corner_rowspan +
+                                      '><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="' + text_color + '">' + label + '</font></div></div></td>']
 
                 # column headers
-                for cat_i,cat in enumerate(cats):
+                for cat_i, cat in enumerate(cats):
                     if not cat_seen[cat] and not show_blanks:
                         continue
                     cat_disp = cat
                     cell_title = input_msa_descs[cat_i]
-                    if len(cat_disp) > cat_disp_trunc_len+1:
-                        cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
-                    html_report_lines += ['<td style="border-right:solid 2px '+border_cat_color+'; border-bottom:solid 2px '+border_cat_color+'" bgcolor="'+head_color_2+'"title="'+cell_title+'" valign=bottom align=center>']
+                    if len(cat_disp) > cat_disp_trunc_len + 1:
+                        cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
+                    html_report_lines += ['<td style="border-right:solid 2px ' + border_cat_color + '; border-bottom:solid 2px ' +
+                                          border_cat_color + '" bgcolor="' + head_color_2 + '"title="' + cell_title + '" valign=bottom align=center>']
                     html_report_lines += ['<div class="vertical-text"><div class="vertical-text__inner">']
-                    html_report_lines += ['<font color="'+text_color_2+'" size='+graph_cat_fontsize+'><b>']
+                    html_report_lines += ['<font color="' + text_color_2 + '" size=' + graph_cat_fontsize + '><b>']
                     #for c_i,c in enumerate(cat_disp):
                     #    if c_i < len(cat_disp)-1:
                     #        html_report_lines += [c+'<br>']
@@ -3035,17 +3054,19 @@ class kb_hmmer:
                 for genome_ref in genome_refs:
                     genome_sci_name = genome_ref_to_sci_name[genome_ref]
                     html_report_lines += ['<tr>']
-                    html_report_lines += ['<td align=right><font color="'+text_color+'" size='+graph_gen_fontsize+'><b><nobr>'+genome_sci_name+'</nobr></b></font></td>']
+                    html_report_lines += ['<td align=right><font color="' + text_color + '" size=' +
+                                          graph_gen_fontsize + '><b><nobr>' + genome_sci_name + '</nobr></b></font></td>']
                     for cat in cats:
                         if not cat_seen[cat] and not show_blanks:
                             continue
                         val = table_data[genome_ref][cat]
                         if val == 0:
                             cell_color = 'white'
-                        else:                    
-                            cell_color_i = max_color - int(round(max_color * (val-overall_low_val) / float(overall_high_val-overall_low_val)))
+                        else:
+                            cell_color_i = max_color - \
+                                int(round(max_color * (val - overall_low_val) / float(overall_high_val - overall_low_val)))
                             c = color_list[cell_color_i]
-                            cell_color = '#'+c+c+c+c+'FF'
+                            cell_color = '#' + c + c + c + c + 'FF'
 
                         cell_val = str(table_data[genome_ref][cat])  # the key line
 
@@ -3057,34 +3078,38 @@ class kb_hmmer:
                             else:
                                 this_text_color = cell_color
                                 this_graph_char = graph_char
-                                html_report_lines += ['<td align=center valign=middle title="'+cell_val+'" style="width:'+cell_width+'" bgcolor="'+cell_color+'"><font color="'+this_text_color+'" size='+cell_fontsize+'>'+this_graph_char+'</font></td>']
+                                html_report_lines += ['<td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + '" bgcolor="' +
+                                                      cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td>']
                         else:
-                            html_report_lines += ['<td align=center valign=middle style="'+cell_width+'; border-right:solid 2px '+border_color+'; border-bottom:solid 2px '+border_color+'"><font color="'+text_color+'" size='+cell_fontsize+'>'+cell_val+'</font></td>']
+                            html_report_lines += ['<td align=center valign=middle style="' + cell_width + '; border-right:solid 2px ' + border_color +
+                                                  '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
 
                     html_report_lines += ['</tr>']
                 html_report_lines += ['</table>']
 
             # genomes as columns
             else:
-                raise ValueError ("Do not yet support Genomes as columns")
-
+                raise ValueError("Do not yet support Genomes as columns")
 
             # key table
             html_report_lines += ['<p>']
-            html_report_lines += ['<table cellpadding=3 cellspacing=2 border='+border+'>']
-            html_report_lines += ['<tr><td valign=middle align=left colspan=2 style="border-bottom:solid 4px '+border_color+'"><font color="'+text_color+'"><b>KEY</b></font></td></tr>']
+            html_report_lines += ['<table cellpadding=3 cellspacing=2 border=' + border + '>']
+            html_report_lines += ['<tr><td valign=middle align=left colspan=2 style="border-bottom:solid 4px ' +
+                                  border_color + '"><font color="' + text_color + '"><b>KEY</b></font></td></tr>']
 
-            for cat_i,cat in enumerate(cats):
+            for cat_i, cat in enumerate(cats):
                 cell_color = 'white'
                 if not cat_seen[cat] and not show_blanks:
                     cell_color = "#eeeeee"
                 desc = input_msa_descs[cat_i]
                 cat_disp = cat
-                if len(cat_disp) > cat_disp_trunc_len+1:
-                    cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
+                if len(cat_disp) > cat_disp_trunc_len + 1:
+                    cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
                 html_report_lines += ['<tr>']
-                html_report_lines += ['<td valign=middle align=left bgcolor="'+cell_color+'" style="border-right:solid 4px '+border_color+'"><font color="'+text_color+'" size='+graph_cat_fontsize+'>'+cat_disp+'</font></td>']
-                html_report_lines += ['<td valign=middle align=left bgcolor="'+cell_color+'"><font color="'+text_color+'" size='+graph_cat_fontsize+'>'+desc+'</font></td>']
+                html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '" style="border-right:solid 4px ' +
+                                      border_color + '"><font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_disp + '</font></td>']
+                html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color +
+                                      '"><font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + desc + '</font></td>']
                 html_report_lines += ['</tr>']
 
             html_report_lines += ['</table>']
@@ -3096,13 +3121,12 @@ class kb_hmmer:
             # write html to file and upload
             html_path = html_profile_path
             html_report_str = "\n".join(html_report_lines)
-            with open (html_path, 'w', 0) as html_handle:
+            with open(html_path, 'w', 0) as html_handle:
                 html_handle.write(html_report_str)
-
 
         #### Upload HTML reports
         ##
-        self.log(console,"UPLOADING HTML REPORT(s)")  # DEBUG
+        self.log(console, "UPLOADING HTML REPORT(s)")  # DEBUG
         if len(invalid_msgs) == 0:
 
             # Upload HTML Report dir
@@ -3115,12 +3139,11 @@ class kb_hmmer:
                                                      'make_handle': 0,
                                                      'pack': 'zip'})
             except:
-                raise ValueError ('Logging exception loading HTML file to shock')
-
+                raise ValueError('Logging exception loading HTML file to shock')
 
         #### Upload output files
         ##
-        self.log(console,"UPLOADING OUTPUT FILES")  # DEBUG
+        self.log(console, "UPLOADING OUTPUT FILES")  # DEBUG
         if len(invalid_msgs) == 0:
 
             output_hit_TAB_dir = os.path.join(self.output_dir, 'HMMER_output_TAB')
@@ -3129,13 +3152,13 @@ class kb_hmmer:
                 os.makedirs(output_hit_TAB_dir)
             if not os.path.exists(output_hit_MSA_dir):
                 os.makedirs(output_hit_MSA_dir)
-            
-            for msa_i,input_msa_name in enumerate(input_msa_names):
+
+            for msa_i, input_msa_name in enumerate(input_msa_names):
                 if total_hit_cnts[msa_i] == 0:
-                    self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR MSA '+input_msa_name)
+                    self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR MSA ' + input_msa_name)
                     continue
-                new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, input_msa_name+'.hitout.txt');
-                new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, input_msa_name+'.msaout.txt');
+                new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, input_msa_name + '.hitout.txt')
+                new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, input_msa_name + '.msaout.txt')
 
                 shutil.copy(output_hit_TAB_file_paths[msa_i], new_hit_TAB_file_path)
                 shutil.copy(output_hit_MSA_file_paths[msa_i], new_hit_MSA_file_path)
@@ -3143,27 +3166,26 @@ class kb_hmmer:
             # Upload output dirs
             TAB_upload_ret = None
             MSA_upload_ret = None
-            self.log(console, 'UPLOADING OF HMMER OUTPUT FOR MSA '+input_msa_name)
+            self.log(console, 'UPLOADING OF HMMER OUTPUT FOR MSA ' + input_msa_name)
             try:
                 TAB_upload_ret = dfu.file_to_shock({'file_path': output_hit_TAB_dir,
                                                     'make_handle': 0,
                                                     'pack': 'zip'})
             except:
-                raise ValueError ('Logging exception loading TAB output to shock')
+                raise ValueError('Logging exception loading TAB output to shock')
             try:
                 MSA_upload_ret = dfu.file_to_shock({'file_path': output_hit_MSA_dir,
                                                     'make_handle': 0,
                                                     'pack': 'zip'})
             except:
-                raise ValueError ('Logging exception loading MSA output to shock')
-
+                raise ValueError('Logging exception loading MSA output to shock')
 
         #### Create report object
         ##
-        self.log(console,"CREATING REPORT OBJECT")  # DEBUG
+        self.log(console, "CREATING REPORT OBJECT")  # DEBUG
         if len(invalid_msgs) == 0:
 
-            reportName = 'hmmer_report_'+str(uuid.uuid4())
+            reportName = 'hmmer_report_' + str(uuid.uuid4())
             reportObj = {'objects_created': [],
                          #'text_message': '',  # or is it 'message'?
                          'message': '',  # or is it 'text_message'?
@@ -3182,29 +3204,30 @@ class kb_hmmer:
             reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_profile_file,
-                                        'label': search_tool_name+' HTML Report'}
+                                        'label': search_tool_name + ' HTML Report'}
                                        ]
 
             if TAB_upload_ret != None:
                 reportObj['file_links'] += [{'shock_id': TAB_upload_ret['shock_id'],
-                                             'name': search_tool_name+'_Search.TAB.zip',
-                                             'label': search_tool_name+'-'+' hits TABLE'}]
+                                             'name': search_tool_name + '_Search.TAB.zip',
+                                             'label': search_tool_name + '-' + ' hits TABLE'}]
             if MSA_upload_ret != None:
                 reportObj['file_links'] += [{'shock_id': MSA_upload_ret['shock_id'],
-                                           
-                                             'name': search_tool_name+'_Search.MSA.zip',
-                                             'label': search_tool_name+' hits MSA'}
-                                           ]
+
+                                             'name': search_tool_name + '_Search.MSA.zip',
+                                             'label': search_tool_name + ' hits MSA'}
+                                            ]
             if hit_accept_something:
                 if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
                     for object_created_ref in objects_created_refs:
-                        reportObj['objects_created'].append({'ref':object_created_ref, 'description':'Coalesced'+' '+search_tool_name+' hits'})
+                        reportObj['objects_created'].append(
+                            {'ref': object_created_ref, 'description': 'Coalesced' + ' ' + search_tool_name + ' hits'})
                 else:
-                    for msa_i,input_msa_name in enumerate(input_msa_names):
+                    for msa_i, input_msa_name in enumerate(input_msa_names):
                         if total_hit_cnts[msa_i] == 0:
                             continue
-                        reportObj['objects_created'].append({'ref':objects_created_refs[msa_i], 'description':input_msa_name+' '+search_tool_name+' hits'})
-                
+                        reportObj['objects_created'].append(
+                            {'ref': objects_created_refs[msa_i], 'description': input_msa_name + ' ' + search_tool_name + ' hits'})
 
             # save report object
             #
@@ -3213,48 +3236,46 @@ class kb_hmmer:
             #report_info = report.create({'report':reportObj, 'workspace_name':params['workspace_name']})
             report_info = reportClient.create_extended_report(reportObj)
 
-
         #### data validation error
         ##
         if len(invalid_msgs) > 0:
-            report += "FAILURE\n\n"+"\n".join(invalid_msgs)+"\n"
+            report += "FAILURE\n\n" + "\n".join(invalid_msgs) + "\n"
 
             reportObj = {
-                'objects_created':[],
-                'text_message':report
-                }
+                'objects_created': [],
+                'text_message': report
+            }
 
-            reportName = 'hmmer_report_'+str(uuid.uuid4())
+            reportName = 'hmmer_report_' + str(uuid.uuid4())
             report_obj_info = ws.save_objects({
-                    #                'id':info[6],
-                    'workspace':params['workspace_name'],
-                    'objects':[
-                        {
-                            'type':'KBaseReport.Report',
-                            'data':reportObj,
-                            'name':reportName,
-                            'meta':{},
-                            'hidden':1,
-                            'provenance':provenance
-                            }
-                        ]
-                    })[0]
+                #                'id':info[6],
+                'workspace': params['workspace_name'],
+                'objects': [
+                    {
+                        'type': 'KBaseReport.Report',
+                        'data': reportObj,
+                        'name': reportName,
+                        'meta': {},
+                        'hidden': 1,
+                        'provenance': provenance
+                    }
+                ]
+            })[0]
             report_info = dict()
             report_info['name'] = report_obj_info[1]
-            report_info['ref'] = str(report_obj_info[6])+'/'+str(report_obj_info[0])+'/'+str(report_obj_info[4])
-
+            report_info['ref'] = str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4])
 
         #### Return Report
         ##
-        self.log(console,"BUILDING RETURN OBJECT")
+        self.log(console, "BUILDING RETURN OBJECT")
 #        returnVal = { 'output_report_name': reportName,
 #                      'output_report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
 #                      'output_filtered_ref': params['workspace_name']+'/'+params['output_filtered_name']
 #                      }
-        returnVal = { 'report_name': report_info['name'],
-                      'report_ref': report_info['ref']
-                      }
-        self.log(console,search_tool_name+"_Search DONE")
+        returnVal = {'report_name': report_info['name'],
+                     'report_ref': report_info['ref']
+                     }
+        self.log(console, search_tool_name + "_Search DONE")
         #END HMMER_Local_MSA_Group_Search
 
         # At some point might do deeper type checking...
@@ -3263,7 +3284,6 @@ class kb_hmmer:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
-
 
     def HMMER_dbCAN_Search(self, ctx, params):
         """
@@ -3304,9 +3324,10 @@ class kb_hmmer:
         #BEGIN HMMER_dbCAN_Search
         console = []
         invalid_msgs = []
+        msa_invalid_msgs = []
         search_tool_name = 'HMMER_dbCAN'
-        self.log(console,'Running '+search_tool_name+'_Search with params=')
-        self.log(console, "\n"+pformat(params))
+        self.log(console, 'Running ' + search_tool_name + '_Search with params=')
+        self.log(console, "\n" + pformat(params))
         report = ''
 #        report = 'Running '+search_tool_name+'_Search with params='
 #        report += "\n"+pformat(params)
@@ -3314,7 +3335,6 @@ class kb_hmmer:
         #appropriate_sequence_found_in_MSA_input = False
         appropriate_sequence_found_in_many_input = False
         genome_id_feature_id_delim = '.f:'
-
 
         #### do some basic checks
         #
@@ -3331,20 +3351,18 @@ class kb_hmmer:
         if 'coalesce_output' not in params:
             raise ValueError('coalesce_output parameter is required')
 
-
         # set local names and ids
 #        input_one_ref = params['input_one_ref']
         #input_msa_ref = params['input_msa_ref']
         input_many_ref = params['input_many_ref']
         ws_id = input_many_ref.split('/')[0]
-        
 
         #### Get the input_many object
         ##
         try:
             ws = workspaceService(self.workspaceURL, token=ctx['token'])
             #objects = ws.get_objects([{'ref': input_many_ref}])
-            objects = ws.get_objects2({'objects':[{'ref': input_many_ref}]})['data']
+            objects = ws.get_objects2({'objects': [{'ref': input_many_ref}]})['data']
             input_many_data = objects[0]['data']
             info = objects[0]['info']
             input_many_name = str(info[1])
@@ -3353,7 +3371,6 @@ class kb_hmmer:
         except Exception as e:
             raise ValueError('Unable to fetch input_many_name object from workspace: ' + str(e))
             #to get the full stack trace: traceback.format_exc()
-
 
         # Handle overloading (input_many can be SequenceSet, FeatureSet, Genome, or GenomeSet)
         #
@@ -3365,25 +3382,29 @@ class kb_hmmer:
                 raise ValueError('Unable to get SequenceSet: ' + str(e))
 
             header_id = input_many_sequenceSet['sequences'][0]['sequence_id']
-            many_forward_reads_file_path = os.path.join(self.output_dir, header_id+'.fasta')
+            many_forward_reads_file_path = os.path.join(self.output_dir, header_id + '.fasta')
             many_forward_reads_file_handle = open(many_forward_reads_file_path, 'w', 0)
-            self.log(console, 'writing reads file: '+str(many_forward_reads_file_path))
+            self.log(console, 'writing reads file: ' + str(many_forward_reads_file_path))
 
             for seq_obj in input_many_sequenceSet['sequences']:
                 header_id = seq_obj['sequence_id']
                 sequence_str = seq_obj['sequence']
 
                 PROT_pattern = re.compile("^[acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
-                #DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
-                if not PROT_pattern.match(sequence_str):
-                    self.log(invalid_msgs,"BAD record for sequence_id: "+header_id+"\n"+sequence_str+"\n")
+                DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
+                if DNA_pattern.match(sequence_str):
+                    self.log(invalid_msgs,
+                             "Require protein sequences for target. " +
+                             "BAD nucleotide record for sequence_id: " + header_id + "\n" + sequence_str + "\n")
+                    continue
+                elif not PROT_pattern.match(sequence_str):
+                    self.log(invalid_msgs, "BAD record for sequence_id: " + header_id + "\n" + sequence_str + "\n")
                     continue
                 appropriate_sequence_found_in_many_input = True
-                many_forward_reads_file_handle.write('>'+header_id+"\n")
-                many_forward_reads_file_handle.write(sequence_str+"\n")
-            many_forward_reads_file_handle.close();
+                many_forward_reads_file_handle.write('>' + header_id + "\n")
+                many_forward_reads_file_handle.write(sequence_str + "\n")
+            many_forward_reads_file_handle.close()
             self.log(console, 'done')
-
 
         # FeatureSet
         #
@@ -3391,30 +3412,30 @@ class kb_hmmer:
             # retrieve sequences for features
             input_many_featureSet = input_many_data
             many_forward_reads_file_dir = self.output_dir
-            many_forward_reads_file = input_many_name+".fasta"
+            many_forward_reads_file = input_many_name + ".fasta"
 
             # DEBUG
             #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             FeatureSetToFASTA_params = {
-                'featureSet_ref':      input_many_ref,
-                'file':                many_forward_reads_file,
-                'dir':                 many_forward_reads_file_dir,
-                'console':             console,
-                'invalid_msgs':        invalid_msgs,
-                'residue_type':        'protein',
-                'feature_type':        'CDS',
-                'record_id_pattern':   '%%genome_ref%%'+genome_id_feature_id_delim+'%%feature_id%%',
+                'featureSet_ref': input_many_ref,
+                'file': many_forward_reads_file,
+                'dir': many_forward_reads_file_dir,
+                'console': console,
+                'invalid_msgs': invalid_msgs,
+                'residue_type': 'protein',
+                'feature_type': 'CDS',
+                'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
                 'record_desc_pattern': '[%%genome_ref%%]',
-                'case':                'upper',
-                'linewrap':            50,
-                'merge_fasta_files':   'TRUE'
-                }
+                'case': 'upper',
+                'linewrap': 50,
+                'merge_fasta_files': 'TRUE'
+            }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
             #SERVICE_VER = 'release'
             SERVICE_VER = 'dev'
-            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-            FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA (FeatureSetToFASTA_params)
+            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+            FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA(FeatureSetToFASTA_params)
             many_forward_reads_file_path = FeatureSetToFASTA_retVal['fasta_file_path']
             feature_ids_by_genome_ref = FeatureSetToFASTA_retVal['feature_ids_by_genome_ref']
             if len(feature_ids_by_genome_ref.keys()) > 0:
@@ -3424,34 +3445,33 @@ class kb_hmmer:
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
 
-
         # Genome
         #
         elif many_type_name == 'Genome':
             many_forward_reads_file_dir = self.output_dir
-            many_forward_reads_file = input_many_name+".fasta"
+            many_forward_reads_file = input_many_name + ".fasta"
 
             # DEBUG
             #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             GenomeToFASTA_params = {
-                'genome_ref':          input_many_ref,
-                'file':                many_forward_reads_file,
-                'dir':                 many_forward_reads_file_dir,
-                'console':             console,
-                'invalid_msgs':        invalid_msgs,
-                'residue_type':        'protein',
-                'feature_type':        'CDS',
-                'record_id_pattern':   '%%feature_id%%',
+                'genome_ref': input_many_ref,
+                'file': many_forward_reads_file,
+                'dir': many_forward_reads_file_dir,
+                'console': console,
+                'invalid_msgs': invalid_msgs,
+                'residue_type': 'protein',
+                'feature_type': 'CDS',
+                'record_id_pattern': '%%feature_id%%',
                 'record_desc_pattern': '[%%genome_id%%]',
-                'case':                'upper',
-                'linewrap':            50
-                }
+                'case': 'upper',
+                'linewrap': 50
+            }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
             #SERVICE_VER = 'release'
             SERVICE_VER = 'dev'
-            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-            GenomeToFASTA_retVal = DOTFU.GenomeToFASTA (GenomeToFASTA_params)
+            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+            GenomeToFASTA_retVal = DOTFU.GenomeToFASTA(GenomeToFASTA_params)
             many_forward_reads_file_path = GenomeToFASTA_retVal['fasta_file_path']
             feature_ids = GenomeToFASTA_retVal['feature_ids']
             if len(feature_ids) > 0:
@@ -3460,14 +3480,13 @@ class kb_hmmer:
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
-            
 
         # GenomeSet
         #
         elif many_type_name == 'GenomeSet':
             input_many_genomeSet = input_many_data
             many_forward_reads_file_dir = self.output_dir
-            many_forward_reads_file = input_many_name+".fasta"
+            many_forward_reads_file = input_many_name + ".fasta"
 
             genome_refs = []
             for genome_id in input_many_genomeSet['elements']:
@@ -3478,25 +3497,25 @@ class kb_hmmer:
             # DEBUG
             #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             GenomeSetToFASTA_params = {
-                'genomeSet_ref':       input_many_ref,
-                'file':                many_forward_reads_file,
-                'dir':                 many_forward_reads_file_dir,
-                'console':             console,
-                'invalid_msgs':        invalid_msgs,
-                'residue_type':        'protein',
-                'feature_type':        'CDS',
-                'record_id_pattern':   '%%genome_ref%%'+genome_id_feature_id_delim+'%%feature_id%%',
+                'genomeSet_ref': input_many_ref,
+                'file': many_forward_reads_file,
+                'dir': many_forward_reads_file_dir,
+                'console': console,
+                'invalid_msgs': invalid_msgs,
+                'residue_type': 'protein',
+                'feature_type': 'CDS',
+                'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
                 'record_desc_pattern': '[%%genome_ref%%]',
-                'case':                'upper',
-                'linewrap':            50,
-                'merge_fasta_files':   'TRUE'
-                }
+                'case': 'upper',
+                'linewrap': 50,
+                'merge_fasta_files': 'TRUE'
+            }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
             #SERVICE_VER = 'release'
             SERVICE_VER = 'dev'
-            DOTFU = KBaseDataObjectToFileUtils (url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-            GenomeSetToFASTA_retVal = DOTFU.GenomeSetToFASTA (GenomeSetToFASTA_params)
+            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+            GenomeSetToFASTA_retVal = DOTFU.GenomeSetToFASTA(GenomeSetToFASTA_params)
             many_forward_reads_file_path = GenomeSetToFASTA_retVal['fasta_file_path_list'][0]
             feature_ids_by_genome_id = GenomeSetToFASTA_retVal['feature_ids_by_genome_id']
             if len(feature_ids_by_genome_id.keys()) > 0:
@@ -3506,12 +3525,10 @@ class kb_hmmer:
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
 
-
         # Missing proper input_many_type
         #
         else:
-            raise ValueError('Cannot yet handle input_many type of: '+many_type_name)            
-
+            raise ValueError('Cannot yet handle input_many type of: ' + many_type_name)
 
         # Get total number of sequences in input_many search db
         #
@@ -3526,29 +3543,27 @@ class kb_hmmer:
             for genome_id in feature_ids_by_genome_id.keys():
                 seq_total += len(feature_ids_by_genome_id[genome_id])
 
-
         #### Extract the HMMs into buf
         ##
         HMM_bufs = dict()
         this_buf = []
         this_id = None
         HMMS_PATH = self.dbCAN_HMMS_PATH
-        with open (HMMS_PATH, 'r', 0) as hmm_handle:
+        with open(HMMS_PATH, 'r', 0) as hmm_handle:
             for hmm_line in hmm_handle.readlines():
                 hmm_line = hmm_line.rstrip()
                 if hmm_line.startswith('//'):
                     if len(this_buf) > 0:
                         if this_id == None:
-                            raise ValueError ("Failure parsing file: "+HMMS_PATH)
+                            raise ValueError("Failure parsing file: " + HMMS_PATH)
                         this_buf.append(hmm_line)
                         HMM_bufs[this_id] = this_buf
                         this_buf = []
                         this_id = None
                         continue
                 if hmm_line.startswith('NAME'):
-                    this_id = hmm_line.split()[1].replace('.hmm','')
+                    this_id = hmm_line.split()[1].replace('.hmm', '')
                 this_buf.append(hmm_line)
-
 
         #### Get all the HMM cats and ids
         ##
@@ -3566,7 +3581,7 @@ class kb_hmmer:
                 hmm_group = hmm_group_config_line.split("\t")[0]
                 all_HMM_groups_order.append(hmm_group)
                 all_HMM_ids[hmm_group] = []
-                HMM_fam_config_path = os.path.join (HMM_fam_config_dir, 'dbCAN-'+hmm_group+'.txt')
+                HMM_fam_config_path = os.path.join(HMM_fam_config_dir, 'dbCAN-' + hmm_group + '.txt')
                 with open(HMM_fam_config_path, 'r', 0) as hmm_fam_config_handle:
                     for hmm_fam_config_line in hmm_fam_config_handle.readlines():
                         hmm_fam_config_line = hmm_fam_config_line.rstrip()
@@ -3579,13 +3594,12 @@ class kb_hmmer:
                         all_HMM_ids[hmm_group].append(hmm_fam_id)
                         all_HMM_ids_order.append(hmm_fam_id)
 
-
         #### get the specific input HMM ids requested
         ##
         input_HMM_ids = dict()
         for hmm_group in all_HMM_groups_order:
             input_HMM_ids[hmm_group] = []
-            input_field = 'input_dbCAN_'+hmm_group+'ids'
+            input_field = 'input_dbCAN_' + hmm_group + 'ids'
             if input_field in params and params[input_field] != None and len(params[input_field]) > 0:
                 only_none_found = True
                 for HMM_fam in params[input_field]:
@@ -3598,12 +3612,10 @@ class kb_hmmer:
             else:  # default: use all
                 input_HMM_ids[hmm_group] = all_HMM_ids[hmm_group]
 
-
         # check for failed input file creation
         #
         if not appropriate_sequence_found_in_many_input:
-            self.log(invalid_msgs,"no protein sequences found in '"+input_many_name+"'")
-
+            self.log(invalid_msgs, "no protein sequences found in '" + input_many_name + "'")
 
         # input data failed validation.  Need to return
         #
@@ -3611,7 +3623,7 @@ class kb_hmmer:
 
             # load the method provenance from the context object
             #
-            self.log(console,"SETTING PROVENANCE")  # DEBUG
+            self.log(console, "SETTING PROVENANCE")  # DEBUG
             provenance = [{}]
             if 'provenance' in ctx:
                 provenance = ctx['provenance']
@@ -3620,43 +3632,41 @@ class kb_hmmer:
 #            provenance[0]['input_ws_objects'].append(input_one_ref)
             provenance[0]['input_ws_objects'].append(input_many_ref)
             provenance[0]['service'] = 'kb_hmmer'
-            provenance[0]['method'] = search_tool_name+'_Search'
-
+            provenance[0]['method'] = search_tool_name + '_Search'
 
             # build output report object
             #
-            self.log(console,"BUILDING REPORT")  # DEBUG
-            report += "FAILURE:\n\n"+"\n".join(invalid_msgs)+"\n"
+            self.log(console, "BUILDING REPORT")  # DEBUG
+            report += "FAILURE:\n\n" + "\n".join(invalid_msgs) + "\n"
             reportObj = {
-                'objects_created':[],
-                'text_message':report
-                }
+                'objects_created': [],
+                'text_message': report
+            }
 
-            reportName = 'hmmer_report_'+str(uuid.uuid4())
+            reportName = 'hmmer_report_' + str(uuid.uuid4())
             ws = workspaceService(self.workspaceURL, token=ctx['token'])
             report_obj_info = ws.save_objects({
-                    #'id':info[6],
-                    'workspace':params['workspace_name'],
-                    'objects':[
-                        {
-                        'type':'KBaseReport.Report',
-                        'data':reportObj,
-                        'name':reportName,
-                        'meta':{},
-                        'hidden':1,
-                        'provenance':provenance  # DEBUG
-                        }
-                        ]
-                    })[0]
+                #'id':info[6],
+                'workspace': params['workspace_name'],
+                'objects': [
+                    {
+                        'type': 'KBaseReport.Report',
+                        'data': reportObj,
+                        'name': reportName,
+                        'meta': {},
+                        'hidden': 1,
+                        'provenance': provenance  # DEBUG
+                    }
+                ]
+            })[0]
 
-            self.log(console,"BUILDING RETURN OBJECT")
-            returnVal = { 'report_name': reportName,
-                      'report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
-                      }
-            self.log(console,search_tool_name+"_Search DONE")
+            self.log(console, "BUILDING RETURN OBJECT")
+            returnVal = {'report_name': reportName,
+                         'report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
+                         }
+            self.log(console, search_tool_name + "_Search DONE")
             return [returnVal]
 
-        
         #### Iterate through categories and make separate Search HITs for each category
         ##
         hmm_groups_used = []
@@ -3676,8 +3686,8 @@ class kb_hmmer:
         objects_created_refs_coalesce = dict()
         objects_created_refs_by_hmm_id = dict()
 
-        for hmm_group_i,hmm_group in enumerate(all_HMM_groups_order):
-            self.log(console, "PROCESSING HMM GROUP: "+hmm_group)  # DEBUG
+        for hmm_group_i, hmm_group in enumerate(all_HMM_groups_order):
+            self.log(console, "PROCESSING HMM GROUP: " + hmm_group)  # DEBUG
 
             hit_accept_something[hmm_group] = False
 
@@ -3697,33 +3707,30 @@ class kb_hmmer:
             html_report_chunks = []
 
             # HMM loop
-            for hmm_i,hmm_id in enumerate(input_HMM_ids[hmm_group]):
+            for hmm_i, hmm_id in enumerate(input_HMM_ids[hmm_group]):
 
-                self.log(console, "PROCESSING HMM: "+hmm_id)  # DEBUG
+                self.log(console, "PROCESSING HMM: " + hmm_id)  # DEBUG
 
                 # init hit counts
                 total_hit_cnts[hmm_id] = 0
                 accepted_hit_cnts[hmm_id] = 0
                 html_report_chunks.append(None)
 
-
                 # set paths
                 #
                 hmmer_dir = os.path.join(self.output_dir, hmm_id)  # this must match above
                 if not os.path.exists(hmmer_dir):
                     os.makedirs(hmmer_dir)
-                HMM_file_path = os.path.join(hmmer_dir, hmm_id+".hmm")
+                HMM_file_path = os.path.join(hmmer_dir, hmm_id + ".hmm")
 
-                
                 # create HMM file
-                with open (HMM_file_path, 'w', 0) as hmm_handle:
-                    hmm_handle.write("\n".join(HMM_bufs[hmm_id])+"\n")
+                with open(HMM_file_path, 'w', 0) as hmm_handle:
+                    hmm_handle.write("\n".join(HMM_bufs[hmm_id]) + "\n")
 
                 if not os.path.isfile(HMM_file_path):
-                    raise ValueError("HMMER_BUILD failed to create HMM file '"+HMM_file_path+"'")
+                    raise ValueError("HMMER_BUILD failed to create HMM file '" + HMM_file_path + "'")
                 elif not os.path.getsize(HMM_file_path) > 0:
-                    raise ValueError("HMMER_BUILD created empty HMM file '"+HMM_file_path+"'")
-
+                    raise ValueError("HMMER_BUILD created empty HMM file '" + HMM_file_path + "'")
 
                 ### Construct the HMMER_SEARCH command
                 #
@@ -3736,23 +3743,22 @@ class kb_hmmer:
 
                 # check for necessary files
                 if not os.path.isfile(hmmer_search_bin):
-                    raise ValueError("no such file '"+hmmer_search_bin+"'")
+                    raise ValueError("no such file '" + hmmer_search_bin + "'")
                 if not os.path.isfile(HMM_file_path):
-                    raise ValueError("no such file '"+HMM_file_path+"'")
+                    raise ValueError("no such file '" + HMM_file_path + "'")
                 elif not os.path.getsize(HMM_file_path):
-                    raise ValueError("empty file '"+HMM_file_path+"'")
+                    raise ValueError("empty file '" + HMM_file_path + "'")
                 if not os.path.isfile(many_forward_reads_file_path):
-                    raise ValueError("no such file '"+many_forward_reads_file_path+"'")
+                    raise ValueError("no such file '" + many_forward_reads_file_path + "'")
                 elif not os.path.getsize(many_forward_reads_file_path):
-                    raise ValueError("empty file '"+many_forward_reads_file_path+"'")
+                    raise ValueError("empty file '" + many_forward_reads_file_path + "'")
 
-                output_hit_TAB_file_path = os.path.join(hmmer_dir, hmm_id+'.hitout.txt');
-                output_hit_MSA_file_path = os.path.join(hmmer_dir, hmm_id+'.msaout.txt');
-                output_filtered_fasta_file_path = os.path.join(hmmer_dir, hmm_id+'.output_filtered.fasta');
+                output_hit_TAB_file_path = os.path.join(hmmer_dir, hmm_id + '.hitout.txt')
+                output_hit_MSA_file_path = os.path.join(hmmer_dir, hmm_id + '.msaout.txt')
+                output_filtered_fasta_file_path = os.path.join(hmmer_dir, hmm_id + '.output_filtered.fasta')
                 output_hit_TAB_file_paths[hmm_id] = output_hit_TAB_file_path
                 output_hit_MSA_file_paths[hmm_id] = output_hit_MSA_file_path
                 output_filtered_fasta_file_paths.append(output_filtered_fasta_file_path)
-
 
                 # this is command for basic search mode
                 hmmer_search_cmd.append('--tblout')
@@ -3771,7 +3777,7 @@ class kb_hmmer:
                 #    if params['maxaccepts']:
                 #        hmmer_search_cmd.append('-max_target_seqs')
                 #        hmmer_search_cmd.append(str(params['maxaccepts']))
-                
+
                 # Run HMMER, capture output as it happens
                 #
                 #self.log(console, 'RUNNING HMMER_SEARCH:')
@@ -3779,38 +3785,37 @@ class kb_hmmer:
                 #report += "\n"+'running HMMER_SEARCH:'+"\n"
                 #report += '    '+' '.join(hmmer_search_cmd)+"\n"
 
-                p = subprocess.Popen(hmmer_search_cmd, \
-                                     cwd = self.output_dir, \
-                                     stdout = subprocess.PIPE, \
-                                     stderr = subprocess.STDOUT, \
-                                     shell = False)
+                p = subprocess.Popen(hmmer_search_cmd,
+                                     cwd=self.output_dir,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.STDOUT,
+                                     shell=False)
 
                 while True:
                     line = p.stdout.readline()
-                    if not line: break
+                    if not line:
+                        break
                     #self.log(console, line.replace('\n', ''))
 
                 p.stdout.close()
                 p.wait()
                 #self.log(console, 'return code: ' + str(p.returncode))
                 if p.returncode != 0:
-                    raise ValueError('Error running HMMER_SEARCH, return code: '+str(p.returncode) + 
-                                     '\n\n'+ '\n'.join(console))
-
+                    raise ValueError('Error running HMMER_SEARCH, return code: ' + str(p.returncode) +
+                                     '\n\n' + '\n'.join(console))
 
                 # Check for output
                 if not os.path.isfile(output_hit_TAB_file_path):
-                    raise ValueError("HMMER_SEARCH failed to create TAB file '"+output_hit_TAB_file_path+"'")
+                    raise ValueError("HMMER_SEARCH failed to create TAB file '" + output_hit_TAB_file_path + "'")
                 elif not os.path.getsize(output_hit_TAB_file_path) > 0:
-                    raise ValueError("HMMER_SEARCH created empty TAB file '"+output_hit_TAB_file_path+"'")
+                    raise ValueError("HMMER_SEARCH created empty TAB file '" + output_hit_TAB_file_path + "'")
                 if not os.path.isfile(output_hit_MSA_file_path):
-                    raise ValueError("HMMER_SEARCH failed to create MSA file '"+output_hit_MSA_file_path+"'")
+                    raise ValueError("HMMER_SEARCH failed to create MSA file '" + output_hit_MSA_file_path + "'")
                 elif not os.path.getsize(output_hit_MSA_file_path) > 0:
                     #raise ValueError("HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
                     #self.log(console,"HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
-                    self.log(console,"\tHMMER_SEARCH: No hits")
+                    self.log(console, "\tHMMER_SEARCH: No hits")
                     continue
-
 
                 # DEBUG
                 #self.log(console, "DEBUG: output_hit_TAB_file_path: '"+str(output_hit_TAB_file_path))
@@ -3825,14 +3830,13 @@ class kb_hmmer:
                 #        report += line+"\n"
                 #self.log(console, report)
 
-
                 # Get hit beg and end positions from Stockholm format MSA output
                 #
                 #self.log(console, 'PARSING HMMER SEARCH MSA OUTPUT')
                 hit_beg = dict()
                 hit_end = dict()
                 longest_alnlen = dict()
-                with open (output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
+                with open(output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
                     for MSA_out_line in output_hit_MSA_file_handle.readlines():
                         MSA_out_line = MSA_out_line.strip()
                         if MSA_out_line.startswith('#=GS '):
@@ -3843,7 +3847,7 @@ class kb_hmmer:
                             (beg_str, end_str) = hit_range.split('-')
                             beg = int(beg_str)
                             end = int(end_str)
-                            this_alnlen = abs(end-beg)+1
+                            this_alnlen = abs(end - beg) + 1
                             if hit_id in hit_beg:
                                 if this_alnlen > longest_alnlen[hit_id]:
                                     hit_beg[hit_id] = int(beg_str)
@@ -3856,12 +3860,11 @@ class kb_hmmer:
                                 longest_alnlen[hit_id] = this_alnlen
                                 #self.log(console, "ADDING HIT_BEG for "+hit_id)  # DEBUG
 
-
                 # Measure length of hit sequences
                 #
                 #self.log(console, 'MEASURING HIT GENES LENGTHS')
                 hit_seq_len = dict()
-                with open (many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
+                with open(many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
                     last_id = None
                     last_buf = ''
                     for fasta_line in many_forward_reads_file_handle.readlines():
@@ -3869,7 +3872,8 @@ class kb_hmmer:
                         if fasta_line.startswith('>'):
                             if last_id != None:
                                 id_untrans = last_id
-                                id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                                id_trans = re.sub('\|', ':', id_untrans)
                                 #if id_untrans in hit_order or id_trans in hit_order:
                                 if id_untrans in hit_beg or id_trans in hit_beg:
                                     hit_seq_len[id_untrans] = len(last_buf)
@@ -3881,19 +3885,19 @@ class kb_hmmer:
                             last_buf += fasta_line
                     if last_id != None:
                         id_untrans = last_id
-                        id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                        id_trans = re.sub('\|', ':', id_untrans)
                         #if id_untrans in hit_order or id_trans in hit_order:
                         if id_untrans in hit_beg or id_trans in hit_beg:
                             hit_seq_len[id_untrans] = len(last_buf)
                             #self.log(console, "ADDING HIT_SEQ_LEN for "+id_untrans)  # DEBUG
-
 
                 ### Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
                 #
                 #self.log(console, 'PARSING HMMER SEARCH TAB OUTPUT')
                 hit_seq_ids = dict()
                 accept_fids = dict()
-                output_hit_TAB_file_handle = open (output_hit_TAB_file_path, "r", 0)
+                output_hit_TAB_file_handle = open(output_hit_TAB_file_path, "r", 0)
                 output_aln_buf = output_hit_TAB_file_handle.readlines()
                 output_hit_TAB_file_handle.close()
                 accepted_hit_cnt = 0
@@ -3911,26 +3915,26 @@ class kb_hmmer:
                         continue
                     #header_done = True
                     #self.log(console,'HIT LINE: '+line)  # DEBUG
-                    hit_info = re.split ('\s+', line)
-                    hit_seq_id            = hit_info[0]
-                    hit_accession         = hit_info[1]
-                    query_name            = hit_info[2]
-                    query_accession       = hit_info[3]
-                    hit_e_value           = float(hit_info[4])
-                    hit_bitscore          = float(hit_info[5])
-                    hit_bias              = float(hit_info[6])
-                    hit_e_value_best_dom  = float(hit_info[7])
+                    hit_info = re.split('\s+', line)
+                    hit_seq_id = hit_info[0]
+                    hit_accession = hit_info[1]
+                    query_name = hit_info[2]
+                    query_accession = hit_info[3]
+                    hit_e_value = float(hit_info[4])
+                    hit_bitscore = float(hit_info[5])
+                    hit_bias = float(hit_info[6])
+                    hit_e_value_best_dom = float(hit_info[7])
                     hit_bitscore_best_dom = float(hit_info[8])
-                    hit_bias_best_dom     = float(hit_info[9])
-                    hit_expected_dom_n    = float(hit_info[10])
-                    hit_regions           = float(hit_info[11])
-                    hit_regions_multidom  = float(hit_info[12])
-                    hit_overlaps          = float(hit_info[13])
-                    hit_envelopes         = float(hit_info[14])
-                    hit_dom_n             = float(hit_info[15])
+                    hit_bias_best_dom = float(hit_info[9])
+                    hit_expected_dom_n = float(hit_info[10])
+                    hit_regions = float(hit_info[11])
+                    hit_regions_multidom = float(hit_info[12])
+                    hit_overlaps = float(hit_info[13])
+                    hit_envelopes = float(hit_info[14])
+                    hit_dom_n = float(hit_info[15])
                     hit_doms_within_rep_thresh = float(hit_info[16])
                     hit_doms_within_inc_thresh = float(hit_info[17])
-                    hit_desc                   = hit_info[18]
+                    hit_desc = hit_info[18]
 
                     try:
                         if hit_bitscore > high_bitscore_score[hit_seq_id]:
@@ -3955,7 +3959,7 @@ class kb_hmmer:
                     if 'bitscore' in params and float(params['bitscore']) > float(high_bitscore_score[hit_seq_id]):
                         filter = True
                         filtering_fields[hit_seq_id]['bitscore'] = True
-                    if 'overlap_perc' in params and float(params['overlap_perc']) > 100.0*float(longest_alnlen[hit_seq_id])/float(hit_seq_len[hit_seq_id]):
+                    if 'overlap_perc' in params and float(params['overlap_perc']) > 100.0 * float(longest_alnlen[hit_seq_id]) / float(hit_seq_len[hit_seq_id]):
                         filter = True
                         filtering_fields[hit_seq_id]['overlap_perc'] = True
                     if 'maxaccepts' in params and params['maxaccepts'] != None and accepted_hit_cnt == int(params['maxaccepts']):
@@ -3964,7 +3968,7 @@ class kb_hmmer:
 
                     if filter:
                         continue
-            
+
                     hit_accept_something[hmm_group] = True
                     accepted_hit_cnt += 1
                     hit_seq_ids[hit_seq_id] = True
@@ -3982,7 +3986,6 @@ class kb_hmmer:
 
                 accepted_hit_cnts[hmm_id] = accepted_hit_cnt
 
-
                 #
                 ### Create output objects
                 #
@@ -3998,14 +4001,16 @@ class kb_hmmer:
                         output_sequenceSet = dict()
 
                         if 'sequence_set_id' in input_many_sequenceSet and input_many_sequenceSet['sequence_set_id'] != None:
-                            output_sequenceSet['sequence_set_id'] = input_many_sequenceSet['sequence_set_id'] + "."+search_tool_name+"_Search_filtered"
+                            output_sequenceSet['sequence_set_id'] = input_many_sequenceSet['sequence_set_id'] + \
+                                "." + search_tool_name + "_Search_filtered"
                         else:
-                            output_sequenceSet['sequence_set_id'] = search_tool_name+"_Search_filtered"
+                            output_sequenceSet['sequence_set_id'] = search_tool_name + "_Search_filtered"
                         if 'description' in input_many_sequenceSet and input_many_sequenceSet['description'] != None:
-                            output_sequenceSet['description'] = input_many_sequenceSet['description'] + " - "+search_tool_name+"_Search filtered"
+                            output_sequenceSet['description'] = input_many_sequenceSet['description'] + \
+                                " - " + search_tool_name + "_Search filtered"
                         else:
-                            output_sequenceSet['description'] = search_tool_anme+"_Search filtered"
-                            
+                            output_sequenceSet['description'] = search_tool_anme + "_Search filtered"
+
                         #self.log(console,"ADDING SEQUENCES TO SEQUENCESET")
                         output_sequenceSet['sequences'] = []
 
@@ -4015,21 +4020,22 @@ class kb_hmmer:
                             #sequence_str = seq_obj['sequence']
 
                             id_untrans = header_id
-                            id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            id_trans = re.sub('\|', ':', id_untrans)
                             if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                 #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
                                 accept_fids[id_untrans] = True
                                 output_sequenceSet['sequences'].append(seq_obj)
-
 
                     # FeatureSet input -> FeatureSet output
                     #
                     elif many_type_name == 'FeatureSet':
                         output_featureSet = dict()
                         if 'description' in input_many_featureSet and input_many_featureSet['description'] != None:
-                            output_featureSet['description'] = input_many_featureSet['description'] + " - "+search_tool_name+"_Search filtered"
+                            output_featureSet['description'] = input_many_featureSet['description'] + \
+                                " - " + search_tool_name + "_Search filtered"
                         else:
-                            output_featureSet['description'] = search_tool_name+"_Search filtered"
+                            output_featureSet['description'] = search_tool_name + "_Search filtered"
                         output_featureSet['element_ordering'] = []
                         output_featureSet['elements'] = dict()
 
@@ -4037,8 +4043,9 @@ class kb_hmmer:
                         #self.log(console,"ADDING FEATURES TO FEATURESET")
                         for fId in sorted(fId_list):
                             for genome_ref in input_many_featureSet['elements'][fId]:
-                                id_untrans = genome_ref+genome_id_feature_id_delim+fId
-                                id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                                id_untrans = genome_ref + genome_id_feature_id_delim + fId
+                                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                                id_trans = re.sub('\|', ':', id_untrans)
                                 if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                     #self.log(console, 'FOUND HIT '+fId)  # DEBUG
                                     accept_fids[id_untrans] = True
@@ -4058,12 +4065,13 @@ class kb_hmmer:
                         #                output_featureSet['description'] = input_many_genome['scientific_name'] + " - "+search_tool_name+"_Search filtered"
                         #            else:
                         #                output_featureSet['description'] = search_tool_name+"_Search filtered"
-                        output_featureSet['description'] = search_tool_name+"_Search filtered"
+                        output_featureSet['description'] = search_tool_name + "_Search filtered"
                         output_featureSet['element_ordering'] = []
                         output_featureSet['elements'] = dict()
                         for fid in feature_ids:
                             id_untrans = fid
-                            id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                            id_trans = re.sub('\|', ':', id_untrans)
                             if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                 #self.log(console, 'FOUND HIT '+fid)  # DEBUG
                                 #output_featureSet['element_ordering'].append(fid)
@@ -4077,9 +4085,10 @@ class kb_hmmer:
                     elif many_type_name == 'GenomeSet':
                         output_featureSet = dict()
                         if 'description' in input_many_genomeSet and input_many_genomeSet['description'] != None:
-                            output_featureSet['description'] = input_many_genomeSet['description'] + " - "+search_tool_name+"_Search filtered"
+                            output_featureSet['description'] = input_many_genomeSet['description'] + \
+                                " - " + search_tool_name + "_Search filtered"
                         else:
-                            output_featureSet['description'] = search_tool_name+"_Search filtered"
+                            output_featureSet['description'] = search_tool_name + "_Search filtered"
                         output_featureSet['element_ordering'] = []
                         output_featureSet['elements'] = dict()
 
@@ -4088,8 +4097,9 @@ class kb_hmmer:
                             #self.log(console,"READING HITS FOR GENOME "+genome_id)  # DEBUG
                             genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
                             for feature_id in feature_ids_by_genome_id[genome_id]:
-                                id_untrans = genome_ref+genome_id_feature_id_delim+feature_id
-                                id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                                id_untrans = genome_ref + genome_id_feature_id_delim + feature_id
+                                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                                id_trans = re.sub('\|', ':', id_untrans)
                                 if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                     #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
                                     #output_featureSet['element_ordering'].append(feature['id'])
@@ -4102,7 +4112,6 @@ class kb_hmmer:
                                         output_featureSet['element_ordering'].append(feature_id)
                                     output_featureSet['elements'][feature_id].append(genome_ref)
 
-
                     # load the method provenance from the context object
                     #
                     #self.log(console,"SETTING PROVENANCE")  # DEBUG
@@ -4114,8 +4123,7 @@ class kb_hmmer:
                     #        provenance[0]['input_ws_objects'].append(input_one_ref)
                     provenance[0]['input_ws_objects'].append(input_many_ref)
                     provenance[0]['service'] = 'kb_blast'
-                    provenance[0]['method'] = search_tool_name+'_Search'
-
+                    provenance[0]['method'] = search_tool_name + '_Search'
 
                     ### Create output object
                     #
@@ -4139,7 +4147,7 @@ class kb_hmmer:
                                         coalesce_featureIds_genome_ordering.append(this_genome_ref)
 
                     else:  # keep output separate  Upload results if coalesce_output is 0
-                        output_name = hmm_id+'-'+params['output_filtered_name']
+                        output_name = hmm_id + '-' + params['output_filtered_name']
 
                         if len(invalid_msgs) == 0:
                             if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
@@ -4153,30 +4161,31 @@ class kb_hmmer:
                             if many_type_name == 'SequenceSet':
                                 new_obj_info = ws.save_objects({
                                     'workspace': params['workspace_name'],
-                                    'objects':[{
-                                            'type': 'KBaseSequences.SequenceSet',
-                                            'data': output_sequenceSet,
-                                            'name': output_name,
-                                            'meta': {},
-                                            'provenance': provenance
-                                        }]
+                                    'objects': [{
+                                        'type': 'KBaseSequences.SequenceSet',
+                                        'data': output_sequenceSet,
+                                        'name': output_name,
+                                        'meta': {},
+                                        'provenance': provenance
+                                    }]
                                 })[0]
 
                             else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
                                 new_obj_info = ws.save_objects({
                                     'workspace': params['workspace_name'],
-                                    'objects':[{
-                                            'type': 'KBaseCollections.FeatureSet',
-                                            'data': output_featureSet,
-                                            'name': output_name,
-                                            'meta': {},
-                                            'provenance': provenance
-                                        }]
+                                    'objects': [{
+                                        'type': 'KBaseCollections.FeatureSet',
+                                        'data': output_featureSet,
+                                        'name': output_name,
+                                        'meta': {},
+                                        'provenance': provenance
+                                    }]
                                 })[0]
 
-                            [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
-                            objects_created_refs_by_hmm_id[hmm_id] = str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I])
-
+                            [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I,
+                                WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+                            objects_created_refs_by_hmm_id[hmm_id] = str(
+                                new_obj_info[WSID_I]) + '/' + str(new_obj_info[OBJID_I])
 
                 #### Build output report chunks
                 ##
@@ -4185,15 +4194,14 @@ class kb_hmmer:
 
                     # text report
                     #
-                    report += 'HMM['+str(hmm_i)+']: '+hmm_id+"\n"
-                    report += 'sequences in search db: '+str(seq_total)+"\n"
-                    report += 'sequences in hit set: '+str(total_hit_cnts[hmm_id])+"\n"
-                    report += 'sequences in accepted hit set: '+str(accepted_hit_cnts[hmm_id])+"\n"
+                    report += 'HMM[' + str(hmm_i) + ']: ' + hmm_id + "\n"
+                    report += 'sequences in search db: ' + str(seq_total) + "\n"
+                    report += 'sequences in hit set: ' + str(total_hit_cnts[hmm_id]) + "\n"
+                    report += 'sequences in accepted hit set: ' + str(accepted_hit_cnts[hmm_id]) + "\n"
                     report += "\n"
                     #for line in hit_buf:
                     #    report += line
                     #self.log (console, report)
-
 
                     # build html report chunk
                     if many_type_name == 'Genome':
@@ -4232,7 +4240,8 @@ class kb_hmmer:
                         if line == '' or line.startswith('#'):
                             continue
 
-                        [hit_id, hit_accession, query_name, query_accession, e_value, bit_score, bias, e_value_best_dom, bit_score_best_dom, bias_best_dom, expected_dom_n, regions, regions_multidom, overlaps, envelopes, dom_n, doms_within_rep_thresh, doms_within_inc_thresh, hit_desc] = re.split('\s+',line)[0:19]
+                        [hit_id, hit_accession, query_name, query_accession, e_value, bit_score, bias, e_value_best_dom, bit_score_best_dom, bias_best_dom, expected_dom_n,
+                            regions, regions_multidom, overlaps, envelopes, dom_n, doms_within_rep_thresh, doms_within_inc_thresh, hit_desc] = re.split('\s+', line)[0:19]
 
                         #                [query_id, hit_id, identity, aln_len, mismatches, gap_openings, q_beg, q_end, h_beg, h_end, e_value, bit_score] = line.split("\t")[0:12]
                         #                identity = str(round(float(identity), 1))
@@ -4242,9 +4251,8 @@ class kb_hmmer:
                         h_len = hit_seq_len[hit_id]
                         h_beg = hit_beg[hit_id]
                         h_end = hit_end[hit_id]
-                        aln_len = abs(h_end-h_beg)+1
-                        aln_len_perc = round (100.0*float(aln_len)/float(h_len), 1)
-
+                        aln_len = abs(h_end - h_beg) + 1
+                        aln_len_perc = round(100.0 * float(aln_len) / float(h_len), 1)
 
                         #if many_type_name == 'SingleEndLibrary':
                         #    pass
@@ -4252,8 +4260,8 @@ class kb_hmmer:
                         if many_type_name == 'SequenceSet':
                             pass
                         elif many_type_name == 'Genome' or \
-                             many_type_name == 'GenomeSet' or \
-                             many_type_name == 'FeatureSet':
+                                many_type_name == 'GenomeSet' or \
+                                many_type_name == 'FeatureSet':
 
                             if many_type_name != 'Genome':
                                 [genome_ref, hit_fid] = hit_id.split(genome_id_feature_id_delim)
@@ -4265,7 +4273,8 @@ class kb_hmmer:
                             fid_lookup = None
                             for fid in feature_id_to_function[genome_ref].keys():
                                 id_untrans = fid
-                                id_trans = re.sub ('\|',':',id_untrans)  # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
+                                id_trans = re.sub('\|', ':', id_untrans)
 
                                 #self.log (console, "SCANNING FIDS.  HIT_FID: '"+str(hit_fid)+"' FID: '"+str(fid)+"' TRANS: '"+str(id_trans)+"'")  # DEBUG
 
@@ -4274,7 +4283,7 @@ class kb_hmmer:
                                     if many_type_name == 'Genome':
                                         accept_id = fid
                                     elif many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
-                                        accept_id = genome_ref+genome_id_feature_id_delim+fid
+                                        accept_id = genome_ref + genome_id_feature_id_delim + fid
                                     if accept_id in accept_fids:
                                         row_color = accept_row_color
                                     else:
@@ -4283,34 +4292,36 @@ class kb_hmmer:
                                     break
                             #self.log (console, "HIT_FID: '"+str(hit_fid)+"' FID_LOOKUP: '"+str(fid_lookup)+"'")  # DEBUG
                             if fid_lookup == None:
-                                raise ValueError ("unable to find fid for hit_fid: '"+str(hit_fid))
+                                raise ValueError("unable to find fid for hit_fid: '" + str(hit_fid))
                             elif fid_lookup not in feature_id_to_function[genome_ref]:
-                                raise ValueError ("unable to find function for fid: '"+str(fid_lookup))
-                            fid_disp = re.sub (r"^.*\.([^\.]+)\.([^\.]+)$", r"\1.\2", fid_lookup)
+                                raise ValueError("unable to find function for fid: '" + str(fid_lookup))
+                            fid_disp = re.sub(r"^.*\.([^\.]+)\.([^\.]+)$", r"\1.\2", fid_lookup)
 
                             func_disp = feature_id_to_function[genome_ref][fid_lookup]
                             genome_sci_name = genome_ref_to_sci_name[genome_ref]
 
-                            html_report_chunk += ['<tr bgcolor="'+row_color+'">']
+                            html_report_chunk += ['<tr bgcolor="' + row_color + '">']
                             #html_report_chunk += ['<tr bgcolor="'+'white'+'">']  # DEBUG
                             # add overlap bar
 
                             # coverage graphic (with respect to hit seq)
-                            html_report_chunk += ['<td valign=middle align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'">']
-                            html_report_chunk += ['<table style="height:'+str(bar_height)+'px; width:'+str(bar_width)+'px" border=0 cellpadding=0 cellspacing=0>']
+                            html_report_chunk += ['<td valign=middle align=center style="border-right:solid 1px ' +
+                                                  border_body_color + '; border-bottom:solid 1px ' + border_body_color + '">']
+                            html_report_chunk += ['<table style="height:' + str(bar_height) + 'px; width:' + str(
+                                bar_width) + 'px" border=0 cellpadding=0 cellspacing=0>']
                             full_len_pos = bar_width
-                            aln_beg_pos = int (float(bar_width) * float(int(h_beg)-1)/float(int(h_len)-1))
-                            aln_end_pos = int (float(bar_width) * float(int(h_end)-1)/float(int(h_len)-1))
-                            cell_pix_height = str(int(round(float(bar_height)/3.0, 0)))
+                            aln_beg_pos = int(float(bar_width) * float(int(h_beg) - 1) / float(int(h_len) - 1))
+                            aln_end_pos = int(float(bar_width) * float(int(h_end) - 1) / float(int(h_len) - 1))
+                            cell_pix_height = str(int(round(float(bar_height) / 3.0, 0)))
 
-                            cell_color = ['','','']
+                            cell_color = ['', '', '']
                             cell_width = []
                             cell_width.append(aln_beg_pos)
-                            cell_width.append(aln_end_pos-aln_beg_pos)
-                            cell_width.append(bar_width-aln_end_pos)
+                            cell_width.append(aln_end_pos - aln_beg_pos)
+                            cell_width.append(bar_width - aln_end_pos)
 
                             for row_i in range(3):
-                                html_report_chunk += ['<tr style="height:'+cell_pix_height+'px">']
+                                html_report_chunk += ['<tr style="height:' + cell_pix_height + 'px">']
                                 unalign_color = row_color
                                 if row_i == 1:
                                     unalign_color = bar_line_color
@@ -4321,19 +4332,23 @@ class kb_hmmer:
                                 for col_i in range(3):
                                     cell_pix_width = str(cell_width[col_i])
                                     cell_pix_color = cell_color[col_i]
-                                    html_report_chunk += ['<td style="height:'+cell_pix_height+'px; width:'+cell_pix_width+'px" bgcolor="'+cell_pix_color+'"></td>']
+                                    html_report_chunk += ['<td style="height:' + cell_pix_height +
+                                                          'px; width:' + cell_pix_width + 'px" bgcolor="' + cell_pix_color + '"></td>']
                                 html_report_chunk += ['</tr>']
                             html_report_chunk += ['</table>']
                             html_report_chunk += ['</td>']
 
                             # add other cells
                             # fid
-                            html_report_chunk += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(fid_disp)+'</font></td>']
+                            html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + str(fid_disp) + '</font></td>']
                             #                    html_report_chunk += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(hit_accession)+'</font></td>']
                             # func
-                            html_report_chunk += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+func_disp+'</font></td>']
+                            html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + func_disp + '</font></td>']
                             # sci name
-                            html_report_chunk += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+genome_sci_name+'</font></td>']
+                            html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + genome_sci_name + '</font></td>']
                             # ident
                             #                    if 'ident_thresh' in filtering_fields[hit_id]:
                             #                       this_cell_color = reject_cell_color
@@ -4346,22 +4361,26 @@ class kb_hmmer:
                                 this_cell_color = reject_cell_color
                             else:
                                 this_cell_color = row_color
-                            html_report_chunk += ['<td align=center bgcolor="'+str(this_cell_color)+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(aln_len)+' ('+str(aln_len_perc)+'%)</font></td>']
+                            html_report_chunk += ['<td align=center bgcolor="' + str(this_cell_color) + '" style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + str(aln_len) + ' (' + str(aln_len_perc) + '%)</font></td>']
 
                             # evalue
-                            html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(e_value)+'</nobr></font></td>']
+                            html_report_chunk += ['<td align=center style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(e_value) + '</nobr></font></td>']
 
                             # bit score
                             if 'bitscore' in filtering_fields[hit_id]:
                                 this_cell_color = reject_cell_color
                             else:
                                 this_cell_color = row_color
-                            html_report_chunk += ['<td align=center bgcolor="'+str(this_cell_color)+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bit_score)+'</nobr></font></td>']
+                            html_report_chunk += ['<td align=center bgcolor="' + str(this_cell_color) + '" style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(bit_score) + '</nobr></font></td>']
                             # bias
                             #                    html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bias)+'</nobr><br><nobr>('+str(bias_best_dom)+')</nobr></font></td>']
 
                             # aln coords only for hit seq
-                            html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(h_beg)+'-'+str(h_end)+'</nobr></font></td>']
+                            html_report_chunk += ['<td align=center style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' + border_body_color +
+                                                  '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(h_beg) + '-' + str(h_end) + '</nobr></font></td>']
 
                             # close chunk
                             html_report_chunk += ['</tr>']
@@ -4375,70 +4394,69 @@ class kb_hmmer:
                     html_report_chunks[hmm_i] = html_report_chunk_str
                     #self.log(console, "HTML_REPORT_CHUNK: '"+str(html_report_chunk_str)+"'")  # DEBUG
 
-
             #### Create and Upload output objects if coalesce_output is true
             ##
             if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
-                output_name = hmm_group+'-'+params['output_filtered_name']
+                output_name = hmm_group + '-' + params['output_filtered_name']
 
                 if len(invalid_msgs) == 0:
                     if not hit_accept_something[hmm_group]:
-                        self.log(console,"No Coalesced Hits Object to Upload for all HMMs in Group "+hmm_group)  # DEBUG
+                        self.log(console, "No Coalesced Hits Object to Upload for all HMMs in Group " + hmm_group)  # DEBUG
 
                     else:
-                        self.log(console,"Uploading Coalesced Hits Object for HMM Group "+hmm_group)  # DEBUG
+                        self.log(console, "Uploading Coalesced Hits Object for HMM Group " + hmm_group)  # DEBUG
 
                         if many_type_name == 'SequenceSet':  # input many SequenceSet -> save SequenceSet
 
                             output_sequenceSet['sequences'] = coalesced_sequenceObjs
                             new_obj_info = ws.save_objects({
                                 'workspace': params['workspace_name'],
-                                'objects':[{
-                                        'type': 'KBaseSequences.SequenceSet',
-                                        'data': output_sequenceSet,
-                                        'name': output_name,
-                                        'meta': {},
-                                        'provenance': provenance
-                                        }]
-                                })[0]
+                                'objects': [{
+                                    'type': 'KBaseSequences.SequenceSet',
+                                    'data': output_sequenceSet,
+                                    'name': output_name,
+                                    'meta': {},
+                                    'provenance': provenance
+                                }]
+                            })[0]
 
                         else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
 
                             output_featureSet['element_ordering'] = coalesce_featureIds_element_ordering
                             output_featureSet['elements'] = dict()
-                            for f_i,fId in enumerate(output_featureSet['element_ordering']):
+                            for f_i, fId in enumerate(output_featureSet['element_ordering']):
                                 output_featureSet['elements'][fId] = []
                                 output_featureSet['elements'][fId].append(coalesce_featureIds_genome_ordering[f_i])
 
                             new_obj_info = ws.save_objects({
                                 'workspace': params['workspace_name'],
-                                'objects':[{
-                                        'type': 'KBaseCollections.FeatureSet',
-                                        'data': output_featureSet,
-                                        'name': output_name,
-                                        'meta': {},
-                                        'provenance': provenance
-                                        }]
-                                })[0]
+                                'objects': [{
+                                    'type': 'KBaseCollections.FeatureSet',
+                                    'data': output_featureSet,
+                                    'name': output_name,
+                                    'meta': {},
+                                    'provenance': provenance
+                                }]
+                            })[0]
 
-                        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
-                        objects_created_refs_coalesce[hmm_group] = str(new_obj_info[WSID_I])+'/'+str(new_obj_info[OBJID_I])
-
+                        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I,
+                            WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+                        objects_created_refs_coalesce[hmm_group] = str(
+                            new_obj_info[WSID_I]) + '/' + str(new_obj_info[OBJID_I])
 
             #### Set paths for output HTML
             ##
-            html_output_dir = os.path.join(self.output_dir,'html_output')
+            html_output_dir = os.path.join(self.output_dir, 'html_output')
             if not os.path.exists(html_output_dir):
                 os.makedirs(html_output_dir)
-            html_search_file = search_tool_name+'_Search-'+str(hmm_group_i)+'-'+str(hmm_group)+'.html'
-            html_search_path = os.path.join (html_output_dir, html_search_file)
-            html_profile_file = search_tool_name+'_Profile.html'
-            html_profile_path = os.path.join (html_output_dir, html_profile_file)
-
+            html_search_file = search_tool_name + '_Search-' + str(hmm_group_i) + '-' + str(hmm_group) + '.html'
+            html_search_path = os.path.join(html_output_dir, html_search_file)
+            html_profile_file = search_tool_name + '_Profile.html'
+            html_profile_path = os.path.join(html_output_dir, html_profile_file)
 
             #### Build Search output report (and assemble html chunks)
             ##
-            self.log(console,"BUILDING SEARCH REPORT ")  # DEBUG
+            self.log(console, "BUILDING SEARCH REPORT ")  # DEBUG
             if len(invalid_msgs) == 0:
 
                 # build html report
@@ -4451,7 +4469,7 @@ class kb_hmmer:
                 elif many_type_name == 'FeatureSet':
                     feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
                     genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
-                
+
                 sp = '&nbsp;'
                 head_color = "#eeeeff"
                 border_head_color = "#ffccff"
@@ -4478,46 +4496,59 @@ class kb_hmmer:
                 html_report_lines = []
                 html_report_lines += ['<html>']
                 html_report_lines += ['<head>']
-                html_report_lines += ['<title>KBase CAZy dbCAN Model '+str(hmm_group)+' Search Hits</title>']
+                html_report_lines += ['<title>KBase CAZy dbCAN Model ' + str(hmm_group) + ' Search Hits</title>']
                 html_report_lines += ['</head>']
                 html_report_lines += ['<body bgcolor="white">']
                 if many_type_name == 'GenomeSet':
-                    html_report_lines += ['<a href="'+html_profile_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>TABULAR PROFILE</font></a> | ']
-                for this_hmm_group_i,this_hmm_group in enumerate(hmm_groups_used):
-                    disp_hmm_group = this_hmm_group[0].upper()+this_hmm_group[1:]
+                    html_report_lines += ['<a href="' + html_profile_file + '"><font color="' +
+                                          header_tab_color + '" size=' + header_tab_fontsize + '>TABULAR PROFILE</font></a> | ']
+                for this_hmm_group_i, this_hmm_group in enumerate(hmm_groups_used):
+                    disp_hmm_group = this_hmm_group[0].upper() + this_hmm_group[1:]
                     if this_hmm_group == hmm_group:
-                        html_report_lines += [ ' <font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>'+disp_hmm_group+' HITS</b></font> ']
+                        html_report_lines += [' <font color="' + header_tab_color + '" size=' +
+                                              header_tab_fontsize + '><b>' + disp_hmm_group + ' HITS</b></font> ']
                     else:
-                        this_html_search_file = search_tool_name+'_Search-'+str(this_hmm_group_i)+'-'+str(this_hmm_group)+'.html'
-                        html_report_lines += [' <a href="'+this_html_search_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>'+str(disp_hmm_group)+' HITS</font></a> ']
-                    if this_hmm_group_i < len(hmm_groups_used)-1:
+                        this_html_search_file = search_tool_name + '_Search-' + \
+                            str(this_hmm_group_i) + '-' + str(this_hmm_group) + '.html'
+                        html_report_lines += [' <a href="' + this_html_search_file + '"><font color="' + header_tab_color +
+                                              '" size=' + header_tab_fontsize + '>' + str(disp_hmm_group) + ' HITS</font></a> ']
+                    if this_hmm_group_i < len(hmm_groups_used) - 1:
                         html_report_lines += [' | ']
 
                 html_report_lines += ['<p>']
-                html_report_lines += ['<table cellpadding='+cellpadding+' cellspacing = '+cellspacing+' border='+border+'>']
-                html_report_lines += ['<tr bgcolor="'+head_color+'">']
-                html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'ALIGNMENT COVERAGE (HIT SEQ)'+'</font></td>']
-                html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'GENE ID'+'</font></td>']
-                html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'FUNCTION'+'</font></td>']
-                html_report_lines += ['<td style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'GENOME'+'</font></td>']
+                html_report_lines += ['<table cellpadding=' + cellpadding +
+                                      ' cellspacing = ' + cellspacing + ' border=' + border + '>']
+                html_report_lines += ['<tr bgcolor="' + head_color + '">']
+                html_report_lines += ['<td style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' + border_head_color +
+                                      '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'ALIGNMENT COVERAGE (HIT SEQ)' + '</font></td>']
+                html_report_lines += ['<td style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                      border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'GENE ID' + '</font></td>']
+                html_report_lines += ['<td style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                      border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'FUNCTION' + '</font></td>']
+                html_report_lines += ['<td style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                      border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'GENOME' + '</font></td>']
                 #            html_report_lines += ['<td align=center style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'IDENT'+'%</font></td>']
-                html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'ALN_LEN'+'</font></td>']
-                html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'E-VALUE'+'</font></td>']
-                html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'BIT SCORE'+'</font></td>']
-                html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'<nobr>H_BEG-H_END</nobr>'+'</font></td>']
+                html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                      border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'ALN_LEN' + '</font></td>']
+                html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                      border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'E-VALUE' + '</font></td>']
+                html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                      border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'BIT SCORE' + '</font></td>']
+                html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
+                                      border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + '<nobr>H_BEG-H_END</nobr>' + '</font></td>']
                 #            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'MIS MATCH'+'</font></td>']
                 #            html_report_lines += ['<td align=center  style="border-right:solid 2px '+border_head_color+'; border-bottom:solid 2px '+border_head_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+'GAP OPEN'+'</font></td>']
                 html_report_lines += ['</tr>']
 
-
-                for hmm_i,hmm_id in enumerate(input_HMM_ids[hmm_group]):
-                    html_report_lines += ['<tr><td colspan=table_col_width>Hits to <b>'+str(hmm_id)+'</b></td></tr>']
+                for hmm_i, hmm_id in enumerate(input_HMM_ids[hmm_group]):
+                    html_report_lines += ['<tr><td colspan=table_col_width>Hits to <b>' +
+                                          str(hmm_id) + '</b></td></tr>']
                     if total_hit_cnts[hmm_id] == 0 or html_report_chunks[hmm_i] == None or html_report_chunks[hmm_i] == '':
                         html_report_lines += ['<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>']
                     else:
                         #html_report_lines.extend(html_report_chunks[hmm_i])
-                        html_report_lines += [ html_report_chunks[hmm_i] ]
-                    html_report_lines += ['<tr><td colspan=table_col_width>'+sp+'</td></tr>']
+                        html_report_lines += [html_report_chunks[hmm_i]]
+                    html_report_lines += ['<tr><td colspan=table_col_width>' + sp + '</td></tr>']
 
                 html_report_lines += ['</table>']
                 html_report_lines += ['</body>']
@@ -4526,13 +4557,12 @@ class kb_hmmer:
                 # write html to file
                 html_path = html_search_path
                 html_report_str = "\n".join(html_report_lines)
-                with open (html_path, 'w', 0) as html_handle:
+                with open(html_path, 'w', 0) as html_handle:
                     html_handle.write(html_report_str)
-
 
         #### Build Profile output report
         ##
-        self.log(console,"BUILDING PROFILE REPORT ")  # DEBUG
+        self.log(console, "BUILDING PROFILE REPORT ")  # DEBUG
         if len(invalid_msgs) == 0 and many_type_name == 'GenomeSet':
 
             # calculate table
@@ -4540,7 +4570,7 @@ class kb_hmmer:
             cats = all_HMM_ids_order
             table_data = dict()
             INSANE_VALUE = 10000000000000000
-            overall_low_val  =  INSANE_VALUE
+            overall_low_val = INSANE_VALUE
             overall_high_val = -INSANE_VALUE
             cat_seen = dict()
             for cat in cats:
@@ -4552,7 +4582,7 @@ class kb_hmmer:
                     table_data[genome_ref] = dict()
                 for cat in cats:
                     table_data[genome_ref][cat] = 0
-                    
+
                 if genome_ref not in hit_cnt_by_genome_and_model:
                     continue
 
@@ -4566,19 +4596,19 @@ class kb_hmmer:
             for genome_ref in genome_refs:
                 for cat in cats:
                     val = table_data[genome_ref][cat]
-                    if val == 0:  continue
+                    if val == 0:
+                        continue
                     #self.log (console, "HIGH VAL SCAN CAT: '"+cat+"' VAL: '"+str(val)+"'")  # DEBUG
                     if val > overall_high_val:
                         overall_high_val = val
                     if val < overall_low_val:
                         overall_low_val = val
             if overall_high_val == -INSANE_VALUE:
-                raise ValueError ("unable to find any counts")
-
+                raise ValueError("unable to find any counts")
 
             # build html report
             sp = '&nbsp;'
-            text_color   = "#606060"
+            text_color = "#606060"
             text_color_2 = "#606060"
             head_color_1 = "#eeeeee"
             head_color_2 = "#eeeeee"
@@ -4589,8 +4619,8 @@ class kb_hmmer:
             #graph_char = "."
             graph_char = sp
             #color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e']
-            color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d']
-            max_color = len(color_list)-1
+            color_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd']
+            max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
             cell_width = '10px'
             if len(genome_refs) > 20:
@@ -4598,14 +4628,14 @@ class kb_hmmer:
 #            elif len(genome_refs) > 10:
 #                graph_gen_fontsize = "2"
             else:
-#                graph_gen_fontsize = "3"
+                #                graph_gen_fontsize = "3"
                 graph_gen_fontsize = "2"
             if len(cats) > 20:
                 graph_cat_fontsize = "1"
 #            elif len(cats) > 5:
 #                graph_cat_fontsize = "2"
             else:
-#                graph_cat_fontsize = "3"
+                #                graph_cat_fontsize = "3"
                 graph_cat_fontsize = "2"
             if int(graph_cat_fontsize) < int(graph_gen_fontsize):
                 cell_fontsize = graph_gen_fontsize = graph_cat_fontsize
@@ -4628,42 +4658,49 @@ class kb_hmmer:
             html_report_lines += ['<head>']
             html_report_lines += ['<title>KBase HMMER Custom Model Profile</title>']
             html_report_lines += ['<style>']
-            html_report_lines += [".vertical-text {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
-            html_report_lines += [".vertical-text_title {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+            html_report_lines += [
+                ".vertical-text {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+            html_report_lines += [
+                ".vertical-text_title {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
             html_report_lines += ['</style>']
             html_report_lines += ['</head>']
             html_report_lines += ['<body bgcolor="white">']
-            html_report_lines += ['<font color="'+header_tab_color+'" size='+header_tab_fontsize+'><b>TABULAR PROFILE</b></font> | ']
+            html_report_lines += ['<font color="' + header_tab_color + '" size=' +
+                                  header_tab_fontsize + '><b>TABULAR PROFILE</b></font> | ']
 
-            for this_hmm_group_i,this_hmm_group in enumerate(hmm_groups_used):
-                disp_hmm_group = this_hmm_group[0].upper()+this_hmm_group[1:]
-                this_html_search_file = search_tool_name+'_Search-'+str(this_hmm_group_i)+'-'+str(this_hmm_group)+'.html'
-                html_report_lines += [' <a href="'+this_html_search_file+'"><font color="'+header_tab_color+'" size='+header_tab_fontsize+'>'+str(disp_hmm_group)+' HITS</font></a> ']
-                if this_hmm_group_i < len(hmm_groups_used)-1:
+            for this_hmm_group_i, this_hmm_group in enumerate(hmm_groups_used):
+                disp_hmm_group = this_hmm_group[0].upper() + this_hmm_group[1:]
+                this_html_search_file = search_tool_name + '_Search-' + \
+                    str(this_hmm_group_i) + '-' + str(this_hmm_group) + '.html'
+                html_report_lines += [' <a href="' + this_html_search_file + '"><font color="' + header_tab_color +
+                                      '" size=' + header_tab_fontsize + '>' + str(disp_hmm_group) + ' HITS</font></a> ']
+                if this_hmm_group_i < len(hmm_groups_used) - 1:
                     html_report_lines += [' | ']
             html_report_lines += ['<p>']
-
 
             # genomes as rows
             if 'vertical' in params and int(params['vertical']) == 1:
                 # table header
-                html_report_lines += ['<table cellpadding='+graph_padding+' cellspacing='+graph_spacing+' border='+border+'>']
+                html_report_lines += ['<table cellpadding=' + graph_padding +
+                                      ' cellspacing=' + graph_spacing + ' border=' + border + '>']
                 corner_rowspan = "1"
                 label = ''
                 html_report_lines += ['<tr>']
-                html_report_lines += ['<td valign=bottom align=right rowspan='+corner_rowspan+'><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="'+text_color+'">'+label+'</font></div></div></td>']
+                html_report_lines += ['<td valign=bottom align=right rowspan=' + corner_rowspan +
+                                      '><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="' + text_color + '">' + label + '</font></div></div></td>']
 
                 # column headers
-                for cat_i,cat in enumerate(cats):
+                for cat_i, cat in enumerate(cats):
                     if not cat_seen[cat] and not show_blanks:
                         continue
                     cat_disp = cat
                     cell_title = input_HMM_descs[cat]
-                    if len(cat_disp) > cat_disp_trunc_len+1:
-                        cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
-                    html_report_lines += ['<td style="border-right:solid 2px '+border_cat_color+'; border-bottom:solid 2px '+border_cat_color+'" bgcolor="'+head_color_2+'"title="'+cell_title+'" valign=bottom align=center>']
+                    if len(cat_disp) > cat_disp_trunc_len + 1:
+                        cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
+                    html_report_lines += ['<td style="border-right:solid 2px ' + border_cat_color + '; border-bottom:solid 2px ' +
+                                          border_cat_color + '" bgcolor="' + head_color_2 + '"title="' + cell_title + '" valign=bottom align=center>']
                     html_report_lines += ['<div class="vertical-text"><div class="vertical-text__inner">']
-                    html_report_lines += ['<font color="'+text_color_2+'" size='+graph_cat_fontsize+'><b>']
+                    html_report_lines += ['<font color="' + text_color_2 + '" size=' + graph_cat_fontsize + '><b>']
                     #for c_i,c in enumerate(cat_disp):
                     #    if c_i < len(cat_disp)-1:
                     #        html_report_lines += [c+'<br>']
@@ -4679,17 +4716,19 @@ class kb_hmmer:
                 for genome_ref in genome_refs:
                     genome_sci_name = genome_ref_to_sci_name[genome_ref]
                     html_report_lines += ['<tr>']
-                    html_report_lines += ['<td align=right><font color="'+text_color+'" size='+graph_gen_fontsize+'><b><nobr>'+genome_sci_name+'</nobr></b></font></td>']
+                    html_report_lines += ['<td align=right><font color="' + text_color + '" size=' +
+                                          graph_gen_fontsize + '><b><nobr>' + genome_sci_name + '</nobr></b></font></td>']
                     for cat in cats:
                         if not cat_seen[cat] and not show_blanks:
                             continue
                         val = table_data[genome_ref][cat]
                         if val == 0:
                             cell_color = 'white'
-                        else:                    
-                            cell_color_i = max_color - int(round(max_color * (val-overall_low_val) / float(overall_high_val-overall_low_val)))
+                        else:
+                            cell_color_i = max_color - \
+                                int(round(max_color * (val - overall_low_val) / float(overall_high_val - overall_low_val)))
                             c = color_list[cell_color_i]
-                            cell_color = '#'+c+c+c+c+'FF'
+                            cell_color = '#' + c + c + c + c + 'FF'
 
                         cell_val = str(table_data[genome_ref][cat])  # the key line
 
@@ -4701,48 +4740,52 @@ class kb_hmmer:
                             else:
                                 this_text_color = cell_color
                                 this_graph_char = graph_char
-                            html_report_lines += ['<td align=center valign=middle title="'+cell_val+'" style="width:'+cell_width+'" bgcolor="'+cell_color+'"><font color="'+this_text_color+'" size='+cell_fontsize+'>'+this_graph_char+'</font></td>']
+                            html_report_lines += ['<td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + '" bgcolor="' +
+                                                  cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td>']
                         else:
-                            html_report_lines += ['<td align=center valign=middle style="'+cell_width+'; border-right:solid 2px '+border_color+'; border-bottom:solid 2px '+border_color+'"><font color="'+text_color+'" size='+cell_fontsize+'>'+cell_val+'</font></td>']
+                            html_report_lines += ['<td align=center valign=middle style="' + cell_width + '; border-right:solid 2px ' + border_color +
+                                                  '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
 
                     html_report_lines += ['</tr>']
                 html_report_lines += ['</table>']
 
             # genomes as columns
             else:
-                raise ValueError ("Do not yet support Genomes as columns")
-
+                raise ValueError("Do not yet support Genomes as columns")
 
             # key table
             CAZy_server_addr = 'www.cazy.org'
             html_report_lines += ['<p>']
-            html_report_lines += ['<table cellpadding=3 cellspacing=2 border='+border+'>']
-            html_report_lines += ['<tr><td valign=middle align=left colspan=2 style="border-bottom:solid 4px '+border_color+'"><font color="'+text_color+'"><b>KEY</b></font></td></tr>']
+            html_report_lines += ['<table cellpadding=3 cellspacing=2 border=' + border + '>']
+            html_report_lines += ['<tr><td valign=middle align=left colspan=2 style="border-bottom:solid 4px ' +
+                                  border_color + '"><font color="' + text_color + '"><b>KEY</b></font></td></tr>']
 
-            for cat_i,cat in enumerate(cats):
+            for cat_i, cat in enumerate(cats):
                 cell_color = 'white'
                 if not cat_seen[cat] and not show_blanks:
                     cell_color = "#eeeeee"
                 desc = input_HMM_descs[cat]
                 cat_disp = cat
-                if len(cat_disp) > cat_disp_trunc_len+1:
-                    cat_disp = cat_disp[0:cat_disp_trunc_len]+'*'
+                if len(cat_disp) > cat_disp_trunc_len + 1:
+                    cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
 
                 if cat == 'GT2_Cellulose_synt':
-                    link_addr = 'http://'+CAZy_server_addr+'/'+cat+'.html'
-                    link_open = '<a href="'+link_addr+'" target="cazy_tab">'
+                    link_addr = 'http://' + CAZy_server_addr + '/' + cat + '.html'
+                    link_open = '<a href="' + link_addr + '" target="cazy_tab">'
                     link_close = '</a>'
                 elif cat == 'dockerin' or cat == 'cohesin' or cat == 'SLH':
                     link_open = ''
                     link_close = ''
                 else:
-                    link_addr = 'http://'+CAZy_server_addr+'/'+cat+'.html'
-                    link_open = '<a href="'+link_addr+'" target="cazy_tab">'
+                    link_addr = 'http://' + CAZy_server_addr + '/' + cat + '.html'
+                    link_open = '<a href="' + link_addr + '" target="cazy_tab">'
                     link_close = '</a>'
 
                 html_report_lines += ['<tr>']
-                html_report_lines += ['<td valign=middle align=left bgcolor="'+cell_color+'" style="border-right:solid 4px '+border_color+'">'+link_open+'<font color="'+text_color+'" size='+graph_cat_fontsize+'>'+cat_disp+'</font>'+link_close+'</td>']
-                html_report_lines += ['<td valign=middle align=left bgcolor="'+cell_color+'">'+link_open+'<font color="'+text_color+'" size='+graph_cat_fontsize+'>'+desc+'</font>'+link_close+'</td>']
+                html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '" style="border-right:solid 4px ' + border_color +
+                                      '">' + link_open + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_disp + '</font>' + link_close + '</td>']
+                html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '">' + link_open +
+                                      '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + desc + '</font>' + link_close + '</td>']
                 html_report_lines += ['</tr>']
 
             html_report_lines += ['</table>']
@@ -4754,13 +4797,12 @@ class kb_hmmer:
             # write html to file and upload
             html_path = html_profile_path
             html_report_str = "\n".join(html_report_lines)
-            with open (html_path, 'w', 0) as html_handle:
+            with open(html_path, 'w', 0) as html_handle:
                 html_handle.write(html_report_str)
-
 
         #### Upload HTML reports
         ##
-        self.log(console,"UPLOADING HTML REPORT(s)")  # DEBUG
+        self.log(console, "UPLOADING HTML REPORT(s)")  # DEBUG
         if len(invalid_msgs) == 0:
 
             # Upload HTML Report dir
@@ -4773,12 +4815,11 @@ class kb_hmmer:
                                                      'make_handle': 0,
                                                      'pack': 'zip'})
             except:
-                raise ValueError ('Logging exception loading HTML file to shock')
-
+                raise ValueError('Logging exception loading HTML file to shock')
 
         #### Upload output files
         ##
-        self.log(console,"UPLOADING OUTPUT FILES")  # DEBUG
+        self.log(console, "UPLOADING OUTPUT FILES")  # DEBUG
         if len(invalid_msgs) == 0:
 
             output_hit_TAB_dir = os.path.join(self.output_dir, 'HMMER_output_TAB')
@@ -4787,13 +4828,13 @@ class kb_hmmer:
                 os.makedirs(output_hit_TAB_dir)
             if not os.path.exists(output_hit_MSA_dir):
                 os.makedirs(output_hit_MSA_dir)
-            
-            for hmm_i,hmm_id in enumerate(all_HMM_ids_order):
+
+            for hmm_i, hmm_id in enumerate(all_HMM_ids_order):
                 if total_hit_cnts[hmm_id] == 0:
-                    self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR HMM '+hmm_id)
+                    self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR HMM ' + hmm_id)
                     continue
-                new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, hmm_id+'.hitout.txt');
-                new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, hmm_id+'.msaout.txt');
+                new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, hmm_id + '.hitout.txt')
+                new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, hmm_id + '.msaout.txt')
 
                 shutil.copy(output_hit_TAB_file_paths[hmm_id], new_hit_TAB_file_path)
                 shutil.copy(output_hit_MSA_file_paths[hmm_id], new_hit_MSA_file_path)
@@ -4807,21 +4848,20 @@ class kb_hmmer:
                                                     'make_handle': 0,
                                                     'pack': 'zip'})
             except:
-                raise ValueError ('Logging exception loading TAB output to shock')
+                raise ValueError('Logging exception loading TAB output to shock')
             try:
                 MSA_upload_ret = dfu.file_to_shock({'file_path': output_hit_MSA_dir,
                                                     'make_handle': 0,
                                                     'pack': 'zip'})
             except:
-                raise ValueError ('Logging exception loading MSA output to shock')
-
+                raise ValueError('Logging exception loading MSA output to shock')
 
         #### Create report object
         ##
-        self.log(console,"CREATING REPORT OBJECT")  # DEBUG
+        self.log(console, "CREATING REPORT OBJECT")  # DEBUG
         if len(invalid_msgs) == 0:
 
-            reportName = 'hmmer_report_'+str(uuid.uuid4())
+            reportName = 'hmmer_report_' + str(uuid.uuid4())
             reportObj = {'objects_created': [],
                          #'text_message': '',  # or is it 'message'?
                          'message': '',  # or is it 'text_message'?
@@ -4840,30 +4880,31 @@ class kb_hmmer:
             reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_profile_file,
-                                        'label': search_tool_name+' HTML Report'}
+                                        'label': search_tool_name + ' HTML Report'}
                                        ]
 
             if TAB_upload_ret != None:
                 reportObj['file_links'] += [{'shock_id': TAB_upload_ret['shock_id'],
-                                             'name': search_tool_name+'_Search.TAB.zip',
-                                             'label': search_tool_name+'-'+' hits TABLE'}]
+                                             'name': search_tool_name + '_Search.TAB.zip',
+                                             'label': search_tool_name + '-' + ' hits TABLE'}]
             if MSA_upload_ret != None:
                 reportObj['file_links'] += [{'shock_id': MSA_upload_ret['shock_id'],
-                                           
-                                             'name': search_tool_name+'_Search.MSA.zip',
-                                             'label': search_tool_name+' hits MSA'}
-                                           ]
+
+                                             'name': search_tool_name + '_Search.MSA.zip',
+                                             'label': search_tool_name + ' hits MSA'}
+                                            ]
 
             for hmm_group in all_HMM_groups_order:
                 if hit_accept_something[hmm_group]:
                     if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
                         if hmm_group in objects_created_refs_coalesce:
-                            reportObj['objects_created'].append({'ref':objects_created_refs_coalesce[hmm_group], 'description':'Coalesced'+' '+hmm_group+' '+search_tool_name+' hits'})
+                            reportObj['objects_created'].append(
+                                {'ref': objects_created_refs_coalesce[hmm_group], 'description': 'Coalesced' + ' ' + hmm_group + ' ' + search_tool_name + ' hits'})
                     else:
-                        for hmm_i,hmm_id in enumerate(all_HMM_ids[hmm_group]):
+                        for hmm_i, hmm_id in enumerate(all_HMM_ids[hmm_group]):
                             if hmm_id in objects_created_refs_by_hmm_id:
-                                reportObj['objects_created'].append({'ref':objects_created_refs_by_hmm_id[hmm_id], 'description': hmm_id+' '+search_tool_name+' hits'})
-                
+                                reportObj['objects_created'].append(
+                                    {'ref': objects_created_refs_by_hmm_id[hmm_id], 'description': hmm_id + ' ' + search_tool_name + ' hits'})
 
             # save report object
             #
@@ -4872,48 +4913,46 @@ class kb_hmmer:
             #report_info = report.create({'report':reportObj, 'workspace_name':params['workspace_name']})
             report_info = reportClient.create_extended_report(reportObj)
 
-
         #### data validation error
         ##
         if len(invalid_msgs) > 0:
-            report += "FAILURE\n\n"+"\n".join(invalid_msgs)+"\n"
+            report += "FAILURE\n\n" + "\n".join(invalid_msgs) + "\n"
 
             reportObj = {
-                'objects_created':[],
-                'text_message':report
-                }
+                'objects_created': [],
+                'text_message': report
+            }
 
-            reportName = 'hmmer_report_'+str(uuid.uuid4())
+            reportName = 'hmmer_report_' + str(uuid.uuid4())
             report_obj_info = ws.save_objects({
-                    #                'id':info[6],
-                    'workspace':params['workspace_name'],
-                    'objects':[
-                        {
-                            'type':'KBaseReport.Report',
-                            'data':reportObj,
-                            'name':reportName,
-                            'meta':{},
-                            'hidden':1,
-                            'provenance':provenance
-                            }
-                        ]
-                    })[0]
+                #                'id':info[6],
+                'workspace': params['workspace_name'],
+                'objects': [
+                    {
+                        'type': 'KBaseReport.Report',
+                        'data': reportObj,
+                        'name': reportName,
+                        'meta': {},
+                        'hidden': 1,
+                        'provenance': provenance
+                    }
+                ]
+            })[0]
             report_info = dict()
             report_info['name'] = report_obj_info[1]
-            report_info['ref'] = str(report_obj_info[6])+'/'+str(report_obj_info[0])+'/'+str(report_obj_info[4])
-
+            report_info['ref'] = str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4])
 
         #### Return Report
         ##
-        self.log(console,"BUILDING RETURN OBJECT")
+        self.log(console, "BUILDING RETURN OBJECT")
 #        returnVal = { 'output_report_name': reportName,
 #                      'output_report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
 #                      'output_filtered_ref': params['workspace_name']+'/'+params['output_filtered_name']
 #                      }
-        returnVal = { 'report_name': report_info['name'],
-                      'report_ref': report_info['ref']
-                      }
-        self.log(console,search_tool_name+"_Search DONE")
+        returnVal = {'report_name': report_info['name'],
+                     'report_ref': report_info['ref']
+                     }
+        self.log(console, search_tool_name + "_Search DONE")
         #END HMMER_dbCAN_Search
 
         # At some point might do deeper type checking...
@@ -4922,9 +4961,10 @@ class kb_hmmer:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
+
     def status(self, ctx):
         #BEGIN_STATUS
-        returnVal = {'state': "OK", 'message': "", 'version': self.VERSION, 
+        returnVal = {'state': "OK", 'message': "", 'version': self.VERSION,
                      'git_url': self.GIT_URL, 'git_commit_hash': self.GIT_COMMIT_HASH}
         #END_STATUS
         return [returnVal]

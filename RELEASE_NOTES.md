@@ -1,3 +1,8 @@
+### Version 1.2.2
+__Changes__
+- made protein sequence checking stricter
+- changed base docker image to sdkbase2
+
 ### Version 1.2.1
 __Changes__
 - changed citation to PLOS format
