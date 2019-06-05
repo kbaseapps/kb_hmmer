@@ -86,7 +86,7 @@ description : |
     <p><b><i>Output HTML Table:</i></b> The tab-delimited hit table is HTML formatted and additionally shows the region of the hit sequence (as there is no query sequence) covered by the HMMER alignment.  Hits that are above the e-value threshold but below other thresholds and are not included in the FeatureSet output object are shown in gray, with the attributes that were below the threshold in red.</p>
     <p><b><i>Downloadable files:</i></b> HMMER table and Stockholm format MSA are available for download.  These are not altered from the direct output from the HMMER run.</p>
 
-publiations :
+publications :
     -
         display-text: |
             Eddy SR. Accelerated Profile HMM Searches. PLOS Computational Biology. 2011;7: e1002195. doi:10.1371/journal.pcbi.1002195
