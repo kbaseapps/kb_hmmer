@@ -1,7 +1,7 @@
 {
-    "ver": "1.2.0",
+    "ver": "1.0.0",
     "authors": [
-        "dylan"
+        "seanjungbluth"
     ],
     "contact": "http://kbase.us/contact-us/",
     "visible": true,
@@ -10,9 +10,9 @@
         "input": null,
         "output": "no-display"
     },
-    "parameters": [ 
+    "parameters": [
         {
-            "id": "input_dbCAN_AA_ids",
+            "id": "input_env-bioelement_N_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -23,146 +23,200 @@
                                 {
                                         "value": "none",
                                         "display": "none",
-                                        "id": "dbCAN_AA_none",
-                                        "ui-name": "dbCAN_AA_none"
+                                        "id": "env-bioelement_N_none",
+                                        "ui-name": "env-bioelement_N_none"
                                 },
 				{
-					"value": "AA1",
-					"display": "auxiliary activity - AA1",
-					"id": "dbCAN_AA_AA1",
-					"ui-name": "dbCAN_AA_AA1"
+					"value": "amoA",
+					"display": "Nitrogen - Ammonia oxidation - amoA",
+					"id": "env-bioelement_N_amoA",
+					"ui-name": "env-bioelement_N_amoA"
 				},
 				{
-					"value": "AA1_1",
-					"display": "auxiliary activity - AA1_1",
-					"id": "dbCAN_AA_AA1_1",
-					"ui-name": "dbCAN_AA_AA1_1"
+					"value": "amoB",
+					"display": "Nitrogen - Ammonia oxidation - amoB",
+					"id": "env-bioelement_N_amoB",
+					"ui-name": "env-bioelement_N_amoB"
 				},
 				{
-					"value": "AA1_2",
-					"display": "auxiliary activity - AA1_2",
-					"id": "dbCAN_AA_AA1_2",
-					"ui-name": "dbCAN_AA_AA1_2"
+					"value": "amoC",
+					"display": "Nitrogen - Ammonia oxidation - amoC",
+					"id": "env-bioelement_N_amoC",
+					"ui-name": "env-bioelement_N_amoC"
 				},
 				{
-					"value": "AA1_3",
-					"display": "auxiliary activity - AA1_3",
-					"id": "dbCAN_AA_AA1_3",
-					"ui-name": "dbCAN_AA_AA1_3"
+					"value": "hzoA",
+					"display": "Nitrogen - Anammox - hzoA",
+					"id": "env-bioelement_N_hzoA",
+					"ui-name": "env-bioelement_N_hzoA"
 				},
 				{
-					"value": "AA2",
-					"display": "auxiliary activity - AA2",
-					"id": "dbCAN_AA_AA2",
-					"ui-name": "dbCAN_AA_AA2"
+					"value": "hzsA",
+					"display": "Nitrogen - Anammox - hzsA",
+					"id": "env-bioelement_N_hzsA",
+					"ui-name": "env-bioelement_N_hzsA"
 				},
 				{
-					"value": "AA3",
-					"display": "auxiliary activity - AA3",
-					"id": "dbCAN_AA_AA3",
-					"ui-name": "dbCAN_AA_AA3"
+					"value": "Fe_only_alpha",
+					"display": "Nitrogen - N2 fixation - Fe_only_alpha",
+					"id": "env-bioelement_N_Fe_only_alpha",
+					"ui-name": "env-bioelement_N_Fe_only_alpha"
 				},
 				{
-					"value": "AA3_1",
-					"display": "auxiliary activity - AA3_1",
-					"id": "dbCAN_AA_AA3_1",
-					"ui-name": "dbCAN_AA_AA3_1"
+					"value": "Fe_only_beta",
+					"display": "Nitrogen - N2 fixation - Fe_only_beta",
+					"id": "env-bioelement_N_Fe_only_beta",
+					"ui-name": "env-bioelement_N_Fe_only_beta"
 				},
 				{
-					"value": "AA3_2",
-					"display": "auxiliary activity - AA3_2",
-					"id": "dbCAN_AA_AA3_2",
-					"ui-name": "dbCAN_AA_AA3_2"
+					"value": "Fe_only_delta",
+					"display": "Nitrogen - N2 fixation - Fe_only_delta",
+					"id": "env-bioelement_N_Fe_only_delta",
+					"ui-name": "env-bioelement_N_Fe_only_delta"
 				},
 				{
-					"value": "AA3_3",
-					"display": "auxiliary activity - AA3_3",
-					"id": "dbCAN_AA_AA3_3",
-					"ui-name": "dbCAN_AA_AA3_3"
+					"value": "Mo-Fe_type_Alpha",
+					"display": "Nitrogen - N2 fixation - Mo-Fe_type_Alpha",
+					"id": "env-bioelement_N_Mo-Fe_type_Alpha",
+					"ui-name": "env-bioelement_N_Mo-Fe_type_Alpha"
 				},
 				{
-					"value": "AA3_4",
-					"display": "auxiliary activity - AA3_4",
-					"id": "dbCAN_AA_AA3_4",
-					"ui-name": "dbCAN_AA_AA3_4"
+					"value": "Mo-Fe_type_beta",
+					"display": "Nitrogen - N2 fixation - Mo-Fe_type_beta",
+					"id": "env-bioelement_N_Mo-Fe_type_beta",
+					"ui-name": "env-bioelement_N_Mo-Fe_type_beta"
 				},
 				{
-					"value": "AA4",
-					"display": "auxiliary activity - AA4",
-					"id": "dbCAN_AA_AA4",
-					"ui-name": "dbCAN_AA_AA4"
+					"value": "nifH",
+					"display": "Nitrogen - N2 fixation - nifH",
+					"id": "env-bioelement_N_nifH",
+					"ui-name": "env-bioelement_nifH"
 				},
 				{
-					"value": "AA5",
-					"display": "auxiliary activity - AA5",
-					"id": "dbCAN_AA_AA5",
-					"ui-name": "dbCAN_AA_AA5"
+					"value": "Vanadium-type_alpha",
+					"display": "Nitrogen - N2 fixation - Vanadium-type_alpha",
+					"id": "env-bioelement_N_Vanadium-type_alpha",
+					"ui-name": "env-bioelement_N_Vanadium-type_alpha"
 				},
 				{
-					"value": "AA5_1",
-					"display": "auxiliary activity - AA5_1",
-					"id": "dbCAN_AA_AA5_1",
-					"ui-name": "dbCAN_AA_AA5_1"
+					"value": "Vanadium-type_beta",
+					"display": "Nitrogen - N2 fixation - Vanadium-type_beta",
+					"id": "env-bioelement_N_Vanadium-type_beta",
+					"ui-name": "env-bioelement_N_Vanadium-type_beta"
 				},
 				{
-					"value": "AA5_2",
-					"display": "auxiliary activity - AA5_2",
-					"id": "dbCAN_AA_AA5_2",
-					"ui-name": "dbCAN_AA_AA5_2"
+					"value": "Vanadium-type_delta",
+					"display": "Nitrogen - N2 fixation - Vanadium-type_delta",
+					"id": "env-bioelement_N_Vanadium-type_delta",
+					"ui-name": "env-bioelement_N_Vanadium-type_delta"
 				},
 				{
-					"value": "AA6",
-					"display": "auxiliary activity - AA6",
-					"id": "dbCAN_AA_AA6",
-					"ui-name": "dbCAN_AA_AA6"
+					"value": "napA",
+					"display": "Nitrogen - Nitrate reduction - napA",
+					"id": "env-bioelement_N_napA",
+					"ui-name": "env-bioelement_N_napA"
 				},
 				{
-					"value": "AA7",
-					"display": "auxiliary activity - AA7",
-					"id": "dbCAN_AA_AA7",
-					"ui-name": "dbCAN_AA_AA7"
+					"value": "napB",
+					"display": "Nitrogen - Nitrate reduction - napB",
+					"id": "env-bioelement_N_napB",
+					"ui-name": "env-bioelement_N_napB"
 				},
 				{
-					"value": "AA8",
-					"display": "auxiliary activity - AA8",
-					"id": "dbCAN_AA_AA8",
-					"ui-name": "dbCAN_AA_AA8"
+					"value": "narG",
+					"display": "Nitrogen - Nitrate reduction - narG",
+					"id": "env-bioelement_N_narG",
+					"ui-name": "env-bioelement_N_narG"
 				},
 				{
-					"value": "AA9",
-					"display": "auxiliary activity - AA9",
-					"id": "dbCAN_AA_AA9",
-					"ui-name": "dbCAN_AA_AA9"
+					"value": "norB",
+					"display": "Nitrogen - Nitric oxide reduction - norB",
+					"id": "env-bioelement_N_norB",
+					"ui-name": "env-bioelement_N_norB"
 				},
 				{
-					"value": "AA10",
-					"display": "auxiliary activity - AA10",
-					"id": "dbCAN_AA_AA10",
-					"ui-name": "dbCAN_AA_AA10"
+					"value": "norC",
+					"display": "Nitrogen - Nitric oxide reduction - norC",
+					"id": "env-bioelement_N_norC",
+					"ui-name": "env-bioelement_N_norC"
 				},
 				{
-					"value": "AA11",
-					"display": "auxiliary activity - AA11",
-					"id": "dbCAN_AA_AA11",
-					"ui-name": "dbCAN_AA_AA11"
+					"value": "nxrA",
+					"display": "Nitrogen - Nitrite oxidation - nxrA",
+					"id": "env-bioelement_N_nxrA",
+					"ui-name": "env-bioelement_N_nxrA"
 				},
 				{
-					"value": "AA12",
-					"display": "auxiliary activity - AA12",
-					"id": "dbCAN_AA_AA12",
-					"ui-name": "dbCAN_AA_AA12"
+					"value": "nxrB",
+					"display": "Nitrogen - Nitrite oxidation - nxrB",
+					"id": "env-bioelement_N_nxrB",
+					"ui-name": "env-bioelement_N_nxrB"
 				},
 				{
-					"value": "AA13",
-					"display": "auxiliary activity - AA13",
-					"id": "dbCAN_AA_AA13",
-					"ui-name": "dbCAN_AA_AA13"
+					"value": "cyt_c552_large_NrFA",
+					"display": "Nitrogen - Nitrite reduction - cyt_c552_large_NrFA",
+					"id": "env-bioelement_N_cyt_c552_large_NrFA",
+					"ui-name": "env-bioelement_N_cyt_c552_large_NrFA"
+				},
+				{
+					"value": "cyt_c552_small_NrfH",
+					"display": "Nitrogen - Nitrite reduction - cyt_c552_small_NrfH",
+					"id": "env-bioelement_N_cyt_c552_small_NrfH",
+					"ui-name": "env-bioelement_N_cyt_c552_small_NrfH"
+				},
+				{
+					"value": "nirB",
+					"display": "Nitrogen - Nitrite reduction - nirB",
+					"id": "env-bioelement_N_nirB",
+					"ui-name": "env-bioelement_N_nirB"
+				},
+				{
+					"value": "nirD",
+					"display": "Nitrogen - Nitrite reduction - nirD",
+					"id": "env-bioelement_N_nirD",
+					"ui-name": "env-bioelement_N_nirD"
+				},
+				{
+					"value": "nirK",
+					"display": "Nitrogen - Nitrite reduction - nirK",
+					"id": "env-bioelement_N_nirK",
+					"ui-name": "env-bioelement_N_nirK"
+				},
+				{
+					"value": "nirS",
+					"display": "Nitrogen - Nitrite reduction - nirS",
+					"id": "env-bioelement_N_nirS",
+					"ui-name": "env-bioelement_N_nirS"
+				},
+				{
+					"value": "nrfD",
+					"display": "Nitrogen - Nitrite reduction - nrfD",
+					"id": "env-bioelement_N_nrfD",
+					"ui-name": "env-bioelement_N_nrfD"
+				},
+				{
+					"value": "nosD",
+					"display": "Nitrogen - Nitrous oxide reduction - nosD",
+					"id": "env-bioelement_N_nosD",
+					"ui-name": "env-bioelement_N_nosD"
+				},
+				{
+					"value": "nosZ",
+					"display": "Nitrogen - Nitrous oxide reduction - nosZ",
+					"id": "env-bioelement_N_nosZ",
+					"ui-name": "env-bioelement_N_nosZ"
+				},
+				{
+					"value": "octR",
+					"display": "Nitrogen - Octaheme c-type cytochrome Shewanella-type - octR",
+					"id": "env-bioelement_N_octR",
+					"ui-name": "env-bioelement_N_octR"
 				}
                 ]
             }
         },
         {
-            "id": "input_dbCAN_CBM_ids",
+            "id": "input_env-bioelement_S_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -173,488 +227,116 @@
                                 {
                                         "value": "none",
                                         "display": "none",
-                                        "id": "dbCAN_CBM_none",
-                                        "ui-name": "dbCAN_CBM_none"
+                                        "id": "env-bioelement_S_none",
+                                        "ui-name": "env-bioelement_S_none"
                                 },
 				{
-					"value": "CBM1",
-					"display": "carbohydrate-binding module - CBM1",
-					"id": "dbCAN_CBM_CBM1",
-					"ui-name": "dbCAN_CBM_CBM1"
+					"value": "aprA",
+					"display": "Sulfur - Sulfate reduction - aprA",
+					"id": "env-bioelement_S_aprA",
+					"ui-name": "env-bioelement_S_aprA"
 				},
 				{
-					"value": "CBM2",
-					"display": "carbohydrate-binding module - CBM2",
-					"id": "dbCAN_CBM_CBM2",
-					"ui-name": "dbCAN_CBM_CBM2"
+					"value": "asrB",
+					"display": "Sulfur - Sulfate reduction - asrB",
+					"id": "env-bioelement_S_asrB",
+					"ui-name": "env-bioelement_S_asrB"
 				},
 				{
-					"value": "CBM3",
-					"display": "carbohydrate-binding module - CBM3",
-					"id": "dbCAN_CBM_CBM3",
-					"ui-name": "dbCAN_CBM_CBM3"
+					"value": "asrC",
+					"display": "Sulfur - Sulfate reduction - asrC",
+					"id": "env-bioelement_S_asrC",
+					"ui-name": "env-bioelement_S_asrC"
 				},
 				{
-					"value": "CBM4",
-					"display": "carbohydrate-binding module - CBM4",
-					"id": "dbCAN_CBM_CBM4",
-					"ui-name": "dbCAN_CBM_CBM4"
+					"value": "cysC",
+					"display": "Sulfur - Sulfate reduction - cysC",
+					"id": "env-bioelement_S_cysC",
+					"ui-name": "env-bioelement_S_cysC"
 				},
 				{
-					"value": "CBM5",
-					"display": "carbohydrate-binding module - CBM5",
-					"id": "dbCAN_CBM_CBM5",
-					"ui-name": "dbCAN_CBM_CBM5"
+					"value": "cysN",
+					"display": "Sulfur - Sulfate reduction - cysN",
+					"id": "env-bioelement_S_cysN",
+					"ui-name": "env-bioelement_S_cysN"
 				},
 				{
-					"value": "CBM6",
-					"display": "carbohydrate-binding module - CBM6",
-					"id": "dbCAN_CBM_CBM6",
-					"ui-name": "dbCAN_CBM_CBM6"
+					"value": "sat",
+					"display": "Sulfur - Sulfate reduction - sat",
+					"id": "env-bioelement_S_sat",
+					"ui-name": "env-bioelement_S_sat"
 				},
 				{
-					"value": "CBM8",
-					"display": "carbohydrate-binding module - CBM8",
-					"id": "dbCAN_CBM_CBM8",
-					"ui-name": "dbCAN_CBM_CBM8"
+					"value": "fcc",
+					"display": "Sulfur - Sulfide oxidation - fcc",
+					"id": "env-bioelement_S_fcc",
+					"ui-name": "env-bioelement_S_fcc"
 				},
 				{
-					"value": "CBM9",
-					"display": "carbohydrate-binding module - CBM9",
-					"id": "dbCAN_CBM_CBM9",
-					"ui-name": "dbCAN_CBM_CBM9"
+					"value": "sqr",
+					"display": "Sulfur - Sulfide oxidation - sqr",
+					"id": "env-bioelement_S_sqr",
+					"ui-name": "env-bioelement_S_sqr"
 				},
 				{
-					"value": "CBM10",
-					"display": "carbohydrate-binding module - CBM10",
-					"id": "dbCAN_CBM_CBM10",
-					"ui-name": "dbCAN_CBM_CBM10"
+					"value": "dsrD",
+					"display": "Sulfur - Sulfite reduction - dsrD",
+					"id": "env-bioelement_S_dsrD",
+					"ui-name": "env-bioelement_S_dsrD"
 				},
 				{
-					"value": "CBM11",
-					"display": "carbohydrate-binding module - CBM11",
-					"id": "dbCAN_CBM_CBM11",
-					"ui-name": "dbCAN_CBM_CBM11"
+					"value": "dsrA",
+					"display": "Sulfur - Sulfur oxidation - dsrA",
+					"id": "env-bioelement_S_dsrA",
+					"ui-name": "env-bioelement_S_dsrA"
 				},
 				{
-					"value": "CBM12",
-					"display": "carbohydrate-binding module - CBM12",
-					"id": "dbCAN_CBM_CBM12",
-					"ui-name": "dbCAN_CBM_CBM12"
+					"value": "dsrB",
+					"display": "Sulfur - Sulfur oxidation - dsrB",
+					"id": "env-bioelement_S_dsrB",
+					"ui-name": "env-bioelement_S_dsrB"
 				},
 				{
-					"value": "CBM13",
-					"display": "carbohydrate-binding module - CBM13",
-					"id": "dbCAN_CBM_CBM13",
-					"ui-name": "dbCAN_CBM_CBM13"
+					"value": "sor",
+					"display": "Sulfur - Sulfur oxidation - sor",
+					"id": "env-bioelement_S_sor",
+					"ui-name": "env-bioelement_S_sor"
 				},
 				{
-					"value": "CBM14",
-					"display": "carbohydrate-binding module - CBM14",
-					"id": "dbCAN_CBM_CBM14",
-					"ui-name": "dbCAN_CBM_CBM14"
+					"value": "sulfur_dioxygenase",
+					"display": "Sulfur - Sulfur oxidation - sulfur_dioxygenase",
+					"id": "env-bioelement_S_sulfur_dioxygenase",
+					"ui-name": "env-bioelement_S_sulfur_dioxygenase"
 				},
 				{
-					"value": "CBM15",
-					"display": "carbohydrate-binding module - CBM15",
-					"id": "dbCAN_CBM_CBM15",
-					"ui-name": "dbCAN_CBM_CBM15"
+					"value": "phsA",
+					"display": "Sulfur - Thiosulfate disproportionation - phsA",
+					"id": "env-bioelement_S_phsA",
+					"ui-name": "env-bioelement_S_phsA"
 				},
 				{
-					"value": "CBM16",
-					"display": "carbohydrate-binding module - CBM16",
-					"id": "dbCAN_CBM_CBM16",
-					"ui-name": "dbCAN_CBM_CBM16"
+					"value": "soxB",
+					"display": "Sulfur - Thiosulfate oxidation - soxB",
+					"id": "env-bioelement_S_soxB",
+					"ui-name": "env-bioelement_S_soxB"
 				},
 				{
-					"value": "CBM17",
-					"display": "carbohydrate-binding module - CBM17",
-					"id": "dbCAN_CBM_CBM17",
-					"ui-name": "dbCAN_CBM_CBM17"
+					"value": "soxC",
+					"display": "Sulfur - Thiosulfate oxidation - soxC",
+					"id": "env-bioelement_S_soxC",
+					"ui-name": "env-bioelement_S_soxC"
 				},
 				{
-					"value": "CBM18",
-					"display": "carbohydrate-binding module - CBM18",
-					"id": "dbCAN_CBM_CBM18",
-					"ui-name": "dbCAN_CBM_CBM18"
-				},
-				{
-					"value": "CBM19",
-					"display": "carbohydrate-binding module - CBM19",
-					"id": "dbCAN_CBM_CBM19",
-					"ui-name": "dbCAN_CBM_CBM19"
-				},
-				{
-					"value": "CBM20",
-					"display": "carbohydrate-binding module - CBM20",
-					"id": "dbCAN_CBM_CBM20",
-					"ui-name": "dbCAN_CBM_CBM20"
-				},
-				{
-					"value": "CBM21",
-					"display": "carbohydrate-binding module - CBM21",
-					"id": "dbCAN_CBM_CBM21",
-					"ui-name": "dbCAN_CBM_CBM21"
-				},
-				{
-					"value": "CBM22",
-					"display": "carbohydrate-binding module - CBM22",
-					"id": "dbCAN_CBM_CBM22",
-					"ui-name": "dbCAN_CBM_CBM22"
-				},
-				{
-					"value": "CBM23",
-					"display": "carbohydrate-binding module - CBM23",
-					"id": "dbCAN_CBM_CBM23",
-					"ui-name": "dbCAN_CBM_CBM23"
-				},
-				{
-					"value": "CBM24",
-					"display": "carbohydrate-binding module - CBM24",
-					"id": "dbCAN_CBM_CBM24",
-					"ui-name": "dbCAN_CBM_CBM24"
-				},
-				{
-					"value": "CBM25",
-					"display": "carbohydrate-binding module - CBM25",
-					"id": "dbCAN_CBM_CBM25",
-					"ui-name": "dbCAN_CBM_CBM25"
-				},
-				{
-					"value": "CBM26",
-					"display": "carbohydrate-binding module - CBM26",
-					"id": "dbCAN_CBM_CBM26",
-					"ui-name": "dbCAN_CBM_CBM26"
-				},
-				{
-					"value": "CBM27",
-					"display": "carbohydrate-binding module - CBM27",
-					"id": "dbCAN_CBM_CBM27",
-					"ui-name": "dbCAN_CBM_CBM27"
-				},
-				{
-					"value": "CBM28",
-					"display": "carbohydrate-binding module - CBM28",
-					"id": "dbCAN_CBM_CBM28",
-					"ui-name": "dbCAN_CBM_CBM28"
-				},
-				{
-					"value": "CBM29",
-					"display": "carbohydrate-binding module - CBM29",
-					"id": "dbCAN_CBM_CBM29",
-					"ui-name": "dbCAN_CBM_CBM29"
-				},
-				{
-					"value": "CBM30",
-					"display": "carbohydrate-binding module - CBM30",
-					"id": "dbCAN_CBM_CBM30",
-					"ui-name": "dbCAN_CBM_CBM30"
-				},
-				{
-					"value": "CBM31",
-					"display": "carbohydrate-binding module - CBM31",
-					"id": "dbCAN_CBM_CBM31",
-					"ui-name": "dbCAN_CBM_CBM31"
-				},
-				{
-					"value": "CBM32",
-					"display": "carbohydrate-binding module - CBM32",
-					"id": "dbCAN_CBM_CBM32",
-					"ui-name": "dbCAN_CBM_CBM32"
-				},
-				{
-					"value": "CBM34",
-					"display": "carbohydrate-binding module - CBM34",
-					"id": "dbCAN_CBM_CBM34",
-					"ui-name": "dbCAN_CBM_CBM34"
-				},
-				{
-					"value": "CBM35",
-					"display": "carbohydrate-binding module - CBM35",
-					"id": "dbCAN_CBM_CBM35",
-					"ui-name": "dbCAN_CBM_CBM35"
-				},
-				{
-					"value": "CBM36",
-					"display": "carbohydrate-binding module - CBM36",
-					"id": "dbCAN_CBM_CBM36",
-					"ui-name": "dbCAN_CBM_CBM36"
-				},
-				{
-					"value": "CBM37",
-					"display": "carbohydrate-binding module - CBM37",
-					"id": "dbCAN_CBM_CBM37",
-					"ui-name": "dbCAN_CBM_CBM37"
-				},
-				{
-					"value": "CBM38",
-					"display": "carbohydrate-binding module - CBM38",
-					"id": "dbCAN_CBM_CBM38",
-					"ui-name": "dbCAN_CBM_CBM38"
-				},
-				{
-					"value": "CBM39",
-					"display": "carbohydrate-binding module - CBM39",
-					"id": "dbCAN_CBM_CBM39",
-					"ui-name": "dbCAN_CBM_CBM39"
-				},
-				{
-					"value": "CBM40",
-					"display": "carbohydrate-binding module - CBM40",
-					"id": "dbCAN_CBM_CBM40",
-					"ui-name": "dbCAN_CBM_CBM40"
-				},
-				{
-					"value": "CBM41",
-					"display": "carbohydrate-binding module - CBM41",
-					"id": "dbCAN_CBM_CBM41",
-					"ui-name": "dbCAN_CBM_CBM41"
-				},
-				{
-					"value": "CBM42",
-					"display": "carbohydrate-binding module - CBM42",
-					"id": "dbCAN_CBM_CBM42",
-					"ui-name": "dbCAN_CBM_CBM42"
-				},
-				{
-					"value": "CBM43",
-					"display": "carbohydrate-binding module - CBM43",
-					"id": "dbCAN_CBM_CBM43",
-					"ui-name": "dbCAN_CBM_CBM43"
-				},
-				{
-					"value": "CBM44",
-					"display": "carbohydrate-binding module - CBM44",
-					"id": "dbCAN_CBM_CBM44",
-					"ui-name": "dbCAN_CBM_CBM44"
-				},
-				{
-					"value": "CBM45",
-					"display": "carbohydrate-binding module - CBM45",
-					"id": "dbCAN_CBM_CBM45",
-					"ui-name": "dbCAN_CBM_CBM45"
-				},
-				{
-					"value": "CBM46",
-					"display": "carbohydrate-binding module - CBM46",
-					"id": "dbCAN_CBM_CBM46",
-					"ui-name": "dbCAN_CBM_CBM46"
-				},
-				{
-					"value": "CBM47",
-					"display": "carbohydrate-binding module - CBM47",
-					"id": "dbCAN_CBM_CBM47",
-					"ui-name": "dbCAN_CBM_CBM47"
-				},
-				{
-					"value": "CBM48",
-					"display": "carbohydrate-binding module - CBM48",
-					"id": "dbCAN_CBM_CBM48",
-					"ui-name": "dbCAN_CBM_CBM48"
-				},
-				{
-					"value": "CBM49",
-					"display": "carbohydrate-binding module - CBM49",
-					"id": "dbCAN_CBM_CBM49",
-					"ui-name": "dbCAN_CBM_CBM49"
-				},
-				{
-					"value": "CBM50",
-					"display": "carbohydrate-binding module - CBM50",
-					"id": "dbCAN_CBM_CBM50",
-					"ui-name": "dbCAN_CBM_CBM50"
-				},
-				{
-					"value": "CBM51",
-					"display": "carbohydrate-binding module - CBM51",
-					"id": "dbCAN_CBM_CBM51",
-					"ui-name": "dbCAN_CBM_CBM51"
-				},
-				{
-					"value": "CBM52",
-					"display": "carbohydrate-binding module - CBM52",
-					"id": "dbCAN_CBM_CBM52",
-					"ui-name": "dbCAN_CBM_CBM52"
-				},
-				{
-					"value": "CBM53",
-					"display": "carbohydrate-binding module - CBM53",
-					"id": "dbCAN_CBM_CBM53",
-					"ui-name": "dbCAN_CBM_CBM53"
-				},
-				{
-					"value": "CBM54",
-					"display": "carbohydrate-binding module - CBM54",
-					"id": "dbCAN_CBM_CBM54",
-					"ui-name": "dbCAN_CBM_CBM54"
-				},
-				{
-					"value": "CBM55",
-					"display": "carbohydrate-binding module - CBM55",
-					"id": "dbCAN_CBM_CBM55",
-					"ui-name": "dbCAN_CBM_CBM55"
-				},
-				{
-					"value": "CBM56",
-					"display": "carbohydrate-binding module - CBM56",
-					"id": "dbCAN_CBM_CBM56",
-					"ui-name": "dbCAN_CBM_CBM56"
-				},
-				{
-					"value": "CBM57",
-					"display": "carbohydrate-binding module - CBM57",
-					"id": "dbCAN_CBM_CBM57",
-					"ui-name": "dbCAN_CBM_CBM57"
-				},
-				{
-					"value": "CBM58",
-					"display": "carbohydrate-binding module - CBM58",
-					"id": "dbCAN_CBM_CBM58",
-					"ui-name": "dbCAN_CBM_CBM58"
-				},
-				{
-					"value": "CBM59",
-					"display": "carbohydrate-binding module - CBM59",
-					"id": "dbCAN_CBM_CBM59",
-					"ui-name": "dbCAN_CBM_CBM59"
-				},
-				{
-					"value": "CBM60",
-					"display": "carbohydrate-binding module - CBM60",
-					"id": "dbCAN_CBM_CBM60",
-					"ui-name": "dbCAN_CBM_CBM60"
-				},
-				{
-					"value": "CBM61",
-					"display": "carbohydrate-binding module - CBM61",
-					"id": "dbCAN_CBM_CBM61",
-					"ui-name": "dbCAN_CBM_CBM61"
-				},
-				{
-					"value": "CBM62",
-					"display": "carbohydrate-binding module - CBM62",
-					"id": "dbCAN_CBM_CBM62",
-					"ui-name": "dbCAN_CBM_CBM62"
-				},
-				{
-					"value": "CBM63",
-					"display": "carbohydrate-binding module - CBM63",
-					"id": "dbCAN_CBM_CBM63",
-					"ui-name": "dbCAN_CBM_CBM63"
-				},
-				{
-					"value": "CBM64",
-					"display": "carbohydrate-binding module - CBM64",
-					"id": "dbCAN_CBM_CBM64",
-					"ui-name": "dbCAN_CBM_CBM64"
-				},
-				{
-					"value": "CBM65",
-					"display": "carbohydrate-binding module - CBM65",
-					"id": "dbCAN_CBM_CBM65",
-					"ui-name": "dbCAN_CBM_CBM65"
-				},
-				{
-					"value": "CBM66",
-					"display": "carbohydrate-binding module - CBM66",
-					"id": "dbCAN_CBM_CBM66",
-					"ui-name": "dbCAN_CBM_CBM66"
-				},
-				{
-					"value": "CBM67",
-					"display": "carbohydrate-binding module - CBM67",
-					"id": "dbCAN_CBM_CBM67",
-					"ui-name": "dbCAN_CBM_CBM67"
-				},
-				{
-					"value": "CBM68",
-					"display": "carbohydrate-binding module - CBM68",
-					"id": "dbCAN_CBM_CBM68",
-					"ui-name": "dbCAN_CBM_CBM68"
-				},
-				{
-					"value": "CBM69",
-					"display": "carbohydrate-binding module - CBM69",
-					"id": "dbCAN_CBM_CBM69",
-					"ui-name": "dbCAN_CBM_CBM69"
-				},
-				{
-					"value": "CBM70",
-					"display": "carbohydrate-binding module - CBM70",
-					"id": "dbCAN_CBM_CBM70",
-					"ui-name": "dbCAN_CBM_CBM70"
-				},
-				{
-					"value": "CBM71",
-					"display": "carbohydrate-binding module - CBM71",
-					"id": "dbCAN_CBM_CBM71",
-					"ui-name": "dbCAN_CBM_CBM71"
-				},
-				{
-					"value": "CBM72",
-					"display": "carbohydrate-binding module - CBM72",
-					"id": "dbCAN_CBM_CBM72",
-					"ui-name": "dbCAN_CBM_CBM72"
-				},
-				{
-					"value": "CBM73",
-					"display": "carbohydrate-binding module - CBM73",
-					"id": "dbCAN_CBM_CBM73",
-					"ui-name": "dbCAN_CBM_CBM73"
-				},
-				{
-					"value": "CBM74",
-					"display": "carbohydrate-binding module - CBM74",
-					"id": "dbCAN_CBM_CBM74",
-					"ui-name": "dbCAN_CBM_CBM74"
-				},
-				{
-					"value": "CBM75",
-					"display": "carbohydrate-binding module - CBM75",
-					"id": "dbCAN_CBM_CBM75",
-					"ui-name": "dbCAN_CBM_CBM75"
-				},
-				{
-					"value": "CBM76",
-					"display": "carbohydrate-binding module - CBM76",
-					"id": "dbCAN_CBM_CBM76",
-					"ui-name": "dbCAN_CBM_CBM76"
-				},
-				{
-					"value": "CBM77",
-					"display": "carbohydrate-binding module - CBM77",
-					"id": "dbCAN_CBM_CBM77",
-					"ui-name": "dbCAN_CBM_CBM77"
-				},
-				{
-					"value": "CBM78",
-					"display": "carbohydrate-binding module - CBM78",
-					"id": "dbCAN_CBM_CBM78",
-					"ui-name": "dbCAN_CBM_CBM78"
-				},
-				{
-					"value": "CBM79",
-					"display": "carbohydrate-binding module - CBM79",
-					"id": "dbCAN_CBM_CBM79",
-					"ui-name": "dbCAN_CBM_CBM79"
-				},
-				{
-					"value": "CBM80",
-					"display": "carbohydrate-binding module - CBM80",
-					"id": "dbCAN_CBM_CBM80",
-					"ui-name": "dbCAN_CBM_CBM80"
-				},
-				{
-					"value": "CBM81",
-					"display": "carbohydrate-binding module - CBM81",
-					"id": "dbCAN_CBM_CBM81",
-					"ui-name": "dbCAN_CBM_CBM81"
+					"value": "soxY",
+					"display": "Sulfur - Thiosulfate oxidation - soxY",
+					"id": "env-bioelement_S_soxY",
+					"ui-name": "env-bioelement_S_soxY"
 				}
                 ]
             }
         },
         {
-            "id": "input_dbCAN_CE_ids",
+            "id": "input_env-bioelement_O_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -665,110 +347,86 @@
                                 {
                                         "value": "none",
                                         "display": "none",
-                                        "id": "dbCAN_CE_none",
-                                        "ui-name": "dbCAN_CE_none"
+                                        "id": "env-bioelement_O_none",
+                                        "ui-name": "env-bioelement_O_none"
                                 },
 				{
-					"value": "CE1",
-					"display": "carbohydrate esterase - CE1",
-					"id": "dbCAN_CE_CE1",
-					"ui-name": "dbCAN_CE_CE1"
+					"value": "qoxA",
+					"display": "Oxygen - Cytochrome-quinone oxidase - qoxA",
+					"id": "env-bioelement_O_qoxA",
+					"ui-name": "env-bioelement_O_qoxA"
 				},
 				{
-					"value": "CE2",
-					"display": "carbohydrate esterase - CE2",
-					"id": "dbCAN_CE_CE2",
-					"ui-name": "dbCAN_CE_CE2"
+					"value": "qoxB",
+					"display": "Oxygen - Cytochrome-quinone oxidase - qoxB",
+					"id": "env-bioelement_O_qoxB",
+					"ui-name": "env-bioelement_O_qoxB"
 				},
 				{
-					"value": "CE3",
-					"display": "carbohydrate esterase - CE3",
-					"id": "dbCAN_CE_CE3",
-					"ui-name": "dbCAN_CE_CE3"
+					"value": "cydA",
+					"display": "Oxygen - Cytochrome-quinone oxidase - cydA",
+					"id": "env-bioelement_O_cydA",
+					"ui-name": "env-bioelement_O_cydA"
 				},
 				{
-					"value": "CE4",
-					"display": "carbohydrate esterase - CE4",
-					"id": "dbCAN_CE_CE4",
-					"ui-name": "dbCAN_CE_CE4"
+					"value": "cydB",
+					"display": "Oxygen - Cytochrome-quinone oxidase - cydB",
+					"id": "env-bioelement_O_cydB",
+					"ui-name": "env-bioelement_O_cydB"
 				},
 				{
-					"value": "CE5",
-					"display": "carbohydrate esterase - CE5",
-					"id": "dbCAN_CE_CE5",
-					"ui-name": "dbCAN_CE_CE5"
+					"value": "cyoA",
+					"display": "Oxygen - Cytochrome-quinone oxidase - cyoA",
+					"id": "env-bioelement_O_cyoA",
+					"ui-name": "env-bioelement_O_cyoA"
 				},
 				{
-					"value": "CE6",
-					"display": "carbohydrate esterase - CE6",
-					"id": "dbCAN_CE_CE6",
-					"ui-name": "dbCAN_CE_CE6"
+					"value": "cyoD",
+					"display": "Oxygen - Cytochrome-quinone oxidase - cyoD",
+					"id": "env-bioelement_O_cyoD",
+					"ui-name": "env-bioelement_O_cyoD"
 				},
 				{
-					"value": "CE7",
-					"display": "carbohydrate esterase - CE7",
-					"id": "dbCAN_CE_CE7",
-					"ui-name": "dbCAN_CE_CE7"
+					"value": "cyoE",
+					"display": "Oxygen - Cytochrome-quinone oxidase - cyoE",
+					"id": "env-bioelement_O_cyoE",
+					"ui-name": "env-bioelement_O_cyoE"
 				},
 				{
-					"value": "CE8",
-					"display": "carbohydrate esterase - CE8",
-					"id": "dbCAN_CE_CE8",
-					"ui-name": "dbCAN_CE_CE8"
+					"value": "coxA",
+					"display": "Oxygen - Cytochrome c oxidase - coxA",
+					"id": "env-bioelement_O_coxA",
+					"ui-name": "env-bioelement_O_coxA"
 				},
 				{
-					"value": "CE9",
-					"display": "carbohydrate esterase - CE9",
-					"id": "dbCAN_CE_CE9",
-					"ui-name": "dbCAN_CE_CE9"
+					"value": "coxB",
+					"display": "Oxygen - Cytochrome c oxidase - coxB",
+					"id": "env-bioelement_O_coxB",
+					"ui-name": "env-bioelement_O_coxB"
 				},
 				{
-					"value": "CE10",
-					"display": "carbohydrate esterase - CE10",
-					"id": "dbCAN_CE_CE10",
-					"ui-name": "dbCAN_CE_CE10"
+					"value": "ccoN",
+					"display": "Oxygen - Cytochrome c oxidase - ccoN",
+					"id": "env-bioelement_O_ccoN",
+					"ui-name": "env-bioelement_O_ccoN"
 				},
 				{
-					"value": "CE11",
-					"display": "carbohydrate esterase - CE11",
-					"id": "dbCAN_CE_CE11",
-					"ui-name": "dbCAN_CE_CE11"
+					"value": "ccoO",
+					"display": "Oxygen - Cytochrome c oxidase - ccoO",
+					"id": "env-bioelement_O_ccoO",
+					"ui-name": "env-bioelement_O_ccoO"
 				},
 				{
-					"value": "CE12",
-					"display": "carbohydrate esterase - CE12",
-					"id": "dbCAN_CE_CE12",
-					"ui-name": "dbCAN_CE_CE12"
-				},
-				{
-					"value": "CE13",
-					"display": "carbohydrate esterase - CE13",
-					"id": "dbCAN_CE_CE13",
-					"ui-name": "dbCAN_CE_CE13"
-				},
-				{
-					"value": "CE14",
-					"display": "carbohydrate esterase - CE14",
-					"id": "dbCAN_CE_CE14",
-					"ui-name": "dbCAN_CE_CE14"
-				},
-				{
-					"value": "CE15",
-					"display": "carbohydrate esterase - CE15",
-					"id": "dbCAN_CE_CE15",
-					"ui-name": "dbCAN_CE_CE15"
-				},
-				{
-					"value": "CE16",
-					"display": "carbohydrate esterase - CE16",
-					"id": "dbCAN_CE_CE16",
-					"ui-name": "dbCAN_CE_CE16"
+					"value": "ccoP",
+					"display": "Oxygen - Cytochrome c oxidase - ccoP",
+					"id": "env-bioelement_O_ccoP",
+					"ui-name": "env-bioelement_O_ccoP"
 				}
                 ]
             }
         },
         {
-            "id": "input_dbCAN_GH_ids",
+            "id": "input_env-bioelement_CH4_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -779,1676 +437,62 @@
                                 {
                                         "value": "none",
                                         "display": "none",
-                                        "id": "dbCAN_GH_none",
-                                        "ui-name": "dbCAN_GH_none"
+                                        "id": "env-bioelement_CH4_none",
+                                        "ui-name": "env-bioelement_CH4_none"
                                 },
 				{
-					"value": "GH1",
-					"display": "glycoside hydrolase - GH1",
-					"id": "dbCAN_GH_GH1",
-					"ui-name": "dbCAN_GH_GH1"
+					"value": "pmoA",
+					"display": "Methane - Methane oxidation - pmoA",
+					"id": "env-bioelement_CH4_pmoA",
+					"ui-name": "env-bioelement_CH4_pmoA"
 				},
 				{
-					"value": "GH2",
-					"display": "glycoside hydrolase - GH2",
-					"id": "dbCAN_GH_GH2",
-					"ui-name": "dbCAN_GH_GH2"
+					"value": "pmoB",
+					"display": "Methane - Methane oxidation - pmoB",
+					"id": "env-bioelement_CH4_pmoB",
+					"ui-name": "env-bioelement_CH4_pmoB"
 				},
 				{
-					"value": "GH3",
-					"display": "glycoside hydrolase - GH3",
-					"id": "dbCAN_GH_GH3",
-					"ui-name": "dbCAN_GH_GH3"
+					"value": "pmoC",
+					"display": "Methane - Methane oxidation - pmoC",
+					"id": "env-bioelement_CH4_pmoC",
+					"ui-name": "env-bioelement_CH4_pmoC"
 				},
 				{
-					"value": "GH4",
-					"display": "glycoside hydrolase - GH4",
-					"id": "dbCAN_GH_GH4",
-					"ui-name": "dbCAN_GH_GH4"
+					"value": "mmoB",
+					"display": "Methane - Methane oxidation - mmoB",
+					"id": "env-bioelement_CH4_mmoB",
+					"ui-name": "env-bioelement_CH4_mmoB"
 				},
 				{
-					"value": "GH5",
-					"display": "glycoside hydrolase - GH5",
-					"id": "dbCAN_GH_GH5",
-					"ui-name": "dbCAN_GH_GH5"
+					"value": "mmoD",
+					"display": "Methane - Methane oxidation - mmoD",
+					"id": "env-bioelement_CH4_mmoD",
+					"ui-name": "env-bioelement_CH4_mmoD"
 				},
 				{
-					"value": "GH5_1",
-					"display": "glycoside hydrolase - GH5_1",
-					"id": "dbCAN_GH_GH5_1",
-					"ui-name": "dbCAN_GH_GH5_1"
+					"value": "mcrA",
+					"display": "Methane - Methane production - mcrA",
+					"id": "env-bioelement_CH4_mcrA",
+					"ui-name": "env-bioelement_CH4_mcrA"
 				},
 				{
-					"value": "GH5_2",
-					"display": "glycoside hydrolase - GH5_2",
-					"id": "dbCAN_GH_GH5_2",
-					"ui-name": "dbCAN_GH_GH5_2"
+					"value": "mcrB",
+					"display": "Methane - Methane production - mcrB",
+					"id": "env-bioelement_CH4_mcrB",
+					"ui-name": "env-bioelement_CH4_mcrB"
 				},
 				{
-					"value": "GH5_4",
-					"display": "glycoside hydrolase - GH5_4",
-					"id": "dbCAN_GH_GH5_4",
-					"ui-name": "dbCAN_GH_GH5_4"
-				},
-				{
-					"value": "GH5_5",
-					"display": "glycoside hydrolase - GH5_5",
-					"id": "dbCAN_GH_GH5_5",
-					"ui-name": "dbCAN_GH_GH5_5"
-				},
-				{
-					"value": "GH5_7",
-					"display": "glycoside hydrolase - GH5_7",
-					"id": "dbCAN_GH_GH5_7",
-					"ui-name": "dbCAN_GH_GH5_7"
-				},
-				{
-					"value": "GH5_8",
-					"display": "glycoside hydrolase - GH5_8",
-					"id": "dbCAN_GH_GH5_8",
-					"ui-name": "dbCAN_GH_GH5_8"
-				},
-				{
-					"value": "GH5_9",
-					"display": "glycoside hydrolase - GH5_9",
-					"id": "dbCAN_GH_GH5_9",
-					"ui-name": "dbCAN_GH_GH5_9"
-				},
-				{
-					"value": "GH5_10",
-					"display": "glycoside hydrolase - GH5_10",
-					"id": "dbCAN_GH_GH5_10",
-					"ui-name": "dbCAN_GH_GH5_10"
-				},
-				{
-					"value": "GH5_11",
-					"display": "glycoside hydrolase - GH5_11",
-					"id": "dbCAN_GH_GH5_11",
-					"ui-name": "dbCAN_GH_GH5_11"
-				},
-				{
-					"value": "GH5_12",
-					"display": "glycoside hydrolase - GH5_12",
-					"id": "dbCAN_GH_GH5_12",
-					"ui-name": "dbCAN_GH_GH5_12"
-				},
-				{
-					"value": "GH5_13",
-					"display": "glycoside hydrolase - GH5_13",
-					"id": "dbCAN_GH_GH5_13",
-					"ui-name": "dbCAN_GH_GH5_13"
-				},
-				{
-					"value": "GH5_14",
-					"display": "glycoside hydrolase - GH5_14",
-					"id": "dbCAN_GH_GH5_14",
-					"ui-name": "dbCAN_GH_GH5_14"
-				},
-				{
-					"value": "GH5_15",
-					"display": "glycoside hydrolase - GH5_15",
-					"id": "dbCAN_GH_GH5_15",
-					"ui-name": "dbCAN_GH_GH5_15"
-				},
-				{
-					"value": "GH5_16",
-					"display": "glycoside hydrolase - GH5_16",
-					"id": "dbCAN_GH_GH5_16",
-					"ui-name": "dbCAN_GH_GH5_16"
-				},
-				{
-					"value": "GH5_17",
-					"display": "glycoside hydrolase - GH5_17",
-					"id": "dbCAN_GH_GH5_17",
-					"ui-name": "dbCAN_GH_GH5_17"
-				},
-				{
-					"value": "GH5_18",
-					"display": "glycoside hydrolase - GH5_18",
-					"id": "dbCAN_GH_GH5_18",
-					"ui-name": "dbCAN_GH_GH5_18"
-				},
-				{
-					"value": "GH5_19",
-					"display": "glycoside hydrolase - GH5_19",
-					"id": "dbCAN_GH_GH5_19",
-					"ui-name": "dbCAN_GH_GH5_19"
-				},
-				{
-					"value": "GH5_20",
-					"display": "glycoside hydrolase - GH5_20",
-					"id": "dbCAN_GH_GH5_20",
-					"ui-name": "dbCAN_GH_GH5_20"
-				},
-				{
-					"value": "GH5_21",
-					"display": "glycoside hydrolase - GH5_21",
-					"id": "dbCAN_GH_GH5_21",
-					"ui-name": "dbCAN_GH_GH5_21"
-				},
-				{
-					"value": "GH5_22",
-					"display": "glycoside hydrolase - GH5_22",
-					"id": "dbCAN_GH_GH5_22",
-					"ui-name": "dbCAN_GH_GH5_22"
-				},
-				{
-					"value": "GH5_23",
-					"display": "glycoside hydrolase - GH5_23",
-					"id": "dbCAN_GH_GH5_23",
-					"ui-name": "dbCAN_GH_GH5_23"
-				},
-				{
-					"value": "GH5_24",
-					"display": "glycoside hydrolase - GH5_24",
-					"id": "dbCAN_GH_GH5_24",
-					"ui-name": "dbCAN_GH_GH5_24"
-				},
-				{
-					"value": "GH5_25",
-					"display": "glycoside hydrolase - GH5_25",
-					"id": "dbCAN_GH_GH5_25",
-					"ui-name": "dbCAN_GH_GH5_25"
-				},
-				{
-					"value": "GH5_26",
-					"display": "glycoside hydrolase - GH5_26",
-					"id": "dbCAN_GH_GH5_26",
-					"ui-name": "dbCAN_GH_GH5_26"
-				},
-				{
-					"value": "GH5_27",
-					"display": "glycoside hydrolase - GH5_27",
-					"id": "dbCAN_GH_GH5_27",
-					"ui-name": "dbCAN_GH_GH5_27"
-				},
-				{
-					"value": "GH5_28",
-					"display": "glycoside hydrolase - GH5_28",
-					"id": "dbCAN_GH_GH5_28",
-					"ui-name": "dbCAN_GH_GH5_28"
-				},
-				{
-					"value": "GH5_29",
-					"display": "glycoside hydrolase - GH5_29",
-					"id": "dbCAN_GH_GH5_29",
-					"ui-name": "dbCAN_GH_GH5_29"
-				},
-				{
-					"value": "GH5_30",
-					"display": "glycoside hydrolase - GH5_30",
-					"id": "dbCAN_GH_GH5_30",
-					"ui-name": "dbCAN_GH_GH5_30"
-				},
-				{
-					"value": "GH5_31",
-					"display": "glycoside hydrolase - GH5_31",
-					"id": "dbCAN_GH_GH5_31",
-					"ui-name": "dbCAN_GH_GH5_31"
-				},
-				{
-					"value": "GH5_32",
-					"display": "glycoside hydrolase - GH5_32",
-					"id": "dbCAN_GH_GH5_32",
-					"ui-name": "dbCAN_GH_GH5_32"
-				},
-				{
-					"value": "GH5_33",
-					"display": "glycoside hydrolase - GH5_33",
-					"id": "dbCAN_GH_GH5_33",
-					"ui-name": "dbCAN_GH_GH5_33"
-				},
-				{
-					"value": "GH5_34",
-					"display": "glycoside hydrolase - GH5_34",
-					"id": "dbCAN_GH_GH5_34",
-					"ui-name": "dbCAN_GH_GH5_34"
-				},
-				{
-					"value": "GH5_35",
-					"display": "glycoside hydrolase - GH5_35",
-					"id": "dbCAN_GH_GH5_35",
-					"ui-name": "dbCAN_GH_GH5_35"
-				},
-				{
-					"value": "GH5_36",
-					"display": "glycoside hydrolase - GH5_36",
-					"id": "dbCAN_GH_GH5_36",
-					"ui-name": "dbCAN_GH_GH5_36"
-				},
-				{
-					"value": "GH5_37",
-					"display": "glycoside hydrolase - GH5_37",
-					"id": "dbCAN_GH_GH5_37",
-					"ui-name": "dbCAN_GH_GH5_37"
-				},
-				{
-					"value": "GH5_38",
-					"display": "glycoside hydrolase - GH5_38",
-					"id": "dbCAN_GH_GH5_38",
-					"ui-name": "dbCAN_GH_GH5_38"
-				},
-				{
-					"value": "GH5_39",
-					"display": "glycoside hydrolase - GH5_39",
-					"id": "dbCAN_GH_GH5_39",
-					"ui-name": "dbCAN_GH_GH5_39"
-				},
-				{
-					"value": "GH5_40",
-					"display": "glycoside hydrolase - GH5_40",
-					"id": "dbCAN_GH_GH5_40",
-					"ui-name": "dbCAN_GH_GH5_40"
-				},
-				{
-					"value": "GH5_41",
-					"display": "glycoside hydrolase - GH5_41",
-					"id": "dbCAN_GH_GH5_41",
-					"ui-name": "dbCAN_GH_GH5_41"
-				},
-				{
-					"value": "GH5_42",
-					"display": "glycoside hydrolase - GH5_42",
-					"id": "dbCAN_GH_GH5_42",
-					"ui-name": "dbCAN_GH_GH5_42"
-				},
-				{
-					"value": "GH5_43",
-					"display": "glycoside hydrolase - GH5_43",
-					"id": "dbCAN_GH_GH5_43",
-					"ui-name": "dbCAN_GH_GH5_43"
-				},
-				{
-					"value": "GH5_44",
-					"display": "glycoside hydrolase - GH5_44",
-					"id": "dbCAN_GH_GH5_44",
-					"ui-name": "dbCAN_GH_GH5_44"
-				},
-				{
-					"value": "GH5_45",
-					"display": "glycoside hydrolase - GH5_45",
-					"id": "dbCAN_GH_GH5_45",
-					"ui-name": "dbCAN_GH_GH5_45"
-				},
-				{
-					"value": "GH5_46",
-					"display": "glycoside hydrolase - GH5_46",
-					"id": "dbCAN_GH_GH5_46",
-					"ui-name": "dbCAN_GH_GH5_46"
-				},
-				{
-					"value": "GH5_47",
-					"display": "glycoside hydrolase - GH5_47",
-					"id": "dbCAN_GH_GH5_47",
-					"ui-name": "dbCAN_GH_GH5_47"
-				},
-				{
-					"value": "GH5_48",
-					"display": "glycoside hydrolase - GH5_48",
-					"id": "dbCAN_GH_GH5_48",
-					"ui-name": "dbCAN_GH_GH5_48"
-				},
-				{
-					"value": "GH5_49",
-					"display": "glycoside hydrolase - GH5_49",
-					"id": "dbCAN_GH_GH5_49",
-					"ui-name": "dbCAN_GH_GH5_49"
-				},
-				{
-					"value": "GH5_50",
-					"display": "glycoside hydrolase - GH5_50",
-					"id": "dbCAN_GH_GH5_50",
-					"ui-name": "dbCAN_GH_GH5_50"
-				},
-				{
-					"value": "GH5_51",
-					"display": "glycoside hydrolase - GH5_51",
-					"id": "dbCAN_GH_GH5_51",
-					"ui-name": "dbCAN_GH_GH5_51"
-				},
-				{
-					"value": "GH5_52",
-					"display": "glycoside hydrolase - GH5_52",
-					"id": "dbCAN_GH_GH5_52",
-					"ui-name": "dbCAN_GH_GH5_52"
-				},
-				{
-					"value": "GH5_53",
-					"display": "glycoside hydrolase - GH5_53",
-					"id": "dbCAN_GH_GH5_53",
-					"ui-name": "dbCAN_GH_GH5_53"
-				},
-				{
-					"value": "GH6",
-					"display": "glycoside hydrolase - GH6",
-					"id": "dbCAN_GH_GH6",
-					"ui-name": "dbCAN_GH_GH6"
-				},
-				{
-					"value": "GH7",
-					"display": "glycoside hydrolase - GH7",
-					"id": "dbCAN_GH_GH7",
-					"ui-name": "dbCAN_GH_GH7"
-				},
-				{
-					"value": "GH8",
-					"display": "glycoside hydrolase - GH8",
-					"id": "dbCAN_GH_GH8",
-					"ui-name": "dbCAN_GH_GH8"
-				},
-				{
-					"value": "GH9",
-					"display": "glycoside hydrolase - GH9",
-					"id": "dbCAN_GH_GH9",
-					"ui-name": "dbCAN_GH_GH9"
-				},
-				{
-					"value": "GH10",
-					"display": "glycoside hydrolase - GH10",
-					"id": "dbCAN_GH_GH10",
-					"ui-name": "dbCAN_GH_GH10"
-				},
-				{
-					"value": "GH11",
-					"display": "glycoside hydrolase - GH11",
-					"id": "dbCAN_GH_GH11",
-					"ui-name": "dbCAN_GH_GH11"
-				},
-				{
-					"value": "GH12",
-					"display": "glycoside hydrolase - GH12",
-					"id": "dbCAN_GH_GH12",
-					"ui-name": "dbCAN_GH_GH12"
-				},
-				{
-					"value": "GH13",
-					"display": "glycoside hydrolase - GH13",
-					"id": "dbCAN_GH_GH13",
-					"ui-name": "dbCAN_GH_GH13"
-				},
-				{
-					"value": "GH13_1",
-					"display": "glycoside hydrolase - GH13_1",
-					"id": "dbCAN_GH_GH13_1",
-					"ui-name": "dbCAN_GH_GH13_1"
-				},
-				{
-					"value": "GH13_2",
-					"display": "glycoside hydrolase - GH13_2",
-					"id": "dbCAN_GH_GH13_2",
-					"ui-name": "dbCAN_GH_GH13_2"
-				},
-				{
-					"value": "GH13_3",
-					"display": "glycoside hydrolase - GH13_3",
-					"id": "dbCAN_GH_GH13_3",
-					"ui-name": "dbCAN_GH_GH13_3"
-				},
-				{
-					"value": "GH13_4",
-					"display": "glycoside hydrolase - GH13_4",
-					"id": "dbCAN_GH_GH13_4",
-					"ui-name": "dbCAN_GH_GH13_4"
-				},
-				{
-					"value": "GH13_5",
-					"display": "glycoside hydrolase - GH13_5",
-					"id": "dbCAN_GH_GH13_5",
-					"ui-name": "dbCAN_GH_GH13_5"
-				},
-				{
-					"value": "GH13_6",
-					"display": "glycoside hydrolase - GH13_6",
-					"id": "dbCAN_GH_GH13_6",
-					"ui-name": "dbCAN_GH_GH13_6"
-				},
-				{
-					"value": "GH13_7",
-					"display": "glycoside hydrolase - GH13_7",
-					"id": "dbCAN_GH_GH13_7",
-					"ui-name": "dbCAN_GH_GH13_7"
-				},
-				{
-					"value": "GH13_8",
-					"display": "glycoside hydrolase - GH13_8",
-					"id": "dbCAN_GH_GH13_8",
-					"ui-name": "dbCAN_GH_GH13_8"
-				},
-				{
-					"value": "GH13_9",
-					"display": "glycoside hydrolase - GH13_9",
-					"id": "dbCAN_GH_GH13_9",
-					"ui-name": "dbCAN_GH_GH13_9"
-				},
-				{
-					"value": "GH13_10",
-					"display": "glycoside hydrolase - GH13_10",
-					"id": "dbCAN_GH_GH13_10",
-					"ui-name": "dbCAN_GH_GH13_10"
-				},
-				{
-					"value": "GH13_11",
-					"display": "glycoside hydrolase - GH13_11",
-					"id": "dbCAN_GH_GH13_11",
-					"ui-name": "dbCAN_GH_GH13_11"
-				},
-				{
-					"value": "GH13_12",
-					"display": "glycoside hydrolase - GH13_12",
-					"id": "dbCAN_GH_GH13_12",
-					"ui-name": "dbCAN_GH_GH13_12"
-				},
-				{
-					"value": "GH13_13",
-					"display": "glycoside hydrolase - GH13_13",
-					"id": "dbCAN_GH_GH13_13",
-					"ui-name": "dbCAN_GH_GH13_13"
-				},
-				{
-					"value": "GH13_14",
-					"display": "glycoside hydrolase - GH13_14",
-					"id": "dbCAN_GH_GH13_14",
-					"ui-name": "dbCAN_GH_GH13_14"
-				},
-				{
-					"value": "GH13_15",
-					"display": "glycoside hydrolase - GH13_15",
-					"id": "dbCAN_GH_GH13_15",
-					"ui-name": "dbCAN_GH_GH13_15"
-				},
-				{
-					"value": "GH13_16",
-					"display": "glycoside hydrolase - GH13_16",
-					"id": "dbCAN_GH_GH13_16",
-					"ui-name": "dbCAN_GH_GH13_16"
-				},
-				{
-					"value": "GH13_17",
-					"display": "glycoside hydrolase - GH13_17",
-					"id": "dbCAN_GH_GH13_17",
-					"ui-name": "dbCAN_GH_GH13_17"
-				},
-				{
-					"value": "GH13_18",
-					"display": "glycoside hydrolase - GH13_18",
-					"id": "dbCAN_GH_GH13_18",
-					"ui-name": "dbCAN_GH_GH13_18"
-				},
-				{
-					"value": "GH13_19",
-					"display": "glycoside hydrolase - GH13_19",
-					"id": "dbCAN_GH_GH13_19",
-					"ui-name": "dbCAN_GH_GH13_19"
-				},
-				{
-					"value": "GH13_20",
-					"display": "glycoside hydrolase - GH13_20",
-					"id": "dbCAN_GH_GH13_20",
-					"ui-name": "dbCAN_GH_GH13_20"
-				},
-				{
-					"value": "GH13_21",
-					"display": "glycoside hydrolase - GH13_21",
-					"id": "dbCAN_GH_GH13_21",
-					"ui-name": "dbCAN_GH_GH13_21"
-				},
-				{
-					"value": "GH13_22",
-					"display": "glycoside hydrolase - GH13_22",
-					"id": "dbCAN_GH_GH13_22",
-					"ui-name": "dbCAN_GH_GH13_22"
-				},
-				{
-					"value": "GH13_23",
-					"display": "glycoside hydrolase - GH13_23",
-					"id": "dbCAN_GH_GH13_23",
-					"ui-name": "dbCAN_GH_GH13_23"
-				},
-				{
-					"value": "GH13_24",
-					"display": "glycoside hydrolase - GH13_24",
-					"id": "dbCAN_GH_GH13_24",
-					"ui-name": "dbCAN_GH_GH13_24"
-				},
-				{
-					"value": "GH13_25",
-					"display": "glycoside hydrolase - GH13_25",
-					"id": "dbCAN_GH_GH13_25",
-					"ui-name": "dbCAN_GH_GH13_25"
-				},
-				{
-					"value": "GH13_26",
-					"display": "glycoside hydrolase - GH13_26",
-					"id": "dbCAN_GH_GH13_26",
-					"ui-name": "dbCAN_GH_GH13_26"
-				},
-				{
-					"value": "GH13_27",
-					"display": "glycoside hydrolase - GH13_27",
-					"id": "dbCAN_GH_GH13_27",
-					"ui-name": "dbCAN_GH_GH13_27"
-				},
-				{
-					"value": "GH13_28",
-					"display": "glycoside hydrolase - GH13_28",
-					"id": "dbCAN_GH_GH13_28",
-					"ui-name": "dbCAN_GH_GH13_28"
-				},
-				{
-					"value": "GH13_29",
-					"display": "glycoside hydrolase - GH13_29",
-					"id": "dbCAN_GH_GH13_29",
-					"ui-name": "dbCAN_GH_GH13_29"
-				},
-				{
-					"value": "GH13_30",
-					"display": "glycoside hydrolase - GH13_30",
-					"id": "dbCAN_GH_GH13_30",
-					"ui-name": "dbCAN_GH_GH13_30"
-				},
-				{
-					"value": "GH13_31",
-					"display": "glycoside hydrolase - GH13_31",
-					"id": "dbCAN_GH_GH13_31",
-					"ui-name": "dbCAN_GH_GH13_31"
-				},
-				{
-					"value": "GH13_32",
-					"display": "glycoside hydrolase - GH13_32",
-					"id": "dbCAN_GH_GH13_32",
-					"ui-name": "dbCAN_GH_GH13_32"
-				},
-				{
-					"value": "GH13_33",
-					"display": "glycoside hydrolase - GH13_33",
-					"id": "dbCAN_GH_GH13_33",
-					"ui-name": "dbCAN_GH_GH13_33"
-				},
-				{
-					"value": "GH13_34",
-					"display": "glycoside hydrolase - GH13_34",
-					"id": "dbCAN_GH_GH13_34",
-					"ui-name": "dbCAN_GH_GH13_34"
-				},
-				{
-					"value": "GH13_35",
-					"display": "glycoside hydrolase - GH13_35",
-					"id": "dbCAN_GH_GH13_35",
-					"ui-name": "dbCAN_GH_GH13_35"
-				},
-				{
-					"value": "GH13_36",
-					"display": "glycoside hydrolase - GH13_36",
-					"id": "dbCAN_GH_GH13_36",
-					"ui-name": "dbCAN_GH_GH13_36"
-				},
-				{
-					"value": "GH13_37",
-					"display": "glycoside hydrolase - GH13_37",
-					"id": "dbCAN_GH_GH13_37",
-					"ui-name": "dbCAN_GH_GH13_37"
-				},
-				{
-					"value": "GH13_38",
-					"display": "glycoside hydrolase - GH13_38",
-					"id": "dbCAN_GH_GH13_38",
-					"ui-name": "dbCAN_GH_GH13_38"
-				},
-				{
-					"value": "GH13_39",
-					"display": "glycoside hydrolase - GH13_39",
-					"id": "dbCAN_GH_GH13_39",
-					"ui-name": "dbCAN_GH_GH13_39"
-				},
-				{
-					"value": "GH13_40",
-					"display": "glycoside hydrolase - GH13_40",
-					"id": "dbCAN_GH_GH13_40",
-					"ui-name": "dbCAN_GH_GH13_40"
-				},
-				{
-					"value": "GH13_41",
-					"display": "glycoside hydrolase - GH13_41",
-					"id": "dbCAN_GH_GH13_41",
-					"ui-name": "dbCAN_GH_GH13_41"
-				},
-				{
-					"value": "GH13_42",
-					"display": "glycoside hydrolase - GH13_42",
-					"id": "dbCAN_GH_GH13_42",
-					"ui-name": "dbCAN_GH_GH13_42"
-				},
-				{
-					"value": "GH14",
-					"display": "glycoside hydrolase - GH14",
-					"id": "dbCAN_GH_GH14",
-					"ui-name": "dbCAN_GH_GH14"
-				},
-				{
-					"value": "GH15",
-					"display": "glycoside hydrolase - GH15",
-					"id": "dbCAN_GH_GH15",
-					"ui-name": "dbCAN_GH_GH15"
-				},
-				{
-					"value": "GH16",
-					"display": "glycoside hydrolase - GH16",
-					"id": "dbCAN_GH_GH16",
-					"ui-name": "dbCAN_GH_GH16"
-				},
-				{
-					"value": "GH17",
-					"display": "glycoside hydrolase - GH17",
-					"id": "dbCAN_GH_GH17",
-					"ui-name": "dbCAN_GH_GH17"
-				},
-				{
-					"value": "GH18",
-					"display": "glycoside hydrolase - GH18",
-					"id": "dbCAN_GH_GH18",
-					"ui-name": "dbCAN_GH_GH18"
-				},
-				{
-					"value": "GH19",
-					"display": "glycoside hydrolase - GH19",
-					"id": "dbCAN_GH_GH19",
-					"ui-name": "dbCAN_GH_GH19"
-				},
-				{
-					"value": "GH20",
-					"display": "glycoside hydrolase - GH20",
-					"id": "dbCAN_GH_GH20",
-					"ui-name": "dbCAN_GH_GH20"
-				},
-				{
-					"value": "GH22",
-					"display": "glycoside hydrolase - GH22",
-					"id": "dbCAN_GH_GH22",
-					"ui-name": "dbCAN_GH_GH22"
-				},
-				{
-					"value": "GH23",
-					"display": "glycoside hydrolase - GH23",
-					"id": "dbCAN_GH_GH23",
-					"ui-name": "dbCAN_GH_GH23"
-				},
-				{
-					"value": "GH24",
-					"display": "glycoside hydrolase - GH24",
-					"id": "dbCAN_GH_GH24",
-					"ui-name": "dbCAN_GH_GH24"
-				},
-				{
-					"value": "GH25",
-					"display": "glycoside hydrolase - GH25",
-					"id": "dbCAN_GH_GH25",
-					"ui-name": "dbCAN_GH_GH25"
-				},
-				{
-					"value": "GH26",
-					"display": "glycoside hydrolase - GH26",
-					"id": "dbCAN_GH_GH26",
-					"ui-name": "dbCAN_GH_GH26"
-				},
-				{
-					"value": "GH27",
-					"display": "glycoside hydrolase - GH27",
-					"id": "dbCAN_GH_GH27",
-					"ui-name": "dbCAN_GH_GH27"
-				},
-				{
-					"value": "GH28",
-					"display": "glycoside hydrolase - GH28",
-					"id": "dbCAN_GH_GH28",
-					"ui-name": "dbCAN_GH_GH28"
-				},
-				{
-					"value": "GH29",
-					"display": "glycoside hydrolase - GH29",
-					"id": "dbCAN_GH_GH29",
-					"ui-name": "dbCAN_GH_GH29"
-				},
-				{
-					"value": "GH30",
-					"display": "glycoside hydrolase - GH30",
-					"id": "dbCAN_GH_GH30",
-					"ui-name": "dbCAN_GH_GH30"
-				},
-				{
-					"value": "GH30_1",
-					"display": "glycoside hydrolase - GH30_1",
-					"id": "dbCAN_GH_GH30_1",
-					"ui-name": "dbCAN_GH_GH30_1"
-				},
-				{
-					"value": "GH30_2",
-					"display": "glycoside hydrolase - GH30_2",
-					"id": "dbCAN_GH_GH30_2",
-					"ui-name": "dbCAN_GH_GH30_2"
-				},
-				{
-					"value": "GH30_3",
-					"display": "glycoside hydrolase - GH30_3",
-					"id": "dbCAN_GH_GH30_3",
-					"ui-name": "dbCAN_GH_GH30_3"
-				},
-				{
-					"value": "GH30_4",
-					"display": "glycoside hydrolase - GH30_4",
-					"id": "dbCAN_GH_GH30_4",
-					"ui-name": "dbCAN_GH_GH30_4"
-				},
-				{
-					"value": "GH30_5",
-					"display": "glycoside hydrolase - GH30_5",
-					"id": "dbCAN_GH_GH30_5",
-					"ui-name": "dbCAN_GH_GH30_5"
-				},
-				{
-					"value": "GH30_6",
-					"display": "glycoside hydrolase - GH30_6",
-					"id": "dbCAN_GH_GH30_6",
-					"ui-name": "dbCAN_GH_GH30_6"
-				},
-				{
-					"value": "GH30_7",
-					"display": "glycoside hydrolase - GH30_7",
-					"id": "dbCAN_GH_GH30_7",
-					"ui-name": "dbCAN_GH_GH30_7"
-				},
-				{
-					"value": "GH30_8",
-					"display": "glycoside hydrolase - GH30_8",
-					"id": "dbCAN_GH_GH30_8",
-					"ui-name": "dbCAN_GH_GH30_8"
-				},
-				{
-					"value": "GH31",
-					"display": "glycoside hydrolase - GH31",
-					"id": "dbCAN_GH_GH31",
-					"ui-name": "dbCAN_GH_GH31"
-				},
-				{
-					"value": "GH32",
-					"display": "glycoside hydrolase - GH32",
-					"id": "dbCAN_GH_GH32",
-					"ui-name": "dbCAN_GH_GH32"
-				},
-				{
-					"value": "GH33",
-					"display": "glycoside hydrolase - GH33",
-					"id": "dbCAN_GH_GH33",
-					"ui-name": "dbCAN_GH_GH33"
-				},
-				{
-					"value": "GH34",
-					"display": "glycoside hydrolase - GH34",
-					"id": "dbCAN_GH_GH34",
-					"ui-name": "dbCAN_GH_GH34"
-				},
-				{
-					"value": "GH35",
-					"display": "glycoside hydrolase - GH35",
-					"id": "dbCAN_GH_GH35",
-					"ui-name": "dbCAN_GH_GH35"
-				},
-				{
-					"value": "GH36",
-					"display": "glycoside hydrolase - GH36",
-					"id": "dbCAN_GH_GH36",
-					"ui-name": "dbCAN_GH_GH36"
-				},
-				{
-					"value": "GH37",
-					"display": "glycoside hydrolase - GH37",
-					"id": "dbCAN_GH_GH37",
-					"ui-name": "dbCAN_GH_GH37"
-				},
-				{
-					"value": "GH38",
-					"display": "glycoside hydrolase - GH38",
-					"id": "dbCAN_GH_GH38",
-					"ui-name": "dbCAN_GH_GH38"
-				},
-				{
-					"value": "GH39",
-					"display": "glycoside hydrolase - GH39",
-					"id": "dbCAN_GH_GH39",
-					"ui-name": "dbCAN_GH_GH39"
-				},
-				{
-					"value": "GH42",
-					"display": "glycoside hydrolase - GH42",
-					"id": "dbCAN_GH_GH42",
-					"ui-name": "dbCAN_GH_GH42"
-				},
-				{
-					"value": "GH43",
-					"display": "glycoside hydrolase - GH43",
-					"id": "dbCAN_GH_GH43",
-					"ui-name": "dbCAN_GH_GH43"
-				},
-				{
-					"value": "GH43_1",
-					"display": "glycoside hydrolase - GH43_1",
-					"id": "dbCAN_GH_GH43_1",
-					"ui-name": "dbCAN_GH_GH43_1"
-				},
-				{
-					"value": "GH43_2",
-					"display": "glycoside hydrolase - GH43_2",
-					"id": "dbCAN_GH_GH43_2",
-					"ui-name": "dbCAN_GH_GH43_2"
-				},
-				{
-					"value": "GH43_3",
-					"display": "glycoside hydrolase - GH43_3",
-					"id": "dbCAN_GH_GH43_3",
-					"ui-name": "dbCAN_GH_GH43_3"
-				},
-				{
-					"value": "GH43_4",
-					"display": "glycoside hydrolase - GH43_4",
-					"id": "dbCAN_GH_GH43_4",
-					"ui-name": "dbCAN_GH_GH43_4"
-				},
-				{
-					"value": "GH43_5",
-					"display": "glycoside hydrolase - GH43_5",
-					"id": "dbCAN_GH_GH43_5",
-					"ui-name": "dbCAN_GH_GH43_5"
-				},
-				{
-					"value": "GH43_6",
-					"display": "glycoside hydrolase - GH43_6",
-					"id": "dbCAN_GH_GH43_6",
-					"ui-name": "dbCAN_GH_GH43_6"
-				},
-				{
-					"value": "GH43_7",
-					"display": "glycoside hydrolase - GH43_7",
-					"id": "dbCAN_GH_GH43_7",
-					"ui-name": "dbCAN_GH_GH43_7"
-				},
-				{
-					"value": "GH43_8",
-					"display": "glycoside hydrolase - GH43_8",
-					"id": "dbCAN_GH_GH43_8",
-					"ui-name": "dbCAN_GH_GH43_8"
-				},
-				{
-					"value": "GH43_9",
-					"display": "glycoside hydrolase - GH43_9",
-					"id": "dbCAN_GH_GH43_9",
-					"ui-name": "dbCAN_GH_GH43_9"
-				},
-				{
-					"value": "GH43_10",
-					"display": "glycoside hydrolase - GH43_10",
-					"id": "dbCAN_GH_GH43_10",
-					"ui-name": "dbCAN_GH_GH43_10"
-				},
-				{
-					"value": "GH43_11",
-					"display": "glycoside hydrolase - GH43_11",
-					"id": "dbCAN_GH_GH43_11",
-					"ui-name": "dbCAN_GH_GH43_11"
-				},
-				{
-					"value": "GH43_12",
-					"display": "glycoside hydrolase - GH43_12",
-					"id": "dbCAN_GH_GH43_12",
-					"ui-name": "dbCAN_GH_GH43_12"
-				},
-				{
-					"value": "GH43_13",
-					"display": "glycoside hydrolase - GH43_13",
-					"id": "dbCAN_GH_GH43_13",
-					"ui-name": "dbCAN_GH_GH43_13"
-				},
-				{
-					"value": "GH43_14",
-					"display": "glycoside hydrolase - GH43_14",
-					"id": "dbCAN_GH_GH43_14",
-					"ui-name": "dbCAN_GH_GH43_14"
-				},
-				{
-					"value": "GH43_15",
-					"display": "glycoside hydrolase - GH43_15",
-					"id": "dbCAN_GH_GH43_15",
-					"ui-name": "dbCAN_GH_GH43_15"
-				},
-				{
-					"value": "GH43_16",
-					"display": "glycoside hydrolase - GH43_16",
-					"id": "dbCAN_GH_GH43_16",
-					"ui-name": "dbCAN_GH_GH43_16"
-				},
-				{
-					"value": "GH43_17",
-					"display": "glycoside hydrolase - GH43_17",
-					"id": "dbCAN_GH_GH43_17",
-					"ui-name": "dbCAN_GH_GH43_17"
-				},
-				{
-					"value": "GH43_18",
-					"display": "glycoside hydrolase - GH43_18",
-					"id": "dbCAN_GH_GH43_18",
-					"ui-name": "dbCAN_GH_GH43_18"
-				},
-				{
-					"value": "GH43_19",
-					"display": "glycoside hydrolase - GH43_19",
-					"id": "dbCAN_GH_GH43_19",
-					"ui-name": "dbCAN_GH_GH43_19"
-				},
-				{
-					"value": "GH43_20",
-					"display": "glycoside hydrolase - GH43_20",
-					"id": "dbCAN_GH_GH43_20",
-					"ui-name": "dbCAN_GH_GH43_20"
-				},
-				{
-					"value": "GH43_21",
-					"display": "glycoside hydrolase - GH43_21",
-					"id": "dbCAN_GH_GH43_21",
-					"ui-name": "dbCAN_GH_GH43_21"
-				},
-				{
-					"value": "GH43_22",
-					"display": "glycoside hydrolase - GH43_22",
-					"id": "dbCAN_GH_GH43_22",
-					"ui-name": "dbCAN_GH_GH43_22"
-				},
-				{
-					"value": "GH43_23",
-					"display": "glycoside hydrolase - GH43_23",
-					"id": "dbCAN_GH_GH43_23",
-					"ui-name": "dbCAN_GH_GH43_23"
-				},
-				{
-					"value": "GH43_24",
-					"display": "glycoside hydrolase - GH43_24",
-					"id": "dbCAN_GH_GH43_24",
-					"ui-name": "dbCAN_GH_GH43_24"
-				},
-				{
-					"value": "GH43_25",
-					"display": "glycoside hydrolase - GH43_25",
-					"id": "dbCAN_GH_GH43_25",
-					"ui-name": "dbCAN_GH_GH43_25"
-				},
-				{
-					"value": "GH43_26",
-					"display": "glycoside hydrolase - GH43_26",
-					"id": "dbCAN_GH_GH43_26",
-					"ui-name": "dbCAN_GH_GH43_26"
-				},
-				{
-					"value": "GH43_27",
-					"display": "glycoside hydrolase - GH43_27",
-					"id": "dbCAN_GH_GH43_27",
-					"ui-name": "dbCAN_GH_GH43_27"
-				},
-				{
-					"value": "GH43_28",
-					"display": "glycoside hydrolase - GH43_28",
-					"id": "dbCAN_GH_GH43_28",
-					"ui-name": "dbCAN_GH_GH43_28"
-				},
-				{
-					"value": "GH43_29",
-					"display": "glycoside hydrolase - GH43_29",
-					"id": "dbCAN_GH_GH43_29",
-					"ui-name": "dbCAN_GH_GH43_29"
-				},
-				{
-					"value": "GH43_30",
-					"display": "glycoside hydrolase - GH43_30",
-					"id": "dbCAN_GH_GH43_30",
-					"ui-name": "dbCAN_GH_GH43_30"
-				},
-				{
-					"value": "GH43_31",
-					"display": "glycoside hydrolase - GH43_31",
-					"id": "dbCAN_GH_GH43_31",
-					"ui-name": "dbCAN_GH_GH43_31"
-				},
-				{
-					"value": "GH43_32",
-					"display": "glycoside hydrolase - GH43_32",
-					"id": "dbCAN_GH_GH43_32",
-					"ui-name": "dbCAN_GH_GH43_32"
-				},
-				{
-					"value": "GH43_33",
-					"display": "glycoside hydrolase - GH43_33",
-					"id": "dbCAN_GH_GH43_33",
-					"ui-name": "dbCAN_GH_GH43_33"
-				},
-				{
-					"value": "GH43_34",
-					"display": "glycoside hydrolase - GH43_34",
-					"id": "dbCAN_GH_GH43_34",
-					"ui-name": "dbCAN_GH_GH43_34"
-				},
-				{
-					"value": "GH43_35",
-					"display": "glycoside hydrolase - GH43_35",
-					"id": "dbCAN_GH_GH43_35",
-					"ui-name": "dbCAN_GH_GH43_35"
-				},
-				{
-					"value": "GH43_36",
-					"display": "glycoside hydrolase - GH43_36",
-					"id": "dbCAN_GH_GH43_36",
-					"ui-name": "dbCAN_GH_GH43_36"
-				},
-				{
-					"value": "GH43_37",
-					"display": "glycoside hydrolase - GH43_37",
-					"id": "dbCAN_GH_GH43_37",
-					"ui-name": "dbCAN_GH_GH43_37"
-				},
-				{
-					"value": "GH44",
-					"display": "glycoside hydrolase - GH44",
-					"id": "dbCAN_GH_GH44",
-					"ui-name": "dbCAN_GH_GH44"
-				},
-				{
-					"value": "GH45",
-					"display": "glycoside hydrolase - GH45",
-					"id": "dbCAN_GH_GH45",
-					"ui-name": "dbCAN_GH_GH45"
-				},
-				{
-					"value": "GH46",
-					"display": "glycoside hydrolase - GH46",
-					"id": "dbCAN_GH_GH46",
-					"ui-name": "dbCAN_GH_GH46"
-				},
-				{
-					"value": "GH47",
-					"display": "glycoside hydrolase - GH47",
-					"id": "dbCAN_GH_GH47",
-					"ui-name": "dbCAN_GH_GH47"
-				},
-				{
-					"value": "GH48",
-					"display": "glycoside hydrolase - GH48",
-					"id": "dbCAN_GH_GH48",
-					"ui-name": "dbCAN_GH_GH48"
-				},
-				{
-					"value": "GH49",
-					"display": "glycoside hydrolase - GH49",
-					"id": "dbCAN_GH_GH49",
-					"ui-name": "dbCAN_GH_GH49"
-				},
-				{
-					"value": "GH50",
-					"display": "glycoside hydrolase - GH50",
-					"id": "dbCAN_GH_GH50",
-					"ui-name": "dbCAN_GH_GH50"
-				},
-				{
-					"value": "GH51",
-					"display": "glycoside hydrolase - GH51",
-					"id": "dbCAN_GH_GH51",
-					"ui-name": "dbCAN_GH_GH51"
-				},
-				{
-					"value": "GH52",
-					"display": "glycoside hydrolase - GH52",
-					"id": "dbCAN_GH_GH52",
-					"ui-name": "dbCAN_GH_GH52"
-				},
-				{
-					"value": "GH53",
-					"display": "glycoside hydrolase - GH53",
-					"id": "dbCAN_GH_GH53",
-					"ui-name": "dbCAN_GH_GH53"
-				},
-				{
-					"value": "GH54",
-					"display": "glycoside hydrolase - GH54",
-					"id": "dbCAN_GH_GH54",
-					"ui-name": "dbCAN_GH_GH54"
-				},
-				{
-					"value": "GH55",
-					"display": "glycoside hydrolase - GH55",
-					"id": "dbCAN_GH_GH55",
-					"ui-name": "dbCAN_GH_GH55"
-				},
-				{
-					"value": "GH56",
-					"display": "glycoside hydrolase - GH56",
-					"id": "dbCAN_GH_GH56",
-					"ui-name": "dbCAN_GH_GH56"
-				},
-				{
-					"value": "GH57",
-					"display": "glycoside hydrolase - GH57",
-					"id": "dbCAN_GH_GH57",
-					"ui-name": "dbCAN_GH_GH57"
-				},
-				{
-					"value": "GH58",
-					"display": "glycoside hydrolase - GH58",
-					"id": "dbCAN_GH_GH58",
-					"ui-name": "dbCAN_GH_GH58"
-				},
-				{
-					"value": "GH59",
-					"display": "glycoside hydrolase - GH59",
-					"id": "dbCAN_GH_GH59",
-					"ui-name": "dbCAN_GH_GH59"
-				},
-				{
-					"value": "GH62",
-					"display": "glycoside hydrolase - GH62",
-					"id": "dbCAN_GH_GH62",
-					"ui-name": "dbCAN_GH_GH62"
-				},
-				{
-					"value": "GH63",
-					"display": "glycoside hydrolase - GH63",
-					"id": "dbCAN_GH_GH63",
-					"ui-name": "dbCAN_GH_GH63"
-				},
-				{
-					"value": "GH64",
-					"display": "glycoside hydrolase - GH64",
-					"id": "dbCAN_GH_GH64",
-					"ui-name": "dbCAN_GH_GH64"
-				},
-				{
-					"value": "GH65",
-					"display": "glycoside hydrolase - GH65",
-					"id": "dbCAN_GH_GH65",
-					"ui-name": "dbCAN_GH_GH65"
-				},
-				{
-					"value": "GH66",
-					"display": "glycoside hydrolase - GH66",
-					"id": "dbCAN_GH_GH66",
-					"ui-name": "dbCAN_GH_GH66"
-				},
-				{
-					"value": "GH67",
-					"display": "glycoside hydrolase - GH67",
-					"id": "dbCAN_GH_GH67",
-					"ui-name": "dbCAN_GH_GH67"
-				},
-				{
-					"value": "GH68",
-					"display": "glycoside hydrolase - GH68",
-					"id": "dbCAN_GH_GH68",
-					"ui-name": "dbCAN_GH_GH68"
-				},
-				{
-					"value": "GH70",
-					"display": "glycoside hydrolase - GH70",
-					"id": "dbCAN_GH_GH70",
-					"ui-name": "dbCAN_GH_GH70"
-				},
-				{
-					"value": "GH71",
-					"display": "glycoside hydrolase - GH71",
-					"id": "dbCAN_GH_GH71",
-					"ui-name": "dbCAN_GH_GH71"
-				},
-				{
-					"value": "GH72",
-					"display": "glycoside hydrolase - GH72",
-					"id": "dbCAN_GH_GH72",
-					"ui-name": "dbCAN_GH_GH72"
-				},
-				{
-					"value": "GH73",
-					"display": "glycoside hydrolase - GH73",
-					"id": "dbCAN_GH_GH73",
-					"ui-name": "dbCAN_GH_GH73"
-				},
-				{
-					"value": "GH74",
-					"display": "glycoside hydrolase - GH74",
-					"id": "dbCAN_GH_GH74",
-					"ui-name": "dbCAN_GH_GH74"
-				},
-				{
-					"value": "GH75",
-					"display": "glycoside hydrolase - GH75",
-					"id": "dbCAN_GH_GH75",
-					"ui-name": "dbCAN_GH_GH75"
-				},
-				{
-					"value": "GH76",
-					"display": "glycoside hydrolase - GH76",
-					"id": "dbCAN_GH_GH76",
-					"ui-name": "dbCAN_GH_GH76"
-				},
-				{
-					"value": "GH77",
-					"display": "glycoside hydrolase - GH77",
-					"id": "dbCAN_GH_GH77",
-					"ui-name": "dbCAN_GH_GH77"
-				},
-				{
-					"value": "GH78",
-					"display": "glycoside hydrolase - GH78",
-					"id": "dbCAN_GH_GH78",
-					"ui-name": "dbCAN_GH_GH78"
-				},
-				{
-					"value": "GH79",
-					"display": "glycoside hydrolase - GH79",
-					"id": "dbCAN_GH_GH79",
-					"ui-name": "dbCAN_GH_GH79"
-				},
-				{
-					"value": "GH80",
-					"display": "glycoside hydrolase - GH80",
-					"id": "dbCAN_GH_GH80",
-					"ui-name": "dbCAN_GH_GH80"
-				},
-				{
-					"value": "GH81",
-					"display": "glycoside hydrolase - GH81",
-					"id": "dbCAN_GH_GH81",
-					"ui-name": "dbCAN_GH_GH81"
-				},
-				{
-					"value": "GH82",
-					"display": "glycoside hydrolase - GH82",
-					"id": "dbCAN_GH_GH82",
-					"ui-name": "dbCAN_GH_GH82"
-				},
-				{
-					"value": "GH83",
-					"display": "glycoside hydrolase - GH83",
-					"id": "dbCAN_GH_GH83",
-					"ui-name": "dbCAN_GH_GH83"
-				},
-				{
-					"value": "GH84",
-					"display": "glycoside hydrolase - GH84",
-					"id": "dbCAN_GH_GH84",
-					"ui-name": "dbCAN_GH_GH84"
-				},
-				{
-					"value": "GH85",
-					"display": "glycoside hydrolase - GH85",
-					"id": "dbCAN_GH_GH85",
-					"ui-name": "dbCAN_GH_GH85"
-				},
-				{
-					"value": "GH86",
-					"display": "glycoside hydrolase - GH86",
-					"id": "dbCAN_GH_GH86",
-					"ui-name": "dbCAN_GH_GH86"
-				},
-				{
-					"value": "GH87",
-					"display": "glycoside hydrolase - GH87",
-					"id": "dbCAN_GH_GH87",
-					"ui-name": "dbCAN_GH_GH87"
-				},
-				{
-					"value": "GH88",
-					"display": "glycoside hydrolase - GH88",
-					"id": "dbCAN_GH_GH88",
-					"ui-name": "dbCAN_GH_GH88"
-				},
-				{
-					"value": "GH89",
-					"display": "glycoside hydrolase - GH89",
-					"id": "dbCAN_GH_GH89",
-					"ui-name": "dbCAN_GH_GH89"
-				},
-				{
-					"value": "GH90",
-					"display": "glycoside hydrolase - GH90",
-					"id": "dbCAN_GH_GH90",
-					"ui-name": "dbCAN_GH_GH90"
-				},
-				{
-					"value": "GH91",
-					"display": "glycoside hydrolase - GH91",
-					"id": "dbCAN_GH_GH91",
-					"ui-name": "dbCAN_GH_GH91"
-				},
-				{
-					"value": "GH92",
-					"display": "glycoside hydrolase - GH92",
-					"id": "dbCAN_GH_GH92",
-					"ui-name": "dbCAN_GH_GH92"
-				},
-				{
-					"value": "GH93",
-					"display": "glycoside hydrolase - GH93",
-					"id": "dbCAN_GH_GH93",
-					"ui-name": "dbCAN_GH_GH93"
-				},
-				{
-					"value": "GH94",
-					"display": "glycoside hydrolase - GH94",
-					"id": "dbCAN_GH_GH94",
-					"ui-name": "dbCAN_GH_GH94"
-				},
-				{
-					"value": "GH95",
-					"display": "glycoside hydrolase - GH95",
-					"id": "dbCAN_GH_GH95",
-					"ui-name": "dbCAN_GH_GH95"
-				},
-				{
-					"value": "GH96",
-					"display": "glycoside hydrolase - GH96",
-					"id": "dbCAN_GH_GH96",
-					"ui-name": "dbCAN_GH_GH96"
-				},
-				{
-					"value": "GH97",
-					"display": "glycoside hydrolase - GH97",
-					"id": "dbCAN_GH_GH97",
-					"ui-name": "dbCAN_GH_GH97"
-				},
-				{
-					"value": "GH98",
-					"display": "glycoside hydrolase - GH98",
-					"id": "dbCAN_GH_GH98",
-					"ui-name": "dbCAN_GH_GH98"
-				},
-				{
-					"value": "GH99",
-					"display": "glycoside hydrolase - GH99",
-					"id": "dbCAN_GH_GH99",
-					"ui-name": "dbCAN_GH_GH99"
-				},
-				{
-					"value": "GH100",
-					"display": "glycoside hydrolase - GH100",
-					"id": "dbCAN_GH_GH100",
-					"ui-name": "dbCAN_GH_GH100"
-				},
-				{
-					"value": "GH101",
-					"display": "glycoside hydrolase - GH101",
-					"id": "dbCAN_GH_GH101",
-					"ui-name": "dbCAN_GH_GH101"
-				},
-				{
-					"value": "GH102",
-					"display": "glycoside hydrolase - GH102",
-					"id": "dbCAN_GH_GH102",
-					"ui-name": "dbCAN_GH_GH102"
-				},
-				{
-					"value": "GH103",
-					"display": "glycoside hydrolase - GH103",
-					"id": "dbCAN_GH_GH103",
-					"ui-name": "dbCAN_GH_GH103"
-				},
-				{
-					"value": "GH104",
-					"display": "glycoside hydrolase - GH104",
-					"id": "dbCAN_GH_GH104",
-					"ui-name": "dbCAN_GH_GH104"
-				},
-				{
-					"value": "GH105",
-					"display": "glycoside hydrolase - GH105",
-					"id": "dbCAN_GH_GH105",
-					"ui-name": "dbCAN_GH_GH105"
-				},
-				{
-					"value": "GH106",
-					"display": "glycoside hydrolase - GH106",
-					"id": "dbCAN_GH_GH106",
-					"ui-name": "dbCAN_GH_GH106"
-				},
-				{
-					"value": "GH107",
-					"display": "glycoside hydrolase - GH107",
-					"id": "dbCAN_GH_GH107",
-					"ui-name": "dbCAN_GH_GH107"
-				},
-				{
-					"value": "GH108",
-					"display": "glycoside hydrolase - GH108",
-					"id": "dbCAN_GH_GH108",
-					"ui-name": "dbCAN_GH_GH108"
-				},
-				{
-					"value": "GH109",
-					"display": "glycoside hydrolase - GH109",
-					"id": "dbCAN_GH_GH109",
-					"ui-name": "dbCAN_GH_GH109"
-				},
-				{
-					"value": "GH110",
-					"display": "glycoside hydrolase - GH110",
-					"id": "dbCAN_GH_GH110",
-					"ui-name": "dbCAN_GH_GH110"
-				},
-				{
-					"value": "GH111",
-					"display": "glycoside hydrolase - GH111",
-					"id": "dbCAN_GH_GH111",
-					"ui-name": "dbCAN_GH_GH111"
-				},
-				{
-					"value": "GH112",
-					"display": "glycoside hydrolase - GH112",
-					"id": "dbCAN_GH_GH112",
-					"ui-name": "dbCAN_GH_GH112"
-				},
-				{
-					"value": "GH113",
-					"display": "glycoside hydrolase - GH113",
-					"id": "dbCAN_GH_GH113",
-					"ui-name": "dbCAN_GH_GH113"
-				},
-				{
-					"value": "GH114",
-					"display": "glycoside hydrolase - GH114",
-					"id": "dbCAN_GH_GH114",
-					"ui-name": "dbCAN_GH_GH114"
-				},
-				{
-					"value": "GH115",
-					"display": "glycoside hydrolase - GH115",
-					"id": "dbCAN_GH_GH115",
-					"ui-name": "dbCAN_GH_GH115"
-				},
-				{
-					"value": "GH116",
-					"display": "glycoside hydrolase - GH116",
-					"id": "dbCAN_GH_GH116",
-					"ui-name": "dbCAN_GH_GH116"
-				},
-				{
-					"value": "GH117",
-					"display": "glycoside hydrolase - GH117",
-					"id": "dbCAN_GH_GH117",
-					"ui-name": "dbCAN_GH_GH117"
-				},
-				{
-					"value": "GH118",
-					"display": "glycoside hydrolase - GH118",
-					"id": "dbCAN_GH_GH118",
-					"ui-name": "dbCAN_GH_GH118"
-				},
-				{
-					"value": "GH119",
-					"display": "glycoside hydrolase - GH119",
-					"id": "dbCAN_GH_GH119",
-					"ui-name": "dbCAN_GH_GH119"
-				},
-				{
-					"value": "GH120",
-					"display": "glycoside hydrolase - GH120",
-					"id": "dbCAN_GH_GH120",
-					"ui-name": "dbCAN_GH_GH120"
-				},
-				{
-					"value": "GH121",
-					"display": "glycoside hydrolase - GH121",
-					"id": "dbCAN_GH_GH121",
-					"ui-name": "dbCAN_GH_GH121"
-				},
-				{
-					"value": "GH122",
-					"display": "glycoside hydrolase - GH122",
-					"id": "dbCAN_GH_GH122",
-					"ui-name": "dbCAN_GH_GH122"
-				},
-				{
-					"value": "GH123",
-					"display": "glycoside hydrolase - GH123",
-					"id": "dbCAN_GH_GH123",
-					"ui-name": "dbCAN_GH_GH123"
-				},
-				{
-					"value": "GH124",
-					"display": "glycoside hydrolase - GH124",
-					"id": "dbCAN_GH_GH124",
-					"ui-name": "dbCAN_GH_GH124"
-				},
-				{
-					"value": "GH125",
-					"display": "glycoside hydrolase - GH125",
-					"id": "dbCAN_GH_GH125",
-					"ui-name": "dbCAN_GH_GH125"
-				},
-				{
-					"value": "GH126",
-					"display": "glycoside hydrolase - GH126",
-					"id": "dbCAN_GH_GH126",
-					"ui-name": "dbCAN_GH_GH126"
-				},
-				{
-					"value": "GH127",
-					"display": "glycoside hydrolase - GH127",
-					"id": "dbCAN_GH_GH127",
-					"ui-name": "dbCAN_GH_GH127"
-				},
-				{
-					"value": "GH128",
-					"display": "glycoside hydrolase - GH128",
-					"id": "dbCAN_GH_GH128",
-					"ui-name": "dbCAN_GH_GH128"
-				},
-				{
-					"value": "GH129",
-					"display": "glycoside hydrolase - GH129",
-					"id": "dbCAN_GH_GH129",
-					"ui-name": "dbCAN_GH_GH129"
-				},
-				{
-					"value": "GH130",
-					"display": "glycoside hydrolase - GH130",
-					"id": "dbCAN_GH_GH130",
-					"ui-name": "dbCAN_GH_GH130"
-				},
-				{
-					"value": "GH131",
-					"display": "glycoside hydrolase - GH131",
-					"id": "dbCAN_GH_GH131",
-					"ui-name": "dbCAN_GH_GH131"
-				},
-				{
-					"value": "GH132",
-					"display": "glycoside hydrolase - GH132",
-					"id": "dbCAN_GH_GH132",
-					"ui-name": "dbCAN_GH_GH132"
-				},
-				{
-					"value": "GH133",
-					"display": "glycoside hydrolase - GH133",
-					"id": "dbCAN_GH_GH133",
-					"ui-name": "dbCAN_GH_GH133"
-				},
-				{
-					"value": "GH134",
-					"display": "glycoside hydrolase - GH134",
-					"id": "dbCAN_GH_GH134",
-					"ui-name": "dbCAN_GH_GH134"
-				},
-				{
-					"value": "GH135",
-					"display": "glycoside hydrolase - GH135",
-					"id": "dbCAN_GH_GH135",
-					"ui-name": "dbCAN_GH_GH135"
-				},
-				{
-					"value": "GH136",
-					"display": "glycoside hydrolase - GH136",
-					"id": "dbCAN_GH_GH136",
-					"ui-name": "dbCAN_GH_GH136"
-				},
-				{
-					"value": "GH137",
-					"display": "glycoside hydrolase - GH137",
-					"id": "dbCAN_GH_GH137",
-					"ui-name": "dbCAN_GH_GH137"
-				},
-				{
-					"value": "GH138",
-					"display": "glycoside hydrolase - GH138",
-					"id": "dbCAN_GH_GH138",
-					"ui-name": "dbCAN_GH_GH138"
-				},
-				{
-					"value": "GH139",
-					"display": "glycoside hydrolase - GH139",
-					"id": "dbCAN_GH_GH139",
-					"ui-name": "dbCAN_GH_GH139"
-				},
-				{
-					"value": "GH140",
-					"display": "glycoside hydrolase - GH140",
-					"id": "dbCAN_GH_GH140",
-					"ui-name": "dbCAN_GH_GH140"
-				},
-				{
-					"value": "GH141",
-					"display": "glycoside hydrolase - GH141",
-					"id": "dbCAN_GH_GH141",
-					"ui-name": "dbCAN_GH_GH141"
-				},
-				{
-					"value": "GH142",
-					"display": "glycoside hydrolase - GH142",
-					"id": "dbCAN_GH_GH142",
-					"ui-name": "dbCAN_GH_GH142"
-				},
-				{
-					"value": "GH143",
-					"display": "glycoside hydrolase - GH143",
-					"id": "dbCAN_GH_GH143",
-					"ui-name": "dbCAN_GH_GH143"
-				},
-				{
-					"value": "GH144",
-					"display": "glycoside hydrolase - GH144",
-					"id": "dbCAN_GH_GH144",
-					"ui-name": "dbCAN_GH_GH144"
-				},
-				{
-					"value": "GH145",
-					"display": "glycoside hydrolase - GH145",
-					"id": "dbCAN_GH_GH145",
-					"ui-name": "dbCAN_GH_GH145"
+					"value": "mcrG",
+					"display": "Methane - Methane production - mcrG",
+					"id": "env-bioelement_CH4_mcrG",
+					"ui-name": "env-bioelement_CH4_mcrG"
 				}
                 ]
             }
         },
         {
-            "id": "input_dbCAN_GT_ids",
+            "id": "input_env-bioelement_CFix_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -2459,626 +503,68 @@
                                 {
                                         "value": "none",
                                         "display": "none",
-                                        "id": "dbCAN_GT_none",
-                                        "ui-name": "dbCAN_GT_none"
+                                        "id": "env-bioelement_CFix_none",
+                                        "ui-name": "env-bioelement_CFix_none"
                                 },
 				{
-					"value": "GT1",
-					"display": "glycosyl transferase - GT1",
-					"id": "dbCAN_GT_GT1",
-					"ui-name": "dbCAN_GT_GT1"
+					"value": "Form_I",
+					"display": "Carbon Fixation - CBB cycle (Rubisco) - Form_I",
+					"id": "env-bioelement_CFix_Form_I",
+					"ui-name": "env-bioelement_CFix_Form_I"
 				},
 				{
-					"value": "GT2",
-					"display": "glycosyl transferase - GT2",
-					"id": "dbCAN_GT_GT2",
-					"ui-name": "dbCAN_GT_GT2"
+					"value": "Form_II",
+					"display": "Carbon Fixation - CBB cycle (Rubisco) - Form_II",
+					"id": "env-bioelement_CFix_Form_II",
+					"ui-name": "env-bioelement_CFix_Form_II"
 				},
 				{
-					"value": "GT2_Cellulose_synt",
-					"display": "glycosyl transferase - GT2_Cellulose_synt",
-					"id": "dbCAN_GT_GT2_Cellulose_synt",
-					"ui-name": "dbCAN_GT_GT2_Cellulose_synt"
+					"value": "Form_II-III",
+					"display": "Carbon Fixation - CBB cycle (Rubisco) - Form_II-III",
+					"id": "env-bioelement_CFix_Form_II-III",
+					"ui-name": "env-bioelement_CFix_Form_II-III"
 				},
 				{
-					"value": "GT3",
-					"display": "glycosyl transferase - GT3",
-					"id": "dbCAN_GT_GT3",
-					"ui-name": "dbCAN_GT_GT3"
+					"value": "Form_III",
+					"display": "Carbon Fixation - CBB cycle (Rubisco) - Form_III",
+					"id": "env-bioelement_CFix_Form_III",
+					"ui-name": "env-bioelement_CFix_Form_III"
 				},
 				{
-					"value": "GT4",
-					"display": "glycosyl transferase - GT4",
-					"id": "dbCAN_GT_GT4",
-					"ui-name": "dbCAN_GT_GT4"
+					"value": "aclA",
+					"display": "Carbon Fixation - Reverse TCA Cycle - aclA",
+					"id": "env-bioelement_CFix_aclA",
+					"ui-name": "env-bioelement_CFix_aclA"
 				},
 				{
-					"value": "GT5",
-					"display": "glycosyl transferase - GT5",
-					"id": "dbCAN_GT_GT5",
-					"ui-name": "dbCAN_GT_GT5"
+					"value": "aclB",
+					"display": "Carbon Fixation - Reverse TCA Cycle - aclB",
+					"id": "env-bioelement_CFix_aclB",
+					"ui-name": "env-bioelement_CFix_aclB"
 				},
 				{
-					"value": "GT6",
-					"display": "glycosyl transferase - GT6",
-					"id": "dbCAN_GT_GT6",
-					"ui-name": "dbCAN_GT_GT6"
+					"value": "codh_catalytic",
+					"display": "Carbon Fixation - Wood Ljungdahl Pathway - codh_catalytic",
+					"id": "env-bioelement_CFix_codh_catalytic",
+					"ui-name": "env-bioelement_CFix_codh_catalytic"
 				},
 				{
-					"value": "GT7",
-					"display": "glycosyl transferase - GT7",
-					"id": "dbCAN_GT_GT7",
-					"ui-name": "dbCAN_GT_GT7"
+					"value": "codhC_beta",
+					"display": "Carbon Fixation - Wood Ljungdahl Pathway - codhC_beta",
+					"id": "env-bioelement_CFix_codhC_beta",
+					"ui-name": "env-bioelement_CFix_codhC_beta"
 				},
 				{
-					"value": "GT8",
-					"display": "glycosyl transferase - GT8",
-					"id": "dbCAN_GT_GT8",
-					"ui-name": "dbCAN_GT_GT8"
-				},
-				{
-					"value": "GT9",
-					"display": "glycosyl transferase - GT9",
-					"id": "dbCAN_GT_GT9",
-					"ui-name": "dbCAN_GT_GT9"
-				},
-				{
-					"value": "GT10",
-					"display": "glycosyl transferase - GT10",
-					"id": "dbCAN_GT_GT10",
-					"ui-name": "dbCAN_GT_GT10"
-				},
-				{
-					"value": "GT11",
-					"display": "glycosyl transferase - GT11",
-					"id": "dbCAN_GT_GT11",
-					"ui-name": "dbCAN_GT_GT11"
-				},
-				{
-					"value": "GT12",
-					"display": "glycosyl transferase - GT12",
-					"id": "dbCAN_GT_GT12",
-					"ui-name": "dbCAN_GT_GT12"
-				},
-				{
-					"value": "GT13",
-					"display": "glycosyl transferase - GT13",
-					"id": "dbCAN_GT_GT13",
-					"ui-name": "dbCAN_GT_GT13"
-				},
-				{
-					"value": "GT14",
-					"display": "glycosyl transferase - GT14",
-					"id": "dbCAN_GT_GT14",
-					"ui-name": "dbCAN_GT_GT14"
-				},
-				{
-					"value": "GT15",
-					"display": "glycosyl transferase - GT15",
-					"id": "dbCAN_GT_GT15",
-					"ui-name": "dbCAN_GT_GT15"
-				},
-				{
-					"value": "GT16",
-					"display": "glycosyl transferase - GT16",
-					"id": "dbCAN_GT_GT16",
-					"ui-name": "dbCAN_GT_GT16"
-				},
-				{
-					"value": "GT17",
-					"display": "glycosyl transferase - GT17",
-					"id": "dbCAN_GT_GT17",
-					"ui-name": "dbCAN_GT_GT17"
-				},
-				{
-					"value": "GT18",
-					"display": "glycosyl transferase - GT18",
-					"id": "dbCAN_GT_GT18",
-					"ui-name": "dbCAN_GT_GT18"
-				},
-				{
-					"value": "GT19",
-					"display": "glycosyl transferase - GT19",
-					"id": "dbCAN_GT_GT19",
-					"ui-name": "dbCAN_GT_GT19"
-				},
-				{
-					"value": "GT20",
-					"display": "glycosyl transferase - GT20",
-					"id": "dbCAN_GT_GT20",
-					"ui-name": "dbCAN_GT_GT20"
-				},
-				{
-					"value": "GT21",
-					"display": "glycosyl transferase - GT21",
-					"id": "dbCAN_GT_GT21",
-					"ui-name": "dbCAN_GT_GT21"
-				},
-				{
-					"value": "GT22",
-					"display": "glycosyl transferase - GT22",
-					"id": "dbCAN_GT_GT22",
-					"ui-name": "dbCAN_GT_GT22"
-				},
-				{
-					"value": "GT23",
-					"display": "glycosyl transferase - GT23",
-					"id": "dbCAN_GT_GT23",
-					"ui-name": "dbCAN_GT_GT23"
-				},
-				{
-					"value": "GT24",
-					"display": "glycosyl transferase - GT24",
-					"id": "dbCAN_GT_GT24",
-					"ui-name": "dbCAN_GT_GT24"
-				},
-				{
-					"value": "GT25",
-					"display": "glycosyl transferase - GT25",
-					"id": "dbCAN_GT_GT25",
-					"ui-name": "dbCAN_GT_GT25"
-				},
-				{
-					"value": "GT26",
-					"display": "glycosyl transferase - GT26",
-					"id": "dbCAN_GT_GT26",
-					"ui-name": "dbCAN_GT_GT26"
-				},
-				{
-					"value": "GT27",
-					"display": "glycosyl transferase - GT27",
-					"id": "dbCAN_GT_GT27",
-					"ui-name": "dbCAN_GT_GT27"
-				},
-				{
-					"value": "GT28",
-					"display": "glycosyl transferase - GT28",
-					"id": "dbCAN_GT_GT28",
-					"ui-name": "dbCAN_GT_GT28"
-				},
-				{
-					"value": "GT29",
-					"display": "glycosyl transferase - GT29",
-					"id": "dbCAN_GT_GT29",
-					"ui-name": "dbCAN_GT_GT29"
-				},
-				{
-					"value": "GT30",
-					"display": "glycosyl transferase - GT30",
-					"id": "dbCAN_GT_GT30",
-					"ui-name": "dbCAN_GT_GT30"
-				},
-				{
-					"value": "GT31",
-					"display": "glycosyl transferase - GT31",
-					"id": "dbCAN_GT_GT31",
-					"ui-name": "dbCAN_GT_GT31"
-				},
-				{
-					"value": "GT32",
-					"display": "glycosyl transferase - GT32",
-					"id": "dbCAN_GT_GT32",
-					"ui-name": "dbCAN_GT_GT32"
-				},
-				{
-					"value": "GT33",
-					"display": "glycosyl transferase - GT33",
-					"id": "dbCAN_GT_GT33",
-					"ui-name": "dbCAN_GT_GT33"
-				},
-				{
-					"value": "GT34",
-					"display": "glycosyl transferase - GT34",
-					"id": "dbCAN_GT_GT34",
-					"ui-name": "dbCAN_GT_GT34"
-				},
-				{
-					"value": "GT35",
-					"display": "glycosyl transferase - GT35",
-					"id": "dbCAN_GT_GT35",
-					"ui-name": "dbCAN_GT_GT35"
-				},
-				{
-					"value": "GT37",
-					"display": "glycosyl transferase - GT37",
-					"id": "dbCAN_GT_GT37",
-					"ui-name": "dbCAN_GT_GT37"
-				},
-				{
-					"value": "GT38",
-					"display": "glycosyl transferase - GT38",
-					"id": "dbCAN_GT_GT38",
-					"ui-name": "dbCAN_GT_GT38"
-				},
-				{
-					"value": "GT39",
-					"display": "glycosyl transferase - GT39",
-					"id": "dbCAN_GT_GT39",
-					"ui-name": "dbCAN_GT_GT39"
-				},
-				{
-					"value": "GT40",
-					"display": "glycosyl transferase - GT40",
-					"id": "dbCAN_GT_GT40",
-					"ui-name": "dbCAN_GT_GT40"
-				},
-				{
-					"value": "GT41",
-					"display": "glycosyl transferase - GT41",
-					"id": "dbCAN_GT_GT41",
-					"ui-name": "dbCAN_GT_GT41"
-				},
-				{
-					"value": "GT42",
-					"display": "glycosyl transferase - GT42",
-					"id": "dbCAN_GT_GT42",
-					"ui-name": "dbCAN_GT_GT42"
-				},
-				{
-					"value": "GT43",
-					"display": "glycosyl transferase - GT43",
-					"id": "dbCAN_GT_GT43",
-					"ui-name": "dbCAN_GT_GT43"
-				},
-				{
-					"value": "GT44",
-					"display": "glycosyl transferase - GT44",
-					"id": "dbCAN_GT_GT44",
-					"ui-name": "dbCAN_GT_GT44"
-				},
-				{
-					"value": "GT45",
-					"display": "glycosyl transferase - GT45",
-					"id": "dbCAN_GT_GT45",
-					"ui-name": "dbCAN_GT_GT45"
-				},
-				{
-					"value": "GT46",
-					"display": "glycosyl transferase - GT46",
-					"id": "dbCAN_GT_GT46",
-					"ui-name": "dbCAN_GT_GT46"
-				},
-				{
-					"value": "GT47",
-					"display": "glycosyl transferase - GT47",
-					"id": "dbCAN_GT_GT47",
-					"ui-name": "dbCAN_GT_GT47"
-				},
-				{
-					"value": "GT48",
-					"display": "glycosyl transferase - GT48",
-					"id": "dbCAN_GT_GT48",
-					"ui-name": "dbCAN_GT_GT48"
-				},
-				{
-					"value": "GT49",
-					"display": "glycosyl transferase - GT49",
-					"id": "dbCAN_GT_GT49",
-					"ui-name": "dbCAN_GT_GT49"
-				},
-				{
-					"value": "GT50",
-					"display": "glycosyl transferase - GT50",
-					"id": "dbCAN_GT_GT50",
-					"ui-name": "dbCAN_GT_GT50"
-				},
-				{
-					"value": "GT51",
-					"display": "glycosyl transferase - GT51",
-					"id": "dbCAN_GT_GT51",
-					"ui-name": "dbCAN_GT_GT51"
-				},
-				{
-					"value": "GT52",
-					"display": "glycosyl transferase - GT52",
-					"id": "dbCAN_GT_GT52",
-					"ui-name": "dbCAN_GT_GT52"
-				},
-				{
-					"value": "GT53",
-					"display": "glycosyl transferase - GT53",
-					"id": "dbCAN_GT_GT53",
-					"ui-name": "dbCAN_GT_GT53"
-				},
-				{
-					"value": "GT54",
-					"display": "glycosyl transferase - GT54",
-					"id": "dbCAN_GT_GT54",
-					"ui-name": "dbCAN_GT_GT54"
-				},
-				{
-					"value": "GT55",
-					"display": "glycosyl transferase - GT55",
-					"id": "dbCAN_GT_GT55",
-					"ui-name": "dbCAN_GT_GT55"
-				},
-				{
-					"value": "GT56",
-					"display": "glycosyl transferase - GT56",
-					"id": "dbCAN_GT_GT56",
-					"ui-name": "dbCAN_GT_GT56"
-				},
-				{
-					"value": "GT57",
-					"display": "glycosyl transferase - GT57",
-					"id": "dbCAN_GT_GT57",
-					"ui-name": "dbCAN_GT_GT57"
-				},
-				{
-					"value": "GT58",
-					"display": "glycosyl transferase - GT58",
-					"id": "dbCAN_GT_GT58",
-					"ui-name": "dbCAN_GT_GT58"
-				},
-				{
-					"value": "GT59",
-					"display": "glycosyl transferase - GT59",
-					"id": "dbCAN_GT_GT59",
-					"ui-name": "dbCAN_GT_GT59"
-				},
-				{
-					"value": "GT60",
-					"display": "glycosyl transferase - GT60",
-					"id": "dbCAN_GT_GT60",
-					"ui-name": "dbCAN_GT_GT60"
-				},
-				{
-					"value": "GT61",
-					"display": "glycosyl transferase - GT61",
-					"id": "dbCAN_GT_GT61",
-					"ui-name": "dbCAN_GT_GT61"
-				},
-				{
-					"value": "GT62",
-					"display": "glycosyl transferase - GT62",
-					"id": "dbCAN_GT_GT62",
-					"ui-name": "dbCAN_GT_GT62"
-				},
-				{
-					"value": "GT63",
-					"display": "glycosyl transferase - GT63",
-					"id": "dbCAN_GT_GT63",
-					"ui-name": "dbCAN_GT_GT63"
-				},
-				{
-					"value": "GT64",
-					"display": "glycosyl transferase - GT64",
-					"id": "dbCAN_GT_GT64",
-					"ui-name": "dbCAN_GT_GT64"
-				},
-				{
-					"value": "GT65",
-					"display": "glycosyl transferase - GT65",
-					"id": "dbCAN_GT_GT65",
-					"ui-name": "dbCAN_GT_GT65"
-				},
-				{
-					"value": "GT66",
-					"display": "glycosyl transferase - GT66",
-					"id": "dbCAN_GT_GT66",
-					"ui-name": "dbCAN_GT_GT66"
-				},
-				{
-					"value": "GT67",
-					"display": "glycosyl transferase - GT67",
-					"id": "dbCAN_GT_GT67",
-					"ui-name": "dbCAN_GT_GT67"
-				},
-				{
-					"value": "GT68",
-					"display": "glycosyl transferase - GT68",
-					"id": "dbCAN_GT_GT68",
-					"ui-name": "dbCAN_GT_GT68"
-				},
-				{
-					"value": "GT69",
-					"display": "glycosyl transferase - GT69",
-					"id": "dbCAN_GT_GT69",
-					"ui-name": "dbCAN_GT_GT69"
-				},
-				{
-					"value": "GT70",
-					"display": "glycosyl transferase - GT70",
-					"id": "dbCAN_GT_GT70",
-					"ui-name": "dbCAN_GT_GT70"
-				},
-				{
-					"value": "GT71",
-					"display": "glycosyl transferase - GT71",
-					"id": "dbCAN_GT_GT71",
-					"ui-name": "dbCAN_GT_GT71"
-				},
-				{
-					"value": "GT72",
-					"display": "glycosyl transferase - GT72",
-					"id": "dbCAN_GT_GT72",
-					"ui-name": "dbCAN_GT_GT72"
-				},
-				{
-					"value": "GT73",
-					"display": "glycosyl transferase - GT73",
-					"id": "dbCAN_GT_GT73",
-					"ui-name": "dbCAN_GT_GT73"
-				},
-				{
-					"value": "GT74",
-					"display": "glycosyl transferase - GT74",
-					"id": "dbCAN_GT_GT74",
-					"ui-name": "dbCAN_GT_GT74"
-				},
-				{
-					"value": "GT75",
-					"display": "glycosyl transferase - GT75",
-					"id": "dbCAN_GT_GT75",
-					"ui-name": "dbCAN_GT_GT75"
-				},
-				{
-					"value": "GT76",
-					"display": "glycosyl transferase - GT76",
-					"id": "dbCAN_GT_GT76",
-					"ui-name": "dbCAN_GT_GT76"
-				},
-				{
-					"value": "GT77",
-					"display": "glycosyl transferase - GT77",
-					"id": "dbCAN_GT_GT77",
-					"ui-name": "dbCAN_GT_GT77"
-				},
-				{
-					"value": "GT78",
-					"display": "glycosyl transferase - GT78",
-					"id": "dbCAN_GT_GT78",
-					"ui-name": "dbCAN_GT_GT78"
-				},
-				{
-					"value": "GT79",
-					"display": "glycosyl transferase - GT79",
-					"id": "dbCAN_GT_GT79",
-					"ui-name": "dbCAN_GT_GT79"
-				},
-				{
-					"value": "GT80",
-					"display": "glycosyl transferase - GT80",
-					"id": "dbCAN_GT_GT80",
-					"ui-name": "dbCAN_GT_GT80"
-				},
-				{
-					"value": "GT81",
-					"display": "glycosyl transferase - GT81",
-					"id": "dbCAN_GT_GT81",
-					"ui-name": "dbCAN_GT_GT81"
-				},
-				{
-					"value": "GT82",
-					"display": "glycosyl transferase - GT82",
-					"id": "dbCAN_GT_GT82",
-					"ui-name": "dbCAN_GT_GT82"
-				},
-				{
-					"value": "GT83",
-					"display": "glycosyl transferase - GT83",
-					"id": "dbCAN_GT_GT83",
-					"ui-name": "dbCAN_GT_GT83"
-				},
-				{
-					"value": "GT84",
-					"display": "glycosyl transferase - GT84",
-					"id": "dbCAN_GT_GT84",
-					"ui-name": "dbCAN_GT_GT84"
-				},
-				{
-					"value": "GT85",
-					"display": "glycosyl transferase - GT85",
-					"id": "dbCAN_GT_GT85",
-					"ui-name": "dbCAN_GT_GT85"
-				},
-				{
-					"value": "GT87",
-					"display": "glycosyl transferase - GT87",
-					"id": "dbCAN_GT_GT87",
-					"ui-name": "dbCAN_GT_GT87"
-				},
-				{
-					"value": "GT88",
-					"display": "glycosyl transferase - GT88",
-					"id": "dbCAN_GT_GT88",
-					"ui-name": "dbCAN_GT_GT88"
-				},
-				{
-					"value": "GT89",
-					"display": "glycosyl transferase - GT89",
-					"id": "dbCAN_GT_GT89",
-					"ui-name": "dbCAN_GT_GT89"
-				},
-				{
-					"value": "GT90",
-					"display": "glycosyl transferase - GT90",
-					"id": "dbCAN_GT_GT90",
-					"ui-name": "dbCAN_GT_GT90"
-				},
-				{
-					"value": "GT91",
-					"display": "glycosyl transferase - GT91",
-					"id": "dbCAN_GT_GT91",
-					"ui-name": "dbCAN_GT_GT91"
-				},
-				{
-					"value": "GT92",
-					"display": "glycosyl transferase - GT92",
-					"id": "dbCAN_GT_GT92",
-					"ui-name": "dbCAN_GT_GT92"
-				},
-				{
-					"value": "GT93",
-					"display": "glycosyl transferase - GT93",
-					"id": "dbCAN_GT_GT93",
-					"ui-name": "dbCAN_GT_GT93"
-				},
-				{
-					"value": "GT94",
-					"display": "glycosyl transferase - GT94",
-					"id": "dbCAN_GT_GT94",
-					"ui-name": "dbCAN_GT_GT94"
-				},
-				{
-					"value": "GT95",
-					"display": "glycosyl transferase - GT95",
-					"id": "dbCAN_GT_GT95",
-					"ui-name": "dbCAN_GT_GT95"
-				},
-				{
-					"value": "GT96",
-					"display": "glycosyl transferase - GT96",
-					"id": "dbCAN_GT_GT96",
-					"ui-name": "dbCAN_GT_GT96"
-				},
-				{
-					"value": "GT97",
-					"display": "glycosyl transferase - GT97",
-					"id": "dbCAN_GT_GT97",
-					"ui-name": "dbCAN_GT_GT97"
-				},
-				{
-					"value": "GT98",
-					"display": "glycosyl transferase - GT98",
-					"id": "dbCAN_GT_GT98",
-					"ui-name": "dbCAN_GT_GT98"
-				},
-				{
-					"value": "GT99",
-					"display": "glycosyl transferase - GT99",
-					"id": "dbCAN_GT_GT99",
-					"ui-name": "dbCAN_GT_GT99"
-				},
-				{
-					"value": "GT101",
-					"display": "glycosyl transferase - GT101",
-					"id": "dbCAN_GT_GT101",
-					"ui-name": "dbCAN_GT_GT101"
-				},
-				{
-					"value": "GT102",
-					"display": "glycosyl transferase - GT102",
-					"id": "dbCAN_GT_GT102",
-					"ui-name": "dbCAN_GT_GT102"
-				},
-				{
-					"value": "GT103",
-					"display": "glycosyl transferase - GT103",
-					"id": "dbCAN_GT_GT103",
-					"ui-name": "dbCAN_GT_GT103"
-				},
-				{
-					"value": "GT104",
-					"display": "glycosyl transferase - GT104",
-					"id": "dbCAN_GT_GT104",
-					"ui-name": "dbCAN_GT_GT104"
+					"value": "codhD_delta",
+					"display": "Carbon Fixation - Wood Ljungdahl Pathway - codhD_delta",
+					"id": "env-bioelement_CFix_codhD_delta",
+					"ui-name": "env-bioelement_CFix_codhD_delta"
 				}
                 ]
             }
         },
         {
-            "id": "input_dbCAN_PL_ids",
+            "id": "input_env-bioelement_CMono_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -3089,530 +575,32 @@
                                 {
                                         "value": "none",
                                         "display": "none",
-                                        "id": "dbCAN_PL_none",
-                                        "ui-name": "dbCAN_PL_none"
+                                        "id": "env-bioelement_CMono_none",
+                                        "ui-name": "env-bioelement_CMono_none"
                                 },
 				{
-					"value": "PL1",
-					"display": "polysaccharide lyase - PL1",
-					"id": "dbCAN_PL_PL1",
-					"ui-name": "dbCAN_PL_PL1"
+					"value": "coxL",
+					"display": "Carbon Monoxide - CO oxidation - coxL",
+					"id": "env-bioelement_CMono_coxL",
+					"ui-name": "env-bioelement_CMono_coxL"
 				},
 				{
-					"value": "PL1_1",
-					"display": "polysaccharide lyase - PL1_1",
-					"id": "dbCAN_PL_PL1_1",
-					"ui-name": "dbCAN_PL_PL1_1"
+					"value": "coxM",
+					"display": "Carbon Monoxide - CO oxidation - coxM",
+					"id": "env-bioelement_CMono_coxM",
+					"ui-name": "env-bioelement_CMono_coxM"
 				},
 				{
-					"value": "PL1_2",
-					"display": "polysaccharide lyase - PL1_2",
-					"id": "dbCAN_PL_PL1_2",
-					"ui-name": "dbCAN_PL_PL1_2"
-				},
-				{
-					"value": "PL1_3",
-					"display": "polysaccharide lyase - PL1_3",
-					"id": "dbCAN_PL_PL1_3",
-					"ui-name": "dbCAN_PL_PL1_3"
-				},
-				{
-					"value": "PL1_4",
-					"display": "polysaccharide lyase - PL1_4",
-					"id": "dbCAN_PL_PL1_4",
-					"ui-name": "dbCAN_PL_PL1_4"
-				},
-				{
-					"value": "PL1_5",
-					"display": "polysaccharide lyase - PL1_5",
-					"id": "dbCAN_PL_PL1_5",
-					"ui-name": "dbCAN_PL_PL1_5"
-				},
-				{
-					"value": "PL1_6",
-					"display": "polysaccharide lyase - PL1_6",
-					"id": "dbCAN_PL_PL1_6",
-					"ui-name": "dbCAN_PL_PL1_6"
-				},
-				{
-					"value": "PL1_7",
-					"display": "polysaccharide lyase - PL1_7",
-					"id": "dbCAN_PL_PL1_7",
-					"ui-name": "dbCAN_PL_PL1_7"
-				},
-				{
-					"value": "PL1_8",
-					"display": "polysaccharide lyase - PL1_8",
-					"id": "dbCAN_PL_PL1_8",
-					"ui-name": "dbCAN_PL_PL1_8"
-				},
-				{
-					"value": "PL1_9",
-					"display": "polysaccharide lyase - PL1_9",
-					"id": "dbCAN_PL_PL1_9",
-					"ui-name": "dbCAN_PL_PL1_9"
-				},
-				{
-					"value": "PL1_10",
-					"display": "polysaccharide lyase - PL1_10",
-					"id": "dbCAN_PL_PL1_10",
-					"ui-name": "dbCAN_PL_PL1_10"
-				},
-				{
-					"value": "PL1_11",
-					"display": "polysaccharide lyase - PL1_11",
-					"id": "dbCAN_PL_PL1_11",
-					"ui-name": "dbCAN_PL_PL1_11"
-				},
-				{
-					"value": "PL1_12",
-					"display": "polysaccharide lyase - PL1_12",
-					"id": "dbCAN_PL_PL1_12",
-					"ui-name": "dbCAN_PL_PL1_12"
-				},
-				{
-					"value": "PL2",
-					"display": "polysaccharide lyase - PL2",
-					"id": "dbCAN_PL_PL2",
-					"ui-name": "dbCAN_PL_PL2"
-				},
-				{
-					"value": "PL2_1",
-					"display": "polysaccharide lyase - PL2_1",
-					"id": "dbCAN_PL_PL2_1",
-					"ui-name": "dbCAN_PL_PL2_1"
-				},
-				{
-					"value": "PL2_2",
-					"display": "polysaccharide lyase - PL2_2",
-					"id": "dbCAN_PL_PL2_2",
-					"ui-name": "dbCAN_PL_PL2_2"
-				},
-				{
-					"value": "PL3",
-					"display": "polysaccharide lyase - PL3",
-					"id": "dbCAN_PL_PL3",
-					"ui-name": "dbCAN_PL_PL3"
-				},
-				{
-					"value": "PL3_1",
-					"display": "polysaccharide lyase - PL3_1",
-					"id": "dbCAN_PL_PL3_1",
-					"ui-name": "dbCAN_PL_PL3_1"
-				},
-				{
-					"value": "PL3_2",
-					"display": "polysaccharide lyase - PL3_2",
-					"id": "dbCAN_PL_PL3_2",
-					"ui-name": "dbCAN_PL_PL3_2"
-				},
-				{
-					"value": "PL3_3",
-					"display": "polysaccharide lyase - PL3_3",
-					"id": "dbCAN_PL_PL3_3",
-					"ui-name": "dbCAN_PL_PL3_3"
-				},
-				{
-					"value": "PL3_4",
-					"display": "polysaccharide lyase - PL3_4",
-					"id": "dbCAN_PL_PL3_4",
-					"ui-name": "dbCAN_PL_PL3_4"
-				},
-				{
-					"value": "PL3_5",
-					"display": "polysaccharide lyase - PL3_5",
-					"id": "dbCAN_PL_PL3_5",
-					"ui-name": "dbCAN_PL_PL3_5"
-				},
-				{
-					"value": "PL4",
-					"display": "polysaccharide lyase - PL4",
-					"id": "dbCAN_PL_PL4",
-					"ui-name": "dbCAN_PL_PL4"
-				},
-				{
-					"value": "PL4_1",
-					"display": "polysaccharide lyase - PL4_1",
-					"id": "dbCAN_PL_PL4_1",
-					"ui-name": "dbCAN_PL_PL4_1"
-				},
-				{
-					"value": "PL4_2",
-					"display": "polysaccharide lyase - PL4_2",
-					"id": "dbCAN_PL_PL4_2",
-					"ui-name": "dbCAN_PL_PL4_2"
-				},
-				{
-					"value": "PL4_3",
-					"display": "polysaccharide lyase - PL4_3",
-					"id": "dbCAN_PL_PL4_3",
-					"ui-name": "dbCAN_PL_PL4_3"
-				},
-				{
-					"value": "PL4_4",
-					"display": "polysaccharide lyase - PL4_4",
-					"id": "dbCAN_PL_PL4_4",
-					"ui-name": "dbCAN_PL_PL4_4"
-				},
-				{
-					"value": "PL4_5",
-					"display": "polysaccharide lyase - PL4_5",
-					"id": "dbCAN_PL_PL4_5",
-					"ui-name": "dbCAN_PL_PL4_5"
-				},
-				{
-					"value": "PL5",
-					"display": "polysaccharide lyase - PL5",
-					"id": "dbCAN_PL_PL5",
-					"ui-name": "dbCAN_PL_PL5"
-				},
-				{
-					"value": "PL5_1",
-					"display": "polysaccharide lyase - PL5_1",
-					"id": "dbCAN_PL_PL5_1",
-					"ui-name": "dbCAN_PL_PL5_1"
-				},
-				{
-					"value": "PL6",
-					"display": "polysaccharide lyase - PL6",
-					"id": "dbCAN_PL_PL6",
-					"ui-name": "dbCAN_PL_PL6"
-				},
-				{
-					"value": "PL6_1",
-					"display": "polysaccharide lyase - PL6_1",
-					"id": "dbCAN_PL_PL6_1",
-					"ui-name": "dbCAN_PL_PL6_1"
-				},
-				{
-					"value": "PL6_2",
-					"display": "polysaccharide lyase - PL6_2",
-					"id": "dbCAN_PL_PL6_2",
-					"ui-name": "dbCAN_PL_PL6_2"
-				},
-				{
-					"value": "PL6_3",
-					"display": "polysaccharide lyase - PL6_3",
-					"id": "dbCAN_PL_PL6_3",
-					"ui-name": "dbCAN_PL_PL6_3"
-				},
-				{
-					"value": "PL7",
-					"display": "polysaccharide lyase - PL7",
-					"id": "dbCAN_PL_PL7",
-					"ui-name": "dbCAN_PL_PL7"
-				},
-				{
-					"value": "PL7_1",
-					"display": "polysaccharide lyase - PL7_1",
-					"id": "dbCAN_PL_PL7_1",
-					"ui-name": "dbCAN_PL_PL7_1"
-				},
-				{
-					"value": "PL7_2",
-					"display": "polysaccharide lyase - PL7_2",
-					"id": "dbCAN_PL_PL7_2",
-					"ui-name": "dbCAN_PL_PL7_2"
-				},
-				{
-					"value": "PL7_3",
-					"display": "polysaccharide lyase - PL7_3",
-					"id": "dbCAN_PL_PL7_3",
-					"ui-name": "dbCAN_PL_PL7_3"
-				},
-				{
-					"value": "PL7_4",
-					"display": "polysaccharide lyase - PL7_4",
-					"id": "dbCAN_PL_PL7_4",
-					"ui-name": "dbCAN_PL_PL7_4"
-				},
-				{
-					"value": "PL7_5",
-					"display": "polysaccharide lyase - PL7_5",
-					"id": "dbCAN_PL_PL7_5",
-					"ui-name": "dbCAN_PL_PL7_5"
-				},
-				{
-					"value": "PL8",
-					"display": "polysaccharide lyase - PL8",
-					"id": "dbCAN_PL_PL8",
-					"ui-name": "dbCAN_PL_PL8"
-				},
-				{
-					"value": "PL8_1",
-					"display": "polysaccharide lyase - PL8_1",
-					"id": "dbCAN_PL_PL8_1",
-					"ui-name": "dbCAN_PL_PL8_1"
-				},
-				{
-					"value": "PL8_2",
-					"display": "polysaccharide lyase - PL8_2",
-					"id": "dbCAN_PL_PL8_2",
-					"ui-name": "dbCAN_PL_PL8_2"
-				},
-				{
-					"value": "PL8_3",
-					"display": "polysaccharide lyase - PL8_3",
-					"id": "dbCAN_PL_PL8_3",
-					"ui-name": "dbCAN_PL_PL8_3"
-				},
-				{
-					"value": "PL9",
-					"display": "polysaccharide lyase - PL9",
-					"id": "dbCAN_PL_PL9",
-					"ui-name": "dbCAN_PL_PL9"
-				},
-				{
-					"value": "PL9_1",
-					"display": "polysaccharide lyase - PL9_1",
-					"id": "dbCAN_PL_PL9_1",
-					"ui-name": "dbCAN_PL_PL9_1"
-				},
-				{
-					"value": "PL9_2",
-					"display": "polysaccharide lyase - PL9_2",
-					"id": "dbCAN_PL_PL9_2",
-					"ui-name": "dbCAN_PL_PL9_2"
-				},
-				{
-					"value": "PL9_3",
-					"display": "polysaccharide lyase - PL9_3",
-					"id": "dbCAN_PL_PL9_3",
-					"ui-name": "dbCAN_PL_PL9_3"
-				},
-				{
-					"value": "PL9_4",
-					"display": "polysaccharide lyase - PL9_4",
-					"id": "dbCAN_PL_PL9_4",
-					"ui-name": "dbCAN_PL_PL9_4"
-				},
-				{
-					"value": "PL10",
-					"display": "polysaccharide lyase - PL10",
-					"id": "dbCAN_PL_PL10",
-					"ui-name": "dbCAN_PL_PL10"
-				},
-				{
-					"value": "PL10_1",
-					"display": "polysaccharide lyase - PL10_1",
-					"id": "dbCAN_PL_PL10_1",
-					"ui-name": "dbCAN_PL_PL10_1"
-				},
-				{
-					"value": "PL10_2",
-					"display": "polysaccharide lyase - PL10_2",
-					"id": "dbCAN_PL_PL10_2",
-					"ui-name": "dbCAN_PL_PL10_2"
-				},
-				{
-					"value": "PL10_3",
-					"display": "polysaccharide lyase - PL10_3",
-					"id": "dbCAN_PL_PL10_3",
-					"ui-name": "dbCAN_PL_PL10_3"
-				},
-				{
-					"value": "PL11",
-					"display": "polysaccharide lyase - PL11",
-					"id": "dbCAN_PL_PL11",
-					"ui-name": "dbCAN_PL_PL11"
-				},
-				{
-					"value": "PL11_1",
-					"display": "polysaccharide lyase - PL11_1",
-					"id": "dbCAN_PL_PL11_1",
-					"ui-name": "dbCAN_PL_PL11_1"
-				},
-				{
-					"value": "PL11_2",
-					"display": "polysaccharide lyase - PL11_2",
-					"id": "dbCAN_PL_PL11_2",
-					"ui-name": "dbCAN_PL_PL11_2"
-				},
-				{
-					"value": "PL12",
-					"display": "polysaccharide lyase - PL12",
-					"id": "dbCAN_PL_PL12",
-					"ui-name": "dbCAN_PL_PL12"
-				},
-				{
-					"value": "PL12_1",
-					"display": "polysaccharide lyase - PL12_1",
-					"id": "dbCAN_PL_PL12_1",
-					"ui-name": "dbCAN_PL_PL12_1"
-				},
-				{
-					"value": "PL12_2",
-					"display": "polysaccharide lyase - PL12_2",
-					"id": "dbCAN_PL_PL12_2",
-					"ui-name": "dbCAN_PL_PL12_2"
-				},
-				{
-					"value": "PL12_3",
-					"display": "polysaccharide lyase - PL12_3",
-					"id": "dbCAN_PL_PL12_3",
-					"ui-name": "dbCAN_PL_PL12_3"
-				},
-				{
-					"value": "PL13",
-					"display": "polysaccharide lyase - PL13",
-					"id": "dbCAN_PL_PL13",
-					"ui-name": "dbCAN_PL_PL13"
-				},
-				{
-					"value": "PL14",
-					"display": "polysaccharide lyase - PL14",
-					"id": "dbCAN_PL_PL14",
-					"ui-name": "dbCAN_PL_PL14"
-				},
-				{
-					"value": "PL14_1",
-					"display": "polysaccharide lyase - PL14_1",
-					"id": "dbCAN_PL_PL14_1",
-					"ui-name": "dbCAN_PL_PL14_1"
-				},
-				{
-					"value": "PL14_2",
-					"display": "polysaccharide lyase - PL14_2",
-					"id": "dbCAN_PL_PL14_2",
-					"ui-name": "dbCAN_PL_PL14_2"
-				},
-				{
-					"value": "PL14_3",
-					"display": "polysaccharide lyase - PL14_3",
-					"id": "dbCAN_PL_PL14_3",
-					"ui-name": "dbCAN_PL_PL14_3"
-				},
-				{
-					"value": "PL14_4",
-					"display": "polysaccharide lyase - PL14_4",
-					"id": "dbCAN_PL_PL14_4",
-					"ui-name": "dbCAN_PL_PL14_4"
-				},
-				{
-					"value": "PL14_5",
-					"display": "polysaccharide lyase - PL14_5",
-					"id": "dbCAN_PL_PL14_5",
-					"ui-name": "dbCAN_PL_PL14_5"
-				},
-				{
-					"value": "PL15",
-					"display": "polysaccharide lyase - PL15",
-					"id": "dbCAN_PL_PL15",
-					"ui-name": "dbCAN_PL_PL15"
-				},
-				{
-					"value": "PL15_1",
-					"display": "polysaccharide lyase - PL15_1",
-					"id": "dbCAN_PL_PL15_1",
-					"ui-name": "dbCAN_PL_PL15_1"
-				},
-				{
-					"value": "PL15_2",
-					"display": "polysaccharide lyase - PL15_2",
-					"id": "dbCAN_PL_PL15_2",
-					"ui-name": "dbCAN_PL_PL15_2"
-				},
-				{
-					"value": "PL16",
-					"display": "polysaccharide lyase - PL16",
-					"id": "dbCAN_PL_PL16",
-					"ui-name": "dbCAN_PL_PL16"
-				},
-				{
-					"value": "PL17",
-					"display": "polysaccharide lyase - PL17",
-					"id": "dbCAN_PL_PL17",
-					"ui-name": "dbCAN_PL_PL17"
-				},
-				{
-					"value": "PL17_1",
-					"display": "polysaccharide lyase - PL17_1",
-					"id": "dbCAN_PL_PL17_1",
-					"ui-name": "dbCAN_PL_PL17_1"
-				},
-				{
-					"value": "PL17_2",
-					"display": "polysaccharide lyase - PL17_2",
-					"id": "dbCAN_PL_PL17_2",
-					"ui-name": "dbCAN_PL_PL17_2"
-				},
-				{
-					"value": "PL18",
-					"display": "polysaccharide lyase - PL18",
-					"id": "dbCAN_PL_PL18",
-					"ui-name": "dbCAN_PL_PL18"
-				},
-				{
-					"value": "PL20",
-					"display": "polysaccharide lyase - PL20",
-					"id": "dbCAN_PL_PL20",
-					"ui-name": "dbCAN_PL_PL20"
-				},
-				{
-					"value": "PL21",
-					"display": "polysaccharide lyase - PL21",
-					"id": "dbCAN_PL_PL21",
-					"ui-name": "dbCAN_PL_PL21"
-				},
-				{
-					"value": "PL21_1",
-					"display": "polysaccharide lyase - PL21_1",
-					"id": "dbCAN_PL_PL21_1",
-					"ui-name": "dbCAN_PL_PL21_1"
-				},
-				{
-					"value": "PL22",
-					"display": "polysaccharide lyase - PL22",
-					"id": "dbCAN_PL_PL22",
-					"ui-name": "dbCAN_PL_PL22"
-				},
-				{
-					"value": "PL22_1",
-					"display": "polysaccharide lyase - PL22_1",
-					"id": "dbCAN_PL_PL22_1",
-					"ui-name": "dbCAN_PL_PL22_1"
-				},
-				{
-					"value": "PL22_2",
-					"display": "polysaccharide lyase - PL22_2",
-					"id": "dbCAN_PL_PL22_2",
-					"ui-name": "dbCAN_PL_PL22_2"
-				},
-				{
-					"value": "PL23",
-					"display": "polysaccharide lyase - PL23",
-					"id": "dbCAN_PL_PL23",
-					"ui-name": "dbCAN_PL_PL23"
-				},
-				{
-					"value": "PL24",
-					"display": "polysaccharide lyase - PL24",
-					"id": "dbCAN_PL_PL24",
-					"ui-name": "dbCAN_PL_PL24"
-				},
-				{
-					"value": "PL25",
-					"display": "polysaccharide lyase - PL25",
-					"id": "dbCAN_PL_PL25",
-					"ui-name": "dbCAN_PL_PL25"
-				},
-				{
-					"value": "PL26",
-					"display": "polysaccharide lyase - PL26",
-					"id": "dbCAN_PL_PL26",
-					"ui-name": "dbCAN_PL_PL26"
-				},
-				{
-					"value": "PL27",
-					"display": "polysaccharide lyase - PL27",
-					"id": "dbCAN_PL_PL27",
-					"ui-name": "dbCAN_PL_PL27"
+					"value": "coxS",
+					"display": "Carbon Monoxide - CO oxidation - coxS",
+					"id": "env-bioelement_CMono_coxS",
+					"ui-name": "env-bioelement_CMono_coxS"
 				}
                 ]
             }
         },
         {
-            "id": "input_dbCAN_cellulosome_ids",
+            "id": "input_env-bioelement_C1_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -3623,27 +611,399 @@
                                 {
                                         "value": "none",
                                         "display": "none",
-                                        "id": "dbCAN_cellulosome_none",
-                                        "ui-name": "dbCAN_cellulosome_none"
+                                        "id": "env-bioelement_C1_none",
+                                        "ui-name": "env-bioelement_C1_none"
                                 },
+				{
+					"value": "fae",
+					"display": "C1 Compounds - Formaldehyde oxidation - fae",
+					"id": "env-bioelement_C1_fae",
+					"ui-name": "env-bioelement_C1_fae"
+				},
+				{
+					"value": "fdh_thiol-independent_type",
+					"display": "C1 Compounds - Formaldehyde oxidation - fdh_thiol-independent_type",
+					"id": "env-bioelement_C1_fdh_thiol-independent_type",
+					"ui-name": "env-bioelement_C1_fdh_thiol-independent_type"
+				},
+				{
+					"value": "formylmethanofuran-tetrahyromethanopterin_formyltransferase",
+					"display": "C1 Compounds - Formaldehyde oxidation - formylmethanofuran-tetrahyromethanopterin_formyltransferase",
+					"id": "env-bioelement_C1_formylmethanofuran-tetrahyromethanopterin_formyltransferase",
+					"ui-name": "env-bioelement_C1_formylmethanofuran-tetrahyromethanopterin_formyltransferase"
+				},
+				{
+					"value": "methenyltetrahydromethanopterin_cyclohydrolase",
+					"display": "C1 Compounds - Formaldehyde oxidation - methenyltetrahydromethanopterin_cyclohydrolase",
+					"id": "env-bioelement_C1_methenyltetrahydromethanopterin_cyclohydrolase",
+					"ui-name": "env-bioelement_C1_methenyltetrahydromethanopterin_cyclohydrolase"
+				},
+				{
+					"value": "S--hydroxymethyl-glutathione_dehydrogenase",
+					"display": "C1 Compounds - Formaldehyde oxidation - S--hydroxymethyl-glutathione_dehydrogenase",
+					"id": "env-bioelement_C1_S--hydroxymethyl-glutathione_dehydrogenase",
+					"ui-name": "env-bioelement_C1_S--hydroxymethyl-glutathione_dehydrogenase"
+				},
+				{
+					"value": "S-formylglutathione_hydrolase",
+					"display": "C1 Compounds - Formaldehyde oxidation - S-formylglutathione_hydrolase",
+					"id": "env-bioelement_C1_S-formylglutathione_hydrolase",
+					"ui-name": "env-bioelement_C1_S-formylglutathione_hydrolase"
+				},
+				{
+					"value": "S-hydroxymethyl-mycothiol_dehydrogenase",
+					"display": "C1 Compounds - Formaldehyde oxidation - S-hydroxymethyl-mycothiol_dehydrogenase",
+					"id": "env-bioelement_C1_S-hydroxymethyl-mycothiol_dehydrogenase",
+					"ui-name": "env-bioelement_C1_S-hydroxymethyl-mycothiol_dehydrogenase"
+				},
+				{
+					"value": "formate_dehydrogenase_alpha_subunit",
+					"display": "C1 Compounds - Formate oxidation - formate_dehydrogenase_alpha_subunit",
+					"id": "env-bioelement_C1_formate_dehydrogenase_alpha_subunit",
+					"ui-name": "env-bioelement_C1_formate_dehydrogenase_alpha_subunit"
+				},
+				{
+					"value": "formate_dehydrogenase_beta_subunit",
+					"display": "C1 Compounds - Formate oxidation - formate_dehydrogenase_beta_subunit",
+					"id": "env-bioelement_C1_formate_dehydrogenase_beta_subunit",
+					"ui-name": "env-bioelement_C1_formate_dehydrogenase_beta_subunit"
+				},
+				{
+					"value": "formate_dehydrogenase_gamma_subunit",
+					"display": "C1 Compounds - Formate oxidation - formate_dehydrogenase_gamma_subunit",
+					"id": "env-bioelement_C1_formate_dehydrogenase_gamma_subunit",
+					"ui-name": "env-bioelement_C1_formate_dehydrogenase_gamma_subunit"
+				},
+				{
+					"value": "NDMA-dependent_methanol_dehydrogenase",
+					"display": "C1 Compounds - Methanol oxidation - NDMA-dependent_methanol_dehydrogenase",
+					"id": "env-bioelement_C1_NDMA-dependent_methanol_dehydrogenase",
+					"ui-name": "env-bioelement_C1_NDMA-dependent_methanol_dehydrogenase"
+				},
+				{
+					"value": "pqq",
+					"display": "C1 Compounds - Methanol oxidation - pqq",
+					"id": "env-bioelement_C1_pqq",
+					"ui-name": "env-bioelement_C1_pqq"
+				},
+				{
+					"value": "madA",
+					"display": "C1 Compounds - Methyl amine -> formaldehyde - madA",
+					"id": "env-bioelement_C1_madA",
+					"ui-name": "env-bioelement_C1_madA"
+				},
+				{
+					"value": "madB",
+					"display": "C1 Compounds - Methyl amine -> formaldehyde - madB",
+					"id": "env-bioelement_C1_madB",
+					"ui-name": "env-bioelement_C1_madB"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_env-bioelement_H_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
                                 {
-                                        "value": "dockerin",
-                                        "display": "dockerin",
-                                        "id": "dbCAN_cellulosome_dockerin",
-                                        "ui-name": "dbCAN_cellulosome_dockerin"
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "env-bioelement_H_none",
+                                        "ui-name": "env-bioelement_H_none"
                                 },
+				{
+					"value": "Group_A",
+					"display": "Hydrogen - FeFe hydrogenase - Group_A",
+					"id": "env-bioelement_H_Group_A",
+					"ui-name": "env-bioelement_H_Group_A"
+				},
+				{
+					"value": "Group_B1-B3",
+					"display": "Hydrogen - FeFe hydrogenase - Group_B1-B3",
+					"id": "env-bioelement_H_Group_B1-B3",
+					"ui-name": "env-bioelement_H_Group_B1-B3"
+				},
+				{
+					"value": "Group_1",
+					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_1",
+					"id": "env-bioelement_H_Group_1",
+					"ui-name": "env-bioelement_H_Group_1"
+				},
+				{
+					"value": "Group_2a",
+					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_2a",
+					"id": "env-bioelement_H_Group_2a",
+					"ui-name": "env-bioelement_H_Group_2a"
+				},
+				{
+					"value": "Group_2b",
+					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_2b",
+					"id": "env-bioelement_H_Group_2b",
+					"ui-name": "env-bioelement_H_Group_2b"
+				},
+				{
+					"value": "Group_3a",
+					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_3a",
+					"id": "env-bioelement_H_Group_3a",
+					"ui-name": "env-bioelement_H_Group_3a"
+				},
+				{
+					"value": "Group_3b",
+					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_3b",
+					"id": "env-bioelement_H_Group_3b",
+					"ui-name": "env-bioelement_H_Group_3b"
+				},
+				{
+					"value": "Group_3c",
+					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_3c",
+					"id": "env-bioelement_H_Group_3c",
+					"ui-name": "env-bioelement_H_Group_3c"
+				},
+				{
+					"value": "Group_3d",
+					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_3d",
+					"id": "env-bioelement_H_Group_3d",
+					"ui-name": "env-bioelement_H_Group_3d"
+				},
+				{
+					"value": "Group_4",
+					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_4",
+					"id": "env-bioelement_H_Group_4",
+					"ui-name": "env-bioelement_H_Group_4"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_env-bioelement_Halo_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
                                 {
-                                        "value": "cohesin",
-                                        "display": "cohesin",
-                                        "id": "dbCAN_cellulosome_cohesin",
-                                        "ui-name": "dbCAN_cellulosome_cohesin"
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "env-bioelement_Halo_none",
+                                        "ui-name": "env-bioelement_Halo_none"
                                 },
+				{
+					"value": "Chlorite_dismutase",
+					"display": "Halogenated Compounds - Chlorite reduction - Chlorite_dismutase",
+					"id": "env-bioelement_Halo_Chlorite_dismutase",
+					"ui-name": "env-bioelement_Halo_Chlorite_dismutase"
+				},
+				{
+					"value": "Haloacid_dehydrogenase",
+					"display": "Halogenated Compounds - Compound Degradation - Haloacid_dehydrogenase",
+					"id": "env-bioelement_Halo_Haloacid_dehydrogenase",
+					"ui-name": "env-bioelement_Halo_Haloacid_dehydrogenase"
+				},
+				{
+					"value": "Reductive_dehalogenase",
+					"display": "Halogenated Compounds - Compound Degradation - Reductive_dehalogenase",
+					"id": "env-bioelement_Halo_Reductive_dehalogenase",
+					"ui-name": "env-bioelement_Halo_Reductive_dehalogenase"
+				},
+				{
+					"value": "pcrA",
+					"display": "Halogenated Compounds - Perchlorate reduction - pcrA",
+					"id": "env-bioelement_Halo_pcrA",
+					"ui-name": "env-bioelement_Halo_pcrA"
+				},
+				{
+					"value": "pcrB",
+					"display": "Halogenated Compounds - Perchlorate reduction - pcrB",
+					"id": "env-bioelement_Halo_pcrB",
+					"ui-name": "env-bioelement_Halo_pcrB"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_env-bioelement_As_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
                                 {
-                                        "value": "SLH",
-                                        "display": "S-Layer Homology",
-                                        "id": "dbCAN_cellulosome_SLH",
-                                        "ui-name": "dbCAN_cellulosome_SLH"
-                                }
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "env-bioelement_As_none",
+                                        "ui-name": "env-bioelement_As_none"
+                                },
+				{
+					"value": "arsC",
+					"display": "Arsenic - Arsenate reduction - arsC",
+					"id": "env-bioelement_As_arsC",
+					"ui-name": "env-bioelement_As_arsC"
+				},
+				{
+					"value": "glutathione-glutaredoxin_type",
+					"display": "Arsenic - Arsenate reduction - glutathione-glutaredoxin_type",
+					"id": "env-bioelement_As_glutathione-glutaredoxin_type",
+					"ui-name": "env-bioelement_As_glutathione-glutaredoxin_type"
+				},
+				{
+					"value": "thioredoxin",
+					"display": "Arsenic - Arsenate reduction - thioredoxin",
+					"id": "env-bioelement_As_thioredoxin",
+					"ui-name": "env-bioelement_As_thioredoxin"
+				},
+				{
+					"value": "arsenite_oxidase_large",
+					"display": "Arsenic - Arsenite oxidation - arsenite_oxidase_large",
+					"id": "env-bioelement_As_arsenite_oxidase_large",
+					"ui-name": "env-bioelement_As_arsenite_oxidase_large"
+				},
+				{
+					"value": "arsenite_oxidase_small",
+					"display": "Arsenic - Arsenite oxidation - arsenite_oxidase_small",
+					"id": "env-bioelement_As_arsenite_oxidase_small",
+					"ui-name": "env-bioelement_As_arsenite_oxidase_small"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_env-bioelement_Se_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "env-bioelement_Se_none",
+                                        "ui-name": "env-bioelement_Se_none"
+                                },
+				{
+					"value": "molybdenum-binding_subunit",
+					"display": "Selenium - Selenate reduction - molybdenum-binding_subunit",
+					"id": "env-bioelement_Se_molybdenum-binding_subunit",
+					"ui-name": "env-bioelement_Se_molybdenum-binding_subunit"
+				},
+				{
+					"value": "ygfK",
+					"display": "Selenium - Selenate reduction - ygfK",
+					"id": "env-bioelement_Se_ygfK",
+					"ui-name": "env-bioelement_Se_ygfK"
+				},
+				{
+					"value": "ygfM",
+					"display": "Selenium - Selenate reduction - ygfM",
+					"id": "env-bioelement_Se_ygfM",
+					"ui-name": "env-bioelement_Se_ygfM"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_env-bioelement_Ur_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "env-bioelement_Ur_none",
+                                        "ui-name": "env-bioelement_Ur_none"
+                                },
+				{
+					"value": "ureA",
+					"display": "Urea - Urease - ureA",
+					"id": "env-bioelement_Ur_ureA",
+					"ui-name": "env-bioelement_Ur_ureA"
+				},
+				{
+					"value": "ureB",
+					"display": "Urea - Urease - ureB",
+					"id": "env-bioelement_Ur_ureB",
+					"ui-name": "env-bioelement_Ur_ureB"
+				},
+				{
+					"value": "ureC",
+					"display": "Urea - Urease - ureC",
+					"id": "env-bioelement_Ur_ureC",
+					"ui-name": "env-bioelement_Ur_ureC"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_env-bioelement_Me_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "env-bioelement_Me_none",
+                                        "ui-name": "env-bioelement_Me_none"
+                                },
+				{
+					"value": "mtrA",
+					"display": "Metals - Metal (Iron/Manganese) oxidation - mtrA",
+					"id": "env-bioelement_Me_mtrA",
+					"ui-name": "env-bioelement_Me_mtrA"
+				},
+				{
+					"value": "mtrC",
+					"display": "Metals - Metal (Iron/Manganese) oxidation - mtrC",
+					"id": "env-bioelement_Me_mtrC",
+					"ui-name": "env-bioelement_Me_mtrC"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_env-bioelement_CN_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "none" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "none",
+                                        "display": "none",
+                                        "id": "env-bioelement_CN_none",
+                                        "ui-name": "env-bioelement_CN_none"
+                                },
+				{
+					"value": "nthA",
+					"display": "Nitriles - Nitrile hydratase - nthA",
+					"id": "env-bioelement_CN_nthA",
+					"ui-name": "env-bioelement_CN_nthA"
+				},
+				{
+					"value": "nthB",
+					"display": "Nitriles - Nitrile hydratase - nthB",
+					"id": "env-bioelement_CN_nthB",
+					"ui-name": "env-bioelement_CN_nthB"
+				}
                 ]
             }
         },
@@ -3663,11 +1023,11 @@
             "optional": false,
             "advanced": false,
             "allow_multiple": false,
-            "default_values": [ "HMMER_dbCAN_Search.FeatureSet" ],
+            "default_values": [ "HMMER_env-bioelement_Search.FeatureSet" ],
             "field_type": "text",
             "text_options": {
                 "valid_ws_types": [ "KBaseCollections.FeatureSet" ],
-		"is_output_name": true		  
+		"is_output_name": true
             }
         },
         {
@@ -3687,11 +1047,11 @@
                                 },
                                 {
                                         "value": "1",
-                                        "display": "Merge hits within CAZy category (recommended)",
+                                        "display": "Merge hits within env-bioelement category (recommended)",
                                         "id": "merge",
                                         "ui-name": "merge"
                                 }
-			]					    
+			]
             }
         },
         {
@@ -3814,44 +1174,72 @@
         "service-mapping": {
             "url": "",
             "name": "kb_hmmer",
-            "method": "HMMER_dbCAN_Search",
+            "method": "HMMER_env-bioelement_Search",
             "input_mapping": [
                 {
                     "narrative_system_variable": "workspace",
                     "target_property": "workspace_name"
                 },
                 {
-                    "input_parameter": "input_dbCAN_AA_ids",
-                    "target_property": "input_dbCAN_AA_ids"
+                    "input_parameter": "input_env-bioelement_N_ids",
+                    "target_property": "input_env-bioelement_N_ids"
                 },
                 {
-                    "input_parameter": "input_dbCAN_CBM_ids",
-                    "target_property": "input_dbCAN_CBM_ids"
+                    "input_parameter": "input_env-bioelement_S_ids",
+                    "target_property": "input_env-bioelement_S_ids"
                 },
                 {
-                    "input_parameter": "input_dbCAN_CE_ids",
-                    "target_property": "input_dbCAN_CE_ids"
+                    "input_parameter": "input_env-bioelement_O_ids",
+                    "target_property": "input_env-bioelement_O_ids"
                 },
                 {
-                    "input_parameter": "input_dbCAN_GH_ids",
-                    "target_property": "input_dbCAN_GH_ids"
+                    "input_parameter": "input_env-bioelement_CH4_ids",
+                    "target_property": "input_env-bioelement_CH4_ids"
                 },
                 {
-                    "input_parameter": "input_dbCAN_GT_ids",
-                    "target_property": "input_dbCAN_GT_ids"
+                    "input_parameter": "input_env-bioelement_CFix_ids",
+                    "target_property": "input_env-bioelement_CFix_ids"
                 },
                 {
-                    "input_parameter": "input_dbCAN_PL_ids",
-                    "target_property": "input_dbCAN_PL_ids"
+                    "input_parameter": "input_env-bioelement_CMono_ids",
+                    "target_property": "input_env-bioelement_CMono_ids"
                 },
                 {
-                    "input_parameter": "input_dbCAN_cellulosome_ids",
-                    "target_property": "input_dbCAN_cellulosome_ids"
+                    "input_parameter": "input_env-bioelement_C1_ids",
+                    "target_property": "input_env-bioelement_C1_ids"
+                },
+                {
+                    "input_parameter": "input_env-bioelement_H_ids",
+                    "target_property": "input_env-bioelement_H_ids"
+                },
+                {
+                    "input_parameter": "input_env-bioelement_Halo_ids",
+                    "target_property": "input_env-bioelement_Halo_ids"
+                },
+                {
+                    "input_parameter": "input_env-bioelement_As_ids",
+                    "target_property": "input_env-bioelement_As_ids"
+                },
+                {
+                    "input_parameter": "input_env-bioelement_Se_ids",
+                    "target_property": "input_env-bioelement_Se_ids"
+                },
+                {
+                    "input_parameter": "input_env-bioelement_Ur_ids",
+                    "target_property": "input_env-bioelement_Ur_ids"
+                },
+                {
+                    "input_parameter": "input_env-bioelement_Me_ids",
+                    "target_property": "input_env-bioelement_Me_ids"
+                },
+                {
+                    "input_parameter": "input_env-bioelement_CN_ids",
+                    "target_property": "input_env-bioelement_CN_ids"
                 },
                 {
                     "input_parameter": "input_many_ref",
                     "target_property": "input_many_ref",
-		    "target_type_transform": "resolved-ref"
+		                  "target_type_transform": "resolved-ref"
                 },
                 {
                     "input_parameter": "output_filtered_name",
@@ -3880,15 +1268,15 @@
                 {
                     "input_parameter": "heatmap",
                     "target_property": "heatmap"
-                },		
+                },
                 {
                     "input_parameter": "vertical",
                     "target_property": "vertical"
-                },		
+                },
                 {
                     "input_parameter": "show_blanks",
                     "target_property": "show_blanks"
-                }		
+                }
             ],
             "output_mapping": [
                 {

@@ -138,4 +138,50 @@ module kb_hmmer {
     **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
     */
     funcdef HMMER_dbCAN_Search (HMMER_dbCAN_Params params)  returns (HMMER_Output) authentication required;
+
+
+    /* HMMER env-bioelement Input Params
+    */
+    typedef structure {
+        workspace_name workspace_name;
+/*  sequence       input_one_sequence;
+    data_obj_ref   input_one_ref;
+*/
+    data_obj_ref   input_env-bioelement_N_ids;
+    data_obj_ref   input_env-bioelement_S_ids;
+    data_obj_ref   input_env-bioelement_O_ids;
+    data_obj_ref   input_env-bioelement_CH4_ids;
+    data_obj_ref   input_env-bioelement_CFix_ids;
+    data_obj_ref   input_env-bioelement_CMono_ids;
+    data_obj_ref   input_env-bioelement_C1_ids;
+    data_obj_ref   input_env-bioelement_H_ids;
+    data_obj_ref   input_env-bioelement_Halo_ids;
+    data_obj_ref   input_env-bioelement_As_ids;
+    data_obj_ref   input_env-bioelement_Se_ids;
+    data_obj_ref   input_env-bioelement_Ur_ids;
+    data_obj_ref   input_env-bioelement_Me_ids;
+    data_obj_ref   input_env-bioelement_CN_ids;
+    data_obj_ref   input_many_ref;
+        data_obj_name  output_filtered_name;
+
+    bool  coalesce_output;
+    float e_value;
+    float bitscore;
+    float overlap_perc;
+    float maxaccepts;
+/*  float ident_thresh;
+*/
+        bool  heatmap;
+    bool  vertical;  /* only supports true for now */
+    bool  show_blanks;
+    } HMMER_env-bioelement_Params;
+
+
+    /*  Method for HMMER search of Markov Models of environmental bioelement families
+    **
+    **    overloading as follows:
+    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+    **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
+    */
+    funcdef HMMER_env-bioelement_Search (HMMER_env-bioelement_Params params)  returns (HMMER_Output) authentication required;
 };

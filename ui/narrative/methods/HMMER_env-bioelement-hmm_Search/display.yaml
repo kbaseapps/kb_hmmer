@@ -1,12 +1,12 @@
 #
 # define display information
 #
-name: Search with dbCAN HMMs of CAZy families - v1
+name: Search with HMMs of environmental bioelement families - v1
 tooltip: |
-    Search for matches to dbCAN HMMs of CAZy carbohydrate active enzyme families using HMMER 3
+    Search for matches to HMMs of environmental bioelement cycling families using HMMER 3
 screenshots: []
 
-icon: dbCAN-cyan.png
+icon: env-bioelement-cyan.png
 
 #
 # define a set of similar methods that might be useful to the user
