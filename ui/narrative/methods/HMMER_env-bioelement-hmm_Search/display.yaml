@@ -1,7 +1,7 @@
 #
 # define display information
 #
-name: Search with HMMs of environmental bioelement families - v1
+name: Search with HMMs of Environmental Bioelement families - v1
 tooltip: |
     Search for matches to HMMs of environmental bioelement cycling families using HMMER 3
 screenshots: []
@@ -179,6 +179,10 @@ publications :
         display-text: |
             Eddy SR. Accelerated Profile HMM Searches. PLOS Computational Biology. 2011;7: e1002195. doi:10.1371/journal.pcbi.1002195
         link: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195
+    -
+        display-text: |
+            Anatharaman K, Brown CT, Hug LA, Sharon I, Castelle CJ, Probst AJ, Thomas BC, Singh A, Wilkins MJ, Karaoz U, Brodie EL, Williams KH, Hubbard SS, Banfield JF. Thousands of microbial genomes shed light on interconnected biogeochemical processes in an aquifer system. Nature Communications. 2016;7: 13219. doi:10.1038/ncomms13219
+        link: https://www.nature.com/articles/ncomms13219
 
     -
         display-text: |
