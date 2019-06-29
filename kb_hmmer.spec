@@ -140,7 +140,7 @@ module kb_hmmer {
     funcdef HMMER_dbCAN_Search (HMMER_dbCAN_Params params)  returns (HMMER_Output) authentication required;
 
 
-    /* HMMER env-bioelement Input Params
+    /* HMMER EnvBioelement Input Params
     */
     typedef structure {
         workspace_name workspace_name;
@@ -183,5 +183,5 @@ module kb_hmmer {
     **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
     **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
     */
-    funcdef HMMER_env-bioelement_Search (HMMER_env-bioelement_Params params)  returns (HMMER_Output) authentication required;
+    funcdef HMMER_EnvBioelement_Search (HMMER_EnvBioelement_Params params)  returns (HMMER_Output) authentication required;
 };
