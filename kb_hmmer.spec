@@ -2,12 +2,12 @@
 ** A KBase module: kb_hmmer
 **
 ** This module contains HMMER Hidden Markov Model Sequence Search and Alignment
-** 
+**
 */
 
 module kb_hmmer {
 
-    /* 
+    /*
     ** The workspace object refs are of form:
     **
     **    objects = ws.get_objects([{'ref': params['workspace_id']+'/'+params['obj_name']}])
@@ -174,7 +174,7 @@ module kb_hmmer {
         bool  heatmap;
     bool  vertical;  /* only supports true for now */
     bool  show_blanks;
-    } HMMER_env-bioelement_Params;
+    } HMMER_EnvBioelement_Params;
 
 
     /*  Method for HMMER search of Markov Models of environmental bioelement families

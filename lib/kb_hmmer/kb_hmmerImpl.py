@@ -88,7 +88,7 @@ class kb_hmmer:
     # EnvBioelement search App
     envbioelement_version = 'v1'
     envbioelement_HMMS_DIR = os.path.join(os.sep, 'kb', 'module', 'data', 'EnvBioelement', 'EnvBioelement-' + envbioelement_version)
-    envbioelement_HMMS_PATH = os.path.join(envbioelement_HMMS_DIR, 'env-bioelement-fam-HMMs.txt.' + envbioelement_version)
+    envbioelement_HMMS_PATH = os.path.join(envbioelement_HMMS_DIR, 'EnvBioelement-fam-HMMs.txt.' + envbioelement_version)
 
     # target is a list for collecting log messages
 
