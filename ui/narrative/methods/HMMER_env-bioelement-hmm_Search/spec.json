@@ -1023,7 +1023,7 @@
             "optional": false,
             "advanced": false,
             "allow_multiple": false,
-            "default_values": [ "HMMER_env-bioelement_Search.FeatureSet" ],
+            "default_values": [ "HMMER_EnvBioelement_Search.FeatureSet" ],
             "field_type": "text",
             "text_options": {
                 "valid_ws_types": [ "KBaseCollections.FeatureSet" ],
@@ -1174,7 +1174,7 @@
         "service-mapping": {
             "url": "",
             "name": "kb_hmmer",
-            "method": "HMMER_env-bioelement_Search",
+            "method": "HMMER_EnvBioelement_Search",
             "input_mapping": [
                 {
                     "narrative_system_variable": "workspace",
