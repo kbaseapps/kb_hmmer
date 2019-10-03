@@ -1,0 +1,14 @@
+fae
+fdh_thiol-independent_type
+formylmethanofuran-tetrahyromethanopterin_formyltransferase
+methenyltetrahydromethanopterin_cyclohydrolase
+S--hydroxymethyl-glutathione_dehydrogenase
+S-formylglutathione_hydrolase
+S-hydroxymethyl-mycothiol_dehydrogenase
+formate_dehydrogenase_alpha_subunit
+formate_dehydrogenase_beta_subunit
+formate_dehydrogenase_gamma_subunit
+NDMA-dependent_methanol_dehydrogenase
+pqq
+madA
+madB
