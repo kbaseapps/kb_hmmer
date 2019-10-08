@@ -88,7 +88,7 @@ class kb_hmmer:
     # EnvBioelement search App
     envbioelement_version = 'v1'
     envbioelement_HMMS_DIR = os.path.join(os.sep, 'kb', 'module', 'data', 'EnvBioelement', 'EnvBioelement-' + envbioelement_version)
-    envbioelement_HMMS_PATH = os.path.join(envbioelement_HMMS_DIR, 'EnvBioelement-fam-HMMs.txt.' + envbioelement_version)
+    envbioelement_HMMS_PATH = os.path.join(envbioelement_HMMS_DIR, 'env-bioelement-fam-HMMs.txt.' + envbioelement_version)
 
     # target is a list for collecting log messages
 
@@ -234,7 +234,7 @@ class kb_hmmer:
 
     def HMMER_MSA_Search(self, ctx, params):
         """
-        Method for HMMER search of an MSA against many sequences 
+        Method for HMMER search of an MSA against many sequences
         **
         **    overloading as follows:
         **        input_msa_ref: MSA
@@ -1525,7 +1525,7 @@ class kb_hmmer:
 
     def HMMER_Local_MSA_Group_Search(self, ctx, params):
         """
-        Method for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
+        Method for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences
         **
         **    overloading as follows:
         **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
@@ -3300,7 +3300,7 @@ class kb_hmmer:
         **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
         :param params: instance of type "HMMER_dbCAN_Params" (HMMER dbCAN
            Input Params) -> structure: parameter "workspace_name" of type
-           "workspace_name" (** The workspace object refs are of form: ** ** 
+           "workspace_name" (** The workspace object refs are of form: ** **
            objects = ws.get_objects([{'ref':
            params['workspace_id']+'/'+params['obj_name']}]) ** ** "ref" means
            the entire name combining the workspace id and the object name **
