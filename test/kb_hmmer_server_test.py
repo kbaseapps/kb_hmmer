@@ -106,7 +106,7 @@ class kb_hmmerTest(unittest.TestCase):
                                             'GCF_000022285.1_ASM2228v1_genomic.gbff', \
                                             'GCF_001439985.1_wTPRE_1.0_genomic.gbff', \
                                             'GCF_000015865.1_ASM1586v1_genomic.gbff', \
-                                            'GCF_000164865.1_ASM16486v1_genomic.gbff']): 
+                                            'GCF_000164865.1_ASM16486v1_genomic.gbff']):
                                             #'GCF_000287295.1_ASM28729v1_genomic.gbff', \
                                             #'GCF_000306885.1_ASM30688v1_genomic.gbff', \
 
@@ -128,10 +128,10 @@ class kb_hmmerTest(unittest.TestCase):
             'description': 'genomeSet for testing',
             'elements': dict()
         }
-        for genome_ref in cls.genome_refs: 
+        for genome_ref in cls.genome_refs:
             testGS['elements'][genome_scinames[genome_ref]] = { 'ref': genome_ref }
         print ("prepare_data(): UPLOADING GENOME SET: "+genomeSet_name)  # DEBUG
-        obj_info = cls.wsClient.save_objects({'workspace': cls.ws_info[NAME_I],       
+        obj_info = cls.wsClient.save_objects({'workspace': cls.ws_info[NAME_I],
                                               'objects': [
                                                   {
                                                       'type':'KBaseSearch.GenomeSet',
@@ -248,7 +248,7 @@ class kb_hmmerTest(unittest.TestCase):
         #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
         #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
 
-        # app run params        
+        # app run params
         parameters = { 'workspace_name': self.getWsName(),
                        'input_msa_ref': self.MSA_refs[1],         # Single MSA
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
@@ -378,7 +378,7 @@ class kb_hmmerTest(unittest.TestCase):
         #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
         #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
 
-        # app run params        
+        # app run params
         parameters = { 'workspace_name': self.getWsName(),
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
@@ -425,7 +425,7 @@ class kb_hmmerTest(unittest.TestCase):
         #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
         #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
 
-        # app run params        
+        # app run params
         parameters = { 'workspace_name': self.getWsName(),
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
@@ -651,7 +651,7 @@ class kb_hmmerTest(unittest.TestCase):
         #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
         #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
 
-        # app run params        
+        # app run params
         parameters = { 'workspace_name': self.getWsName(),
                        'input_dbCAN_AA_ids': [],
                        'input_dbCAN_CBM_ids': [],
@@ -705,7 +705,7 @@ class kb_hmmerTest(unittest.TestCase):
         #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
         #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
 
-        # app run params        
+        # app run params
         parameters = { 'workspace_name': self.getWsName(),
                        'input_dbCAN_AA_ids': [],
                        'input_dbCAN_CBM_ids': [],
@@ -726,6 +726,185 @@ class kb_hmmerTest(unittest.TestCase):
                        'show_blanks': "0"
                      }
         ret = self.getImpl().HMMER_dbCAN_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created objs
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+    ### Test 13: envbioelement Models against Single Genome
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_13_kb_hmmer_HMMER_envbioelement_Search_Genome()")
+    def test_13_kb_hmmer_HMMER_envbioelement_Search_Genome(self):
+        test_name = 'test_13_kb_hmmer_HMMER_envbioelement_Search_Genome'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_env-bioelement_S_ids': [],
+                       'input_env-bioelement_O_ids': [],
+                       'input_env-bioelement_CH4_ids': [],
+                       'input_env-bioelement_CFix_ids': [],
+                       'input_env-bioelement_CMono_ids': [],
+                       'input_env-bioelement_C1_ids': [],
+                       'input_env-bioelement_H_ids': [],
+                       'input_env-bioelement_Halo_ids': [],
+                       'input_env-bioelement_As_ids': [],
+                       'input_env-bioelement_Se_ids': [],
+                       'input_env-bioelement_Ur_ids': [],
+                       'input_env-bioelement_Me_ids': [],
+                       'input_env-bioelement_CN_ids': [],
+                       'input_many_ref': self.genome_refs[3],  # Single Genome
+                       'output_filtered_name': obj_out_name,
+                       'coalesce_output': 0,
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'overlap_fraction': "50.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_EnvBioelement_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created obj
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 14: envbioelement Models against GenomeSet, DON'T coalesce output
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_14_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_NOcoalesce()")
+    def test_14_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_NOcoalesce(self):
+        test_name = 'test_14_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_env-bioelement_S_ids': [],
+                       'input_env-bioelement_O_ids': [],
+                       'input_env-bioelement_CH4_ids': [],
+                       'input_env-bioelement_CFix_ids': [],
+                       'input_env-bioelement_CMono_ids': [],
+                       'input_env-bioelement_C1_ids': [],
+                       'input_env-bioelement_H_ids': [],
+                       'input_env-bioelement_Halo_ids': [],
+                       'input_env-bioelement_As_ids': [],
+                       'input_env-bioelement_Se_ids': [],
+                       'input_env-bioelement_Ur_ids': [],
+                       'input_env-bioelement_Me_ids': [],
+                       'input_env-bioelement_CN_ids': [],
+                       'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
+                       'output_filtered_name': obj_out_name,
+                       'coalesce_output': 0,  # KEY
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'overlap_fraction': "50.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_EnvBioelement_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created objs
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 15: envbioelement Models against GenomeSet, DO coalesce output
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_15_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_coalesce()")
+    def test_15_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_coalesce(self):
+        test_name = 'test_15_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_env-bioelement_S_ids': [],
+                       'input_env-bioelement_O_ids': [],
+                       'input_env-bioelement_CH4_ids': [],
+                       'input_env-bioelement_CFix_ids': [],
+                       'input_env-bioelement_CMono_ids': [],
+                       'input_env-bioelement_C1_ids': [],
+                       'input_env-bioelement_H_ids': [],
+                       'input_env-bioelement_Halo_ids': [],
+                       'input_env-bioelement_As_ids': [],
+                       'input_env-bioelement_Se_ids': [],
+                       'input_env-bioelement_Ur_ids': [],
+                       'input_env-bioelement_Me_ids': [],
+                       'input_env-bioelement_CN_ids': [],
+                       'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
+                       'output_filtered_name': obj_out_name,
+                       'coalesce_output': 1,  # KEY
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'overlap_fraction': "50.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_EnvBioelement_Search(self.getContext(), parameters)[0]
         self.assertIsNotNone(ret['report_ref'])
 
         # check created objs
