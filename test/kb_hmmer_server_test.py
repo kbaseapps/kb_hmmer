@@ -577,7 +577,7 @@ class kb_hmmerTest(unittest.TestCase):
     #     self.assertTrue(len(report_obj['objects_created']) == 0)
     #     pass
     #
-    
+
     ### Test 10: dbCAN Models against Single Genome
     #
     # uncomment to skip this test
@@ -740,9 +740,9 @@ class kb_hmmerTest(unittest.TestCase):
         pass
 
     ## Test 13: envbioelement Models against Single Genome
-
-    uncomment to skip this test
-    HIDE @unittest.skip("skipped test test_13_kb_hmmer_HMMER_envbioelement_Search_Genome()")
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_13_kb_hmmer_HMMER_envbioelement_Search_Genome()")
     def test_13_kb_hmmer_HMMER_envbioelement_Search_Genome(self):
         test_name = 'test_13_kb_hmmer_HMMER_envbioelement_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
