@@ -2101,9 +2101,6 @@ class kb_hmmer:
             elif not os.path.getsize(HMM_file_path) > 0:
                 raise ValueError("HMMER_BUILD created empty HMM file '" + HMM_file_path + "'")
 
-            print("HMM_file_path" + str(HMM_file_path))
-            print("HMM_bufs" + str(HMM_bufs))
-
             ### Construct the HMMER_SEARCH command
             #
             # SYNTAX (from http://eddylab.org/software/hmmer3/3.1b2/Userguide.pdf)
@@ -3731,6 +3728,10 @@ class kb_hmmer:
                 if not os.path.exists(hmmer_dir):
                     os.makedirs(hmmer_dir)
                 HMM_file_path = os.path.join(hmmer_dir, hmm_id + ".hmm")
+
+
+                print("HMM_file_path" + str(HMM_file_path))
+                print("HMM_bufs" + str(HMM_bufs))
 
                 # create HMM file
                 with open(HMM_file_path, 'w', 0) as hmm_handle:
