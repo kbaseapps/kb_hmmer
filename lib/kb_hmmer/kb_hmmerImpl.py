@@ -5415,8 +5415,6 @@ class kb_hmmer:
 
                 # create HMM file
                 with open(HMM_file_path, 'w', 0) as hmm_handle:
-                    print("hmm_id: {}".format(hmm_id))
-                    print("HMM_bufs[hmm_id]: {}".format(HMM_bufs[hmm_id]))
                     hmm_handle.write("\n".join(HMM_bufs[hmm_id]) + "\n")
 
                 if not os.path.isfile(HMM_file_path):
