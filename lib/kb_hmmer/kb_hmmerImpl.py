@@ -3729,10 +3729,6 @@ class kb_hmmer:
                     os.makedirs(hmmer_dir)
                 HMM_file_path = os.path.join(hmmer_dir, hmm_id + ".hmm")
 
-
-                print("HMM_file_path" + str(HMM_file_path))
-                print("HMM_bufs" + str(HMM_bufs))
-
                 # create HMM file
                 with open(HMM_file_path, 'w', 0) as hmm_handle:
                     hmm_handle.write("\n".join(HMM_bufs[hmm_id]) + "\n")
@@ -5419,6 +5415,8 @@ class kb_hmmer:
 
                 # create HMM file
                 with open(HMM_file_path, 'w', 0) as hmm_handle:
+                    print("hmm_id: {}".format(hmm_id))
+                    print("HMM_bufs[hmm_id]: {}".format(HMM_bufs[hmm_id]))
                     hmm_handle.write("\n".join(HMM_bufs[hmm_id]) + "\n")
 
                 if not os.path.isfile(HMM_file_path):
