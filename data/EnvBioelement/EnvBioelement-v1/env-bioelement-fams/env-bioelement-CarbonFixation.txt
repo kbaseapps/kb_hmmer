@@ -1,7 +1,7 @@
-Form_I
-Form_II
-Form_II-III
-Form_III
+rubisco_form_I
+rubisco_form_II
+rubisco_form_II-III
+rubisco_form_III
 aclA
 aclB
 codh_catalytic
