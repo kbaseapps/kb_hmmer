@@ -144,6 +144,10 @@ publications :
         display-text: |
             Eddy SR. Accelerated Profile HMM Searches. PLOS Computational Biology. 2011;7: e1002195. doi:10.1371/journal.pcbi.1002195
         link: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195
+    -
+        display-text: |
+            Huang L, Zhang H, Wu P, Entwistle S, Li X, Yohe T, Yi H, Yang Z, Yin Y. dbCAN-seq: a database of carbohydrate-active enzyme (CAZyme) sequence and annotation. Nucleic Acids Research. 2018;46: D516-D521. doi:10.1093/nar/gkx894
+        link: https://academic.oup.com/nar/article/46/D1/D516/4372485
 
     -
         display-text: |

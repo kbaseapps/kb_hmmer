@@ -1,3 +1,7 @@
+### Version 1.3.0
+__Changes__
+- added App HMMER_EnvBioelement_Search()
+
 ### Version 1.2.2
 __Changes__
 - made protein sequence checking stricter

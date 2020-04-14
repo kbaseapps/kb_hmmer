@@ -1,0 +1,10 @@
+Hydrogenase_Group_A
+Hydrogenase_Group_B1-B3
+Hydrogenase_Group_1
+Hydrogenase_Group_2a
+Hydrogenase_Group_2b
+Hydrogenase_Group_3a
+Hydrogenase_Group_3b
+Hydrogenase_Group_3c
+Hydrogenase_Group_3d
+Hydrogenase_Group_4

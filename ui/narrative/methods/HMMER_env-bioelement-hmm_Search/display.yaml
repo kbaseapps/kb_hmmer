@@ -1,0 +1,190 @@
+#
+# define display information
+#
+name: Search with HMMs of Environmental Bioelement families - v1
+tooltip: |
+    Search for matches to HMMs of environmental bioelement cycling families using HMMER 3
+screenshots: []
+
+icon: env-bioelement-cyan.png
+
+#
+# define a set of similar methods that might be useful to the user
+#
+suggestions:
+    apps:
+        related:
+            []
+        next:
+            []
+    methods:
+        related:
+            []
+        next:
+            []
+
+#
+# Configure the display and description of parameters
+#
+parameters :
+    input_env-bioelement_N_ids:
+        ui-name : |
+            Nitrogen - N (default: ALL)
+        short-hint : |
+            Select HMMs for Nitrogen Bioelement Families, or will use ALL if left blank
+    input_env-bioelement_S_ids:
+        ui-name : |
+            Sulfur - S (default: ALL)
+        short-hint : |
+            Select HMMs for Sulfur Bioelement Families, or will use ALL if left blank
+    input_env-bioelement_O_ids:
+        ui-name : |
+            Oxygen - O (default: ALL)
+        short-hint : |
+            Select HMMs for Oxygen Bioelement Families, or will use ALL if left blank
+    input_env-bioelement_CH4_ids:
+        ui-name : |
+            Methane - CH4 (default: ALL)
+        short-hint : |
+            Select HMMs for Methane Bioelement Families, or will use ALL if left blank
+    input_env-bioelement_CFix_ids:
+        ui-name : |
+            Carbon Fixation - CFix (default: ALL)
+        short-hint : |
+            Select HMMs for Carbon Fixation Bioelement Families, or will use ALL if left blank
+    input_env-bioelement_CMono_ids:
+        ui-name : |
+            Carbon Monoxide - CMono (default: ALL)
+        short-hint : |
+            Select HMMs for Carbon Monoxide Bioelement Families, or will use ALL if left blank
+    input_env-bioelement_C1_ids:
+        ui-name : |
+            C1 Compounds - C1 (default: ALL)
+        short-hint : |
+            Select HMMs for C1 Compound Bioelement Families, or will use ALL if left blank
+    input_env-bioelement_H_ids:
+        ui-name : |
+            Hydrogen - H (default: ALL)
+        short-hint : |
+            Select HMMs for Hydrogen Bioelement Families, or will use ALL if left blank
+    input_env-bioelement_Halo_ids:
+        ui-name : |
+            Halogenated Compounds - Halo (default: ALL)
+        short-hint : |
+            Select HMMs for Halogenated Compound Bioelement Families, or will use ALL if left blank
+    input_env-bioelement_As_ids:
+        ui-name : |
+            Arsenic - As (default: ALL)
+        short-hint : |
+            Select HMMs for Arsenic Bioelement Families, or will use ALL if left blank
+    input_env-bioelement_Se_ids:
+        ui-name : |
+            Selenium - Se (default: ALL)
+        short-hint : |
+            Select HMMs for Nitrogen Bioelement Families, or will use ALL if left blank
+    input_env-bioelement_Ur_ids:
+        ui-name : |
+            Urea - Ur (default: ALL)
+        short-hint : |
+            Select HMMs for Urea Bioelement Families, or will use ALL if left blank
+    input_env-bioelement_Me_ids:
+        ui-name : |
+            Metal - Me (default: ALL)
+        short-hint : |
+            Select HMMs for Metal Bioelement Families, or will use ALL if left blank
+    input_env-bioelement_CN_ids:
+        ui-name : |
+            Nitrile - CN (default: ALL)
+        short-hint : |
+            Select HMMs for Nitrile Bioelement Families, or will use ALL if left blank
+    input_many_ref:
+        ui-name : |
+            Targets Object
+        short-hint : |
+            PROTEIN Targets object to be searched. Data types may be FeatureSet, Genome, or GenomeSet.
+    output_filtered_name:
+        ui-name : |
+            Output Object
+        short-hint : |
+            Object containing matches.  Output will be will be FeatureSet.
+    coalesce_output:
+        ui-name : |
+            Coalesce output
+        short-hint : |
+            Combine output for each env-bioelement category (N, S, O, CH4, CFix, CMono, C1, H, Halo, As, Se, Ur, Me, CN) into one object instead of splitting into a separate object per HMM Search
+    e_value:
+        ui-name : |
+            E-value
+        short-hint : |
+            threshold for hits
+    bitscore:
+        ui-name : |
+            Bit Score
+        short-hint : |
+            threshold for hits
+    overlap_perc:
+        ui-name : |
+            Alignment Overlap Threshold (%)
+        short-hint : |
+            overlap threshold is with respect to hit sequence length
+    maxaccepts:
+        ui-name : |
+            Max Accepts
+        short-hint : |
+            limits the number of hits in result.  Default: 1000
+    heatmap :
+        ui-name : |
+            View GenomeSet profile as
+        short-hint : |
+            Display as heatmap or numerical table (if input is GenomeSet)
+        long-hint  : |
+            Display as heatmap or numerical table (if input is GenomeSet)
+    vertical :
+        ui-name : |
+            View GenomeSet profile genomes as
+        short-hint : |
+            Show table with genomes as rows
+        long-hint  : |
+            Show table with genomes as rows
+    show_blanks :
+        ui-name : |
+            Show GenomeSet profile empty categories
+        short-hint : |
+            Show categories or families that have no counts
+        long-hint  : |
+            Show categories or families that have no counts
+
+description : |
+    <p>This method performs a set of Hidden Markov Model (HMM) searches on protein sequences using HMMER models built for a Group of MSAs.</p>
+    <p><hr></p>
+    <p><i>Implemented for KBase by <a href="https://github.com/dcchivian">Dylan Chivian</a> (<a href="mailto:DCChivian@lbl.gov">DCChivian@lbl.gov</a>)</i></p>
+    <p><hr></p>
+    <p><i>HMMER Search & Functional Profile with Custom Models</i> performs multiple HMMER searches.  It reads the objects in the Narrative to find the Multiple Sequence Alignments (MSAs) and uses those MSAs to create a set of Hidden Markov Models (HMMs) which are used in turn to search a protein sequence database.  The MSAs must first be generated using a tool such as MUSCLE that builds an MSA from a FeatureSet object.  The KBase implementation permits searching through the genes in a Genome object, the genes in the Genome members of a GenomeSet, or the genes in a FeatureSet.  The output object of these searches is a FeatureSet containing those genes that pass the thresholds given by the user.  The App also provides a table of the hits (with those hits that are below the thresholds in gray) and links to download the table of hits and a Stockholm format MSA.  A separate table for each MSA/HMM is provided, whereas the user may select whether to combine the hits into a single FeatureSet or produce a separate FeatureSet object for each MSA/HMM.</p>
+    <p><hr></p>
+    <p><b>Configuration:</b></p>
+    <p><b><i>Targets Object:</i></b> The Targets Object may be a FeatureSet of genes, a Genome, or a GenomeSet.  A HMMER search database will be automatically generated from the Targets Object.</p>
+    <p><b><i>Output Object:</i></b> This is the set of genes that are both hit and pass user-defined thresholds.</p>
+    <p><b><i>Coalesce Output:</i></b> Select whether to combine all hits into a single FeatureSet (which may be used in subsequent Functional Profiling) or make a separate FeatureSet of hits for each MSA/HMM.</p>
+    <p><b><i>E-value:</i></b> This bounds the e-value for the weakest hit to consider viable.  Values below this do not get reported in the table or the HMMER output text downloads.</p>
+    <p><b><i>Bitscore:</i></b> This bounds the bitscore for the weakest hit to include in the FeatureSet output object.  Hits below this threshold are still reported in the table and HMMER text downloads.</p>
+    <p><b><i>Max Accepts:</i></b> Hard cap on how many hits to report (Default: 1000)</p>
+    <p><hr></p>
+    <p><b>Output:</b></p>
+    <p><b><i>Output Object:</i></b> Gene hits are captured in a FeatureSet output object.  If there are additional user-defined thresholds, those are filtered out and do not appear in the object, even if they are shown in the output table.  The Output object name is used as a basename to which the MSA/HMM name is prepended if the user has selected to separate FeatureSets.</p>
+    <p><b><i>Output HTML Table:</i></b> The tab-delimited hit table is HTML formatted and additionally shows the region of the hit sequence (as there is no query sequence) covered by the HMMER alignment.  Hits that are above the e-value threshold but below other thresholds and are not included in the FeatureSet output object are shown in gray, with the attributes that were below the threshold in red.  A separate table is made for each MSA/HMM.</p>
+    <p><b><i>Downloadable files:</i></b> HMMER table and Stockholm format MSA are available for download.  These are not altered from the direct output from the HMMER run.  The text output is generated for each MSA/HMM.</p>
+
+publications :
+    -
+        display-text: |
+            Eddy SR. Accelerated Profile HMM Searches. PLOS Computational Biology. 2011;7: e1002195. doi:10.1371/journal.pcbi.1002195
+        link: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195
+    -
+        display-text: |
+            Anatharaman K, Brown CT, Hug LA, Sharon I, Castelle CJ, Probst AJ, Thomas BC, Singh A, Wilkins MJ, Karaoz U, Brodie EL, Williams KH, Hubbard SS, Banfield JF. Thousands of microbial genomes shed light on interconnected biogeochemical processes in an aquifer system. Nature Communications. 2016;7: 13219. doi:10.1038/ncomms13219
+        link: https://www.nature.com/articles/ncomms13219
+
+    -
+        display-text: |
+            HMMER v3.1b2 source:
+        link: http://HMMER.ORG
