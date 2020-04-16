@@ -19,15 +19,15 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_protein
-#from biokbase.workspace.client import Workspace as workspaceService
-from Workspace.WorkspaceClient import Workspace as workspaceService
+
+from installed_clients.WorkspaceClient import Workspace
 from requests_toolbelt import MultipartEncoder
 from biokbase.AbstractHandle.Client import AbstractHandle as HandleService
 
 # SDK Utils
-from KBaseDataObjectToFileUtils.KBaseDataObjectToFileUtilsClient import KBaseDataObjectToFileUtils
-from DataFileUtil.DataFileUtilClient import DataFileUtil as DFUClient
-from KBaseReport.KBaseReportClient import KBaseReport
+from installed_clients.KBaseDataObjectToFileUtilsClient import KBaseDataObjectToFileUtils
+from installed_clients.DataFileUtilClient import DataFileUtil as DFUClient
+from installed_clients.KBaseReportClient import KBaseReport
 
 # silence whining
 import requests
@@ -54,9 +54,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.2.2"
+    VERSION = "1.4.0"
     GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "4b495b811a6bcf532801133d832d175ea5069ae1"
+    GIT_COMMIT_HASH = "64e87e3a4cdcf941ed03a6290ef0130b7284c777"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -201,7 +201,6 @@ class kb_hmmer:
 
     # config contains contents of config file in a hash or None if it couldn't
     # be found
-
     def __init__(self, config):
         #BEGIN_CONSTRUCTOR
         self.workspaceURL = config['workspace-url']
@@ -232,9 +231,10 @@ class kb_hmmer:
         #END_CONSTRUCTOR
         pass
 
+
     def HMMER_MSA_Search(self, ctx, params):
         """
-        Method for HMMER search of an MSA against many sequences
+        Method for HMMER search of an MSA against many sequences 
         **
         **    overloading as follows:
         **        input_msa_ref: MSA
@@ -304,7 +304,7 @@ class kb_hmmer:
 #            self.log(invalid_msgs,"input_one_feature_id was not obtained from Query Object: "+input_one_name)
 #        master_row_idx = 0
         try:
-            ws = workspaceService(self.workspaceURL, token=ctx['token'])
+            ws = Workspace(self.workspaceURL, token=ctx['token'])
             #objects = ws.get_objects([{'ref': input_msa_ref}])
             objects = ws.get_objects2({'objects': [{'ref': input_msa_ref}]})['data']
             input_msa_data = objects[0]['data']
@@ -424,7 +424,7 @@ class kb_hmmer:
         #### Get the input_many object
         ##
         try:
-            ws = workspaceService(self.workspaceURL, token=ctx['token'])
+            ws = Workspace(self.workspaceURL, token=ctx['token'])
             #objects = ws.get_objects([{'ref': input_many_ref}])
             objects = ws.get_objects2({'objects': [{'ref': input_many_ref}]})['data']
             input_many_data = objects[0]['data']
@@ -638,7 +638,7 @@ class kb_hmmer:
             }
 
             reportName = 'hmmer_report_' + str(uuid.uuid4())
-            ws = workspaceService(self.workspaceURL, token=ctx['token'])
+            ws = Workspace(self.workspaceURL, token=ctx['token'])
             report_obj_info = ws.save_objects({
                 #'id':info[6],
                 'workspace': params['workspace_name'],
@@ -1525,7 +1525,7 @@ class kb_hmmer:
 
     def HMMER_Local_MSA_Group_Search(self, ctx, params):
         """
-        Method for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences
+        Method for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
         **
         **    overloading as follows:
         **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
@@ -1592,7 +1592,7 @@ class kb_hmmer:
         #### Get the input_many object
         ##
         try:
-            ws = workspaceService(self.workspaceURL, token=ctx['token'])
+            ws = Workspace(self.workspaceURL, token=ctx['token'])
             #objects = ws.get_objects([{'ref': input_many_ref}])
             objects = ws.get_objects2({'objects': [{'ref': input_many_ref}]})['data']
             input_many_data = objects[0]['data']
@@ -1781,7 +1781,7 @@ class kb_hmmer:
             input_msa_refs = params['input_msa_refs']
         else:
             input_msa_refs = []
-            ws = workspaceService(self.workspaceURL, token=ctx['token'])
+            ws = Workspace(self.workspaceURL, token=ctx['token'])
             try:
                 msa_obj_info_list = ws.list_objects({'ids': [ws_id], 'type': "KBaseTrees.MSA"})
             except Exception as e:
@@ -1807,7 +1807,7 @@ class kb_hmmer:
             keep_msa.append(False)
 
             try:
-                ws = workspaceService(self.workspaceURL, token=ctx['token'])
+                ws = Workspace(self.workspaceURL, token=ctx['token'])
                 #objects = ws.get_objects([{'ref': input_msa_ref}])
                 objects = ws.get_objects2({'objects': [{'ref': input_msa_ref}]})['data']
                 input_msa_data = objects[0]['data']
@@ -1990,7 +1990,7 @@ class kb_hmmer:
             }
 
             reportName = 'hmmer_report_' + str(uuid.uuid4())
-            ws = workspaceService(self.workspaceURL, token=ctx['token'])
+            ws = Workspace(self.workspaceURL, token=ctx['token'])
             report_obj_info = ws.save_objects({
                 #'id':info[6],
                 'workspace': params['workspace_name'],
@@ -3300,7 +3300,7 @@ class kb_hmmer:
         **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
         :param params: instance of type "HMMER_dbCAN_Params" (HMMER dbCAN
            Input Params) -> structure: parameter "workspace_name" of type
-           "workspace_name" (** The workspace object refs are of form: ** **
+           "workspace_name" (** The workspace object refs are of form: ** ** 
            objects = ws.get_objects([{'ref':
            params['workspace_id']+'/'+params['obj_name']}]) ** ** "ref" means
            the entire name combining the workspace id and the object name **
@@ -3366,7 +3366,7 @@ class kb_hmmer:
         #### Get the input_many object
         ##
         try:
-            ws = workspaceService(self.workspaceURL, token=ctx['token'])
+            ws = Workspace(self.workspaceURL, token=ctx['token'])
             #objects = ws.get_objects([{'ref': input_many_ref}])
             objects = ws.get_objects2({'objects': [{'ref': input_many_ref}]})['data']
             input_many_data = objects[0]['data']
@@ -3650,7 +3650,7 @@ class kb_hmmer:
             }
 
             reportName = 'hmmer_report_' + str(uuid.uuid4())
-            ws = workspaceService(self.workspaceURL, token=ctx['token'])
+            ws = Workspace(self.workspaceURL, token=ctx['token'])
             report_obj_info = ws.save_objects({
                 #'id':info[6],
                 'workspace': params['workspace_name'],
@@ -4970,35 +4970,35 @@ class kb_hmmer:
 
     def HMMER_EnvBioelement_Search(self, ctx, params):
         """
-        Method for HMMER search of EnvBioelement Markov Models
+        Method for HMMER search of Markov Models of environmental bioelement families
         **
         **    overloading as follows:
         **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
         **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
-        :param params: instance of type "HMMER_dbCAN_Params" (HMMER dbCAN
-           Input Params) -> structure: parameter "workspace_name" of type
-           "workspace_name" (** The workspace object refs are of form: ** **
-           objects = ws.get_objects([{'ref':
+        :param params: instance of type "HMMER_EnvBioelement_Params" (HMMER
+           EnvBioelement Input Params) -> structure: parameter
+           "workspace_name" of type "workspace_name" (** The workspace object
+           refs are of form: ** **    objects = ws.get_objects([{'ref':
            params['workspace_id']+'/'+params['obj_name']}]) ** ** "ref" means
            the entire name combining the workspace id and the object name **
            "id" is a numerical identifier of the workspace or object, and
            should just be used for workspace ** "name" is a string identifier
            of a workspace or object.  This is received from Narrative.),
-           parameter "input_env-bioelement_N_ids" of type "data_obj_ref", parameter
-           "input_env-bioelement_S_ids" of type "data_obj_ref", parameter
-           "input_env-bioelement_O_ids" of type "data_obj_ref", parameter
-           "input_env-bioelement_CH4_ids" of type "data_obj_ref", parameter
-           "input_env-bioelement_CFix_ids" of type "data_obj_ref", parameter
-           "input_env-bioelement_CMono_ids" of type "data_obj_ref", parameter
-           "input_env-bioelement_C1_ids" of type "data_obj_ref", parameter
-           "input_env-bioelement_H_ids" of type "data_obj_ref", parameter
-           "input_env-bioelement_Halo_ids" of type "data_obj_ref", parameter
-           "input_env-bioelement_As_ids" of type "data_obj_ref", parameter
-           "input_env-bioelement_Se_ids" of type "data_obj_ref", parameter
-           "input_env-bioelement_Ur_ids" of type "data_obj_ref", parameter
-           "input_env-bioelement_Me_ids" of type "data_obj_ref", parameter
-           "input_env-bioelement_CN_ids" of type "data_obj_ref", parameter
-           "input_many_ref" of type "data_obj_ref", parameter
+           parameter "input_env-bioelement_N_ids" of type "data_obj_ref",
+           parameter "input_env-bioelement_S_ids" of type "data_obj_ref",
+           parameter "input_env-bioelement_O_ids" of type "data_obj_ref",
+           parameter "input_env-bioelement_CH4_ids" of type "data_obj_ref",
+           parameter "input_env-bioelement_CFix_ids" of type "data_obj_ref",
+           parameter "input_env-bioelement_CMono_ids" of type "data_obj_ref",
+           parameter "input_env-bioelement_C1_ids" of type "data_obj_ref",
+           parameter "input_env-bioelement_H_ids" of type "data_obj_ref",
+           parameter "input_env-bioelement_Halo_ids" of type "data_obj_ref",
+           parameter "input_env-bioelement_As_ids" of type "data_obj_ref",
+           parameter "input_env-bioelement_Se_ids" of type "data_obj_ref",
+           parameter "input_env-bioelement_Ur_ids" of type "data_obj_ref",
+           parameter "input_env-bioelement_Me_ids" of type "data_obj_ref",
+           parameter "input_env-bioelement_CN_ids" of type "data_obj_ref",
+           parameter "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "coalesce_output" of type "bool", parameter "e_value" of Double,
            parameter "bitscore" of Double, parameter "overlap_perc" of
@@ -5050,7 +5050,7 @@ class kb_hmmer:
         #### Get the input_many object
         ##
         try:
-            ws = workspaceService(self.workspaceURL, token=ctx['token'])
+            ws = Workspace(self.workspaceURL, token=ctx['token'])
             #objects = ws.get_objects([{'ref': input_many_ref}])
             objects = ws.get_objects2({'objects': [{'ref': input_many_ref}]})['data']
             input_many_data = objects[0]['data']
@@ -5334,7 +5334,7 @@ class kb_hmmer:
             }
 
             reportName = 'hmmer_report_' + str(uuid.uuid4())
-            ws = workspaceService(self.workspaceURL, token=ctx['token'])
+            ws = Workspace(self.workspaceURL, token=ctx['token'])
             report_obj_info = ws.save_objects({
                 #'id':info[6],
                 'workspace': params['workspace_name'],
@@ -6651,7 +6651,6 @@ class kb_hmmer:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
-
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK", 'message': "", 'version': self.VERSION,

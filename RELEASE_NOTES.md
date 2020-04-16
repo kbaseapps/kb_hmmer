@@ -1,3 +1,7 @@
+### Version 1.4.0
+__Changes__
+- updated HMMER to v3.3
+
 ### Version 1.3.0
 __Changes__
 - added App HMMER_EnvBioelement_Search()
