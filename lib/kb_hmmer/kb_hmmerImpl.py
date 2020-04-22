@@ -56,7 +56,7 @@ class kb_hmmer:
     ######################################### noqa
     VERSION = "1.4.0"
     GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "64e87e3a4cdcf941ed03a6290ef0130b7284c777"
+    GIT_COMMIT_HASH = "2ba4be5594958a325d50e7c9dde677d17783973c"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
