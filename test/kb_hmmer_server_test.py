@@ -208,6 +208,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_msa_ref': self.MSA_refs[1],      # Single MSA
                        'input_many_ref': self.genome_refs[0],  # Single Genome
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name',
                        'e_value': ".001",
                        'bitscore': "50",
                        'overlap_fraction': "50.0",
@@ -251,6 +252,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_msa_ref': self.MSA_refs[1],         # Single MSA
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'sci_name',
                        'e_value': ".001",
                        'bitscore': "50",
                        'overlap_fraction': "50.0",
@@ -294,6 +296,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_msa_ref': self.MSA_refs[0],      # Single MSA
                        'input_many_ref': self.genome_refs[0],  # Single Genome
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
                        'e_value': ".001",
                        'bitscore': "50",
                        'overlap_fraction': "50.0",
@@ -333,6 +336,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_msa_refs': [self.MSA_refs[1], self.MSA_refs[2], self.MSA_refs[3]],  # Specific MSAs
                        'input_many_ref': self.genome_refs[0],  # Single Genome
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,
                        'e_value': ".001",
                        'bitscore': "50",
@@ -381,6 +385,7 @@ class kb_hmmerTest(unittest.TestCase):
         parameters = { 'workspace_name': self.getWsName(),
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 0,  # KEY
                        'e_value': ".001",
                        'bitscore': "50",
@@ -428,6 +433,7 @@ class kb_hmmerTest(unittest.TestCase):
         parameters = { 'workspace_name': self.getWsName(),
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name',
                        'coalesce_output': 1,  # KEY
                        'e_value': ".001",
                        'bitscore': "50",
@@ -476,6 +482,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_msa_refs': [self.MSA_refs[0]],  # Specific nuc MSA
                        'input_many_ref': self.genome_refs[0],  # Single Genome
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'sci_name',
                        'coalesce_output': 0,
                        'e_value': ".001",
                        'bitscore': "50",
@@ -519,6 +526,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_msa_ref': self.MSA_refs[1],      # Single MSA
                        'input_many_ref': self.genome_refs[0],  # Single Genome
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'e_value': ".001",
                        'bitscore': "5000000",
                        'overlap_fraction': "100.0",
@@ -558,6 +566,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_msa_refs': [self.MSA_refs[1], self.MSA_refs[2], self.MSA_refs[3]],  # Specific MSAs
                        'input_many_ref': self.genome_refs[0],  # Single Genome
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 0,
                        'e_value': ".001",
                        'bitscore': "500000000",
@@ -607,6 +616,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_dbCAN_cellulosome_ids': [],
                        'input_many_ref': self.genome_refs[3],  # Single Genome
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 0,
                        'e_value': ".001",
                        'bitscore': "50",
@@ -661,6 +671,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_dbCAN_cellulosome_ids': [],
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,  # KEY
                        'e_value': ".001",
                        'bitscore': "50",
@@ -715,6 +726,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_dbCAN_cellulosome_ids': [],
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 1,  # KEY
                        'e_value': ".001",
                        'bitscore': "50",
@@ -775,6 +787,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_env-bioelement_CN_ids': [],
                        'input_many_ref': self.genome_refs[3],  # Single Genome
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,
                        'e_value': ".001",
                        'bitscore': "50",
@@ -835,6 +848,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_env-bioelement_CN_ids': [],
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,  # KEY
                        'e_value': ".001",
                        'bitscore': "50",
@@ -895,6 +909,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_env-bioelement_CN_ids': [],
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 1,  # KEY
                        'e_value': ".001",
                        'bitscore': "50",

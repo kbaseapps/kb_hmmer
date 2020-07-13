@@ -1,3 +1,7 @@
+### Version 1.4.2
+__Changes__
+- add configuration for genome display name
+
 ### Version 1.4.1
 __Changes__
 - changed heatmap colors to make easier to distinguish and extend to black for max value

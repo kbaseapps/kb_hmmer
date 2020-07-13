@@ -39,6 +39,11 @@ parameters :
             Sequence Database/Reference
         short-hint : |
             The protein sequence database or reference to be searched.
+    genome_disp_name_config:
+        ui-name : |
+            Display genome as
+        short-hint : |
+            Use the object name, object version, and/or scientific name of the Genome in the function profile report
     output_filtered_name:
         ui-name : |
             Output Object

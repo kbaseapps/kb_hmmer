@@ -54,9 +54,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.4.0"
+    VERSION = "1.4.2"
     GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "2ba4be5594958a325d50e7c9dde677d17783973c"
+    GIT_COMMIT_HASH = "83cdab982d4863681905a9af9ad726affff29b8a"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -252,8 +252,9 @@ class kb_hmmer:
            parameter "input_many_ref" of type "data_obj_ref", parameter
            "input_msa_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "e_value" of Double, parameter "bitscore" of Double, parameter
-           "overlap_perc" of Double, parameter "maxaccepts" of Double
+           "params['genome_disp_name_config']" of String, parameter "e_value" of
+           Double, parameter "bitscore" of Double, parameter "overlap_perc"
+           of Double, parameter "maxaccepts" of Double
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"
@@ -290,6 +291,8 @@ class kb_hmmer:
             raise ValueError('input_msa_ref parameter is required')
         if 'input_many_ref' not in params:
             raise ValueError('input_many_ref parameter is required')
+        if 'genome_disp_name_config' not in params:
+            raise ValueError('genome_disp_name_config parameter is required')
         if 'output_filtered_name' not in params:
             raise ValueError('output_filtered_name parameter is required')
 
@@ -1151,12 +1154,15 @@ class kb_hmmer:
             # build html report
             if many_type_name == 'Genome':
                 feature_id_to_function = GenomeToFASTA_retVal['feature_id_to_function']
+                genome_ref_to_obj_name = GenomeToFASTA_retVal['genome_ref_to_obj_name']
                 genome_ref_to_sci_name = GenomeToFASTA_retVal['genome_ref_to_sci_name']
             elif many_type_name == 'GenomeSet':
                 feature_id_to_function = GenomeSetToFASTA_retVal['feature_id_to_function']
+                genome_ref_to_obj_name = GenomeSetToFASTA_retVal['genome_ref_to_obj_name']
                 genome_ref_to_sci_name = GenomeSetToFASTA_retVal['genome_ref_to_sci_name']
             elif many_type_name == 'FeatureSet':
                 feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
+                genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                 genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
 
             head_color = "#eeeeff"
@@ -1268,8 +1274,25 @@ class kb_hmmer:
                     fid_disp = re.sub(r"^.*\.([^\.]+)\.([^\.]+)$", r"\1.\2", fid_lookup)
 
                     func_disp = feature_id_to_function[genome_ref][fid_lookup]
-                    genome_sci_name = genome_ref_to_sci_name[genome_ref]
 
+                    # set genome_disp_name
+                    if many_type_name == 'AnnotatedMetagenomeAssembly':
+                        genome_disp_name = ama_ref_to_obj_name[genome_ref]
+                    else:
+                        genome_obj_name = genome_ref_to_obj_name[genome_ref]
+                        genome_sci_name = genome_ref_to_sci_name[genome_ref]
+                        [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
+                        genome_disp_name = ''
+                        if 'obj_name' in params['genome_disp_name_config']:
+                            genome_disp_name += genome_obj_name
+                        if 'ver' in params['genome_disp_name_config']:
+                            genome_disp_name += '.v'+str(genome_obj_version)
+                        if 'sci_name' in params['genome_disp_name_config']:
+                            genome_disp_name += ': '+genome_sci_name
+                        else:
+                            genome_disp_name = genome_sci_name
+
+                    # build html report table line
                     html_report_lines += ['<tr bgcolor="' + row_color + '">']
                     #html_report_lines += ['<tr bgcolor="'+'white'+'">']  # DEBUG
                     # add overlap bar
@@ -1316,9 +1339,9 @@ class kb_hmmer:
                     # func
                     html_report_lines += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
                                           border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + func_disp + '</font></td>']
-                    # sci name
+                    # genome name
                     html_report_lines += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
-                                          border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + genome_sci_name + '</font></td>']
+                                          border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + genome_disp_name + '</font></td>']
                     # ident
 #                    if 'ident_thresh' in filtering_fields[hit_id]:
  #                       this_cell_color = reject_cell_color
@@ -1542,10 +1565,11 @@ class kb_hmmer:
            parameter "input_msa_refs" of type "data_obj_ref", parameter
            "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "coalesce_output" of type "bool", parameter "e_value" of Double,
-           parameter "bitscore" of Double, parameter "overlap_perc" of
-           Double, parameter "maxaccepts" of Double, parameter "heatmap" of
-           type "bool", parameter "vertical" of type "bool", parameter
+           "params['genome_disp_name_config']" of String, parameter "coalesce_output"
+           of type "bool", parameter "e_value" of Double, parameter
+           "bitscore" of Double, parameter "overlap_perc" of Double,
+           parameter "maxaccepts" of Double, parameter "heatmap" of type
+           "bool", parameter "vertical" of type "bool", parameter
            "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
@@ -1578,6 +1602,8 @@ class kb_hmmer:
 #            raise ValueError('input_msa_refs parameter is required if selecting local MSAs')
         if 'input_many_ref' not in params:
             raise ValueError('input_many_ref parameter is required')
+        if 'genome_disp_name_config' not in params:
+            raise ValueError('genome_disp_name_config parameter is required')
         if 'output_filtered_name' not in params:
             raise ValueError('output_filtered_name parameter is required')
         if 'coalesce_output' not in params:
@@ -2574,12 +2600,15 @@ class kb_hmmer:
                 # build html report chunk
                 if many_type_name == 'Genome':
                     feature_id_to_function = GenomeToFASTA_retVal['feature_id_to_function']
+                    genome_ref_to_obj_name = GenomeToFASTA_retVal['genome_ref_to_obj_name']
                     genome_ref_to_sci_name = GenomeToFASTA_retVal['genome_ref_to_sci_name']
                 elif many_type_name == 'GenomeSet':
                     feature_id_to_function = GenomeSetToFASTA_retVal['feature_id_to_function']
+                    genome_ref_to_obj_name = GenomeSetToFASTA_retVal['genome_ref_to_obj_name']
                     genome_ref_to_sci_name = GenomeSetToFASTA_retVal['genome_ref_to_sci_name']
                 elif many_type_name == 'FeatureSet':
                     feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
+                    genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                     genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
 
                 head_color = "#eeeeff"
@@ -2666,8 +2695,25 @@ class kb_hmmer:
                         fid_disp = re.sub(r"^.*\.([^\.]+)\.([^\.]+)$", r"\1.\2", fid_lookup)
 
                         func_disp = feature_id_to_function[genome_ref][fid_lookup]
-                        genome_sci_name = genome_ref_to_sci_name[genome_ref]
 
+                        # set genome_disp_name
+                        if many_type_name == 'AnnotatedMetagenomeAssembly':
+                            genome_disp_name = ama_ref_to_obj_name[genome_ref]
+                        else:
+                            genome_obj_name = genome_ref_to_obj_name[genome_ref]
+                            genome_sci_name = genome_ref_to_sci_name[genome_ref]
+                            [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
+                            genome_disp_name = ''
+                            if 'obj_name' in params['genome_disp_name_config']:
+                                genome_disp_name += genome_obj_name
+                            if 'ver' in params['genome_disp_name_config']:
+                                genome_disp_name += '.v'+str(genome_obj_version)
+                            if 'sci_name' in params['genome_disp_name_config']:
+                                genome_disp_name += ': '+genome_sci_name
+                            else:
+                                genome_disp_name = genome_sci_name
+
+                        # build html report table line
                         html_report_chunk += ['<tr bgcolor="' + row_color + '">']
                         #html_report_chunk += ['<tr bgcolor="'+'white'+'">']  # DEBUG
                         # add overlap bar
@@ -2714,9 +2760,9 @@ class kb_hmmer:
                         # func
                         html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
                                               border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + func_disp + '</font></td>']
-                        # sci name
+                        # genome name
                         html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
-                                              border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + genome_sci_name + '</font></td>']
+                                              border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + genome_disp_name + '</font></td>']
                         # ident
     #                    if 'ident_thresh' in filtering_fields[hit_id]:
      #                       this_cell_color = reject_cell_color
@@ -2830,12 +2876,15 @@ class kb_hmmer:
             # build html report
             if many_type_name == 'Genome':
                 feature_id_to_function = GenomeToFASTA_retVal['feature_id_to_function']
+                genome_ref_to_obj_name = GenomeToFASTA_retVal['genome_ref_to_obj_name']
                 genome_ref_to_sci_name = GenomeToFASTA_retVal['genome_ref_to_sci_name']
             elif many_type_name == 'GenomeSet':
                 feature_id_to_function = GenomeSetToFASTA_retVal['feature_id_to_function']
+                genome_ref_to_obj_name = GenomeSetToFASTA_retVal['genome_ref_to_obj_name']
                 genome_ref_to_sci_name = GenomeSetToFASTA_retVal['genome_ref_to_sci_name']
             elif many_type_name == 'FeatureSet':
                 feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
+                genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                 genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
 
             sp = '&nbsp;'
@@ -3070,10 +3119,27 @@ class kb_hmmer:
 
                 # rest of rows
                 for genome_ref in genome_refs:
-                    genome_sci_name = genome_ref_to_sci_name[genome_ref]
+                    # set genome_disp_name
+                    if many_type_name == 'AnnotatedMetagenomeAssembly':
+                        genome_disp_name = ama_ref_to_obj_name[genome_ref]
+                    else:
+                        genome_obj_name = genome_ref_to_obj_name[genome_ref]
+                        genome_sci_name = genome_ref_to_sci_name[genome_ref]
+                        [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
+                        genome_disp_name = ''
+                        if 'obj_name' in params['genome_disp_name_config']:
+                            genome_disp_name += genome_obj_name
+                        if 'ver' in params['genome_disp_name_config']:
+                            genome_disp_name += '.v'+str(genome_obj_version)
+                        if 'sci_name' in params['genome_disp_name_config']:
+                            genome_disp_name += ': '+genome_sci_name
+                        else:
+                            genome_disp_name = genome_sci_name
+
+                    # build html report table line
                     html_report_lines += ['<tr>']
                     html_report_lines += ['<td align=right><font color="' + text_color + '" size=' +
-                                          graph_gen_fontsize + '><b><nobr>' + genome_sci_name + '</nobr></b></font></td>']
+                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></td>']
                     for cat in cats:
                         if not cat_seen[cat] and not show_blanks:
                             continue
@@ -3329,10 +3395,11 @@ class kb_hmmer:
            "input_dbCAN_cellulosome_ids" of type "data_obj_ref", parameter
            "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "coalesce_output" of type "bool", parameter "e_value" of Double,
-           parameter "bitscore" of Double, parameter "overlap_perc" of
-           Double, parameter "maxaccepts" of Double, parameter "heatmap" of
-           type "bool", parameter "vertical" of type "bool", parameter
+           "params['genome_disp_name_config']" of String, parameter "coalesce_output"
+           of type "bool", parameter "e_value" of Double, parameter
+           "bitscore" of Double, parameter "overlap_perc" of Double,
+           parameter "maxaccepts" of Double, parameter "heatmap" of type
+           "bool", parameter "vertical" of type "bool", parameter
            "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
@@ -3365,6 +3432,8 @@ class kb_hmmer:
 #            raise ValueError('input_msa_refs parameter is required if selecting local MSAs')
 #        if 'input_many_ref' not in params:
 #            raise ValueError('input_many_ref parameter is required')
+        if 'genome_disp_name_config' not in params:
+            raise ValueError('genome_disp_name_config parameter is required')
         if 'output_filtered_name' not in params:
             raise ValueError('output_filtered_name parameter is required')
         if 'coalesce_output' not in params:
@@ -4225,12 +4294,15 @@ class kb_hmmer:
                     # build html report chunk
                     if many_type_name == 'Genome':
                         feature_id_to_function = GenomeToFASTA_retVal['feature_id_to_function']
+                        genome_ref_to_obj_name = GenomeToFASTA_retVal['genome_ref_to_obj_name']
                         genome_ref_to_sci_name = GenomeToFASTA_retVal['genome_ref_to_sci_name']
                     elif many_type_name == 'GenomeSet':
                         feature_id_to_function = GenomeSetToFASTA_retVal['feature_id_to_function']
+                        genome_ref_to_obj_name = GenomeSetToFASTA_retVal['genome_ref_to_obj_name']
                         genome_ref_to_sci_name = GenomeSetToFASTA_retVal['genome_ref_to_sci_name']
                     elif many_type_name == 'FeatureSet':
                         feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
+                        genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                         genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
 
                     head_color = "#eeeeff"
@@ -4317,8 +4389,25 @@ class kb_hmmer:
                             fid_disp = re.sub(r"^.*\.([^\.]+)\.([^\.]+)$", r"\1.\2", fid_lookup)
 
                             func_disp = feature_id_to_function[genome_ref][fid_lookup]
-                            genome_sci_name = genome_ref_to_sci_name[genome_ref]
 
+                            # set genome_disp_name
+                            if many_type_name == 'AnnotatedMetagenomeAssembly':
+                                genome_disp_name = ama_ref_to_obj_name[genome_ref]
+                            else:
+                                genome_obj_name = genome_ref_to_obj_name[genome_ref]
+                                genome_sci_name = genome_ref_to_sci_name[genome_ref]
+                                [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
+                                genome_disp_name = ''
+                                if 'obj_name' in params['genome_disp_name_config']:
+                                    genome_disp_name += genome_obj_name
+                                if 'ver' in params['genome_disp_name_config']:
+                                    genome_disp_name += '.v'+str(genome_obj_version)
+                                if 'sci_name' in params['genome_disp_name_config']:
+                                    genome_disp_name += ': '+genome_sci_name
+                                else:
+                                    genome_disp_name = genome_sci_name
+
+                            # build html report table line
                             html_report_chunk += ['<tr bgcolor="' + row_color + '">']
                             #html_report_chunk += ['<tr bgcolor="'+'white'+'">']  # DEBUG
                             # add overlap bar
@@ -4365,9 +4454,9 @@ class kb_hmmer:
                             # func
                             html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
                                                   border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + func_disp + '</font></td>']
-                            # sci name
+                            # genome name
                             html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
-                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + genome_sci_name + '</font></td>']
+                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + genome_disp_name + '</font></td>']
                             # ident
                             #                    if 'ident_thresh' in filtering_fields[hit_id]:
                             #                       this_cell_color = reject_cell_color
@@ -4481,12 +4570,15 @@ class kb_hmmer:
                 # build html report
                 if many_type_name == 'Genome':
                     feature_id_to_function = GenomeToFASTA_retVal['feature_id_to_function']
+                    genome_ref_to_obj_name = GenomeToFASTA_retVal['genome_ref_to_obj_name']
                     genome_ref_to_sci_name = GenomeToFASTA_retVal['genome_ref_to_sci_name']
                 elif many_type_name == 'GenomeSet':
                     feature_id_to_function = GenomeSetToFASTA_retVal['feature_id_to_function']
+                    genome_ref_to_obj_name = GenomeSetToFASTA_retVal['genome_ref_to_obj_name']
                     genome_ref_to_sci_name = GenomeSetToFASTA_retVal['genome_ref_to_sci_name']
                 elif many_type_name == 'FeatureSet':
                     feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
+                    genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                     genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
 
                 sp = '&nbsp;'
@@ -4745,10 +4837,27 @@ class kb_hmmer:
 
                 # rest of rows
                 for genome_ref in genome_refs:
-                    genome_sci_name = genome_ref_to_sci_name[genome_ref]
+                    # set genome_disp_name
+                    if many_type_name == 'AnnotatedMetagenomeAssembly':
+                        genome_disp_name = ama_ref_to_obj_name[genome_ref]
+                    else:
+                        genome_obj_name = genome_ref_to_obj_name[genome_ref]
+                        genome_sci_name = genome_ref_to_sci_name[genome_ref]
+                        [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
+                        genome_disp_name = ''
+                        if 'obj_name' in params['genome_disp_name_config']:
+                            genome_disp_name += genome_obj_name
+                        if 'ver' in params['genome_disp_name_config']:
+                            genome_disp_name += '.v'+str(genome_obj_version)
+                        if 'sci_name' in params['genome_disp_name_config']:
+                            genome_disp_name += ': '+genome_sci_name
+                        else:
+                            genome_disp_name = genome_sci_name
+
+                    # build html report table line
                     html_report_lines += ['<tr>']
                     html_report_lines += ['<td align=right><font color="' + text_color + '" size=' +
-                                          graph_gen_fontsize + '><b><nobr>' + genome_sci_name + '</nobr></b></font></td>']
+                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></td>']
                     for cat in cats:
                         if not cat_seen[cat] and not show_blanks:
                             continue
@@ -5026,10 +5135,11 @@ class kb_hmmer:
            parameter "input_env-bioelement_CN_ids" of type "data_obj_ref",
            parameter "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "coalesce_output" of type "bool", parameter "e_value" of Double,
-           parameter "bitscore" of Double, parameter "overlap_perc" of
-           Double, parameter "maxaccepts" of Double, parameter "heatmap" of
-           type "bool", parameter "vertical" of type "bool", parameter
+           "params['genome_disp_name_config']" of String, parameter "coalesce_output"
+           of type "bool", parameter "e_value" of Double, parameter
+           "bitscore" of Double, parameter "overlap_perc" of Double,
+           parameter "maxaccepts" of Double, parameter "heatmap" of type
+           "bool", parameter "vertical" of type "bool", parameter
            "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
@@ -5062,6 +5172,8 @@ class kb_hmmer:
 #            raise ValueError('input_msa_refs parameter is required if selecting local MSAs')
 #        if 'input_many_ref' not in params:
 #            raise ValueError('input_many_ref parameter is required')
+        if 'genome_disp_name_config' not in params:
+            raise ValueError('genome_disp_name_config parameter is required')
         if 'output_filtered_name' not in params:
             raise ValueError('output_filtered_name parameter is required')
         if 'coalesce_output' not in params:
@@ -5922,12 +6034,15 @@ class kb_hmmer:
                     # build html report chunk
                     if many_type_name == 'Genome':
                         feature_id_to_function = GenomeToFASTA_retVal['feature_id_to_function']
+                        genome_ref_to_obj_name = GenomeToFASTA_retVal['genome_ref_to_obj_name']
                         genome_ref_to_sci_name = GenomeToFASTA_retVal['genome_ref_to_sci_name']
                     elif many_type_name == 'GenomeSet':
                         feature_id_to_function = GenomeSetToFASTA_retVal['feature_id_to_function']
+                        genome_ref_to_obj_name = GenomeSetToFASTA_retVal['genome_ref_to_obj_name']
                         genome_ref_to_sci_name = GenomeSetToFASTA_retVal['genome_ref_to_sci_name']
                     elif many_type_name == 'FeatureSet':
                         feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
+                        genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                         genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
 
                     head_color = "#eeeeff"
@@ -6014,8 +6129,25 @@ class kb_hmmer:
                             fid_disp = re.sub(r"^.*\.([^\.]+)\.([^\.]+)$", r"\1.\2", fid_lookup)
 
                             func_disp = feature_id_to_function[genome_ref][fid_lookup]
-                            genome_sci_name = genome_ref_to_sci_name[genome_ref]
 
+                            # set genome_disp_name
+                            if many_type_name == 'AnnotatedMetagenomeAssembly':
+                                genome_disp_name = ama_ref_to_obj_name[genome_ref]
+                            else:
+                                genome_obj_name = genome_ref_to_obj_name[genome_ref]
+                                genome_sci_name = genome_ref_to_sci_name[genome_ref]
+                                [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
+                                genome_disp_name = ''
+                                if 'obj_name' in params['genome_disp_name_config']:
+                                    genome_disp_name += genome_obj_name
+                                if 'ver' in params['genome_disp_name_config']:
+                                    genome_disp_name += '.v'+str(genome_obj_version)
+                                if 'sci_name' in params['genome_disp_name_config']:
+                                    genome_disp_name += ': '+genome_sci_name
+                                else:
+                                    genome_disp_name = genome_sci_name
+
+                            # build html report table line
                             html_report_chunk += ['<tr bgcolor="' + row_color + '">']
                             #html_report_chunk += ['<tr bgcolor="'+'white'+'">']  # DEBUG
                             # add overlap bar
@@ -6062,9 +6194,9 @@ class kb_hmmer:
                             # func
                             html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
                                                   border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + func_disp + '</font></td>']
-                            # sci name
+                            # genome name
                             html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
-                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + genome_sci_name + '</font></td>']
+                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + genome_disp_name + '</font></td>']
                             # ident
                             #                    if 'ident_thresh' in filtering_fields[hit_id]:
                             #                       this_cell_color = reject_cell_color
@@ -6178,12 +6310,15 @@ class kb_hmmer:
                 # build html report
                 if many_type_name == 'Genome':
                     feature_id_to_function = GenomeToFASTA_retVal['feature_id_to_function']
+                    genome_ref_to_obj_name = GenomeToFASTA_retVal['genome_ref_to_obj_name']
                     genome_ref_to_sci_name = GenomeToFASTA_retVal['genome_ref_to_sci_name']
                 elif many_type_name == 'GenomeSet':
                     feature_id_to_function = GenomeSetToFASTA_retVal['feature_id_to_function']
+                    genome_ref_to_obj_name = GenomeSetToFASTA_retVal['genome_ref_to_obj_name']
                     genome_ref_to_sci_name = GenomeSetToFASTA_retVal['genome_ref_to_sci_name']
                 elif many_type_name == 'FeatureSet':
                     feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
+                    genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                     genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
 
                 sp = '&nbsp;'
@@ -6442,10 +6577,27 @@ class kb_hmmer:
 
                 # rest of rows
                 for genome_ref in genome_refs:
-                    genome_sci_name = genome_ref_to_sci_name[genome_ref]
+                    # set genome_disp_name
+                    if many_type_name == 'AnnotatedMetagenomeAssembly':
+                        genome_disp_name = ama_ref_to_obj_name[genome_ref]
+                    else:
+                        genome_obj_name = genome_ref_to_obj_name[genome_ref]
+                        genome_sci_name = genome_ref_to_sci_name[genome_ref]
+                        [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
+                        genome_disp_name = ''
+                        if 'obj_name' in params['genome_disp_name_config']:
+                            genome_disp_name += genome_obj_name
+                        if 'ver' in params['genome_disp_name_config']:
+                            genome_disp_name += '.v'+str(genome_obj_version)
+                        if 'sci_name' in params['genome_disp_name_config']:
+                            genome_disp_name += ': '+genome_sci_name
+                        else:
+                            genome_disp_name = genome_sci_name
+
+                    # build html report table line
                     html_report_lines += ['<tr>']
                     html_report_lines += ['<td align=right><font color="' + text_color + '" size=' +
-                                          graph_gen_fontsize + '><b><nobr>' + genome_sci_name + '</nobr></b></font></td>']
+                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></td>']
                     for cat in cats:
                         if not cat_seen[cat] and not show_blanks:
                             continue

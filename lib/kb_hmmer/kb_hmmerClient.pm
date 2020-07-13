@@ -129,6 +129,7 @@ HMMER_Params is a reference to a hash where the following keys are defined:
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	input_msa_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	genome_disp_name_config has a value which is a string
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	overlap_perc has a value which is a float
@@ -153,6 +154,7 @@ HMMER_Params is a reference to a hash where the following keys are defined:
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	input_msa_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	genome_disp_name_config has a value which is a string
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	overlap_perc has a value which is a float
@@ -246,6 +248,7 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	input_msa_refs has a value which is a kb_hmmer.data_obj_ref
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	genome_disp_name_config has a value which is a string
 	coalesce_output has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
@@ -275,6 +278,7 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	input_msa_refs has a value which is a kb_hmmer.data_obj_ref
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	genome_disp_name_config has a value which is a string
 	coalesce_output has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
@@ -378,6 +382,7 @@ HMMER_dbCAN_Params is a reference to a hash where the following keys are defined
 	input_dbCAN_cellulosome_ids has a value which is a kb_hmmer.data_obj_ref
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	genome_disp_name_config has a value which is a string
 	coalesce_output has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
@@ -413,6 +418,7 @@ HMMER_dbCAN_Params is a reference to a hash where the following keys are defined
 	input_dbCAN_cellulosome_ids has a value which is a kb_hmmer.data_obj_ref
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	genome_disp_name_config has a value which is a string
 	coalesce_output has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
@@ -523,6 +529,7 @@ HMMER_EnvBioelement_Params is a reference to a hash where the following keys are
 	input_env-bioelement_CN_ids has a value which is a kb_hmmer.data_obj_ref
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	genome_disp_name_config has a value which is a string
 	coalesce_output has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
@@ -565,6 +572,7 @@ HMMER_EnvBioelement_Params is a reference to a hash where the following keys are
 	input_env-bioelement_CN_ids has a value which is a kb_hmmer.data_obj_ref
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	genome_disp_name_config has a value which is a string
 	coalesce_output has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
@@ -893,6 +901,7 @@ workspace_name has a value which is a kb_hmmer.workspace_name
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 input_msa_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
+genome_disp_name_config has a value which is a string
 e_value has a value which is a float
 bitscore has a value which is a float
 overlap_perc has a value which is a float
@@ -909,6 +918,7 @@ workspace_name has a value which is a kb_hmmer.workspace_name
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 input_msa_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
+genome_disp_name_config has a value which is a string
 e_value has a value which is a float
 bitscore has a value which is a float
 overlap_perc has a value which is a float
@@ -979,6 +989,7 @@ workspace_name has a value which is a kb_hmmer.workspace_name
 input_msa_refs has a value which is a kb_hmmer.data_obj_ref
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
+genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
@@ -999,6 +1010,7 @@ workspace_name has a value which is a kb_hmmer.workspace_name
 input_msa_refs has a value which is a kb_hmmer.data_obj_ref
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
+genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
@@ -1042,6 +1054,7 @@ input_dbCAN_PL_ids has a value which is a kb_hmmer.data_obj_ref
 input_dbCAN_cellulosome_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
+genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
@@ -1068,6 +1081,7 @@ input_dbCAN_PL_ids has a value which is a kb_hmmer.data_obj_ref
 input_dbCAN_cellulosome_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
+genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
@@ -1118,6 +1132,7 @@ input_env-bioelement_Me_ids has a value which is a kb_hmmer.data_obj_ref
 input_env-bioelement_CN_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
+genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
@@ -1151,6 +1166,7 @@ input_env-bioelement_Me_ids has a value which is a kb_hmmer.data_obj_ref
 input_env-bioelement_CN_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
+genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float

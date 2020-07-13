@@ -33,6 +33,7 @@ module kb_hmmer {
 	data_obj_ref   input_many_ref;
 	data_obj_ref   input_msa_ref;
         data_obj_name  output_filtered_name;
+        string         genome_disp_name_config;
 
 	float e_value;
 	float bitscore;
@@ -78,6 +79,7 @@ module kb_hmmer {
 	data_obj_ref   input_msa_refs;
 	data_obj_ref   input_many_ref;
         data_obj_name  output_filtered_name;
+        string         genome_disp_name_config;
 
 	bool  coalesce_output;
 	float e_value;
@@ -117,6 +119,7 @@ module kb_hmmer {
 	data_obj_ref   input_dbCAN_cellulosome_ids;
 	data_obj_ref   input_many_ref;
         data_obj_name  output_filtered_name;
+        string         genome_disp_name_config;
 
 	bool  coalesce_output;
 	float e_value;
@@ -163,6 +166,7 @@ module kb_hmmer {
     data_obj_ref   input_env-bioelement_CN_ids;
     data_obj_ref   input_many_ref;
         data_obj_name  output_filtered_name;
+        string         genome_disp_name_config;
 
     bool  coalesce_output;
     float e_value;
