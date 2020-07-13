@@ -2972,7 +2972,19 @@ class kb_hmmer:
             #graph_char = "."
             graph_char = sp
             #color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e']
-            color_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd']
+            #color_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd']
+            color_list = [
+                "#000000",
+                "#000066",
+                "#000099",
+                "#0000bb",
+                "#0000dd",
+                "#0000ff",
+                "#4444ff",
+                "#6666ff",
+                "#8888ff",
+                "#aaaaff",
+                "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
             cell_width = '10px'
@@ -3071,8 +3083,9 @@ class kb_hmmer:
                         else:
                             cell_color_i = max_color - \
                                 int(round(max_color * (val - overall_low_val) / float(overall_high_val - overall_low_val)))
-                            c = color_list[cell_color_i]
-                            cell_color = '#' + c + c + c + c + 'FF'
+                            #c = color_list[cell_color_i]
+                            #cell_color = '#' + c + c + c + c + 'FF'
+                            cell_color = color_list[cell_color_i]
 
                         cell_val = str(table_data[genome_ref][cat])  # the key line
 
@@ -4625,7 +4638,19 @@ class kb_hmmer:
             #graph_char = "."
             graph_char = sp
             #color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e']
-            color_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd']
+            #color_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd']
+            color_list = [
+                "#000000",
+                "#000066",
+                "#000099",
+                "#0000bb",
+                "#0000dd",
+                "#0000ff",
+                "#4444ff",
+                "#6666ff",
+                "#8888ff",
+                "#aaaaff",
+                "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
             cell_width = '10px'
@@ -4733,8 +4758,9 @@ class kb_hmmer:
                         else:
                             cell_color_i = max_color - \
                                 int(round(max_color * (val - overall_low_val) / float(overall_high_val - overall_low_val)))
-                            c = color_list[cell_color_i]
-                            cell_color = '#' + c + c + c + c + 'FF'
+                            #c = color_list[cell_color_i]
+                            #cell_color = '#' + c + c + c + c + 'FF'
+                            cell_color = color_list[cell_color_i]
 
                         cell_val = str(table_data[genome_ref][cat])  # the key line
 
@@ -6309,7 +6335,19 @@ class kb_hmmer:
             #graph_char = "."
             graph_char = sp
             #color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e']
-            color_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd']
+            #color_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd']
+            color_list = [
+                "#000000",
+                "#000066",
+                "#000099",
+                "#0000bb",
+                "#0000dd",
+                "#0000ff",
+                "#4444ff",
+                "#6666ff",
+                "#8888ff",
+                "#aaaaff",
+                "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
             cell_width = '10px'
@@ -6417,8 +6455,9 @@ class kb_hmmer:
                         else:
                             cell_color_i = max_color - \
                                 int(round(max_color * (val - overall_low_val) / float(overall_high_val - overall_low_val)))
-                            c = color_list[cell_color_i]
-                            cell_color = '#' + c + c + c + c + 'FF'
+                            #c = color_list[cell_color_i]
+                            #cell_color = '#' + c + c + c + c + 'FF'
+                            cell_color = color_list[cell_color_i]
 
                         cell_val = str(table_data[genome_ref][cat])  # the key line
 

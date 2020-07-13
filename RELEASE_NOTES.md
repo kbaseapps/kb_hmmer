@@ -1,3 +1,7 @@
+### Version 1.4.1
+__Changes__
+- changed heatmap colors to make easier to distinguish and extend to black for max value
+
 ### Version 1.4.0
 __Changes__
 - updated HMMER to v3.3
