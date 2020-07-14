@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "input_msa_refs",
     "input_many_ref",
     "output_filtered_name",
+    "genome_disp_name_config",
     "coalesce_output",
     "e_value",
     "bitscore",
@@ -44,6 +45,8 @@ public class HMMERLocalMSAGroupParams {
     private String inputManyRef;
     @JsonProperty("output_filtered_name")
     private String outputFilteredName;
+    @JsonProperty("genome_disp_name_config")
+    private String genomeDispNameConfig;
     @JsonProperty("coalesce_output")
     private Long coalesceOutput;
     @JsonProperty("e_value")
@@ -119,6 +122,21 @@ public class HMMERLocalMSAGroupParams {
 
     public HMMERLocalMSAGroupParams withOutputFilteredName(String outputFilteredName) {
         this.outputFilteredName = outputFilteredName;
+        return this;
+    }
+
+    @JsonProperty("genome_disp_name_config")
+    public String getGenomeDispNameConfig() {
+        return genomeDispNameConfig;
+    }
+
+    @JsonProperty("genome_disp_name_config")
+    public void setGenomeDispNameConfig(String genomeDispNameConfig) {
+        this.genomeDispNameConfig = genomeDispNameConfig;
+    }
+
+    public HMMERLocalMSAGroupParams withGenomeDispNameConfig(String genomeDispNameConfig) {
+        this.genomeDispNameConfig = genomeDispNameConfig;
         return this;
     }
 
@@ -254,7 +272,7 @@ public class HMMERLocalMSAGroupParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((((((("HMMERLocalMSAGroupParams"+" [workspaceName=")+ workspaceName)+", inputMsaRefs=")+ inputMsaRefs)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", coalesceOutput=")+ coalesceOutput)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", overlapPerc=")+ overlapPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((("HMMERLocalMSAGroupParams"+" [workspaceName=")+ workspaceName)+", inputMsaRefs=")+ inputMsaRefs)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", coalesceOutput=")+ coalesceOutput)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", overlapPerc=")+ overlapPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
