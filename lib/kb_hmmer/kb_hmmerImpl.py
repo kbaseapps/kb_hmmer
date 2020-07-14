@@ -54,9 +54,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.4.2"
+    VERSION = "1.4.3"
     GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "83cdab982d4863681905a9af9ad726affff29b8a"
+    GIT_COMMIT_HASH = "b7dea91749a0fb7f5a9a424b398338691af30a37"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -65,7 +65,7 @@ class kb_hmmer:
     callbackURL = None
     scratch = None
 
-    HMMER_BIN = os.path.join(os.sep, 'kb', 'module', 'hmmer', 'binaries')
+    HMMER_BIN = os.path.join(os.sep, 'kb', 'module', 'hmmer', 'bin')
     HMMER_BUILD = os.path.join(HMMER_BIN, 'hmmbuild')  # construct profile HMM(s) from MSA(s)
     HMMER_MAKE_DB = os.path.join(HMMER_BIN, 'makehmmerdb')  # build a HMMER binary db from a seq file
     HMMER_SEARCH = os.path.join(HMMER_BIN, 'hmmsearch')  # search profile(s) against a sequence db
@@ -252,7 +252,7 @@ class kb_hmmer:
            parameter "input_many_ref" of type "data_obj_ref", parameter
            "input_msa_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "params['genome_disp_name_config']" of String, parameter "e_value" of
+           "genome_disp_name_config" of String, parameter "e_value" of
            Double, parameter "bitscore" of Double, parameter "overlap_perc"
            of Double, parameter "maxaccepts" of Double
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
@@ -586,6 +586,42 @@ class kb_hmmer:
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
 
+        # AnnotatedMetagenomeAssembly
+        #
+        elif many_type_name == 'AnnotatedMetagenomeAssembly':
+            many_forward_reads_file_dir = self.output_dir
+            many_forward_reads_file = input_many_name + ".fasta"
+
+            # DEBUG
+            #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+            AnnotatedMetagenomeAssemblyToFASTA_params = {
+                'ama_ref': input_many_ref,
+                'file': many_forward_reads_file,
+                'dir': many_forward_reads_file_dir,
+                'console': console,
+                'invalid_msgs': invalid_msgs,
+                'residue_type': 'protein',
+                'feature_type': 'CDS',
+                'record_id_pattern': '%%feature_id%%',
+                'record_desc_pattern': '[%%genome_id%%]',
+                'case': 'upper',
+                'linewrap': 50
+            }
+
+            #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
+            #SERVICE_VER = 'release'
+            SERVICE_VER = 'beta'
+            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+            AnnotatedMetagenomeAssemblyToFASTA_retVal = DOTFU.AnnotatedMetagenomeAssemblyToFASTA (AnnotatedMetagenomeAssemblyToFASTA_params)
+            many_forward_reads_file_path = AnnotatedMetagenomeAssemblyToFASTA_retVal['fasta_file_path']
+            feature_ids = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_ids']
+            if len(feature_ids) > 0:
+                appropriate_sequence_found_in_many_input = True
+
+            # DEBUG
+            #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+            #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
+
         # Missing proper input_many_type
         #
         else:
@@ -859,7 +895,6 @@ class kb_hmmer:
                 if fasta_line.startswith('>'):
                     if last_id != None:
                         id_untrans = last_id
-                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                         id_trans = re.sub('\|', ':', id_untrans)
                         #if id_untrans in hit_order or id_trans in hit_order:
                         if id_untrans in hit_beg or id_trans in hit_beg:
@@ -871,7 +906,6 @@ class kb_hmmer:
                     last_buf += fasta_line
             if last_id != None:
                 id_untrans = last_id
-                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                 id_trans = re.sub('\|', ':', id_untrans)
                 #if id_untrans in hit_order or id_trans in hit_order:
                 if id_untrans in hit_beg or id_trans in hit_beg:
@@ -932,9 +966,12 @@ class kb_hmmer:
                     high_bitscore_score[hit_seq_id] = hit_bitscore
                     high_bitscore_line[hit_seq_id] = line
             except:
-                hit_order.append(hit_seq_id)
-                high_bitscore_score[hit_seq_id] = hit_bitscore
-                high_bitscore_line[hit_seq_id] = line
+                if hit_seq_id in hit_seq_len:
+                    hit_order.append(hit_seq_id)
+                    high_bitscore_score[hit_seq_id] = hit_bitscore
+                    high_bitscore_line[hit_seq_id] = line
+                else:
+                    self.log(console, "ALERT!!!  HIT "+hit_seq_id+" not found in MSA alignment and is likely a very weak hit (E-value is "+str(hit_e_value)+" and bitscore is "+str(hit_bitscore)+".  SKIPPING HIT.")
 
         filtering_fields = dict()
         total_hit_cnt = len(hit_order)
@@ -1000,7 +1037,6 @@ class kb_hmmer:
                     #sequence_str = seq_obj['sequence']
 
                     id_untrans = header_id
-                    # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                     id_trans = re.sub('\|', ':', id_untrans)
                     if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                         #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
@@ -1024,7 +1060,6 @@ class kb_hmmer:
                 for fId in sorted(fId_list):
                     for genome_ref in input_many_featureSet['elements'][fId]:
                         id_untrans = genome_ref + genome_id_feature_id_delim + fId
-                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                         id_trans = re.sub('\|', ':', id_untrans)
                         if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                             #self.log(console, 'FOUND HIT '+fId)  # DEBUG
@@ -1050,7 +1085,6 @@ class kb_hmmer:
                 output_featureSet['elements'] = dict()
                 for fid in feature_ids:
                     id_untrans = fid
-                    # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                     id_trans = re.sub('\|', ':', id_untrans)
                     if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                         #self.log(console, 'FOUND HIT '+fid)  # DEBUG
@@ -1078,7 +1112,6 @@ class kb_hmmer:
                     genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
                     for feature_id in feature_ids_by_genome_id[genome_id]:
                         id_untrans = genome_ref + genome_id_feature_id_delim + feature_id
-                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                         id_trans = re.sub('\|', ':', id_untrans)
                         if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                             #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
@@ -1091,6 +1124,36 @@ class kb_hmmer:
                                 output_featureSet['elements'][feature_id] = []
                                 output_featureSet['element_ordering'].append(feature_id)
                             output_featureSet['elements'][feature_id].append(genome_ref)
+
+            # Parse AnnotatedMetagenomeAssembly hits into FeatureSet
+            #
+            elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                seq_total = 0
+                output_featureSet = dict()
+#                if 'scientific_name' in input_many_genome and input_many_genome['scientific_name'] != None:
+#                    output_featureSet['description'] = input_many_genome['scientific_name'] + " - "+search_tool_name+"_Search filtered"
+#                else:
+#                    output_featureSet['description'] = search_tool_name+"_Search filtered"
+                output_featureSet['description'] = search_tool_name+"_Search filtered"
+                output_featureSet['element_ordering'] = []
+                output_featureSet['elements'] = dict()
+                for fid in feature_ids:
+                    #if fid == 'AWN69_RS07145' or fid == 'AWN69_RS13375':
+                    #    self.log(console, 'CHECKING FID '+fid)  # DEBUG
+                    seq_total += 1
+                    id_untrans = fid
+                    id_trans = re.sub ('\|',':',id_untrans)
+                    #print ("TESTING FEATURES: ID_UNTRANS: '"+id_untrans+"'")  # DEBUG
+                    #print ("TESTING FEATURES: ID_TRANS: '"+id_trans+"'")  # DEBUG
+                    if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
+                        self.log(console, 'FOUND HIT '+fid)  # DEBUG
+                        #output_featureSet['element_ordering'].append(fid)
+                        accept_fids[id_untrans] = True
+                        #fid = input_many_ref+self.genome_id_feature_id_delim+id_untrans  # don't change fId for output FeatureSet
+                        ama_ref = params['input_many_ref']
+                        output_featureSet['element_ordering'].append(fid)
+                        output_featureSet['elements'][fid] = [ama_ref]
+
 
             # load the method provenance from the context object
             #
@@ -1249,7 +1312,6 @@ class kb_hmmer:
                     fid_lookup = None
                     for fid in feature_id_to_function[genome_ref].keys():
                         id_untrans = fid
-                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                         id_trans = re.sub('\|', ':', id_untrans)
 
                         #self.log (console, "SCANNING FIDS.  HIT_FID: '"+str(hit_fid)+"' FID: '"+str(fid)+"' TRANS: '"+str(id_trans)+"'")  # DEBUG
@@ -1565,7 +1627,7 @@ class kb_hmmer:
            parameter "input_msa_refs" of type "data_obj_ref", parameter
            "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "params['genome_disp_name_config']" of String, parameter "coalesce_output"
+           "genome_disp_name_config" of String, parameter "coalesce_output"
            of type "bool", parameter "e_value" of Double, parameter
            "bitscore" of Double, parameter "overlap_perc" of Double,
            parameter "maxaccepts" of Double, parameter "heatmap" of type
@@ -1782,6 +1844,42 @@ class kb_hmmer:
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
+
+        # AnnotatedMetagenomeAssembly
+        #
+        elif many_type_name == 'AnnotatedMetagenomeAssembly':
+            many_forward_reads_file_dir = self.output_dir
+            many_forward_reads_file = input_many_name + ".fasta"
+
+            # DEBUG
+            #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+            AnnotatedMetagenomeAssemblyToFASTA_params = {
+                'ama_ref': input_many_ref,
+                'file': many_forward_reads_file,
+                'dir': many_forward_reads_file_dir,
+                'console': console,
+                'invalid_msgs': invalid_msgs,
+                'residue_type': 'protein',
+                'feature_type': 'CDS',
+                'record_id_pattern': '%%feature_id%%',
+                'record_desc_pattern': '[%%genome_id%%]',
+                'case': 'upper',
+                'linewrap': 50
+            }
+
+            #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
+            #SERVICE_VER = 'release'
+            SERVICE_VER = 'beta'
+            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+            AnnotatedMetagenomeAssemblyToFASTA_retVal = DOTFU.AnnotatedMetagenomeAssemblyToFASTA (AnnotatedMetagenomeAssemblyToFASTA_params)
+            many_forward_reads_file_path = AnnotatedMetagenomeAssemblyToFASTA_retVal['fasta_file_path']
+            feature_ids = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_ids']
+            if len(feature_ids) > 0:
+                appropriate_sequence_found_in_many_input = True
+
+            # DEBUG
+            #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+            #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
 
         # Missing proper input_many_type
         #
@@ -2265,7 +2363,6 @@ class kb_hmmer:
                     if fasta_line.startswith('>'):
                         if last_id != None:
                             id_untrans = last_id
-                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                             id_trans = re.sub('\|', ':', id_untrans)
                             #if id_untrans in hit_order or id_trans in hit_order:
                             if id_untrans in hit_beg or id_trans in hit_beg:
@@ -2277,7 +2374,6 @@ class kb_hmmer:
                         last_buf += fasta_line
                 if last_id != None:
                     id_untrans = last_id
-                    # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                     id_trans = re.sub('\|', ':', id_untrans)
                     #if id_untrans in hit_order or id_trans in hit_order:
                     if id_untrans in hit_beg or id_trans in hit_beg:
@@ -2333,9 +2429,12 @@ class kb_hmmer:
                         high_bitscore_score[hit_seq_id] = hit_bitscore
                         high_bitscore_line[hit_seq_id] = line
                 except:
-                    hit_order.append(hit_seq_id)
-                    high_bitscore_score[hit_seq_id] = hit_bitscore
-                    high_bitscore_line[hit_seq_id] = line
+                    if hit_seq_id in hit_seq_len:
+                        hit_order.append(hit_seq_id)
+                        high_bitscore_score[hit_seq_id] = hit_bitscore
+                        high_bitscore_line[hit_seq_id] = line
+                    else:
+                        self.log(console, "ALERT!!!  HIT "+hit_seq_id+" not found in MSA alignment and is likely a very weak hit (E-value is "+str(hit_e_value)+" and bitscore is "+str(hit_bitscore)+".  SKIPPING HIT.")
 
             filtering_fields = dict()
             total_hit_cnts[msa_i] = len(hit_order)
@@ -2412,7 +2511,6 @@ class kb_hmmer:
                         #sequence_str = seq_obj['sequence']
 
                         id_untrans = header_id
-                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                         id_trans = re.sub('\|', ':', id_untrans)
                         if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                             #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
@@ -2436,7 +2534,6 @@ class kb_hmmer:
                     for fId in sorted(fId_list):
                         for genome_ref in input_many_featureSet['elements'][fId]:
                             id_untrans = genome_ref + genome_id_feature_id_delim + fId
-                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                             id_trans = re.sub('\|', ':', id_untrans)
                             if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                 #self.log(console, 'FOUND HIT '+fId)  # DEBUG
@@ -2462,7 +2559,6 @@ class kb_hmmer:
                     output_featureSet['elements'] = dict()
                     for fid in feature_ids:
                         id_untrans = fid
-                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                         id_trans = re.sub('\|', ':', id_untrans)
                         if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                             #self.log(console, 'FOUND HIT '+fid)  # DEBUG
@@ -2490,7 +2586,6 @@ class kb_hmmer:
                         genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
                         for feature_id in feature_ids_by_genome_id[genome_id]:
                             id_untrans = genome_ref + genome_id_feature_id_delim + feature_id
-                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                             id_trans = re.sub('\|', ':', id_untrans)
                             if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                 #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
@@ -2503,6 +2598,36 @@ class kb_hmmer:
                                     output_featureSet['elements'][feature_id] = []
                                     output_featureSet['element_ordering'].append(feature_id)
                                 output_featureSet['elements'][feature_id].append(genome_ref)
+
+                # Parse AnnotatedMetagenomeAssembly hits into FeatureSet
+                #
+                elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                    seq_total = 0
+                    output_featureSet = dict()
+#                    if 'scientific_name' in input_many_genome and input_many_genome['scientific_name'] != None:
+#                        output_featureSet['description'] = input_many_genome['scientific_name'] + " - "+search_tool_name+"_Search filtered"
+#                    else:
+#                        output_featureSet['description'] = search_tool_name+"_Search filtered"
+                    output_featureSet['description'] = search_tool_name+"_Search filtered"
+                    output_featureSet['element_ordering'] = []
+                    output_featureSet['elements'] = dict()
+                    for fid in feature_ids:
+                        #if fid == 'AWN69_RS07145' or fid == 'AWN69_RS13375':
+                        #    self.log(console, 'CHECKING FID '+fid)  # DEBUG
+                        seq_total += 1
+                        id_untrans = fid
+                        id_trans = re.sub ('\|',':',id_untrans)
+                        #print ("TESTING FEATURES: ID_UNTRANS: '"+id_untrans+"'")  # DEBUG
+                        #print ("TESTING FEATURES: ID_TRANS: '"+id_trans+"'")  # DEBUG
+                        if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
+                            self.log(console, 'FOUND HIT '+fid)  # DEBUG
+                            #output_featureSet['element_ordering'].append(fid)
+                            accept_fids[id_untrans] = True
+                            #fid = input_many_ref+self.genome_id_feature_id_delim+id_untrans  # don't change fId for output FeatureSet
+                            ama_ref = params['input_many_ref']
+                            output_featureSet['element_ordering'].append(fid)
+                            output_featureSet['elements'][fid] = [ama_ref]
+
 
                 # load the method provenance from the context object
                 #
@@ -2670,7 +2795,6 @@ class kb_hmmer:
                         fid_lookup = None
                         for fid in feature_id_to_function[genome_ref].keys():
                             id_untrans = fid
-                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                             id_trans = re.sub('\|', ':', id_untrans)
 
                             #self.log (console, "SCANNING FIDS.  HIT_FID: '"+str(hit_fid)+"' FID: '"+str(fid)+"' TRANS: '"+str(id_trans)+"'")  # DEBUG
@@ -3242,6 +3366,8 @@ class kb_hmmer:
                 if total_hit_cnts[msa_i] == 0:
                     self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR MSA ' + input_msa_name)
                     continue
+                else:
+                    self.log(console, 'PREPPING UPLOAD OF HMMER OUTPUT FOR MSA ' + input_msa_name)
                 new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, input_msa_name + '.hitout.txt')
                 new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, input_msa_name + '.msaout.txt')
 
@@ -3395,7 +3521,7 @@ class kb_hmmer:
            "input_dbCAN_cellulosome_ids" of type "data_obj_ref", parameter
            "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "params['genome_disp_name_config']" of String, parameter "coalesce_output"
+           "genome_disp_name_config" of String, parameter "coalesce_output"
            of type "bool", parameter "e_value" of Double, parameter
            "bitscore" of Double, parameter "overlap_perc" of Double,
            parameter "maxaccepts" of Double, parameter "heatmap" of type
@@ -3612,6 +3738,42 @@ class kb_hmmer:
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
+
+        # AnnotatedMetagenomeAssembly
+        #
+        elif many_type_name == 'AnnotatedMetagenomeAssembly':
+            many_forward_reads_file_dir = self.output_dir
+            many_forward_reads_file = input_many_name + ".fasta"
+
+            # DEBUG
+            #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+            AnnotatedMetagenomeAssemblyToFASTA_params = {
+                'ama_ref': input_many_ref,
+                'file': many_forward_reads_file,
+                'dir': many_forward_reads_file_dir,
+                'console': console,
+                'invalid_msgs': invalid_msgs,
+                'residue_type': 'protein',
+                'feature_type': 'CDS',
+                'record_id_pattern': '%%feature_id%%',
+                'record_desc_pattern': '[%%genome_id%%]',
+                'case': 'upper',
+                'linewrap': 50
+            }
+
+            #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
+            #SERVICE_VER = 'release'
+            SERVICE_VER = 'beta'
+            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+            AnnotatedMetagenomeAssemblyToFASTA_retVal = DOTFU.AnnotatedMetagenomeAssemblyToFASTA (AnnotatedMetagenomeAssemblyToFASTA_params)
+            many_forward_reads_file_path = AnnotatedMetagenomeAssemblyToFASTA_retVal['fasta_file_path']
+            feature_ids = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_ids']
+            if len(feature_ids) > 0:
+                appropriate_sequence_found_in_many_input = True
+
+            # DEBUG
+            #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+            #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
 
         # Missing proper input_many_type
         #
@@ -3908,15 +4070,18 @@ class kb_hmmer:
                 # DEBUG
                 #self.log(console, "DEBUG: output_hit_TAB_file_path: '"+str(output_hit_TAB_file_path))
                 #self.log(console, "DEBUG: output_hit_MSA_file_path: '"+str(output_hit_MSA_file_path))
-                #report = "TAB:\n\n"
-                #with open (output_hit_TAB_file_path, 'r') as output_handle:
-                #    for line in output_handle:
-                #        report += line+"\n"
-                #report += "\n\nMSA:\n\n"
-                #with open (output_hit_MSA_file_path, 'r') as output_handle:
-                #    for line in output_handle:
-                #        report += line+"\n"
-                #self.log(console, report)
+                # DEBUG
+                """
+                report = "TAB:\n\n"
+                with open (output_hit_TAB_file_path, 'r') as output_handle:
+                    for line in output_handle:
+                        report += line+"\n"
+                report += "\n\nMSA:\n\n"
+                with open (output_hit_MSA_file_path, 'r') as output_handle:
+                    for line in output_handle:
+                        report += line+"\n"
+                self.log(console, report)
+                """
 
                 # Get hit beg and end positions from Stockholm format MSA output
                 #
@@ -3932,6 +4097,7 @@ class kb_hmmer:
                             hit_rec = re.sub('\s+.*?$', '', hit_rec)
                             hit_range = re.sub('^.*\/', '', hit_rec)
                             hit_id = re.sub('\/[^\/]+$', '', hit_rec)
+                            #self.log(console, "HIT_ID: '"+hit_id+"' HIT_REC: '"+hit_rec+"'")  # DEBUG
                             (beg_str, end_str) = hit_range.split('-')
                             beg = int(beg_str)
                             end = int(end_str)
@@ -3960,7 +4126,6 @@ class kb_hmmer:
                         if fasta_line.startswith('>'):
                             if last_id != None:
                                 id_untrans = last_id
-                                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                                 id_trans = re.sub('\|', ':', id_untrans)
                                 #if id_untrans in hit_order or id_trans in hit_order:
                                 if id_untrans in hit_beg or id_trans in hit_beg:
@@ -3973,7 +4138,6 @@ class kb_hmmer:
                             last_buf += fasta_line
                     if last_id != None:
                         id_untrans = last_id
-                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                         id_trans = re.sub('\|', ':', id_untrans)
                         #if id_untrans in hit_order or id_trans in hit_order:
                         if id_untrans in hit_beg or id_trans in hit_beg:
@@ -4029,9 +4193,12 @@ class kb_hmmer:
                             high_bitscore_score[hit_seq_id] = hit_bitscore
                             high_bitscore_line[hit_seq_id] = line
                     except:
-                        hit_order.append(hit_seq_id)
-                        high_bitscore_score[hit_seq_id] = hit_bitscore
-                        high_bitscore_line[hit_seq_id] = line
+                        if hit_seq_id in hit_seq_len:
+                            hit_order.append(hit_seq_id)
+                            high_bitscore_score[hit_seq_id] = hit_bitscore
+                            high_bitscore_line[hit_seq_id] = line
+                        else:
+                            self.log(console, "ALERT!!!  HIT "+hit_seq_id+" not found in MSA alignment and is likely a very weak hit (E-value is "+str(hit_e_value)+" and bitscore is "+str(hit_bitscore)+".  SKIPPING HIT.")
 
                 filtering_fields = dict()
                 total_hit_cnts[hmm_id] = len(hit_order)
@@ -4108,7 +4275,6 @@ class kb_hmmer:
                             #sequence_str = seq_obj['sequence']
 
                             id_untrans = header_id
-                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                             id_trans = re.sub('\|', ':', id_untrans)
                             if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                 #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
@@ -4132,7 +4298,6 @@ class kb_hmmer:
                         for fId in sorted(fId_list):
                             for genome_ref in input_many_featureSet['elements'][fId]:
                                 id_untrans = genome_ref + genome_id_feature_id_delim + fId
-                                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                                 id_trans = re.sub('\|', ':', id_untrans)
                                 if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                     #self.log(console, 'FOUND HIT '+fId)  # DEBUG
@@ -4158,7 +4323,6 @@ class kb_hmmer:
                         output_featureSet['elements'] = dict()
                         for fid in feature_ids:
                             id_untrans = fid
-                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                             id_trans = re.sub('\|', ':', id_untrans)
                             if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                 #self.log(console, 'FOUND HIT '+fid)  # DEBUG
@@ -4186,7 +4350,6 @@ class kb_hmmer:
                             genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
                             for feature_id in feature_ids_by_genome_id[genome_id]:
                                 id_untrans = genome_ref + genome_id_feature_id_delim + feature_id
-                                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                                 id_trans = re.sub('\|', ':', id_untrans)
                                 if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                     #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
@@ -4199,6 +4362,36 @@ class kb_hmmer:
                                         output_featureSet['elements'][feature_id] = []
                                         output_featureSet['element_ordering'].append(feature_id)
                                     output_featureSet['elements'][feature_id].append(genome_ref)
+
+                    # Parse AnnotatedMetagenomeAssembly hits into FeatureSet
+                    #
+                    elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                        seq_total = 0
+                        output_featureSet = dict()
+#                        if 'scientific_name' in input_many_genome and input_many_genome['scientific_name'] != None:
+#                            output_featureSet['description'] = input_many_genome['scientific_name'] + " - "+search_tool_name+"_Search filtered"
+#                        else:
+#                            output_featureSet['description'] = search_tool_name+"_Search filtered"
+                        output_featureSet['description'] = search_tool_name+"_Search filtered"
+                        output_featureSet['element_ordering'] = []
+                        output_featureSet['elements'] = dict()
+                        for fid in feature_ids:
+                            #if fid == 'AWN69_RS07145' or fid == 'AWN69_RS13375':
+                            #    self.log(console, 'CHECKING FID '+fid)  # DEBUG
+                            seq_total += 1
+                            id_untrans = fid
+                            id_trans = re.sub ('\|',':',id_untrans)
+                            #print ("TESTING FEATURES: ID_UNTRANS: '"+id_untrans+"'")  # DEBUG
+                            #print ("TESTING FEATURES: ID_TRANS: '"+id_trans+"'")  # DEBUG
+                            if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
+                                self.log(console, 'FOUND HIT '+fid)  # DEBUG
+                                #output_featureSet['element_ordering'].append(fid)
+                                accept_fids[id_untrans] = True
+                                #fid = input_many_ref+self.genome_id_feature_id_delim+id_untrans  # don't change fId for output FeatureSet
+                                ama_ref = params['input_many_ref']
+                                output_featureSet['element_ordering'].append(fid)
+                                output_featureSet['elements'][fid] = [ama_ref]
+
 
                     # load the method provenance from the context object
                     #
@@ -4364,7 +4557,6 @@ class kb_hmmer:
                             fid_lookup = None
                             for fid in feature_id_to_function[genome_ref].keys():
                                 id_untrans = fid
-                                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                                 id_trans = re.sub('\|', ':', id_untrans)
 
                                 #self.log (console, "SCANNING FIDS.  HIT_FID: '"+str(hit_fid)+"' FID: '"+str(fid)+"' TRANS: '"+str(id_trans)+"'")  # DEBUG
@@ -4974,6 +5166,8 @@ class kb_hmmer:
                 if total_hit_cnts[hmm_id] == 0:
                     self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR HMM ' + hmm_id)
                     continue
+                else:
+                    self.log(console, 'PREPPING UPLOAD OF HMMER OUTPUT FOR HMM ' + hmm_id)
                 new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, hmm_id + '.hitout.txt')
                 new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, hmm_id + '.msaout.txt')
 
@@ -5135,7 +5329,7 @@ class kb_hmmer:
            parameter "input_env-bioelement_CN_ids" of type "data_obj_ref",
            parameter "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "params['genome_disp_name_config']" of String, parameter "coalesce_output"
+           "genome_disp_name_config" of String, parameter "coalesce_output"
            of type "bool", parameter "e_value" of Double, parameter
            "bitscore" of Double, parameter "overlap_perc" of Double,
            parameter "maxaccepts" of Double, parameter "heatmap" of type
@@ -5352,6 +5546,42 @@ class kb_hmmer:
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
+
+        # AnnotatedMetagenomeAssembly
+        #
+        elif many_type_name == 'AnnotatedMetagenomeAssembly':
+            many_forward_reads_file_dir = self.output_dir
+            many_forward_reads_file = input_many_name + ".fasta"
+
+            # DEBUG
+            #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+            AnnotatedMetagenomeAssemblyToFASTA_params = {
+                'ama_ref': input_many_ref,
+                'file': many_forward_reads_file,
+                'dir': many_forward_reads_file_dir,
+                'console': console,
+                'invalid_msgs': invalid_msgs,
+                'residue_type': 'protein',
+                'feature_type': 'CDS',
+                'record_id_pattern': '%%feature_id%%',
+                'record_desc_pattern': '[%%genome_id%%]',
+                'case': 'upper',
+                'linewrap': 50
+            }
+
+            #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
+            #SERVICE_VER = 'release'
+            SERVICE_VER = 'beta'
+            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+            AnnotatedMetagenomeAssemblyToFASTA_retVal = DOTFU.AnnotatedMetagenomeAssemblyToFASTA (AnnotatedMetagenomeAssemblyToFASTA_params)
+            many_forward_reads_file_path = AnnotatedMetagenomeAssemblyToFASTA_retVal['fasta_file_path']
+            feature_ids = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_ids']
+            if len(feature_ids) > 0:
+                appropriate_sequence_found_in_many_input = True
+
+            # DEBUG
+            #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+            #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
 
         # Missing proper input_many_type
         #
@@ -5700,7 +5930,6 @@ class kb_hmmer:
                         if fasta_line.startswith('>'):
                             if last_id != None:
                                 id_untrans = last_id
-                                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                                 id_trans = re.sub('\|', ':', id_untrans)
                                 #if id_untrans in hit_order or id_trans in hit_order:
                                 if id_untrans in hit_beg or id_trans in hit_beg:
@@ -5713,7 +5942,6 @@ class kb_hmmer:
                             last_buf += fasta_line
                     if last_id != None:
                         id_untrans = last_id
-                        # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                         id_trans = re.sub('\|', ':', id_untrans)
                         #if id_untrans in hit_order or id_trans in hit_order:
                         if id_untrans in hit_beg or id_trans in hit_beg:
@@ -5769,9 +5997,12 @@ class kb_hmmer:
                             high_bitscore_score[hit_seq_id] = hit_bitscore
                             high_bitscore_line[hit_seq_id] = line
                     except:
-                        hit_order.append(hit_seq_id)
-                        high_bitscore_score[hit_seq_id] = hit_bitscore
-                        high_bitscore_line[hit_seq_id] = line
+                        if hit_seq_id in hit_seq_len:
+                            hit_order.append(hit_seq_id)
+                            high_bitscore_score[hit_seq_id] = hit_bitscore
+                            high_bitscore_line[hit_seq_id] = line
+                        else:
+                            self.log(console, "ALERT!!!  HIT "+hit_seq_id+" not found in MSA alignment and is likely a very weak hit (E-value is "+str(hit_e_value)+" and bitscore is "+str(hit_bitscore)+".  SKIPPING HIT.")
 
                 filtering_fields = dict()
                 total_hit_cnts[hmm_id] = len(hit_order)
@@ -5848,7 +6079,6 @@ class kb_hmmer:
                             #sequence_str = seq_obj['sequence']
 
                             id_untrans = header_id
-                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                             id_trans = re.sub('\|', ':', id_untrans)
                             if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                 #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
@@ -5872,7 +6102,6 @@ class kb_hmmer:
                         for fId in sorted(fId_list):
                             for genome_ref in input_many_featureSet['elements'][fId]:
                                 id_untrans = genome_ref + genome_id_feature_id_delim + fId
-                                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                                 id_trans = re.sub('\|', ':', id_untrans)
                                 if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                     #self.log(console, 'FOUND HIT '+fId)  # DEBUG
@@ -5898,7 +6127,6 @@ class kb_hmmer:
                         output_featureSet['elements'] = dict()
                         for fid in feature_ids:
                             id_untrans = fid
-                            # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                             id_trans = re.sub('\|', ':', id_untrans)
                             if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                 #self.log(console, 'FOUND HIT '+fid)  # DEBUG
@@ -5926,7 +6154,6 @@ class kb_hmmer:
                             genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
                             for feature_id in feature_ids_by_genome_id[genome_id]:
                                 id_untrans = genome_ref + genome_id_feature_id_delim + feature_id
-                                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                                 id_trans = re.sub('\|', ':', id_untrans)
                                 if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
                                     #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
@@ -5940,6 +6167,36 @@ class kb_hmmer:
                                         output_featureSet['element_ordering'].append(feature_id)
                                     output_featureSet['elements'][feature_id].append(genome_ref)
 
+                    # Parse AnnotatedMetagenomeAssembly hits into FeatureSet
+                    #
+                    elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                        seq_total = 0
+                        output_featureSet = dict()
+#                        if 'scientific_name' in input_many_genome and input_many_genome['scientific_name'] != None:
+#                            output_featureSet['description'] = input_many_genome['scientific_name'] + " - "+search_tool_name+"_Search filtered"
+#                        else:
+#                            output_featureSet['description'] = search_tool_name+"_Search filtered"
+                        output_featureSet['description'] = search_tool_name+"_Search filtered"
+                        output_featureSet['element_ordering'] = []
+                        output_featureSet['elements'] = dict()
+                        for fid in feature_ids:
+                            #if fid == 'AWN69_RS07145' or fid == 'AWN69_RS13375':
+                            #    self.log(console, 'CHECKING FID '+fid)  # DEBUG
+                            seq_total += 1
+                            id_untrans = fid
+                            id_trans = re.sub ('\|',':',id_untrans)  
+                            #print ("TESTING FEATURES: ID_UNTRANS: '"+id_untrans+"'")  # DEBUG
+                            #print ("TESTING FEATURES: ID_TRANS: '"+id_trans+"'")  # DEBUG
+                            if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
+                                self.log(console, 'FOUND HIT '+fid)  # DEBUG
+                                #output_featureSet['element_ordering'].append(fid)
+                                accept_fids[id_untrans] = True
+                                #fid = input_many_ref+self.genome_id_feature_id_delim+id_untrans  # don't change fId for output FeatureSet
+                                ama_ref = params['input_many_ref']
+                                output_featureSet['element_ordering'].append(fid)
+                                output_featureSet['elements'][fid] = [ama_ref]
+
+                                
                     # load the method provenance from the context object
                     #
                     #self.log(console,"SETTING PROVENANCE")  # DEBUG
@@ -6104,7 +6361,6 @@ class kb_hmmer:
                             fid_lookup = None
                             for fid in feature_id_to_function[genome_ref].keys():
                                 id_untrans = fid
-                                # BLAST seems to make this translation now when id format has simple 'kb|blah' format
                                 id_trans = re.sub('\|', ':', id_untrans)
 
                                 #self.log (console, "SCANNING FIDS.  HIT_FID: '"+str(hit_fid)+"' FID: '"+str(fid)+"' TRANS: '"+str(id_trans)+"'")  # DEBUG
@@ -6714,6 +6970,8 @@ class kb_hmmer:
                 if total_hit_cnts[hmm_id] == 0:
                     self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR HMM ' + hmm_id)
                     continue
+                else:
+                    self.log(console, 'PREPPING UPLOAD OF HMMER OUTPUT FOR HMM ' + hmm_id)
                 new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, hmm_id + '.hitout.txt')
                 new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, hmm_id + '.msaout.txt')
 

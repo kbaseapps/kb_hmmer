@@ -1,7 +1,7 @@
 {
-    "ver": "1.4.0",
+    "ver": "1.4.3",
     "authors": [
-        "seanjungbluth"
+        "seanjungbluth", "dylan"
     ],
     "contact": "http://kbase.us/contact-us/",
     "visible": true,
@@ -1015,7 +1015,11 @@
             "default_values": [ "" ],
             "field_type": "text",
             "text_options": {
-                "valid_ws_types": [ "KBaseCollections.FeatureSet","KBaseGenomes.Genome","KBaseSearch.GenomeSet" ]
+                "valid_ws_types": [ "KBaseCollections.FeatureSet",
+				    "KBaseGenomes.Genome",
+				    "KBaseSearch.GenomeSet",
+				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly"
+				  ]
             }
         },
         {

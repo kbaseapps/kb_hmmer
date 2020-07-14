@@ -1,3 +1,7 @@
+### Version 1.4.3
+__Changes__
+- add support for AnnotatedMetagenomeAssembly as target
+
 ### Version 1.4.2
 __Changes__
 - add configuration for genome display name

@@ -149,6 +149,41 @@ class kb_hmmerTest(unittest.TestCase):
         cls.genomeSet_refs.append(str(obj_info[WSID_I]) +'/'+ str(obj_info[OBJID_I]) +'/'+ str(obj_info[VERSION_I]))
 
 
+        # Upload a test Annotated Metagenome Assembly
+        cls.ama_refs = []
+        ama_name = "ama_test.AMA"
+        ama_feature_cnt = 888
+        ama_contigs_file_src = "data/AnnotatedMetagenomeAssembly/ama_contigs.fasta"
+        ama_genes_file_src   = "data/AnnotatedMetagenomeAssembly/ama_genes.gff"
+        ama_contigs_file_upload = os.path.join (cls.scratch, os.path.basename(ama_contigs_file_src))
+        ama_genes_file_upload = os.path.join (cls.scratch, os.path.basename(ama_genes_file_src))
+        shutil.copy (ama_contigs_file_src, ama_contigs_file_upload)
+        shutil.copy (ama_genes_file_src, ama_genes_file_upload)
+        ama_upload_params = {
+            "workspace_name": cls.wsName,
+            "genome_name": ama_name,
+            "fasta_file": {"path": ama_contigs_file_upload},
+            "gff_file": {"path": ama_genes_file_upload},
+            "source": "GFF",
+            "scientific_name": "TEST AMA",
+            "generate_missing_genes": "True"
+        }
+        try:
+            SERVICE_VER = 'dev'
+            GFU = GenomeFileUtil(os.environ['SDK_CALLBACK_URL'],
+                                 token=cls.ctx['token'],
+                                 service_ver=SERVICE_VER
+                             )
+
+            print ("UPLOADING AMA: "+ama_name+" to WORKSPACE "+cls.wsName+" ...")
+            ama_upload_result = GFU.fasta_gff_to_metagenome (ama_upload_params)
+        except:
+            raise ValueError("unable to upload test AMA data object")
+        pprint (ama_upload_result)
+        ama_ref_1 = ama_upload_result['metagenome_ref']
+        cls.ama_refs.append(ama_ref_1)
+        
+
         # Upload MSAs
         cls.MSA_refs = []
         MSA_data_dir = os.path.join('data','MSA')
@@ -312,6 +347,53 @@ class kb_hmmerTest(unittest.TestCase):
         pass
     
     
+    ### Test 03_02: Single Model against Single AnnotatedMetagenomeAssembly
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_03_02_kb_hmmer_HMMER_MSA_Search_AnnotatedMetagenomeAssembly()")
+    def test_003_02_kb_hmmer_HMMER_MSA_Search_AnnotatedMetagenomeAssembly(self):
+        test_name = 'test_03_02_kb_hmmer_HMMER_MSA_Search_AnnotatedMetagenomeAssembly'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+    
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+    
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_msa_ref': self.MSA_refs[1],      # Single MSA
+                       'input_many_ref': self.ama_refs[0],  # Single AnnotatedMetagenomeAssembly
+                       'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name',
+                       #'e_value': ".001",
+                       'e_value': ".1",
+                       #'bitscore': "50",
+                       'bitscore': "1",
+                       #'overlap_fraction': "50.0",
+                       'overlap_fraction': "5.0",
+                       'maxaccepts': "1000"
+                     }
+        ret = self.getImpl().HMMER_MSA_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+    
+        # check created obj
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+    
+        created_obj_0_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})[0]
+        self.assertEqual(created_obj_0_info[NAME_I], obj_out_name)
+        self.assertEqual(created_obj_0_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+    
+    
     ### Test 04: Specific Models in workspace against Single Genome
     #
     # uncomment to skip this test
@@ -341,6 +423,59 @@ class kb_hmmerTest(unittest.TestCase):
                        'e_value': ".001",
                        'bitscore': "50",
                        'overlap_fraction': "50.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_Local_MSA_Group_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created obj
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+    
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+
+        pass
+    
+    
+    ### Test 04_02: Specific Models in workspace against Single Annotated Metagenome Assembly
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA()")
+    def test_04_02_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA(self):
+        test_name = 'test_04_02_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+    
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+    
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+    
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+    
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_msa_refs': [self.MSA_refs[1], self.MSA_refs[2], self.MSA_refs[3]],  # Specific MSAs
+                       'input_many_ref': self.ama_refs[0],  # Single AnnotatedMetagenomeAssembly
+                       'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
+                       'coalesce_output': 0,
+                       #'e_value': ".001",
+                       'e_value': ".1",
+                       #'bitscore': "50",
+                       'bitscore': "10",
+                       #'overlap_fraction': "50.0",
+                       'overlap_fraction': "5.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'vertical': "1",
@@ -621,6 +756,64 @@ class kb_hmmerTest(unittest.TestCase):
                        'e_value': ".001",
                        'bitscore': "50",
                        'overlap_fraction': "50.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_dbCAN_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+    
+        # check created obj
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+    
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+    
+    
+    ### Test 10: dbCAN Models against Single Genome
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_10_02_kb_hmmer_HMMER_dbCAN_Search_AMA()")
+    def test_10_02_kb_hmmer_HMMER_dbCAN_Search_AMA(self):
+        test_name = 'test_10_02_kb_hmmer_HMMER_dbCAN_Search_AMA'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+    
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+    
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+    
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_dbCAN_AA_ids': [],
+                       'input_dbCAN_CBM_ids': [],
+                       'input_dbCAN_CE_ids': [],
+                       'input_dbCAN_GH_ids': [],
+                       'input_dbCAN_GT_ids': [],
+                       'input_dbCAN_PL_ids': [],
+                       'input_dbCAN_cellulosome_ids': [],
+                       'input_many_ref': self.ama_refs[0],  # Single AnnotatedMetagenomeAssembly
+                       'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_ver_sci_name',
+                       'coalesce_output': 0,
+                       #'e_value': ".001",
+                       'e_value': ".1",
+                       #'bitscore': "50",
+                       'bitscore': "5",
+                       #'overlap_fraction': "50.0",
+                       'overlap_fraction': "5.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'vertical': "1",
