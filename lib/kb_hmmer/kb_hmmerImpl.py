@@ -634,7 +634,7 @@ class kb_hmmer:
             seq_total = len(input_many_sequenceSet['sequences'])
         elif many_type_name == 'FeatureSet':
             seq_total = len(input_many_featureSet['elements'].keys())
-        elif many_type_name == 'Genome':
+        elif many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
             seq_total = len(feature_ids)
         elif many_type_name == 'GenomeSet':
             for genome_id in feature_ids_by_genome_id.keys():
@@ -1227,6 +1227,9 @@ class kb_hmmer:
                 feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
                 genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                 genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
+            elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                feature_id_to_function = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_id_to_function']
+                ama_ref_to_obj_name = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name']
 
             head_color = "#eeeeff"
             border_head_color = "#ffccff"
@@ -1299,10 +1302,11 @@ class kb_hmmer:
                 if many_type_name == 'SequenceSet':
                     pass
                 elif many_type_name == 'Genome' or \
+                        many_type_name == 'AnnotatedMetagenomeAssembly' or \
                         many_type_name == 'GenomeSet' or \
                         many_type_name == 'FeatureSet':
 
-                    if many_type_name != 'Genome':
+                    if 'Set' in many_type_name:
                         [genome_ref, hit_fid] = hit_id.split(genome_id_feature_id_delim)
                     else:
                         genome_ref = input_many_ref
@@ -1318,7 +1322,7 @@ class kb_hmmer:
 
                         if id_untrans == hit_fid or id_trans == hit_fid:
                             #self.log (console, "GOT ONE!")  # DEBUG
-                            if many_type_name == 'Genome':
+                            if many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
                                 accept_id = fid
                             elif many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
                                 accept_id = genome_ref + genome_id_feature_id_delim + fid
@@ -1893,7 +1897,7 @@ class kb_hmmer:
             seq_total = len(input_many_sequenceSet['sequences'])
         elif many_type_name == 'FeatureSet':
             seq_total = len(input_many_featureSet['elements'].keys())
-        elif many_type_name == 'Genome':
+        elif many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
             seq_total = len(feature_ids)
         elif many_type_name == 'GenomeSet':
             for genome_id in feature_ids_by_genome_id.keys():
@@ -2735,6 +2739,9 @@ class kb_hmmer:
                     feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
                     genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                     genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
+                elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                    feature_id_to_function = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_id_to_function']
+                    ama_ref_to_obj_name = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name']
 
                 head_color = "#eeeeff"
                 border_head_color = "#ffccff"
@@ -2782,10 +2789,11 @@ class kb_hmmer:
                     if many_type_name == 'SequenceSet':
                         pass
                     elif many_type_name == 'Genome' or \
+                            many_type_name == 'AnnotatedMetagenomeAssembly' or \
                             many_type_name == 'GenomeSet' or \
                             many_type_name == 'FeatureSet':
 
-                        if many_type_name != 'Genome':
+                        if 'Set' in many_type_name:
                             [genome_ref, hit_fid] = hit_id.split(genome_id_feature_id_delim)
                         else:
                             genome_ref = input_many_ref
@@ -2801,7 +2809,7 @@ class kb_hmmer:
 
                             if id_untrans == hit_fid or id_trans == hit_fid:
                                 #self.log (console, "GOT ONE!")  # DEBUG
-                                if many_type_name == 'Genome':
+                                if many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
                                     accept_id = fid
                                 elif many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
                                     accept_id = genome_ref + genome_id_feature_id_delim + fid
@@ -3010,6 +3018,9 @@ class kb_hmmer:
                 feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
                 genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                 genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
+            elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                feature_id_to_function = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_id_to_function']
+                ama_ref_to_obj_name = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name']
 
             sp = '&nbsp;'
             head_color = "#eeeeff"
@@ -3787,7 +3798,7 @@ class kb_hmmer:
             seq_total = len(input_many_sequenceSet['sequences'])
         elif many_type_name == 'FeatureSet':
             seq_total = len(input_many_featureSet['elements'].keys())
-        elif many_type_name == 'Genome':
+        elif many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
             seq_total = len(feature_ids)
         elif many_type_name == 'GenomeSet':
             for genome_id in feature_ids_by_genome_id.keys():
@@ -4497,6 +4508,9 @@ class kb_hmmer:
                         feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
                         genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                         genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
+                    elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                        feature_id_to_function = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_id_to_function']
+                        ama_ref_to_obj_name = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name']
 
                     head_color = "#eeeeff"
                     border_head_color = "#ffccff"
@@ -4544,10 +4558,11 @@ class kb_hmmer:
                         if many_type_name == 'SequenceSet':
                             pass
                         elif many_type_name == 'Genome' or \
+                                many_type_name == 'AnnotatedMetagenomeAssembly' or \
                                 many_type_name == 'GenomeSet' or \
                                 many_type_name == 'FeatureSet':
 
-                            if many_type_name != 'Genome':
+                            if 'Set' in many_type_name:
                                 [genome_ref, hit_fid] = hit_id.split(genome_id_feature_id_delim)
                             else:
                                 genome_ref = input_many_ref
@@ -4563,7 +4578,7 @@ class kb_hmmer:
 
                                 if id_untrans == hit_fid or id_trans == hit_fid:
                                     #self.log (console, "GOT ONE!")  # DEBUG
-                                    if many_type_name == 'Genome':
+                                    if many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
                                         accept_id = fid
                                     elif many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
                                         accept_id = genome_ref + genome_id_feature_id_delim + fid
@@ -4772,6 +4787,9 @@ class kb_hmmer:
                     feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
                     genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                     genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
+                elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                    feature_id_to_function = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_id_to_function']
+                    ama_ref_to_obj_name = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name']
 
                 sp = '&nbsp;'
                 head_color = "#eeeeff"
@@ -5595,7 +5613,7 @@ class kb_hmmer:
             seq_total = len(input_many_sequenceSet['sequences'])
         elif many_type_name == 'FeatureSet':
             seq_total = len(input_many_featureSet['elements'].keys())
-        elif many_type_name == 'Genome':
+        elif many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
             seq_total = len(feature_ids)
         elif many_type_name == 'GenomeSet':
             for genome_id in feature_ids_by_genome_id.keys():
@@ -6301,6 +6319,9 @@ class kb_hmmer:
                         feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
                         genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                         genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
+                    elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                        feature_id_to_function = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_id_to_function']
+                        ama_ref_to_obj_name = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name']
 
                     head_color = "#eeeeff"
                     border_head_color = "#ffccff"
@@ -6348,10 +6369,11 @@ class kb_hmmer:
                         if many_type_name == 'SequenceSet':
                             pass
                         elif many_type_name == 'Genome' or \
+                                many_type_name == 'AnnotatedMetagenomeAssembly' or \
                                 many_type_name == 'GenomeSet' or \
                                 many_type_name == 'FeatureSet':
 
-                            if many_type_name != 'Genome':
+                            if 'Set' in many_type_name:
                                 [genome_ref, hit_fid] = hit_id.split(genome_id_feature_id_delim)
                             else:
                                 genome_ref = input_many_ref
@@ -6367,7 +6389,7 @@ class kb_hmmer:
 
                                 if id_untrans == hit_fid or id_trans == hit_fid:
                                     #self.log (console, "GOT ONE!")  # DEBUG
-                                    if many_type_name == 'Genome':
+                                    if many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
                                         accept_id = fid
                                     elif many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
                                         accept_id = genome_ref + genome_id_feature_id_delim + fid
@@ -6576,6 +6598,9 @@ class kb_hmmer:
                     feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
                     genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
                     genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
+                elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                    feature_id_to_function = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_id_to_function']
+                    ama_ref_to_obj_name = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name']
 
                 sp = '&nbsp;'
                 head_color = "#eeeeff"

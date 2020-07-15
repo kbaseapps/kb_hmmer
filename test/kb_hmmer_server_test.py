@@ -350,9 +350,9 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 03_02: Single Model against Single AnnotatedMetagenomeAssembly
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_03_02_kb_hmmer_HMMER_MSA_Search_AnnotatedMetagenomeAssembly()")
-    def test_003_02_kb_hmmer_HMMER_MSA_Search_AnnotatedMetagenomeAssembly(self):
-        test_name = 'test_03_02_kb_hmmer_HMMER_MSA_Search_AnnotatedMetagenomeAssembly'
+    # HIDE @unittest.skip("skipped test test_03_02_kb_hmmer_HMMER_MSA_Search_AMA()")
+    def test_003_02_kb_hmmer_HMMER_MSA_Search_AMA(self):
+        test_name = 'test_03_02_kb_hmmer_HMMER_MSA_Search_AMA'
         header_msg = "RUNNING "+test_name+"()"
         header_delim = len(header_msg) * '='
         print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
@@ -776,7 +776,7 @@ class kb_hmmerTest(unittest.TestCase):
         pass
     
     
-    ### Test 10: dbCAN Models against Single Genome
+    ### Test 10_02: dbCAN Models against Single AnnotatedMetagenomeAssembly
     #
     # uncomment to skip this test
     # HIDE @unittest.skip("skipped test test_10_02_kb_hmmer_HMMER_dbCAN_Search_AMA()")
