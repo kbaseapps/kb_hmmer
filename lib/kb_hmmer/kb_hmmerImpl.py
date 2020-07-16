@@ -1524,13 +1524,13 @@ class kb_hmmer:
             reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_file,
-                                        'label': search_tool_name + ' HTML Report'}
+                                        #'label': search_tool_name + ' HTML Report'}
+                                        'description': search_tool_name + ' HTML Report'}
                                        ]
 
             reportObj['file_links'] = [{'shock_id': TAB_upload_ret['shock_id'],
                                         'name': search_tool_name + '_Search.TAB',
                                         'label': search_tool_name + ' hits TABLE'},
-
                                        {'shock_id': MSA_upload_ret['shock_id'],
                                         'name': search_tool_name + '_Search.MSA',
                                         'label': search_tool_name + ' hits MSA'},
@@ -1672,9 +1672,12 @@ class kb_hmmer:
             raise ValueError('genome_disp_name_config parameter is required')
         if 'output_filtered_name' not in params:
             raise ValueError('output_filtered_name parameter is required')
-        if 'coalesce_output' not in params:
-            raise ValueError('coalesce_output parameter is required')
+        #if 'coalesce_output' not in params:
+        #    raise ValueError('coalesce_output parameter is required')
 
+        # never coalesce.  what was I thinking!?!?!?!?!
+        params['coalesce_output'] = 0;
+        
         # set local names and ids
 #        input_one_ref = params['input_one_ref']
         #input_msa_ref = params['input_msa_ref']
@@ -2649,7 +2652,7 @@ class kb_hmmer:
 
                 ### Create output object
                 #
-                if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
+                if 'coalesce_output' in params and int(params['coalesce_output']) == 1:  # This is broken, but also never should have been offered and is now disabled.
                     if len(invalid_msgs) == 0:
                         if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
                             self.log(console, "No Object to Upload for MSA " + input_msa_name)  # DEBUG
@@ -3426,7 +3429,8 @@ class kb_hmmer:
             reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_profile_file,
-                                        'label': search_tool_name + ' HTML Report'}
+                                        #'label': search_tool_name + ' HTML Report'}
+                                        'description': search_tool_name + ' HTML Report'}
                                        ]
 
             if TAB_upload_ret != None:
@@ -3573,8 +3577,8 @@ class kb_hmmer:
             raise ValueError('genome_disp_name_config parameter is required')
         if 'output_filtered_name' not in params:
             raise ValueError('output_filtered_name parameter is required')
-        if 'coalesce_output' not in params:
-            raise ValueError('coalesce_output parameter is required')
+        #if 'coalesce_output' not in params:
+        #    raise ValueError('coalesce_output parameter is required')
 
         # set local names and ids
 #        input_one_ref = params['input_one_ref']
@@ -5233,7 +5237,8 @@ class kb_hmmer:
             reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_profile_file,
-                                        'label': search_tool_name + ' HTML Report'}
+                                        #'label': search_tool_name + ' HTML Report'}
+                                        'description': search_tool_name + ' HTML Report'}
                                        ]
 
             if TAB_upload_ret != None:
@@ -7044,7 +7049,8 @@ class kb_hmmer:
             reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_profile_file,
-                                        'label': search_tool_name + ' HTML Report'}
+                                        #'label': search_tool_name + ' HTML Report'}
+                                        'description': search_tool_name + ' HTML Report'}
                                        ]
 
             if TAB_upload_ret != None:
