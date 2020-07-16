@@ -1524,8 +1524,8 @@ class kb_hmmer:
             reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_file,
-                                        #'label': search_tool_name + ' HTML Report'}
-                                        'description': search_tool_name + ' HTML Report'}
+                                        'label': search_tool_name + ' HTML Report'}
+                                        #'description': search_tool_name + ' HTML Report'}
                                        ]
 
             reportObj['file_links'] = [{'shock_id': TAB_upload_ret['shock_id'],
@@ -3099,15 +3099,14 @@ class kb_hmmer:
             # write html to file
             html_path = html_search_path
             html_report_str = "\n".join(html_report_lines)
-
-            # DEBUG: testing if multiple files breaks reports
-            #with open(html_path, 'w', 0) as html_handle:
-            #    html_handle.write(html_report_str)
+            with open(html_path, 'w', 0) as html_handle:
+                html_handle.write(html_report_str)
 
         #### Build Profile output report
         ##
         self.log(console, "BUILDING PROFILE REPORT ")  # DEBUG
-        if len(invalid_msgs) == 0 and many_type_name == 'GenomeSet':
+        #if len(invalid_msgs) == 0 and many_type_name == 'GenomeSet':
+        if len(invalid_msgs) == 0:
 
             # calculate table
             #
@@ -3431,8 +3430,8 @@ class kb_hmmer:
             reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_profile_file,
-                                        #'label': search_tool_name + ' HTML Report'}
-                                        'description': search_tool_name + ' HTML Report'}
+                                        'label': search_tool_name + ' HTML Report'}
+                                        #'description': search_tool_name + ' HTML Report'}
                                        ]
 
             if TAB_upload_ret != None:
@@ -4890,7 +4889,8 @@ class kb_hmmer:
         #### Build Profile output report
         ##
         self.log(console, "BUILDING PROFILE REPORT ")  # DEBUG
-        if len(invalid_msgs) == 0 and many_type_name == 'GenomeSet':
+        #if len(invalid_msgs) == 0 and many_type_name == 'GenomeSet':
+        if len(invalid_msgs) == 0:
 
             # calculate table
             #
@@ -5239,8 +5239,8 @@ class kb_hmmer:
             reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_profile_file,
-                                        #'label': search_tool_name + ' HTML Report'}
-                                        'description': search_tool_name + ' HTML Report'}
+                                        'label': search_tool_name + ' HTML Report'}
+                                        #'description': search_tool_name + ' HTML Report'}
                                        ]
 
             if TAB_upload_ret != None:
@@ -6702,7 +6702,8 @@ class kb_hmmer:
         #### Build Profile output report
         ##
         self.log(console, "BUILDING PROFILE REPORT ")  # DEBUG
-        if len(invalid_msgs) == 0 and many_type_name == 'GenomeSet':
+        #if len(invalid_msgs) == 0 and many_type_name == 'GenomeSet':
+        if len(invalid_msgs) == 0:
 
             # calculate table
             #
@@ -7051,8 +7052,8 @@ class kb_hmmer:
             reportObj['direct_html_link_index'] = 0
             reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_profile_file,
-                                        #'label': search_tool_name + ' HTML Report'}
-                                        'description': search_tool_name + ' HTML Report'}
+                                        'label': search_tool_name + ' HTML Report'}
+                                        #'description': search_tool_name + ' HTML Report'}
                                        ]
 
             if TAB_upload_ret != None:
