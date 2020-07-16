@@ -1,6 +1,7 @@
 ### Version 1.4.3
 __Changes__
 - add support for AnnotatedMetagenomeAssembly as target
+- removed coalesce option for HMMER_Local_MSA_Group()
 
 ### Version 1.4.2
 __Changes__
