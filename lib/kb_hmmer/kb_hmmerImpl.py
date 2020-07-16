@@ -1733,6 +1733,13 @@ class kb_hmmer:
             many_forward_reads_file_handle.close()
             self.log(console, 'done')
 
+
+        # we're going to profile genome refs for all target types, even if only one object.
+        #  note: we are calling it 'genome_refs' even if the object is an AMA
+        #
+        genome_refs = []
+            
+
         # FeatureSet
         #
         if many_type_name == 'FeatureSet':
@@ -1768,6 +1775,8 @@ class kb_hmmer:
             if len(feature_ids_by_genome_ref.keys()) > 0:
                 appropriate_sequence_found_in_many_input = True
 
+            genome_refs = sorted(feature_ids_by_genome_ref.keys())
+                
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
@@ -1804,6 +1813,8 @@ class kb_hmmer:
             if len(feature_ids) > 0:
                 appropriate_sequence_found_in_many_input = True
 
+            genome_refs = [input_many_ref]
+
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
@@ -1815,7 +1826,6 @@ class kb_hmmer:
             many_forward_reads_file_dir = self.output_dir
             many_forward_reads_file = input_many_name + ".fasta"
 
-            genome_refs = []
             for genome_id in input_many_genomeSet['elements']:
                 genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
                 if genome_ref not in genome_refs:
@@ -1874,6 +1884,8 @@ class kb_hmmer:
                 'linewrap': 50
             }
 
+            genome_refs = [input_many_ref]
+            
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
             #SERVICE_VER = 'release'
             SERVICE_VER = 'beta'
@@ -3636,6 +3648,13 @@ class kb_hmmer:
             many_forward_reads_file_handle.close()
             self.log(console, 'done')
 
+
+        # we're going to profile genome refs for all target types, even if only one object.
+        #  note: we are calling it 'genome_refs' even if the object is an AMA
+        #
+        genome_refs = []
+            
+
         # FeatureSet
         #
         if many_type_name == 'FeatureSet':
@@ -3670,6 +3689,8 @@ class kb_hmmer:
             feature_ids_by_genome_ref = FeatureSetToFASTA_retVal['feature_ids_by_genome_ref']
             if len(feature_ids_by_genome_ref.keys()) > 0:
                 appropriate_sequence_found_in_many_input = True
+
+            genome_refs = sorted(feature_ids_by_genome_ref.keys())
 
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
@@ -3706,6 +3727,8 @@ class kb_hmmer:
             feature_ids = GenomeToFASTA_retVal['feature_ids']
             if len(feature_ids) > 0:
                 appropriate_sequence_found_in_many_input = True
+
+            genome_refs = [input_many_ref]
 
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
@@ -3786,6 +3809,8 @@ class kb_hmmer:
             feature_ids = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_ids']
             if len(feature_ids) > 0:
                 appropriate_sequence_found_in_many_input = True
+
+            genome_refs = [input_many_ref]
 
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
@@ -5453,6 +5478,13 @@ class kb_hmmer:
             many_forward_reads_file_handle.close()
             self.log(console, 'done')
 
+
+        # we're going to profile genome refs for all target types, even if only one object.
+        #  note: we are calling it 'genome_refs' even if the object is an AMA
+        #
+        genome_refs = []
+            
+
         # FeatureSet
         #
         if many_type_name == 'FeatureSet':
@@ -5488,6 +5520,8 @@ class kb_hmmer:
             if len(feature_ids_by_genome_ref.keys()) > 0:
                 appropriate_sequence_found_in_many_input = True
 
+            genome_refs = sorted(feature_ids_by_genome_ref.keys())
+                
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
@@ -5524,6 +5558,8 @@ class kb_hmmer:
             if len(feature_ids) > 0:
                 appropriate_sequence_found_in_many_input = True
 
+            genome_refs = [input_many_ref]
+                
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
@@ -5603,6 +5639,8 @@ class kb_hmmer:
             feature_ids = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_ids']
             if len(feature_ids) > 0:
                 appropriate_sequence_found_in_many_input = True
+
+            genome_refs = [input_many_ref]
 
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
