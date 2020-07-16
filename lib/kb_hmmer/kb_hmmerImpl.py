@@ -1522,7 +1522,7 @@ class kb_hmmer:
             #    reportObj['direct_html'] = html_report_str
             #else:
             reportObj['direct_html_link_index'] = 0
-            reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
+<            reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_file,
                                         #'label': search_tool_name + ' HTML Report'}
                                         'description': search_tool_name + ' HTML Report'}
@@ -3099,8 +3099,10 @@ class kb_hmmer:
             # write html to file
             html_path = html_search_path
             html_report_str = "\n".join(html_report_lines)
-            with open(html_path, 'w', 0) as html_handle:
-                html_handle.write(html_report_str)
+
+            # DEBUG: testing if multiple files breaks reports
+            #with open(html_path, 'w', 0) as html_handle:
+            #    html_handle.write(html_report_str)
 
         #### Build Profile output report
         ##
