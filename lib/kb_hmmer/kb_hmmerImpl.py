@@ -1522,7 +1522,7 @@ class kb_hmmer:
             #    reportObj['direct_html'] = html_report_str
             #else:
             reportObj['direct_html_link_index'] = 0
-<            reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
+            reportObj['html_links'] = [{'shock_id': HTML_upload_ret['shock_id'],
                                         'name': html_file,
                                         #'label': search_tool_name + ' HTML Report'}
                                         'description': search_tool_name + ' HTML Report'}
