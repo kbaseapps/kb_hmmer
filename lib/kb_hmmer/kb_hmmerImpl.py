@@ -3468,9 +3468,11 @@ class kb_hmmer:
                 if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
                     for object_created_ref in objects_created_refs:
                         reportObj['objects_created'].append(
-                            {'ref': object_created_ref, 'description': 'Coalesced' + ' ' + search_tool_name + ' hits'})
+<                            {'ref': object_created_ref, 'description': 'Coalesced' + ' ' + search_tool_name + ' hits'})
                 else:
-                    for msa_i, input_msa_name in enumerate(input_msa_names):
+                    #for msa_i, input_msa_name in enumerate(input_msa_names):  # DEBUG  double check correct alignment of msa_i  # FIXME
+                    for msa_i,object_created_ref in enumerate(objects_created_refs):
+                        input_msa_name = input_msa_names[msa_i]
                         if total_hit_cnts[msa_i] == 0:
                             continue
                         reportObj['objects_created'].append(
