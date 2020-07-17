@@ -3474,6 +3474,8 @@ class kb_hmmer:
                 else:
                     #for msa_i, input_msa_name in enumerate(input_msa_names):  # DEBUG  double check correct alignment of msa_i  # FIXME
                     for msa_i,object_created_ref in enumerate(objects_created_refs):
+                        if object_created_ref == None:
+                            continue
                         input_msa_name = input_msa_names[msa_i]
                         if total_hit_cnts[msa_i] == 0:
                             continue
