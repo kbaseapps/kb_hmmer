@@ -618,7 +618,7 @@ class kb_hmmer:
             if len(feature_ids) > 0:
                 appropriate_sequence_found_in_many_input = True
                 
-            genome_refs = input_many_ref
+            genome_refs = [input_many_ref]
             
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
@@ -3753,7 +3753,6 @@ class kb_hmmer:
             many_forward_reads_file_dir = self.output_dir
             many_forward_reads_file = input_many_name + ".fasta"
 
-            genome_refs = []
             for genome_id in input_many_genomeSet['elements']:
                 genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
                 if genome_ref not in genome_refs:
