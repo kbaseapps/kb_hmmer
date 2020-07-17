@@ -617,7 +617,9 @@ class kb_hmmer:
             feature_ids = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_ids']
             if len(feature_ids) > 0:
                 appropriate_sequence_found_in_many_input = True
-
+                
+            genome_refs = input_many_ref
+            
             # DEBUG
             #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
             #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
@@ -3468,7 +3470,7 @@ class kb_hmmer:
                 if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
                     for object_created_ref in objects_created_refs:
                         reportObj['objects_created'].append(
-<                            {'ref': object_created_ref, 'description': 'Coalesced' + ' ' + search_tool_name + ' hits'})
+                            {'ref': object_created_ref, 'description': 'Coalesced' + ' ' + search_tool_name + ' hits'})
                 else:
                     #for msa_i, input_msa_name in enumerate(input_msa_names):  # DEBUG  double check correct alignment of msa_i  # FIXME
                     for msa_i,object_created_ref in enumerate(objects_created_refs):
