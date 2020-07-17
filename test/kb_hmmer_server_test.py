@@ -426,7 +426,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'vertical': "1",
-                       'show_blanks': "0"
+                       'show_blanks': "1"
                      }
         ret = self.getImpl().HMMER_Local_MSA_Group_Search(self.getContext(), parameters)[0]
         self.assertIsNotNone(ret['report_ref'])
@@ -479,7 +479,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'vertical': "1",
-                       'show_blanks': "0"
+                       'show_blanks': "1"
                      }
         ret = self.getImpl().HMMER_Local_MSA_Group_Search(self.getContext(), parameters)[0]
         self.assertIsNotNone(ret['report_ref'])
@@ -532,7 +532,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'vertical': "1",
-                       'show_blanks': "0"
+                       'show_blanks': "1"
                      }
         ret = self.getImpl().HMMER_Local_MSA_Group_Search(self.getContext(), parameters)[0]
         self.assertIsNotNone(ret['report_ref'])
@@ -581,7 +581,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'vertical': "1",
-                       'show_blanks': "0"
+                       'show_blanks': "1"
                      }
         ret = self.getImpl().HMMER_Local_MSA_Group_Search(self.getContext(), parameters)[0]
         self.assertIsNotNone(ret['report_ref'])
@@ -715,6 +715,50 @@ class kb_hmmerTest(unittest.TestCase):
                        'heatmap': "1",
                        'vertical': "1",
                        'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_Local_MSA_Group_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+    
+        # check created obj
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertTrue(len(report_obj['objects_created']) == 0)
+        pass
+    
+    
+    ### Test 09_02: All Models in workspace against Single Genome, threshold above all hits, show blanks
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_09_02_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL_show_blanks()")
+    def test_09_02_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL_show_blanks(self):
+        test_name = 'test_09_02_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL_show_blanks'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+    
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+    
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+    
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+    
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_msa_refs': [self.MSA_refs[1], self.MSA_refs[2], self.MSA_refs[3]],  # Specific MSAs
+                       'input_many_ref': self.genome_refs[0],  # Single Genome
+                       'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_ver_sci_name',
+                       'coalesce_output': 0,
+                       'e_value': ".001",
+                       'bitscore': "500000000",
+                       'overlap_fraction': "100.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'vertical': "1",
+                       'show_blanks': "1"
                      }
         ret = self.getImpl().HMMER_Local_MSA_Group_Search(self.getContext(), parameters)[0]
         self.assertIsNotNone(ret['report_ref'])

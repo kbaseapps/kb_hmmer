@@ -2485,7 +2485,10 @@ class kb_hmmer:
                 self.log(console, "HIT: '" + hit_seq_id + "'")  # DEBUG
 
                 # capture accepted hit count by genome_ref and model
-                genome_ref = hit_seq_id.split(genome_id_feature_id_delim)[0]
+                if len(genome_refs) == 1:
+                    genome_ref = genome_refs[0]
+                else:
+                    genome_ref = hit_seq_id.split(genome_id_feature_id_delim)[0]
                 self.log(console, "DEBUG: genome_ref: '" + str(genome_ref) + "'")
                 self.log(console, "DEBUG: input_msa_name: '" + str(input_msa_name) + "'")
                 if genome_ref not in hit_cnt_by_genome_and_model:
@@ -2494,6 +2497,9 @@ class kb_hmmer:
                     hit_cnt_by_genome_and_model[genome_ref][input_msa_name] = 0
                 hit_cnt_by_genome_and_model[genome_ref][input_msa_name] += 1
 
+                # DEBUG
+                self.log(console, "DEBUG: incrementing hit count for "+genome_ref+" MODEL: "+input_msa_name)
+                
             accepted_hit_cnts[msa_i] = accepted_hit_cnt
 
             #
@@ -3247,7 +3253,7 @@ class kb_hmmer:
 
                 # column headers
                 for cat_i, cat in enumerate(cats):
-                    if not cat_seen[cat] and not show_blanks:
+                    if not cat_seen.get(cat) and not show_blanks:
                         continue
                     cat_disp = cat
                     cell_title = input_msa_descs[cat_i]
@@ -3292,11 +3298,13 @@ class kb_hmmer:
                     html_report_lines += ['<td align=right><font color="' + text_color + '" size=' +
                                           graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></td>']
                     for cat in cats:
-                        if not cat_seen[cat] and not show_blanks:
+                        if not cat_seen.get(cat) and not show_blanks:
                             continue
                         val = table_data[genome_ref][cat]
-                        if val == 0:
+                        if not cat_seen.get(cat) or val == 0:
                             cell_color = 'white'
+                        elif overall_high_val == overall_low_val:
+                            cell_color = color_list[0]
                         else:
                             cell_color_i = max_color - \
                                 int(round(max_color * (val - overall_low_val) / float(overall_high_val - overall_low_val)))
@@ -3335,7 +3343,7 @@ class kb_hmmer:
 
             for cat_i, cat in enumerate(cats):
                 cell_color = 'white'
-                if not cat_seen[cat] and not show_blanks:
+                if not cat_seen.get(cat) and not show_blanks:
                     cell_color = "#eeeeee"
                 desc = input_msa_descs[cat_i]
                 cat_disp = cat
@@ -5055,7 +5063,7 @@ class kb_hmmer:
 
                 # column headers
                 for cat_i, cat in enumerate(cats):
-                    if not cat_seen[cat] and not show_blanks:
+                    if not cat_seen.get(cat) and not show_blanks:
                         continue
                     cat_disp = cat
                     cell_title = input_HMM_descs[cat]
@@ -5100,11 +5108,13 @@ class kb_hmmer:
                     html_report_lines += ['<td align=right><font color="' + text_color + '" size=' +
                                           graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></td>']
                     for cat in cats:
-                        if not cat_seen[cat] and not show_blanks:
+                        if not cat_seen.get(cat) and not show_blanks:
                             continue
                         val = table_data[genome_ref][cat]
-                        if val == 0:
+                        if not cat_seen.get(cat) or val == 0:
                             cell_color = 'white'
+                        elif overall_high_val == overall_low_val:
+                            cell_color = color_list[0]
                         else:
                             cell_color_i = max_color - \
                                 int(round(max_color * (val - overall_low_val) / float(overall_high_val - overall_low_val)))
@@ -5144,7 +5154,7 @@ class kb_hmmer:
 
             for cat_i, cat in enumerate(cats):
                 cell_color = 'white'
-                if not cat_seen[cat] and not show_blanks:
+                if not cat_seen.get(cat) and not show_blanks:
                     cell_color = "#eeeeee"
                 desc = input_HMM_descs[cat]
                 cat_disp = cat
@@ -6881,7 +6891,7 @@ class kb_hmmer:
 
                 # column headers
                 for cat_i, cat in enumerate(cats):
-                    if not cat_seen[cat] and not show_blanks:
+                    if not cat_seen.get(cat) and not show_blanks:
                         continue
                     cat_disp = cat
                     cell_title = input_HMM_descs[cat]
@@ -6926,11 +6936,13 @@ class kb_hmmer:
                     html_report_lines += ['<td align=right><font color="' + text_color + '" size=' +
                                           graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></td>']
                     for cat in cats:
-                        if not cat_seen[cat] and not show_blanks:
+                        if not cat_seen.get(cat) and not show_blanks:
                             continue
                         val = table_data[genome_ref][cat]
-                        if val == 0:
+                        if not cat_seen.get(cat) or val == 0:
                             cell_color = 'white'
+                        elif overall_high_val == overall_low_val:
+                            cell_color = color_list[0]
                         else:
                             cell_color_i = max_color - \
                                 int(round(max_color * (val - overall_low_val) / float(overall_high_val - overall_low_val)))
@@ -6970,7 +6982,7 @@ class kb_hmmer:
 
             for cat_i, cat in enumerate(cats):
                 cell_color = 'white'
-                if not cat_seen[cat] and not show_blanks:
+                if not cat_seen.get(cat) and not show_blanks:
                     cell_color = "#eeeeee"
                 desc = input_HMM_descs[cat]
                 cat_disp = cat
