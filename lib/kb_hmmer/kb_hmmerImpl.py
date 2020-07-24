@@ -54,9 +54,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.4.3"
+    VERSION = "1.4.4"
     GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "b7dea91749a0fb7f5a9a424b398338691af30a37"
+    GIT_COMMIT_HASH = "b063fd55bcf8325b68238f8ca27c3ff7142a52a2"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -1357,8 +1357,6 @@ class kb_hmmer:
                             genome_disp_name += '.v'+str(genome_obj_version)
                         if 'sci_name' in params['genome_disp_name_config']:
                             genome_disp_name += ': '+genome_sci_name
-                        else:
-                            genome_disp_name = genome_sci_name
 
                     # build html report table line
                     html_report_lines += ['<tr bgcolor="' + row_color + '">']
@@ -1637,8 +1635,8 @@ class kb_hmmer:
            of type "bool", parameter "e_value" of Double, parameter
            "bitscore" of Double, parameter "overlap_perc" of Double,
            parameter "maxaccepts" of Double, parameter "heatmap" of type
-           "bool", parameter "vertical" of type "bool", parameter
-           "show_blanks" of type "bool"
+           "bool", parameter "low_val" of type "bool", parameter "vertical"
+           of type "bool", parameter "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"
@@ -2865,8 +2863,6 @@ class kb_hmmer:
                                 genome_disp_name += '.v'+str(genome_obj_version)
                             if 'sci_name' in params['genome_disp_name_config']:
                                 genome_disp_name += ': '+genome_sci_name
-                            else:
-                                genome_disp_name = genome_sci_name
 
                         # build html report table line
                         html_report_chunk += ['<tr bgcolor="' + row_color + '">']
@@ -3133,7 +3129,10 @@ class kb_hmmer:
             cats = input_msa_names
             table_data = dict()
             INSANE_VALUE = 10000000000000000
-            overall_low_val = INSANE_VALUE
+            if params.get('low_val') and params['low_val'] != 'detect':
+                overall_low_val = float(params['low_val'])
+            else:
+                overall_low_val = INSANE_VALUE
             overall_high_val = -INSANE_VALUE
             cat_seen = dict()
 
@@ -3165,8 +3164,47 @@ class kb_hmmer:
                     if val < overall_low_val:
                         overall_low_val = val
             if overall_high_val == -INSANE_VALUE:
-                raise ValueError("unable to find any counts")
+                error_msg = "unable to find any counts"
+                self.log(invalid_msgs, error_msg)
+                provenance = [{}]
+                if 'provenance' in ctx:
+                    provenance = ctx['provenance']
+                # add additional info to provenance here, in this case the input data object reference
+                provenance[0]['input_ws_objects'] = []
+                provenance[0]['input_ws_objects'].append(input_msa_ref)
+                provenance[0]['input_ws_objects'].append(input_many_ref)
+                provenance[0]['service'] = 'kb_hmmer'
+                provenance[0]['method'] = search_tool_name + '_Search'
+                report += "FAILURE\n\n" + "\n".join(invalid_msgs) + "\n"
+                reportObj = {
+                    'objects_created': [],
+                    'text_message': report
+                }
+                reportName = 'hmmer_report_' + str(uuid.uuid4())
+                report_obj_info = ws.save_objects({
+                    #                'id':info[6],
+                    'workspace': params['workspace_name'],
+                    'objects': [
+                        {
+                            'type': 'KBaseReport.Report',
+                            'data': reportObj,
+                            'name': reportName,
+                            'meta': {},
+                            'hidden': 1,
+                            'provenance': provenance
+                        }
+                    ]
+                })[0]
+                report_info = dict()
+                report_info['name'] = report_obj_info[1]
+                report_info['ref'] = str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4])
+                self.log(console, "BUILDING RETURN OBJECT")
+                returnVal = {'report_name': report_info['name'],
+                             'report_ref': report_info['ref']
+                }
+                return [returnVal]
 
+            
             # build html report
             sp = '&nbsp;'
             text_color = "#606060"
@@ -3182,12 +3220,12 @@ class kb_hmmer:
             #color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e']
             #color_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd']
             color_list = [
-                "#000000",
-                "#000066",
-                "#000099",
-                "#0000bb",
-                "#0000dd",
-                "#0000ff",
+                "#333333",
+                "#222266",
+                "#222299",
+                "#2222bb",
+                "#2222dd",
+                "#2222ff",
                 "#4444ff",
                 "#6666ff",
                 "#8888ff",
@@ -3195,7 +3233,8 @@ class kb_hmmer:
                 "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
-            cell_width = '10px'
+            cell_width = '10'
+            corner_radius = str(int(0.2*int(cell_width)+0.5))
             if len(genome_refs) > 20:
                 graph_gen_fontsize = "1"
 #            elif len(genome_refs) > 10:
@@ -3292,8 +3331,6 @@ class kb_hmmer:
                             genome_disp_name += '.v'+str(genome_obj_version)
                         if 'sci_name' in params['genome_disp_name_config']:
                             genome_disp_name += ': '+genome_sci_name
-                        else:
-                            genome_disp_name = genome_sci_name
 
                     # build html report table line
                     html_report_lines += ['<tr>']
@@ -3324,10 +3361,10 @@ class kb_hmmer:
                             else:
                                 this_text_color = cell_color
                                 this_graph_char = graph_char
-                                html_report_lines += ['<td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + '" bgcolor="' +
-                                                      cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td>']
+                            html_report_lines += ['<td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + 'px; height:' + cell_width + 'px; border-radius:' + corner_radius + 'px" bgcolor="' +
+                                                  cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td>']
                         else:
-                            html_report_lines += ['<td align=center valign=middle style="' + cell_width + '; border-right:solid 2px ' + border_color +
+                            html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
 
                     html_report_lines += ['</tr>']
@@ -3567,8 +3604,8 @@ class kb_hmmer:
            of type "bool", parameter "e_value" of Double, parameter
            "bitscore" of Double, parameter "overlap_perc" of Double,
            parameter "maxaccepts" of Double, parameter "heatmap" of type
-           "bool", parameter "vertical" of type "bool", parameter
-           "show_blanks" of type "bool"
+           "bool", parameter "low_val" of type "bool", parameter "vertical"
+           of type "bool", parameter "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"
@@ -4654,8 +4691,6 @@ class kb_hmmer:
                                     genome_disp_name += '.v'+str(genome_obj_version)
                                 if 'sci_name' in params['genome_disp_name_config']:
                                     genome_disp_name += ': '+genome_sci_name
-                                else:
-                                    genome_disp_name = genome_sci_name
 
                             # build html report table line
                             html_report_chunk += ['<tr bgcolor="' + row_color + '">']
@@ -4935,7 +4970,10 @@ class kb_hmmer:
             cats = all_HMM_ids_order
             table_data = dict()
             INSANE_VALUE = 10000000000000000
-            overall_low_val = INSANE_VALUE
+            if params.get('low_val') and params['low_val'] != 'detect':
+                overall_low_val = float(params['low_val'])
+            else:
+                overall_low_val = INSANE_VALUE
             overall_high_val = -INSANE_VALUE
             cat_seen = dict()
             for cat in cats:
@@ -4969,8 +5007,47 @@ class kb_hmmer:
                     if val < overall_low_val:
                         overall_low_val = val
             if overall_high_val == -INSANE_VALUE:
-                raise ValueError("unable to find any counts")
+                error_msg = "unable to find any counts"
+                self.log(invalid_msgs, error_msg)
+                provenance = [{}]
+                if 'provenance' in ctx:
+                    provenance = ctx['provenance']
+                # add additional info to provenance here, in this case the input data object reference
+                provenance[0]['input_ws_objects'] = []
+                provenance[0]['input_ws_objects'].append(input_msa_ref)
+                provenance[0]['input_ws_objects'].append(input_many_ref)
+                provenance[0]['service'] = 'kb_hmmer'
+                provenance[0]['method'] = search_tool_name + '_Search'
+                report += "FAILURE\n\n" + "\n".join(invalid_msgs) + "\n"
+                reportObj = {
+                    'objects_created': [],
+                    'text_message': report
+                }
+                reportName = 'hmmer_report_' + str(uuid.uuid4())
+                report_obj_info = ws.save_objects({
+                    #                'id':info[6],
+                    'workspace': params['workspace_name'],
+                    'objects': [
+                        {
+                            'type': 'KBaseReport.Report',
+                            'data': reportObj,
+                            'name': reportName,
+                            'meta': {},
+                            'hidden': 1,
+                            'provenance': provenance
+                        }
+                    ]
+                })[0]
+                report_info = dict()
+                report_info['name'] = report_obj_info[1]
+                report_info['ref'] = str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4])
+                self.log(console, "BUILDING RETURN OBJECT")
+                returnVal = {'report_name': report_info['name'],
+                             'report_ref': report_info['ref']
+                }
+                return [returnVal]
 
+            
             # build html report
             sp = '&nbsp;'
             text_color = "#606060"
@@ -4986,12 +5063,12 @@ class kb_hmmer:
             #color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e']
             #color_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd']
             color_list = [
-                "#000000",
-                "#000066",
-                "#000099",
-                "#0000bb",
-                "#0000dd",
-                "#0000ff",
+                "#333333",
+                "#222266",
+                "#222299",
+                "#2222bb",
+                "#2222dd",
+                "#2222ff",
                 "#4444ff",
                 "#6666ff",
                 "#8888ff",
@@ -4999,7 +5076,8 @@ class kb_hmmer:
                 "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
-            cell_width = '10px'
+            cell_width = '10'
+            corner_radius = str(int(0.2*int(cell_width)+0.5))
             if len(genome_refs) > 20:
                 graph_gen_fontsize = "1"
 #            elif len(genome_refs) > 10:
@@ -5105,8 +5183,6 @@ class kb_hmmer:
                             genome_disp_name += '.v'+str(genome_obj_version)
                         if 'sci_name' in params['genome_disp_name_config']:
                             genome_disp_name += ': '+genome_sci_name
-                        else:
-                            genome_disp_name = genome_sci_name
 
                     # build html report table line
                     html_report_lines += ['<tr>']
@@ -5137,10 +5213,10 @@ class kb_hmmer:
                             else:
                                 this_text_color = cell_color
                                 this_graph_char = graph_char
-                            html_report_lines += ['<td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + '" bgcolor="' +
+                            html_report_lines += ['<td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + 'px; height:' + cell_width + 'px; border-radius:' + corner_radius + 'px" bgcolor="' +
                                                   cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td>']
                         else:
-                            html_report_lines += ['<td align=center valign=middle style="' + cell_width + '; border-right:solid 2px ' + border_color +
+                            html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
 
                     html_report_lines += ['</tr>']
@@ -5398,8 +5474,8 @@ class kb_hmmer:
            of type "bool", parameter "e_value" of Double, parameter
            "bitscore" of Double, parameter "overlap_perc" of Double,
            parameter "maxaccepts" of Double, parameter "heatmap" of type
-           "bool", parameter "vertical" of type "bool", parameter
-           "show_blanks" of type "bool"
+           "bool", parameter "low_val" of type "bool", parameter "vertical"
+           of type "bool", parameter "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"
@@ -6482,8 +6558,6 @@ class kb_hmmer:
                                     genome_disp_name += '.v'+str(genome_obj_version)
                                 if 'sci_name' in params['genome_disp_name_config']:
                                     genome_disp_name += ': '+genome_sci_name
-                                else:
-                                    genome_disp_name = genome_sci_name
 
                             # build html report table line
                             html_report_chunk += ['<tr bgcolor="' + row_color + '">']
@@ -6763,7 +6837,10 @@ class kb_hmmer:
             cats = all_HMM_ids_order
             table_data = dict()
             INSANE_VALUE = 10000000000000000
-            overall_low_val = INSANE_VALUE
+            if params.get('low_val') and params['low_val'] != 'detect':
+                overall_low_val = float(params['low_val'])
+            else:
+                overall_low_val = INSANE_VALUE
             overall_high_val = -INSANE_VALUE
             cat_seen = dict()
             for cat in cats:
@@ -6797,7 +6874,46 @@ class kb_hmmer:
                     if val < overall_low_val:
                         overall_low_val = val
             if overall_high_val == -INSANE_VALUE:
-                raise ValueError("unable to find any counts")
+                error_msg = "unable to find any counts"
+                self.log(invalid_msgs, error_msg)
+                provenance = [{}]
+                if 'provenance' in ctx:
+                    provenance = ctx['provenance']
+                # add additional info to provenance here, in this case the input data object reference
+                provenance[0]['input_ws_objects'] = []
+                provenance[0]['input_ws_objects'].append(input_msa_ref)
+                provenance[0]['input_ws_objects'].append(input_many_ref)
+                provenance[0]['service'] = 'kb_hmmer'
+                provenance[0]['method'] = search_tool_name + '_Search'
+                report += "FAILURE\n\n" + "\n".join(invalid_msgs) + "\n"
+                reportObj = {
+                    'objects_created': [],
+                    'text_message': report
+                }
+                reportName = 'hmmer_report_' + str(uuid.uuid4())
+                report_obj_info = ws.save_objects({
+                    #                'id':info[6],
+                    'workspace': params['workspace_name'],
+                    'objects': [
+                        {
+                            'type': 'KBaseReport.Report',
+                            'data': reportObj,
+                            'name': reportName,
+                            'meta': {},
+                            'hidden': 1,
+                            'provenance': provenance
+                        }
+                    ]
+                })[0]
+                report_info = dict()
+                report_info['name'] = report_obj_info[1]
+                report_info['ref'] = str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4])
+                self.log(console, "BUILDING RETURN OBJECT")
+                returnVal = {'report_name': report_info['name'],
+                             'report_ref': report_info['ref']
+                }
+                return [returnVal]
+
 
             # build html report
             sp = '&nbsp;'
@@ -6814,12 +6930,12 @@ class kb_hmmer:
             #color_list = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e']
             #color_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd']
             color_list = [
-                "#000000",
-                "#000066",
-                "#000099",
-                "#0000bb",
-                "#0000dd",
-                "#0000ff",
+                "#333333",
+                "#222266",
+                "#222299",
+                "#2222bb",
+                "#2222dd",
+                "#2222ff",
                 "#4444ff",
                 "#6666ff",
                 "#8888ff",
@@ -6827,7 +6943,8 @@ class kb_hmmer:
                 "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
-            cell_width = '10px'
+            cell_width = '10'
+            corner_radius = str(int(0.2*int(cell_width)+0.5))
             if len(genome_refs) > 20:
                 graph_gen_fontsize = "1"
 #            elif len(genome_refs) > 10:
@@ -6933,8 +7050,6 @@ class kb_hmmer:
                             genome_disp_name += '.v'+str(genome_obj_version)
                         if 'sci_name' in params['genome_disp_name_config']:
                             genome_disp_name += ': '+genome_sci_name
-                        else:
-                            genome_disp_name = genome_sci_name
 
                     # build html report table line
                     html_report_lines += ['<tr>']
@@ -6965,10 +7080,10 @@ class kb_hmmer:
                             else:
                                 this_text_color = cell_color
                                 this_graph_char = graph_char
-                            html_report_lines += ['<td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + '" bgcolor="' +
+                            html_report_lines += ['<td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + 'px; height:' + cell_width + 'px; border-radius:' + corner_radius + 'px" bgcolor="' +
                                                   cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td>']
                         else:
-                            html_report_lines += ['<td align=center valign=middle style="' + cell_width + '; border-right:solid 2px ' + border_color +
+                            html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
 
                     html_report_lines += ['</tr>']

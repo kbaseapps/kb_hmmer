@@ -1,5 +1,5 @@
 {
-    "ver": "1.4.3",
+    "ver": "1.4.4",
     "authors": [
         "dylan"
     ],
@@ -3814,7 +3814,7 @@
             }
         },
         {
-            "id": "vertical",
+            "id": "low_val",
             "optional": false,
             "advanced": true,
             "allow_multiple": false,
@@ -3823,10 +3823,22 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "0.1",
+                                        "display": "fixed: 0.1",
+                                        "id": "fixed: 0.1",
+                                        "ui-name": "fixed: 0.1"
+                                },
+                                {
                                         "value": "1",
-                                        "display": "rows",
-                                        "id": "rows",
-                                        "ui-name": "rows"
+                                        "display": "fixed: 1",
+                                        "id": "fixed: 1",
+                                        "ui-name": "fixed: 1"
+                                },
+                                {
+                                        "value": "detect",
+                                        "display": "detect",
+                                        "id": "detect",
+                                        "ui-name": "detect"
                                 }
                 ]
             }
@@ -3932,7 +3944,11 @@
                     "target_property": "heatmap"
                 },		
                 {
-                    "input_parameter": "vertical",
+                    "input_parameter": "low_val",
+                    "target_property": "low_val"
+                },		
+                {
+                    "constant_value": "1",
                     "target_property": "vertical"
                 },		
                 {

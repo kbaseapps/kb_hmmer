@@ -86,8 +86,8 @@ class kb_hmmer(object):
            of type "bool", parameter "e_value" of Double, parameter
            "bitscore" of Double, parameter "overlap_perc" of Double,
            parameter "maxaccepts" of Double, parameter "heatmap" of type
-           "bool", parameter "vertical" of type "bool", parameter
-           "show_blanks" of type "bool"
+           "bool", parameter "low_val" of type "bool", parameter "vertical"
+           of type "bool", parameter "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"
@@ -124,8 +124,8 @@ class kb_hmmer(object):
            of type "bool", parameter "e_value" of Double, parameter
            "bitscore" of Double, parameter "overlap_perc" of Double,
            parameter "maxaccepts" of Double, parameter "heatmap" of type
-           "bool", parameter "vertical" of type "bool", parameter
-           "show_blanks" of type "bool"
+           "bool", parameter "low_val" of type "bool", parameter "vertical"
+           of type "bool", parameter "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"
@@ -169,8 +169,8 @@ class kb_hmmer(object):
            of type "bool", parameter "e_value" of Double, parameter
            "bitscore" of Double, parameter "overlap_perc" of Double,
            parameter "maxaccepts" of Double, parameter "heatmap" of type
-           "bool", parameter "vertical" of type "bool", parameter
-           "show_blanks" of type "bool"
+           "bool", parameter "low_val" of type "bool", parameter "vertical"
+           of type "bool", parameter "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"

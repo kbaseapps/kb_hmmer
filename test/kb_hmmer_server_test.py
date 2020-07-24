@@ -425,6 +425,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "1",
                        'vertical': "1",
                        'show_blanks': "1"
                      }
@@ -478,6 +479,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "5.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "0.1",
                        'vertical': "1",
                        'show_blanks': "1"
                      }
@@ -531,6 +533,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "5.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "detect",
                        'vertical': "1",
                        'show_blanks': "1"
                      }
@@ -580,6 +583,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "detect",
                        'vertical': "1",
                        'show_blanks': "1"
                      }
@@ -629,6 +633,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "detect",
                        'vertical': "1",
                        'show_blanks': "0"
                      }
@@ -713,6 +718,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "100.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "detect",
                        'vertical': "1",
                        'show_blanks': "0"
                      }
@@ -757,6 +763,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "100.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "detect",
                        'vertical': "1",
                        'show_blanks': "1"
                      }
@@ -807,6 +814,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "detect",
                        'vertical': "1",
                        'show_blanks': "0"
                      }
@@ -865,6 +873,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "5.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "1",
                        'vertical': "1",
                        'show_blanks': "0"
                      }
@@ -920,6 +929,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "0.1",
                        'vertical': "1",
                        'show_blanks': "0"
                      }
@@ -975,6 +985,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "detect",
                        'vertical': "1",
                        'show_blanks': "0"
                      }
@@ -1036,6 +1047,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "detect",
                        'vertical': "1",
                        'show_blanks': "0"
                      }
@@ -1097,6 +1109,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "1",
                        'vertical': "1",
                        'show_blanks': "0"
                      }
@@ -1158,6 +1171,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'overlap_fraction': "50.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
+                       'low_val': "0.1",
                        'vertical': "1",
                        'show_blanks': "0"
                      }
