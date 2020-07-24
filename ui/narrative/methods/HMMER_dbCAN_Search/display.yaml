@@ -74,9 +74,9 @@ parameters :
             Use the object name, object version, and/or scientific name of the Genome in the function profile report
     output_filtered_name:
         ui-name : |
-            Output Object
+            Output FeatureSet basename
         short-hint : |
-            Object containing matches.  Output will be will be FeatureSet.
+            FeatureSets containing hits with thresholds.  Object names will be HMM name attached to configured basename.
     coalesce_output:
         ui-name : |
             Coalesce output
@@ -109,13 +109,13 @@ parameters :
             Display as heatmap or numerical table (if input is GenomeSet)
         long-hint  : |
             Display as heatmap or numerical table (if input is GenomeSet)
-    vertical :
+    low_val :
         ui-name : |
-            View GenomeSet profile genomes as
+            Heatmap low value
         short-hint : |
-            Show table with genomes as rows
+            Use fixed value or lowest detected value as base of heatmap
         long-hint  : |
-            Show table with genomes as rows
+            Use fixed value or lowest detected value as base of heatmap
     show_blanks :
         ui-name : |
             Show GenomeSet profile empty categories

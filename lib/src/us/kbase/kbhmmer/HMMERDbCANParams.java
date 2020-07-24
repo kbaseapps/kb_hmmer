@@ -38,6 +38,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "overlap_perc",
     "maxaccepts",
     "heatmap",
+    "low_val",
     "vertical",
     "show_blanks"
 })
@@ -77,6 +78,8 @@ public class HMMERDbCANParams {
     private Double maxaccepts;
     @JsonProperty("heatmap")
     private Long heatmap;
+    @JsonProperty("low_val")
+    private Long lowVal;
     @JsonProperty("vertical")
     private Long vertical;
     @JsonProperty("show_blanks")
@@ -338,6 +341,21 @@ public class HMMERDbCANParams {
         return this;
     }
 
+    @JsonProperty("low_val")
+    public Long getLowVal() {
+        return lowVal;
+    }
+
+    @JsonProperty("low_val")
+    public void setLowVal(Long lowVal) {
+        this.lowVal = lowVal;
+    }
+
+    public HMMERDbCANParams withLowVal(Long lowVal) {
+        this.lowVal = lowVal;
+        return this;
+    }
+
     @JsonProperty("vertical")
     public Long getVertical() {
         return vertical;
@@ -380,7 +398,7 @@ public class HMMERDbCANParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((((((((((((((((((((("HMMERDbCANParams"+" [workspaceName=")+ workspaceName)+", inputDbCANAAIds=")+ inputDbCANAAIds)+", inputDbCANCBMIds=")+ inputDbCANCBMIds)+", inputDbCANCEIds=")+ inputDbCANCEIds)+", inputDbCANGHIds=")+ inputDbCANGHIds)+", inputDbCANGTIds=")+ inputDbCANGTIds)+", inputDbCANPLIds=")+ inputDbCANPLIds)+", inputDbCANCellulosomeIds=")+ inputDbCANCellulosomeIds)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", coalesceOutput=")+ coalesceOutput)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", overlapPerc=")+ overlapPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((((((((((((((((("HMMERDbCANParams"+" [workspaceName=")+ workspaceName)+", inputDbCANAAIds=")+ inputDbCANAAIds)+", inputDbCANCBMIds=")+ inputDbCANCBMIds)+", inputDbCANCEIds=")+ inputDbCANCEIds)+", inputDbCANGHIds=")+ inputDbCANGHIds)+", inputDbCANGTIds=")+ inputDbCANGTIds)+", inputDbCANPLIds=")+ inputDbCANPLIds)+", inputDbCANCellulosomeIds=")+ inputDbCANCellulosomeIds)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", coalesceOutput=")+ coalesceOutput)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", overlapPerc=")+ overlapPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", lowVal=")+ lowVal)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

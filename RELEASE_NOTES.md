@@ -1,3 +1,8 @@
+### Version 1.4.4
+__Changes__
+- added low_val option to heatmap containing methods to set color scale
+- fixed bug with display of MSA Groups where columns shifted left
+
 ### Version 1.4.3
 __Changes__
 - add support for AnnotatedMetagenomeAssembly as target

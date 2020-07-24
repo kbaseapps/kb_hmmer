@@ -89,6 +89,7 @@ module kb_hmmer {
 /*	float ident_thresh;
 */
         bool  heatmap;
+	bool  low_val;
 	bool  vertical;  /* only supports true for now */
 	bool  show_blanks;
     } HMMER_Local_MSA_Group_Params;
@@ -129,6 +130,7 @@ module kb_hmmer {
 /*	float ident_thresh;
 */
         bool  heatmap;
+	bool  low_val;
 	bool  vertical;  /* only supports true for now */
 	bool  show_blanks;
     } HMMER_dbCAN_Params;
@@ -175,7 +177,8 @@ module kb_hmmer {
     float maxaccepts;
 /*  float ident_thresh;
 */
-        bool  heatmap;
+    bool  heatmap;
+    bool  low_val;
     bool  vertical;  /* only supports true for now */
     bool  show_blanks;
     } HMMER_EnvBioelement_Params;

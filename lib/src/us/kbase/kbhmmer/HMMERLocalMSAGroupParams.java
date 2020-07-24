@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "overlap_perc",
     "maxaccepts",
     "heatmap",
+    "low_val",
     "vertical",
     "show_blanks"
 })
@@ -59,6 +60,8 @@ public class HMMERLocalMSAGroupParams {
     private Double maxaccepts;
     @JsonProperty("heatmap")
     private Long heatmap;
+    @JsonProperty("low_val")
+    private Long lowVal;
     @JsonProperty("vertical")
     private Long vertical;
     @JsonProperty("show_blanks")
@@ -230,6 +233,21 @@ public class HMMERLocalMSAGroupParams {
         return this;
     }
 
+    @JsonProperty("low_val")
+    public Long getLowVal() {
+        return lowVal;
+    }
+
+    @JsonProperty("low_val")
+    public void setLowVal(Long lowVal) {
+        this.lowVal = lowVal;
+    }
+
+    public HMMERLocalMSAGroupParams withLowVal(Long lowVal) {
+        this.lowVal = lowVal;
+        return this;
+    }
+
     @JsonProperty("vertical")
     public Long getVertical() {
         return vertical;
@@ -272,7 +290,7 @@ public class HMMERLocalMSAGroupParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((((((((("HMMERLocalMSAGroupParams"+" [workspaceName=")+ workspaceName)+", inputMsaRefs=")+ inputMsaRefs)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", coalesceOutput=")+ coalesceOutput)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", overlapPerc=")+ overlapPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((((("HMMERLocalMSAGroupParams"+" [workspaceName=")+ workspaceName)+", inputMsaRefs=")+ inputMsaRefs)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", coalesceOutput=")+ coalesceOutput)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", overlapPerc=")+ overlapPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", lowVal=")+ lowVal)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

@@ -255,6 +255,7 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	overlap_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
+	low_val has a value which is a kb_hmmer.bool
 	vertical has a value which is a kb_hmmer.bool
 	show_blanks has a value which is a kb_hmmer.bool
 workspace_name is a string
@@ -285,6 +286,7 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	overlap_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
+	low_val has a value which is a kb_hmmer.bool
 	vertical has a value which is a kb_hmmer.bool
 	show_blanks has a value which is a kb_hmmer.bool
 workspace_name is a string
@@ -389,6 +391,7 @@ HMMER_dbCAN_Params is a reference to a hash where the following keys are defined
 	overlap_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
+	low_val has a value which is a kb_hmmer.bool
 	vertical has a value which is a kb_hmmer.bool
 	show_blanks has a value which is a kb_hmmer.bool
 workspace_name is a string
@@ -425,6 +428,7 @@ HMMER_dbCAN_Params is a reference to a hash where the following keys are defined
 	overlap_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
+	low_val has a value which is a kb_hmmer.bool
 	vertical has a value which is a kb_hmmer.bool
 	show_blanks has a value which is a kb_hmmer.bool
 workspace_name is a string
@@ -536,6 +540,7 @@ HMMER_EnvBioelement_Params is a reference to a hash where the following keys are
 	overlap_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
+	low_val has a value which is a kb_hmmer.bool
 	vertical has a value which is a kb_hmmer.bool
 	show_blanks has a value which is a kb_hmmer.bool
 workspace_name is a string
@@ -579,6 +584,7 @@ HMMER_EnvBioelement_Params is a reference to a hash where the following keys are
 	overlap_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
+	low_val has a value which is a kb_hmmer.bool
 	vertical has a value which is a kb_hmmer.bool
 	show_blanks has a value which is a kb_hmmer.bool
 workspace_name is a string
@@ -996,6 +1002,7 @@ bitscore has a value which is a float
 overlap_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
+low_val has a value which is a kb_hmmer.bool
 vertical has a value which is a kb_hmmer.bool
 show_blanks has a value which is a kb_hmmer.bool
 
@@ -1017,6 +1024,7 @@ bitscore has a value which is a float
 overlap_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
+low_val has a value which is a kb_hmmer.bool
 vertical has a value which is a kb_hmmer.bool
 show_blanks has a value which is a kb_hmmer.bool
 
@@ -1061,6 +1069,7 @@ bitscore has a value which is a float
 overlap_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
+low_val has a value which is a kb_hmmer.bool
 vertical has a value which is a kb_hmmer.bool
 show_blanks has a value which is a kb_hmmer.bool
 
@@ -1088,6 +1097,7 @@ bitscore has a value which is a float
 overlap_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
+low_val has a value which is a kb_hmmer.bool
 vertical has a value which is a kb_hmmer.bool
 show_blanks has a value which is a kb_hmmer.bool
 
@@ -1139,6 +1149,7 @@ bitscore has a value which is a float
 overlap_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
+low_val has a value which is a kb_hmmer.bool
 vertical has a value which is a kb_hmmer.bool
 show_blanks has a value which is a kb_hmmer.bool
 
@@ -1173,6 +1184,7 @@ bitscore has a value which is a float
 overlap_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
+low_val has a value which is a kb_hmmer.bool
 vertical has a value which is a kb_hmmer.bool
 show_blanks has a value which is a kb_hmmer.bool
 
