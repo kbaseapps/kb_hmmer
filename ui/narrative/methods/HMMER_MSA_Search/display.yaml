@@ -1,7 +1,7 @@
 #
 # define display information
 #
-name: HMMsearch for MSA (prot-prot) - v3.3
+name: HMMsearch for MSA (prot-prot) - v3.3.1
 tooltip: |
     Search for matches to a Multiple Sequence Alignment (MSA) using Hidden Markov Model Search (hmmsearch).
 screenshots:
@@ -99,5 +99,5 @@ publications :
 
     -
         display-text: |
-            HMMER v3.3 source:
+            HMMER v3.3.1 source:
         link: http://HMMER.ORG
