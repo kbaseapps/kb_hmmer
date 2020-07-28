@@ -3118,6 +3118,7 @@ class kb_hmmer:
             with open(html_path, 'w', 0) as html_handle:
                 html_handle.write(html_report_str)
 
+
         #### Build Profile output report
         ##
         self.log(console, "BUILDING PROFILE REPORT ")  # DEBUG
@@ -3233,8 +3234,10 @@ class kb_hmmer:
                 "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
-            cell_width = '10'
-            corner_radius = str(int(0.2*int(cell_width)+0.5))
+            #cell_width = '10'
+            #corner_radius = str(int(0.2*int(cell_width)+0.5))
+            cell_width = '8'
+            corner_radius = '3'
             if len(genome_refs) > 20:
                 graph_gen_fontsize = "1"
 #            elif len(genome_refs) > 10:
@@ -3361,8 +3364,8 @@ class kb_hmmer:
                             else:
                                 this_text_color = cell_color
                                 this_graph_char = graph_char
-                            html_report_lines += ['<td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + 'px; height:' + cell_width + 'px; border-radius:' + corner_radius + 'px" bgcolor="' +
-                                                  cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td>']
+                            html_report_lines += ['<td align=center valign=middle><table border=1 cellpadding=0 cellspacing=0><tr><td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + 'px; height:' + cell_width + 'px; border-radius:' + corner_radius + 'px" bgcolor="' +
+                                                  cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td></tr></table></td>']
                         else:
                             html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
@@ -4959,6 +4962,7 @@ class kb_hmmer:
                 with open(html_path, 'w', 0) as html_handle:
                     html_handle.write(html_report_str)
 
+
         #### Build Profile output report
         ##
         self.log(console, "BUILDING PROFILE REPORT ")  # DEBUG
@@ -4999,9 +5003,9 @@ class kb_hmmer:
             for genome_ref in genome_refs:
                 for cat in cats:
                     val = table_data[genome_ref][cat]
+                    self.log (console, "HIGH VAL SCAN CAT: '"+cat+"' VAL: '"+str(val)+"'")  # DEBUG
                     if val == 0:
                         continue
-                    #self.log (console, "HIGH VAL SCAN CAT: '"+cat+"' VAL: '"+str(val)+"'")  # DEBUG
                     if val > overall_high_val:
                         overall_high_val = val
                     if val < overall_low_val:
@@ -5014,7 +5018,6 @@ class kb_hmmer:
                     provenance = ctx['provenance']
                 # add additional info to provenance here, in this case the input data object reference
                 provenance[0]['input_ws_objects'] = []
-                provenance[0]['input_ws_objects'].append(input_msa_ref)
                 provenance[0]['input_ws_objects'].append(input_many_ref)
                 provenance[0]['service'] = 'kb_hmmer'
                 provenance[0]['method'] = search_tool_name + '_Search'
@@ -5076,8 +5079,10 @@ class kb_hmmer:
                 "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
-            cell_width = '10'
-            corner_radius = str(int(0.2*int(cell_width)+0.5))
+            #cell_width = '10'
+            #corner_radius = str(int(0.2*int(cell_width)+0.5))
+            cell_width = '8'
+            corner_radius = '3'
             if len(genome_refs) > 20:
                 graph_gen_fontsize = "1"
 #            elif len(genome_refs) > 10:
@@ -5213,8 +5218,8 @@ class kb_hmmer:
                             else:
                                 this_text_color = cell_color
                                 this_graph_char = graph_char
-                            html_report_lines += ['<td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + 'px; height:' + cell_width + 'px; border-radius:' + corner_radius + 'px" bgcolor="' +
-                                                  cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td>']
+                            html_report_lines += ['<td align=center valign=middle><table border=1 cellpadding=0 cellspacing=0><tr><td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + 'px; height:' + cell_width + 'px; border-radius:' + corner_radius + 'px" bgcolor="' +
+                                                  cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td></tr></table></td>']
                         else:
                             html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
@@ -6826,6 +6831,7 @@ class kb_hmmer:
                 with open(html_path, 'w', 0) as html_handle:
                     html_handle.write(html_report_str)
 
+
         #### Build Profile output report
         ##
         self.log(console, "BUILDING PROFILE REPORT ")  # DEBUG
@@ -6881,7 +6887,6 @@ class kb_hmmer:
                     provenance = ctx['provenance']
                 # add additional info to provenance here, in this case the input data object reference
                 provenance[0]['input_ws_objects'] = []
-                provenance[0]['input_ws_objects'].append(input_msa_ref)
                 provenance[0]['input_ws_objects'].append(input_many_ref)
                 provenance[0]['service'] = 'kb_hmmer'
                 provenance[0]['method'] = search_tool_name + '_Search'
@@ -6943,8 +6948,10 @@ class kb_hmmer:
                 "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
-            cell_width = '10'
-            corner_radius = str(int(0.2*int(cell_width)+0.5))
+            #cell_width = '10'
+            #corner_radius = str(int(0.2*int(cell_width)+0.5))
+            cell_width = '8'
+            corner_radius = '3'
             if len(genome_refs) > 20:
                 graph_gen_fontsize = "1"
 #            elif len(genome_refs) > 10:
@@ -7080,8 +7087,8 @@ class kb_hmmer:
                             else:
                                 this_text_color = cell_color
                                 this_graph_char = graph_char
-                            html_report_lines += ['<td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + 'px; height:' + cell_width + 'px; border-radius:' + corner_radius + 'px" bgcolor="' +
-                                                  cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td>']
+                            html_report_lines += ['<td align=center valign=middle><table border=1 cellpadding=0 cellspacing=0><tr><td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + 'px; height:' + cell_width + 'px; border-radius:' + corner_radius + 'px" bgcolor="' +
+                                                  cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td></tr></table></td>']
                         else:
                             html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
