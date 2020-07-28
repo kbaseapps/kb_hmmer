@@ -1,7 +1,7 @@
 #
 # define display information
 #
-name: HMMER Search & Functional Profile with Custom Models - v3.3
+name: HMMER Search & Functional Profile with Custom Models - v3.3.1
 tooltip: |
     Search for matches to all MSAs that are within workspace using Hidden Markov Model (HMMER) Search.
 screenshots:
@@ -120,5 +120,5 @@ publications :
 
     -
         display-text: |
-            HMMER v3.3 source:
+            HMMER v3.3.1 source:
         link: http://HMMER.ORG

@@ -1,3 +1,7 @@
+### Version 1.4.5
+__Changes__
+- updated HMMER to v3.3.1
+
 ### Version 1.4.4
 __Changes__
 - added low_val option to heatmap containing methods to set color scale
