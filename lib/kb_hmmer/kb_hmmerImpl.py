@@ -2485,8 +2485,8 @@ class kb_hmmer:
                 self.log(console, "HIT: '" + hit_seq_id + "'")  # DEBUG
 
                 # capture accepted hit count by genome_ref and model
-                if len(genome_refs) == 1:
-                    genome_ref = genome_refs[0]
+                if many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
+                    genome_ref = input_many_ref
                 else:
                     genome_ref = hit_seq_id.split(genome_id_feature_id_delim)[0]
                 self.log(console, "DEBUG: genome_ref: '" + str(genome_ref) + "'")
@@ -3234,7 +3234,7 @@ class kb_hmmer:
                 "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
-            cell_width = '12'
+            cell_width = '16'
             #corner_radius = str(int(0.2*int(cell_width)+0.5))
             corner_radius = '3'
             if len(genome_refs) > 20:
@@ -4323,7 +4323,10 @@ class kb_hmmer:
                     #self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
 
                     # capture accepted hit count by genome_ref and model
-                    genome_ref = hit_seq_id.split(genome_id_feature_id_delim)[0]
+                    if many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
+                        genome_ref = input_many_ref
+                    else:
+                        genome_ref = hit_seq_id.split(genome_id_feature_id_delim)[0]
                     #self.log(console, "DEBUG: genome_ref: '"+str(genome_ref)+"'")
                     #self.log(console, "DEBUG: input_hmm_name: '"+str(hmm_id)+"'")
                     if genome_ref not in hit_cnt_by_genome_and_model:
@@ -5002,9 +5005,9 @@ class kb_hmmer:
             for genome_ref in genome_refs:
                 for cat in cats:
                     val = table_data[genome_ref][cat]
-                    self.log (console, "HIGH VAL SCAN CAT: '"+cat+"' VAL: '"+str(val)+"'")  # DEBUG
                     if val == 0:
                         continue
+                    #self.log (console, "HIGH VAL SCAN CAT: '"+cat+"' VAL: '"+str(val)+"'")  # DEBUG
                     if val > overall_high_val:
                         overall_high_val = val
                     if val < overall_low_val:
@@ -5078,7 +5081,7 @@ class kb_hmmer:
                 "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
-            cell_width = '12'
+            cell_width = '16'
             #corner_radius = str(int(0.2*int(cell_width)+0.5))
             corner_radius = '3'
             if len(genome_refs) > 20:
@@ -6191,7 +6194,10 @@ class kb_hmmer:
                     #self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
 
                     # capture accepted hit count by genome_ref and model
-                    genome_ref = hit_seq_id.split(genome_id_feature_id_delim)[0]
+                    if many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
+                        genome_ref = input_many_ref
+                    else:
+                        genome_ref = hit_seq_id.split(genome_id_feature_id_delim)[0]
                     #self.log(console, "DEBUG: genome_ref: '"+str(genome_ref)+"'")
                     #self.log(console, "DEBUG: input_hmm_name: '"+str(hmm_id)+"'")
                     if genome_ref not in hit_cnt_by_genome_and_model:
@@ -6946,7 +6952,7 @@ class kb_hmmer:
                 "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
-            cell_width = '12'
+            cell_width = '16'
             #corner_radius = str(int(0.2*int(cell_width)+0.5))
             corner_radius = '3'
             if len(genome_refs) > 20:
