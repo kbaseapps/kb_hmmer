@@ -33,19 +33,14 @@ WORKDIR /kb/module
 # RUN curl http://eddylab.org/software/hmmer3/3.1b2/hmmer-3.1b2-linux-intel-x86_64.tar.gz > hmmer-3.1b2-linux-intel-x86_64.tar.gz && \
 RUN rm -f /usr/bin/hmm*
 RUN \
-  curl http://eddylab.org/software/hmmer/hmmer-3.3.1.tar.gz > hmmer-3.3.1.tar.gz
-RUN \
-  tar xfz hmmer-3.3.1.tar.gz
-RUN \
-  ln -s hmmer-3.3.1 hmmer
-RUN \
+  curl http://eddylab.org/software/hmmer/hmmer-3.3.1.tar.gz > hmmer-3.3.1.tar.gz && \
+  tar xfz hmmer-3.3.1.tar.gz && \
+  ln -s hmmer-3.3.1 hmmer && \
   rm -f hmmer-3.3.1.tar.gz
 WORKDIR /kb/module/hmmer
 RUN \
-  ./configure --prefix /kb/module/hmmer
-RUN \
-  make
-RUN \
+  ./configure --prefix /kb/module/hmmer && \
+  make && \
   make install
 
 
