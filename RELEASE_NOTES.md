@@ -1,3 +1,14 @@
+### Version 1.5.0
+__Changes__
+- DEBUGGING changed heatmap cells to DIV
+- DEBUGGING updated dbCAN to v8
+- DEBUGGING updated dbCAN defaults to match dbCAN2 server E-Value < 1e-15, coverage > 0.35
+- PENDING added descriptions to HMMs in key
+- PENDING added explicit HMM FeatureSet configuration to dbCAN
+- PENDING removed grouped FeatureSets from dbCAN
+- PENDING added HMM-specific thresholds in config
+- PENDING added genes hit to rollover behavior in report
+
 ### Version 1.4.5
 __Changes__
 - updated HMMER to v3.3.1

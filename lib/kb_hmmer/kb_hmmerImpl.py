@@ -3234,9 +3234,10 @@ class kb_hmmer:
                 "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
-            cell_width = '16'
+            cell_width = '20'
+            cell_height = '18'
             #corner_radius = str(int(0.2*int(cell_width)+0.5))
-            corner_radius = '3'
+            corner_radius = '4'
             if len(genome_refs) > 20:
                 graph_gen_fontsize = "1"
 #            elif len(genome_refs) > 10:
@@ -3276,6 +3277,10 @@ class kb_hmmer:
                 ".vertical-text {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
             html_report_lines += [
                 ".vertical-text_title {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+            
+            # add colors as style for DIV
+            for color_i,color_val in enumerate(color_list):
+                html_report_lines += [".heatmap_cell-"+str(color_i)+" {\nwidth: "+str(cell_width)+"px;\nheight: "+str(cell_height)+"px;\nborder-radius: "+str(corner_radius)+"px;\nbackground-color: "+str(color_val)+";\btext-align: center;\n}"]
             html_report_lines += ['</style>']
             html_report_lines += ['</head>']
             html_report_lines += ['<body bgcolor="white">']
@@ -3343,28 +3348,18 @@ class kb_hmmer:
                             continue
                         val = table_data[genome_ref][cat]
                         if not cat_seen.get(cat) or val == 0:
-                            cell_color = 'white'
+                            html_report_lines += ['<td bgcolor=white></td>']
+                            continue
                         elif overall_high_val == overall_low_val:
-                            cell_color = color_list[0]
+                            cell_color_i = 0
                         else:
                             cell_color_i = max_color - \
                                 int(round(max_color * (val - overall_low_val) / float(overall_high_val - overall_low_val)))
-                            #c = color_list[cell_color_i]
-                            #cell_color = '#' + c + c + c + c + 'FF'
-                            cell_color = color_list[cell_color_i]
 
                         cell_val = str(table_data[genome_ref][cat])  # the key line
 
                         if 'heatmap' in params and params['heatmap'] == '1':
-                            if table_data[genome_ref][cat] == 0:
-                                this_text_color = text_color
-                                #this_graph_char = "0"
-                                this_graph_char = sp
-                            else:
-                                this_text_color = cell_color
-                                this_graph_char = graph_char
-                            html_report_lines += ['<td align=center valign=middle><table border=0 cellpadding=0 cellspacing=0><tr><td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + 'px; height:' + cell_width + 'px; border-radius:' + corner_radius + 'px" bgcolor="' +
-                                                  cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td></tr></table></td>']
+                            html_report_lines += ['<td align=center valign=middle bgcolor=white><div class="heatmap_cell-'+str(cell_color_i)+'"></div></td>']
                         else:
                             html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
@@ -5081,9 +5076,10 @@ class kb_hmmer:
                 "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
-            cell_width = '16'
+            cell_width = '20'
+            cell_height = '18'
             #corner_radius = str(int(0.2*int(cell_width)+0.5))
-            corner_radius = '3'
+            corner_radius = '4'
             if len(genome_refs) > 20:
                 graph_gen_fontsize = "1"
 #            elif len(genome_refs) > 10:
@@ -5123,6 +5119,10 @@ class kb_hmmer:
                 ".vertical-text {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
             html_report_lines += [
                 ".vertical-text_title {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+
+            # add colors as style for DIV
+            for color_i,color_val in enumerate(color_list):
+                html_report_lines += [".heatmap_cell-"+str(color_i)+" {\nwidth: "+str(cell_width)+"px;\nheight: "+str(cell_height)+"px;\nborder-radius: "+str(corner_radius)+"px;\nbackground-color: "+str(color_val)+";\btext-align: center;\n}"]
             html_report_lines += ['</style>']
             html_report_lines += ['</head>']
             html_report_lines += ['<body bgcolor="white">']
@@ -5199,28 +5199,18 @@ class kb_hmmer:
                             continue
                         val = table_data[genome_ref][cat]
                         if not cat_seen.get(cat) or val == 0:
-                            cell_color = 'white'
+                            html_report_lines += ['<td bgcolor=white></td>']
+                            continue
                         elif overall_high_val == overall_low_val:
-                            cell_color = color_list[0]
+                            cell_color_i = 0
                         else:
                             cell_color_i = max_color - \
                                 int(round(max_color * (val - overall_low_val) / float(overall_high_val - overall_low_val)))
-                            #c = color_list[cell_color_i]
-                            #cell_color = '#' + c + c + c + c + 'FF'
-                            cell_color = color_list[cell_color_i]
 
                         cell_val = str(table_data[genome_ref][cat])  # the key line
 
                         if 'heatmap' in params and params['heatmap'] == '1':
-                            if table_data[genome_ref][cat] == 0:
-                                this_text_color = text_color
-                                #this_graph_char = "0"
-                                this_graph_char = sp
-                            else:
-                                this_text_color = cell_color
-                                this_graph_char = graph_char
-                            html_report_lines += ['<td align=center valign=middle><table border=0 cellpadding=0 cellspacing=0><tr><td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + 'px; height:' + cell_width + 'px; border-radius:' + corner_radius + 'px" bgcolor="' +
-                                                  cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td></tr></table></td>']
+                            html_report_lines += ['<td align=center valign=middle bgcolor=white><div class="heatmap_cell-'+str(cell_color_i)+'"></div></td>']
                         else:
                             html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
@@ -6952,9 +6942,10 @@ class kb_hmmer:
                 "#ccccff"]
             max_color = len(color_list) - 1
             cat_disp_trunc_len = 40
-            cell_width = '16'
+            cell_width = '20'
+            cell_height = '18'
             #corner_radius = str(int(0.2*int(cell_width)+0.5))
-            corner_radius = '3'
+            corner_radius = '4'
             if len(genome_refs) > 20:
                 graph_gen_fontsize = "1"
 #            elif len(genome_refs) > 10:
@@ -6994,6 +6985,10 @@ class kb_hmmer:
                 ".vertical-text {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
             html_report_lines += [
                 ".vertical-text_title {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+
+            # add colors as style for DIV
+            for color_i,color_val in enumerate(color_list):
+                html_report_lines += [".heatmap_cell-"+str(color_i)+" {\nwidth: "+str(cell_width)+"px;\nheight: "+str(cell_height)+"px;\nborder-radius: "+str(corner_radius)+"px;\nbackground-color: "+str(color_val)+";\btext-align: center;\n}"]
             html_report_lines += ['</style>']
             html_report_lines += ['</head>']
             html_report_lines += ['<body bgcolor="white">']
@@ -7070,28 +7065,18 @@ class kb_hmmer:
                             continue
                         val = table_data[genome_ref][cat]
                         if not cat_seen.get(cat) or val == 0:
-                            cell_color = 'white'
+                            html_report_lines += ['<td bgcolor=white></td>']
+                            continue
                         elif overall_high_val == overall_low_val:
-                            cell_color = color_list[0]
+                            cell_color_i = 0
                         else:
                             cell_color_i = max_color - \
                                 int(round(max_color * (val - overall_low_val) / float(overall_high_val - overall_low_val)))
-                            #c = color_list[cell_color_i]
-                            #cell_color = '#' + c + c + c + c + 'FF'
-                            cell_color = color_list[cell_color_i]
 
                         cell_val = str(table_data[genome_ref][cat])  # the key line
 
                         if 'heatmap' in params and params['heatmap'] == '1':
-                            if table_data[genome_ref][cat] == 0:
-                                this_text_color = text_color
-                                #this_graph_char = "0"
-                                this_graph_char = sp
-                            else:
-                                this_text_color = cell_color
-                                this_graph_char = graph_char
-                            html_report_lines += ['<td align=center valign=middle><table border=0 cellpadding=0 cellspacing=0><tr><td align=center valign=middle title="' + cell_val + '" style="width:' + cell_width + 'px; height:' + cell_width + 'px; border-radius:' + corner_radius + 'px" bgcolor="' +
-                                                  cell_color + '"><font color="' + this_text_color + '" size=' + cell_fontsize + '>' + this_graph_char + '</font></td></tr></table></td>']
+                            html_report_lines += ['<td align=center valign=middle bgcolor=white><div class="heatmap_cell-'+str(cell_color_i)+'"></div></td>']
                         else:
                             html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
