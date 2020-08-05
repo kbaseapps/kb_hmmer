@@ -5239,8 +5239,10 @@ class kb_hmmer:
                     if not cat_seen.get(cat) and not show_blanks:
                         continue
                     cat_disp = cat
-                    cell_title = input_HMM_descs[cat]
-
+                    #cell_title = input_HMM_descs[cat]
+                    cell_title = cat
+                    key_link = cat
+                    
                     if len(cat_disp) > cat_disp_trunc_len + 1:
                         cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
 
@@ -5254,7 +5256,9 @@ class kb_hmmer:
                     #        html_report_lines += [c+'<br>']
                     #    else:
                     #        html_report_lines += [c]
+                    html_report_lines += ['<a href="#'+key_link+'">']
                     html_report_lines += [cat_disp]
+                    html_report_lines += ['</a>']
                     html_report_lines += ['</b></font>']
                     html_report_lines += ['</div></div>']
                     html_report_lines += ['</td>']
@@ -5319,17 +5323,17 @@ class kb_hmmer:
                 cell_color = 'white'
                 if not cat_seen.get(cat) and not show_blanks:
                     cell_color = "#eeeeee"
-                desc = input_HMM_descs[cat]
+                cat_desc = input_HMM_descs[cat]
+                key_link = cat
                 cat_disp = cat
                 if len(cat_disp) > cat_disp_trunc_len + 1:
                     cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
 
                 html_report_lines += ['<tr>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '" style="border-right:solid 4px ' + border_color +
-                                      '">' + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_disp + '</font>' + '</td>']
+                                      '">' + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + '<a name="key_link">' + cat_disp + '</font>' + '</td>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '">' +
-#                                      '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + desc + '</font>' + '</td>']
-                                      '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' +'FOO'+ '</font>' + '</td>']
+                                      '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_desc + '</font>' + '</td>']
                 html_report_lines += ['</tr>']
                 
             # close
