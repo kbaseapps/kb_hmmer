@@ -1,5 +1,10 @@
 #!/usr/bin/perl
 
+if ($#ARGV < 2) {
+    print STDERR "Usage: $0 <id_list_file> <category> <category_name>\n";
+    exit (-1);
+}
+
 
 $id_list_file = shift @ARGV;
 $cat = shift @ARGV;

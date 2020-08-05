@@ -54,9 +54,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.4.5"
+    VERSION = "1.5.0"
     GIT_URL = "https://github.com/dcchivian/kb_hmmer"
-    GIT_COMMIT_HASH = "f73cffb2b7ccddf54864c94ce5eb7eadc1c66b1f"
+    GIT_COMMIT_HASH = "88c6ec47e97753f7ef26fc4f13c66b3df61d2a9b"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -80,7 +80,7 @@ class kb_hmmer:
     #HMMER_NSCAN       = '/kb/module/hmmer/binaries/nhmmscan'  # scan nuc sequence(s) against nuc profile db
 
     # dbCAN CAZy search App
-    dbCAN_version = 'v6'
+    dbCAN_version = 'v8'
     dbCAN_HMMS_DIR = os.path.join(os.sep, 'kb', 'module', 'data', 'dbCAN', 'dbCAN-' + dbCAN_version)
     dbCAN_HMMS_PATH = os.path.join(dbCAN_HMMS_DIR, 'dbCAN-fam-HMMs.txt.' + dbCAN_version)
 
@@ -3647,6 +3647,77 @@ class kb_hmmer:
         input_many_ref = params['input_many_ref']
         ws_id = input_many_ref.split('/')[0]
 
+
+        # validate that at least one fam is selected
+        fam_groups = ['cellulosome',
+                      'GH',
+                      'GT',
+                      'CBM',
+                      'CE',
+                      'PL',
+                      'AA']
+        some_fam_found = False
+        for fam_group in fam_groups:
+            fam_field = 'input_dbCAN_'+fam_group+'_ids'
+            if params.get(fam_field):
+                for fam_id in params[fam_field]:
+                    if fam_id == 'none':
+                        continue
+                    some_fam_found = True
+                    break
+            if some_fam_found:
+                break
+        if not some_fam_found:
+            self.log(console,'You must request at least one HMM')
+            self.log(invalid_msgs,'You must request at least one HMM')
+            
+            # load the method provenance from the context object
+            #
+            self.log(console, "SETTING PROVENANCE")  # DEBUG
+            provenance = [{}]
+            if 'provenance' in ctx:
+                provenance = ctx['provenance']
+            # add additional info to provenance here, in this case the input data object reference
+            provenance[0]['input_ws_objects'] = []
+#            provenance[0]['input_ws_objects'].append(input_one_ref)
+            provenance[0]['input_ws_objects'].append(input_many_ref)
+            provenance[0]['service'] = 'kb_hmmer'
+            provenance[0]['method'] = search_tool_name + '_Search'
+
+            # build output report object
+            #
+            self.log(console, "BUILDING REPORT")  # DEBUG
+            report += "FAILURE:\n\n" + "\n".join(invalid_msgs) + "\n"
+            reportObj = {
+                'objects_created': [],
+                'text_message': report
+            }
+
+            reportName = 'hmmer_report_' + str(uuid.uuid4())
+            ws = Workspace(self.workspaceURL, token=ctx['token'])
+            report_obj_info = ws.save_objects({
+                #'id':info[6],
+                'workspace': params['workspace_name'],
+                'objects': [
+                    {
+                        'type': 'KBaseReport.Report',
+                        'data': reportObj,
+                        'name': reportName,
+                        'meta': {},
+                        'hidden': 1,
+                        'provenance': provenance  # DEBUG
+                    }
+                ]
+            })[0]
+
+            self.log(console, "BUILDING RETURN OBJECT")
+            returnVal = {'report_name': reportName,
+                         'report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
+                         }
+            self.log(console, search_tool_name + "_Search DONE")
+            return [returnVal]
+
+            
         #### Get the input_many object
         ##
         try:
@@ -3919,36 +3990,48 @@ class kb_hmmer:
                 hmm_group = hmm_group_config_line.split("\t")[0]
                 all_HMM_groups_order.append(hmm_group)
                 all_HMM_ids[hmm_group] = []
-                HMM_fam_config_path = os.path.join(HMM_fam_config_dir, 'dbCAN-' + hmm_group + '.txt')
+                #HMM_fam_config_path = os.path.join(HMM_fam_config_dir, 'dbCAN-' + hmm_group + '.txt')
+                HMM_fam_config_path = os.path.join(HMM_fam_config_dir, 'dbCAN-' + hmm_group + '.desc.tsv')
                 with open(HMM_fam_config_path, 'r', 0) as hmm_fam_config_handle:
                     for hmm_fam_config_line in hmm_fam_config_handle.readlines():
                         hmm_fam_config_line = hmm_fam_config_line.rstrip()
                         hmm_fam_config = hmm_fam_config_line.split("\t")
                         hmm_fam_id = hmm_fam_config[0]
                         if len(hmm_fam_config) > 1:
-                            input_HMM_descs[hmm_fam_id] = hmm_fam_config[1]
+                            input_HMM_descs[hmm_fam_id] = re.sub(r'[^\x00-\x7F]+',' ', hmm_fam_config[1])
                         else:
                             input_HMM_descs[hmm_fam_id] = hmm_fam_id
                         all_HMM_ids[hmm_group].append(hmm_fam_id)
                         all_HMM_ids_order.append(hmm_fam_id)
-
+                        #self.log(console,"HMM_FAM_CONFIG: "+hmm_group+" "+hmm_fam_id) # DEBUG
+                        
         #### get the specific input HMM ids requested
         ##
         input_HMM_ids = dict()
         for hmm_group in all_HMM_groups_order:
             input_HMM_ids[hmm_group] = []
-            input_field = 'input_dbCAN_' + hmm_group + 'ids'
+            input_field = 'input_dbCAN_' + hmm_group + '_ids'
             if input_field in params and params[input_field] != None and len(params[input_field]) > 0:
                 only_none_found = True
                 for HMM_fam in params[input_field]:
-                    if HMM_field == 'none':
+                    if HMM_fam == 'none':
                         continue
-                    only_none_found = False
-                    input_HMM_ids[hmm_group].append(HMM_fam)
+                    elif HMM_fam == 'ALL':
+                        input_HMM_ids[hmm_group] = all_HMM_ids[hmm_group]
+                        only_none_found = False
+                        break
+                    else:
+                        only_none_found = False
+                        input_HMM_ids[hmm_group].append(HMM_fam)
                 if only_none_found:
+                    self.log(console, "No HMMs configured for GROUP: "+hmm_group)  # DEBUG
                     input_HMM_ids[hmm_group] = []
-            else:  # default: use all
-                input_HMM_ids[hmm_group] = all_HMM_ids[hmm_group]
+            else:  # default: use NONE
+                self.log(console, "SKIPPING GROUP: "+hmm_group)  # DEBUG
+                input_HMM_ids[hmm_group] = []
+            # DEBUG
+            #for HMM_fam in input_HMM_ids[hmm_group]:
+            #    self.log(console, "SEARCHING WITH "+hmm_group+" "+HMM_fam)
 
         # check for failed input file creation
         #
@@ -5123,6 +5206,7 @@ class kb_hmmer:
             # add colors as style for DIV
             for color_i,color_val in enumerate(color_list):
                 html_report_lines += [".heatmap_cell-"+str(color_i)+" {\nwidth: "+str(cell_width)+"px;\nheight: "+str(cell_height)+"px;\nborder-radius: "+str(corner_radius)+"px;\nbackground-color: "+str(color_val)+";\btext-align: center;\n}"]
+            
             html_report_lines += ['</style>']
             html_report_lines += ['</head>']
             html_report_lines += ['<body bgcolor="white">']
@@ -5156,12 +5240,15 @@ class kb_hmmer:
                         continue
                     cat_disp = cat
                     cell_title = input_HMM_descs[cat]
+
                     if len(cat_disp) > cat_disp_trunc_len + 1:
                         cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
-                    html_report_lines += ['<td style="border-right:solid 2px ' + border_cat_color + '; border-bottom:solid 2px ' +
+
+                    html_report_lines += ['<td style="border-right:solid 2px ' + border_cat_color + '; border-bottom: solid 2px ' +
                                           border_cat_color + '" bgcolor="' + head_color_2 + '"title="' + cell_title + '" valign=bottom align=center>']
                     html_report_lines += ['<div class="vertical-text"><div class="vertical-text__inner">']
                     html_report_lines += ['<font color="' + text_color_2 + '" size=' + graph_cat_fontsize + '><b>']
+                    
                     #for c_i,c in enumerate(cat_disp):
                     #    if c_i < len(cat_disp)-1:
                     #        html_report_lines += [c+'<br>']
@@ -5214,7 +5301,7 @@ class kb_hmmer:
                         else:
                             html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
-
+                        
                     html_report_lines += ['</tr>']
                 html_report_lines += ['</table>']
 
@@ -5223,7 +5310,6 @@ class kb_hmmer:
                 raise ValueError("Do not yet support Genomes as columns")
 
             # key table
-            CAZy_server_addr = 'www.cazy.org'
             html_report_lines += ['<p>']
             html_report_lines += ['<table cellpadding=3 cellspacing=2 border=' + border + '>']
             html_report_lines += ['<tr><td valign=middle align=left colspan=2 style="border-bottom:solid 4px ' +
@@ -5238,28 +5324,16 @@ class kb_hmmer:
                 if len(cat_disp) > cat_disp_trunc_len + 1:
                     cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
 
-                if cat == 'GT2_Cellulose_synt':
-                    link_addr = 'http://' + CAZy_server_addr + '/' + cat + '.html'
-                    link_open = '<a href="' + link_addr + '" target="cazy_tab">'
-                    link_close = '</a>'
-                elif cat == 'dockerin' or cat == 'cohesin' or cat == 'SLH':
-                    link_open = ''
-                    link_close = ''
-                else:
-                    link_addr = 'http://' + CAZy_server_addr + '/' + cat + '.html'
-                    link_open = '<a href="' + link_addr + '" target="cazy_tab">'
-                    link_close = '</a>'
-
                 html_report_lines += ['<tr>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '" style="border-right:solid 4px ' + border_color +
-                                      '">' + link_open + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_disp + '</font>' + link_close + '</td>']
-                html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '">' + link_open +
-                                      '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + desc + '</font>' + link_close + '</td>']
+                                      '">' + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_disp + '</font>' + '</td>']
+                html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '">' +
+#                                      '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + desc + '</font>' + '</td>']
+                                      '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' +'FOO'+ '</font>' + '</td>']
                 html_report_lines += ['</tr>']
-
-            html_report_lines += ['</table>']
-
+                
             # close
+            html_report_lines += ['</table>']
             html_report_lines += ['</body>']
             html_report_lines += ['</html>']
 
@@ -5796,7 +5870,7 @@ class kb_hmmer:
                         hmm_fam_config = hmm_fam_config_line.split("\t")
                         hmm_fam_id = hmm_fam_config[0]
                         if len(hmm_fam_config) > 1:
-                            input_HMM_descs[hmm_fam_id] = hmm_fam_config[1]
+                            input_HMM_descs[hmm_fam_id] = re.sub(r'[^\x00-\x7F]+',' ', hmm_fam_config[1])
                         else:
                             input_HMM_descs[hmm_fam_id] = hmm_fam_id
                         all_HMM_ids[hmm_group].append(hmm_fam_id)
