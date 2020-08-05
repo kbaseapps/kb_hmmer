@@ -1,7 +1,7 @@
 #
 # define display information
 #
-name: Search with dbCAN HMMs of CAZy families - v6
+name: Search with dbCAN HMMs of CAZy families - v8
 tooltip: |
     Search for matches to dbCAN HMMs of CAZy carbohydrate active enzyme families using HMMER 3
 screenshots: []
@@ -27,41 +27,41 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
-    input_dbCAN_GH_ids:
-        ui-name : |
-            Glycoside Hydrolases - GH (default: ALL)
-        short-hint : |
-            Select HMMs for Glycoside Hydrolase Families, or will use ALL if left blank
-    input_dbCAN_GT_ids:
-        ui-name : |
-            GlycosylTransferases - GT (default: ALL)
-        short-hint : |
-            Select HMMs for GlycosylTransferase Families, or will use ALL if left blank
-    input_dbCAN_CE_ids:
-        ui-name : |
-            Carbohydrate Esterases - CE (default: ALL)
-        short-hint : |
-            Select HMMs for Carbohydrate Esterase Families, or will use ALL if left blank
-    input_dbCAN_PL_ids:
-        ui-name : |
-            Polysaccharide Lyases - PL (default: ALL)
-        short-hint : |
-            Select HMMs for Polysaccharide Lyase Families, or will use ALL if left blank
-    input_dbCAN_AA_ids:
-        ui-name : |
-            Auxiliary Activities Fams (default: ALL)
-        short-hint : |
-            Select HMMs for Auxiliary Activiies Families, or will use ALL if left blank
-    input_dbCAN_CBM_ids:
-        ui-name : |
-            Carbohydrate-Binding Modules - CBM (default: ALL)
-        short-hint : |
-            Select HMMs for Carbohydrate-Binding Module Families, or will use ALL if left blank
     input_dbCAN_cellulosome_ids:
         ui-name : |
-            Cellulosome Fams (default: ALL)
+            Cellulosome Fams (default: NONE)
         short-hint : |
-            Select HMMs for Cellulosome Families (dockerin, cohesin, S-Layer Homology), or will use ALL if left blank
+            Select HMMs for Cellulosome Families (dockerin, cohesin, S-Layer Homology), or will use NONE if left blank
+    input_dbCAN_GH_ids:
+        ui-name : |
+            Glycoside Hydrolases - GH (default: NONE)
+        short-hint : |
+            Select HMMs for Glycoside Hydrolase Families, or will use NONE if left blank
+    input_dbCAN_GT_ids:
+        ui-name : |
+            Glycosyl Transferases - GT (default: NONE)
+        short-hint : |
+            Select HMMs for Glycosyl Transferase Families, or will use NONE if left blank
+    input_dbCAN_CBM_ids:
+        ui-name : |
+            Carbohydrate-Binding Modules - CBM (default: NONE)
+        short-hint : |
+            Select HMMs for Carbohydrate-Binding Module Families, or will use NONE if left blank
+    input_dbCAN_CE_ids:
+        ui-name : |
+            Carbohydrate Esterases - CE (default: NONE)
+        short-hint : |
+            Select HMMs for Carbohydrate Esterase Families, or will use NONE if left blank
+    input_dbCAN_PL_ids:
+        ui-name : |
+            Polysaccharide Lyases - PL (default: NONE)
+        short-hint : |
+            Select HMMs for Polysaccharide Lyase Families, or will use NONE if left blank
+    input_dbCAN_AA_ids:
+        ui-name : |
+            Auxiliary Activities Fams (default: NONE)
+        short-hint : |
+            Select HMMs for Auxiliary Activiies Families, or will use NONE if left blank
     input_many_ref:
         ui-name : |
             Targets Object

@@ -98,7 +98,6 @@ class kb_hmmerTest(unittest.TestCase):
 
         [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
 
-
         # Upload a few genomes
         cls.genome_refs = []
 #        for i,genome_filename in enumerate(['GCF_000018425.1_ASM1842v1_genomic.gbff']):  # DEBUG
@@ -147,7 +146,6 @@ class kb_hmmerTest(unittest.TestCase):
                                                   }]
                                           })[0]
         cls.genomeSet_refs.append(str(obj_info[WSID_I]) +'/'+ str(obj_info[OBJID_I]) +'/'+ str(obj_info[VERSION_I]))
-
 
         # Upload a test Annotated Metagenome Assembly
         cls.ama_refs = []
@@ -222,7 +220,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 01: Single Model against Single Genome
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_01_kb_hmmer_HMMER_MSA_Search_Genome()")
+    # HIDE @unittest.skip("skipped test test_01_kb_hmmer_HMMER_MSA_Search_Genome()")
     def test_01_kb_hmmer_HMMER_MSA_Search_Genome(self):
         test_name = 'test_01_kb_hmmer_HMMER_MSA_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
@@ -266,7 +264,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 02: Single Model against GenomeSet
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet()")
+    # HIDE @unittest.skip("skipped test test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet()")
     def test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet(self):
         test_name = 'test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet'
         header_msg = "RUNNING "+test_name+"()"
@@ -310,7 +308,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 03: Single nucleotide Model (to test failure)
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_03_kb_hmmer_HMMER_MSA_Search_Genome_nuc_MSA()")
+    # HIDE @unittest.skip("skipped test test_03_kb_hmmer_HMMER_MSA_Search_Genome_nuc_MSA()")
     def test_03_kb_hmmer_HMMER_MSA_Search_Genome_nuc_MSA(self):
         test_name = 'test_03_kb_hmmer_HMMER_MSA_Search_Genome_nuc_MSA'
         header_msg = "RUNNING "+test_name+"()"
@@ -350,7 +348,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 03_02: Single Model against Single AnnotatedMetagenomeAssembly
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_03_02_kb_hmmer_HMMER_MSA_Search_AMA()")
+    # HIDE @unittest.skip("skipped test test_03_02_kb_hmmer_HMMER_MSA_Search_AMA()")
     def test_003_02_kb_hmmer_HMMER_MSA_Search_AMA(self):
         test_name = 'test_03_02_kb_hmmer_HMMER_MSA_Search_AMA'
         header_msg = "RUNNING "+test_name+"()"
@@ -397,7 +395,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 04: Specific Models in workspace against Single Genome
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome()")
+    # HIDE @unittest.skip("skipped test test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome()")
     def test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome(self):
         test_name = 'test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
@@ -448,7 +446,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 04_02: Specific Models in workspace against Single Annotated Metagenome Assembly
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_04_02_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA()")
+    # HIDE @unittest.skip("skipped test test_04_02_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA()")
     def test_04_02_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA(self):
         test_name = 'test_04_02_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA'
         header_msg = "RUNNING "+test_name+"()"
@@ -502,7 +500,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 04_03: All Models in workspace against Single Annotated Metagenome Assembly, DON'T Coalesce output
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_04_04_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA_ALL_DONT_coalesce()")
+    # HIDE @unittest.skip("skipped test test_04_04_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA_ALL_DONT_coalesce()")
     def test_04_03_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA_ALL_DONT_coalesce(self):
         test_name = 'test_04_03_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA_ALL_DONT_coalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -556,7 +554,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 05: All Models in workspace against GenomeSet, DON'T coalesce output
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_NOcoalesce()")
+    # HIDE @unittest.skip("skipped test test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_NOcoalesce()")
     def test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_NOcoalesce(self):
         test_name = 'test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_NOcoalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -605,7 +603,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 07: Specific Model with nucleotides (should fail)
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_07_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_nuc_MSA()")
+    # HIDE @unittest.skip("skipped test test_07_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_nuc_MSA()")
     def test_07_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_nuc_MSA(self):
         test_name = 'test_07_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_nuc_MSA'
         header_msg = "RUNNING "+test_name+"()"
@@ -650,7 +648,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 08: Single Model against Single Genome, threshold above all hits
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_08_kb_hmmer_HMMER_MSA_Search_Genome_removeALL()")
+    # HIDE @unittest.skip("skipped test test_08_kb_hmmer_HMMER_MSA_Search_Genome_removeALL()")
     def test_08_kb_hmmer_HMMER_MSA_Search_Genome_removeALL(self):
         test_name = 'test_08_kb_hmmer_HMMER_MSA_Search_Genome_removeALL'
         header_msg = "RUNNING "+test_name+"()"
@@ -690,7 +688,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 09: All Models in workspace against Single Genome, threshold above all hits
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_09_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL()")
+    # HIDE @unittest.skip("skipped test test_09_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL()")
     def test_09_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL(self):
         test_name = 'test_09_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL'
         header_msg = "RUNNING "+test_name+"()"
@@ -735,7 +733,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 09_02: All Models in workspace against Single Genome, threshold above all hits, show blanks
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_09_02_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL_show_blanks()")
+    # HIDE @unittest.skip("skipped test test_09_02_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL_show_blanks()")
     def test_09_02_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL_show_blanks(self):
         test_name = 'test_09_02_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL_show_blanks'
         header_msg = "RUNNING "+test_name+"()"
@@ -780,7 +778,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 10: dbCAN Models against Single Genome
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_10_kb_hmmer_HMMER_dbCAN_Search_Genome()")
+    # HIDE @unittest.skip("skipped test test_10_kb_hmmer_HMMER_dbCAN_Search_Genome()")
     def test_10_kb_hmmer_HMMER_dbCAN_Search_Genome(self):
         test_name = 'test_10_kb_hmmer_HMMER_dbCAN_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
@@ -798,13 +796,13 @@ class kb_hmmerTest(unittest.TestCase):
     
         # app run params
         parameters = { 'workspace_name': self.getWsName(),
-                       'input_dbCAN_AA_ids': [],
-                       'input_dbCAN_CBM_ids': [],
-                       'input_dbCAN_CE_ids': [],
-                       'input_dbCAN_GH_ids': [],
-                       'input_dbCAN_GT_ids': [],
-                       'input_dbCAN_PL_ids': [],
-                       'input_dbCAN_cellulosome_ids': [],
+                       'input_dbCAN_AA_ids': ['ALL'],
+                       'input_dbCAN_CBM_ids': ['ALL'],
+                       'input_dbCAN_CE_ids': ['ALL'],
+                       'input_dbCAN_GH_ids': ['ALL'],
+                       'input_dbCAN_GT_ids': ['ALL'],
+                       'input_dbCAN_PL_ids': ['ALL'],
+                       'input_dbCAN_cellulosome_ids': ['ALL'],
                        'input_many_ref': self.genome_refs[3],  # Single Genome
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_ver_sci_name',
@@ -854,13 +852,13 @@ class kb_hmmerTest(unittest.TestCase):
     
         # app run params
         parameters = { 'workspace_name': self.getWsName(),
-                       'input_dbCAN_AA_ids': [],
-                       'input_dbCAN_CBM_ids': [],
-                       'input_dbCAN_CE_ids': [],
-                       'input_dbCAN_GH_ids': [],
-                       'input_dbCAN_GT_ids': [],
-                       'input_dbCAN_PL_ids': [],
-                       'input_dbCAN_cellulosome_ids': [],
+                       'input_dbCAN_AA_ids': ['ALL'],
+                       'input_dbCAN_CBM_ids': ['ALL'],
+                       'input_dbCAN_CE_ids': ['ALL'],
+                       'input_dbCAN_GH_ids': ['ALL'],
+                       'input_dbCAN_GT_ids': ['ALL'],
+                       'input_dbCAN_PL_ids': ['ALL'],
+                       'input_dbCAN_cellulosome_ids': ['ALL'],
                        'input_many_ref': self.ama_refs[0],  # Single AnnotatedMetagenomeAssembly
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_ver_sci_name',
@@ -895,7 +893,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 11: dbCAN Models against GenomeSet, DON'T coalesce output
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_11_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce()")
+    # HIDE @unittest.skip("skipped test test_11_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce()")
     def test_11_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce(self):
         test_name = 'test_11_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -913,13 +911,13 @@ class kb_hmmerTest(unittest.TestCase):
     
         # app run params
         parameters = { 'workspace_name': self.getWsName(),
-                       'input_dbCAN_AA_ids': [],
-                       'input_dbCAN_CBM_ids': [],
-                       'input_dbCAN_CE_ids': [],
-                       'input_dbCAN_GH_ids': [],
-                       'input_dbCAN_GT_ids': [],
-                       'input_dbCAN_PL_ids': [],
-                       'input_dbCAN_cellulosome_ids': [],
+                       'input_dbCAN_AA_ids': ['AA1','AA6'],
+                       'input_dbCAN_CBM_ids': ['CBM44','CBM48'],
+                       'input_dbCAN_CE_ids': ['CE1'],
+                       'input_dbCAN_GH_ids': ['GH5','GH13_20'],
+                       'input_dbCAN_GT_ids': ['GT3','GT4'],
+                       'input_dbCAN_PL_ids': ['PL9','PL22'],
+                       'input_dbCAN_cellulosome_ids': ['dockerin','cohesin'],
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
@@ -951,7 +949,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 12: dbCAN Models against GenomeSet, DO coalesce output
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_12_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce()")
+    # HIDE @unittest.skip("skipped test test_12_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce()")
     def test_12_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce(self):
         test_name = 'test_12_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -969,13 +967,13 @@ class kb_hmmerTest(unittest.TestCase):
     
         # app run params
         parameters = { 'workspace_name': self.getWsName(),
-                       'input_dbCAN_AA_ids': [],
-                       'input_dbCAN_CBM_ids': [],
-                       'input_dbCAN_CE_ids': [],
-                       'input_dbCAN_GH_ids': [],
-                       'input_dbCAN_GT_ids': [],
-                       'input_dbCAN_PL_ids': [],
-                       'input_dbCAN_cellulosome_ids': [],
+                       'input_dbCAN_AA_ids': ['ALL'],
+                       'input_dbCAN_CBM_ids': ['ALL'],
+                       'input_dbCAN_CE_ids': ['ALL'],
+                       'input_dbCAN_GH_ids': ['ALL'],
+                       'input_dbCAN_GT_ids': ['ALL'],
+                       'input_dbCAN_PL_ids': ['ALL'],
+                       'input_dbCAN_cellulosome_ids': ['ALL'],
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
@@ -1007,7 +1005,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 13: envbioelement Models against Single Genome
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_13_kb_hmmer_HMMER_envbioelement_Search_Genome()")
+    # HIDE @unittest.skip("skipped test test_13_kb_hmmer_HMMER_envbioelement_Search_Genome()")
     def test_13_kb_hmmer_HMMER_envbioelement_Search_Genome(self):
         test_name = 'test_13_kb_hmmer_HMMER_envbioelement_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
@@ -1069,7 +1067,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 14: envbioelement Models against GenomeSet, DON'T coalesce output
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_14_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_NOcoalesce()")
+    # HIDE @unittest.skip("skipped test test_14_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_NOcoalesce()")
     def test_14_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_NOcoalesce(self):
         test_name = 'test_14_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_NOcoalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -1131,7 +1129,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 15: envbioelement Models against GenomeSet, DO coalesce output
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_15_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_coalesce()")
+    # HIDE @unittest.skip("skipped test test_15_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_coalesce()")
     def test_15_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_coalesce(self):
         test_name = 'test_15_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_coalesce'
         header_msg = "RUNNING "+test_name+"()"

@@ -48,8 +48,7 @@ RUN \
 #
 WORKDIR /kb/module
 RUN \
-  curl http://bcb.unl.edu/dbCAN2/download/Databases/dbCAN-old@UGA/dbCAN-fam-HMMs.txt.v6 > data/dbCAN/dbCAN-v6/dbCAN-fam-HMMs.txt.v6
-
+  curl http://bcb.unl.edu/dbCAN2/download/dbCAN-HMMdb-V8.txt > data/dbCAN/dbCAN-v8/dbCAN-fam-HMMs.txt.v8
 
 ENTRYPOINT [ "./scripts/entrypoint.sh" ]
 
