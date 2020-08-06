@@ -5205,7 +5205,7 @@ class kb_hmmer:
 
             # add colors as style for DIV
             for color_i,color_val in enumerate(color_list):
-                html_report_lines += [".heatmap_cell-"+str(color_i)+" {\nwidth: "+str(cell_width)+"px;\nheight: "+str(cell_height)+"px;\nborder-radius: "+str(corner_radius)+"px;\nbackground-color: "+str(color_val)+";\btext-align: center;\n}"]
+                html_report_lines += [".heatmap_cell-"+str(color_i)+" {\nwidth: "+str(cell_width)+"px;\nheight: "+str(cell_height)+"px;\nborder-radius: "+str(corner_radius)+"px;\nbackground-color: "+str(color_val)+";\ntext-align: center;\n}"]
             
             html_report_lines += ['</style>']
             html_report_lines += ['</head>']
@@ -5247,7 +5247,7 @@ class kb_hmmer:
                         cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
 
                     html_report_lines += ['<td style="border-right:solid 2px ' + border_cat_color + '; border-bottom: solid 2px ' +
-                                          border_cat_color + '" bgcolor="' + head_color_2 + '"title="' + cell_title + '" valign=bottom align=center>']
+                                          border_cat_color + '" bgcolor="' + head_color_2 + '" title="' + cell_title + '" valign=bottom align=center>']
                     html_report_lines += ['<div class="vertical-text"><div class="vertical-text__inner">']
                     html_report_lines += ['<font color="' + text_color_2 + '" size=' + graph_cat_fontsize + '><b>']
                     
@@ -5256,7 +5256,7 @@ class kb_hmmer:
                     #        html_report_lines += [c+'<br>']
                     #    else:
                     #        html_report_lines += [c]
-                    html_report_lines += ['<a href="#'+key_link+'">']
+                    html_report_lines += ['<a href="#'+key_link+'" target="_key_tab">']
                     html_report_lines += [cat_disp]
                     html_report_lines += ['</a>']
                     html_report_lines += ['</b></font>']
@@ -5301,7 +5301,7 @@ class kb_hmmer:
                         cell_val = str(table_data[genome_ref][cat])  # the key line
 
                         if 'heatmap' in params and params['heatmap'] == '1':
-                            html_report_lines += ['<td align=center valign=middle bgcolor=white><div class="heatmap_cell-'+str(cell_color_i)+'"></div></td>']
+                            html_report_lines += ['<td title="'+cell_val+'" align=center valign=middle bgcolor=white><div class="heatmap_cell-'+str(cell_color_i)+'"></div></td>']
                         else:
                             html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
@@ -5331,7 +5331,7 @@ class kb_hmmer:
 
                 html_report_lines += ['<tr>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '" style="border-right:solid 4px ' + border_color +
-                                      '">' + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + '<a name="key_link">' + cat_disp + '</font>' + '</td>']
+                                      '">' + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + '<a name="'+key_link+'">' + cat_disp + '</font>' + '</td>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '">' +
                                       '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_desc + '</font>' + '</td>']
                 html_report_lines += ['</tr>']
