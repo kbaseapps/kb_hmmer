@@ -3237,7 +3237,7 @@ class kb_hmmer:
             cell_width = '20'
             cell_height = '18'
             #corner_radius = str(int(0.2*int(cell_width)+0.5))
-            corner_radius = '4'
+            corner_radius = '5'
             if len(genome_refs) > 20:
                 graph_gen_fontsize = "1"
 #            elif len(genome_refs) > 10:
@@ -3256,7 +3256,8 @@ class kb_hmmer:
                 cell_fontsize = graph_gen_fontsize = graph_cat_fontsize
             else:
                 cell_fontsize = graph_cat_fontsize = graph_gen_fontsize
-            graph_padding = "5"
+            #graph_padding = "5"
+            graph_padding = "1"
             graph_spacing = "3"
             #border = "1"
             border = "0"
@@ -3274,9 +3275,11 @@ class kb_hmmer:
             html_report_lines += ['<title>KBase HMMER Custom Model Profile</title>']
             html_report_lines += ['<style>']
             html_report_lines += [
-                ".vertical-text {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+                ".horz-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\n}"]
             html_report_lines += [
-                ".vertical-text_title {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+                ".vertical-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+            html_report_lines += [
+                ".vertical-text_title {\ndisplay: inline-block;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
             
             # add colors as style for DIV
             for color_i,color_val in enumerate(color_list):
@@ -3297,7 +3300,7 @@ class kb_hmmer:
                 label = ''
                 html_report_lines += ['<tr>']
                 html_report_lines += ['<td valign=bottom align=right rowspan=' + corner_rowspan +
-                                      '><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="' + text_color + '">' + label + '</font></div></div></td>']
+                                      '><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="' + text_color + '">' + sp + label + '</font></div></div></td>']
 
                 # column headers
                 for cat_i, cat in enumerate(cats):
@@ -3316,6 +3319,7 @@ class kb_hmmer:
                     #        html_report_lines += [c+'<br>']
                     #    else:
                     #        html_report_lines += [c]
+                    html_report_lines += [sp]
                     html_report_lines += [cat_disp]
                     html_report_lines += ['</b></font>']
                     html_report_lines += ['</div></div>']
@@ -3341,8 +3345,8 @@ class kb_hmmer:
 
                     # build html report table line
                     html_report_lines += ['<tr>']
-                    html_report_lines += ['<td align=right><font color="' + text_color + '" size=' +
-                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></td>']
+                    html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +
+                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></div></td>']
                     for cat in cats:
                         if not cat_seen.get(cat) and not show_blanks:
                             continue
@@ -3359,7 +3363,7 @@ class kb_hmmer:
                         cell_val = str(table_data[genome_ref][cat])  # the key line
 
                         if 'heatmap' in params and params['heatmap'] == '1':
-                            html_report_lines += ['<td align=center valign=middle bgcolor=white><div class="heatmap_cell-'+str(cell_color_i)+'"></div></td>']
+                            html_report_lines += ['<td title="'+cell_val+'" align=center valign=middle bgcolor=white><div class="heatmap_cell-'+str(cell_color_i)+'"></div></td>']
                         else:
                             html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
@@ -3387,9 +3391,9 @@ class kb_hmmer:
                     cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
                 html_report_lines += ['<tr>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '" style="border-right:solid 4px ' +
-                                      border_color + '"><font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_disp + '</font></td>']
+                                      border_color + '"><div class="horz-text"><font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_disp + '</font></div></td>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color +
-                                      '"><font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + desc + '</font></td>']
+                                      '"><div class="horz-text"><font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + desc + '</font></div></td>']
                 html_report_lines += ['</tr>']
 
             html_report_lines += ['</table>']
@@ -5162,7 +5166,7 @@ class kb_hmmer:
             cell_width = '20'
             cell_height = '18'
             #corner_radius = str(int(0.2*int(cell_width)+0.5))
-            corner_radius = '4'
+            corner_radius = '5'
             if len(genome_refs) > 20:
                 graph_gen_fontsize = "1"
 #            elif len(genome_refs) > 10:
@@ -5181,7 +5185,8 @@ class kb_hmmer:
                 cell_fontsize = graph_gen_fontsize = graph_cat_fontsize
             else:
                 cell_fontsize = graph_cat_fontsize = graph_gen_fontsize
-            graph_padding = "5"
+            #graph_padding = "5"
+            graph_padding = "1"
             graph_spacing = "3"
             #border = "1"
             border = "0"
@@ -5199,9 +5204,11 @@ class kb_hmmer:
             html_report_lines += ['<title>KBase HMMER Custom Model Profile</title>']
             html_report_lines += ['<style>']
             html_report_lines += [
-                ".vertical-text {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+                ".horz-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\n}"]
             html_report_lines += [
-                ".vertical-text_title {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+                ".vertical-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+            html_report_lines += [
+                ".vertical-text_title {\ndisplay: inline-block;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
 
             # add colors as style for DIV
             for color_i,color_val in enumerate(color_list):
@@ -5232,7 +5239,7 @@ class kb_hmmer:
                 label = ''
                 html_report_lines += ['<tr>']
                 html_report_lines += ['<td valign=bottom align=right rowspan=' + corner_rowspan +
-                                      '><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="' + text_color + '">' + label + '</font></div></div></td>']
+                                      '><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="' + text_color + '">' + sp + label + '</font></div></div></td>']
 
                 # column headers
                 for cat_i, cat in enumerate(cats):
@@ -5257,6 +5264,7 @@ class kb_hmmer:
                     #    else:
                     #        html_report_lines += [c]
                     html_report_lines += ['<a href="#'+key_link+'" target="_key_tab">']
+                    html_report_lines += [sp]
                     html_report_lines += [cat_disp]
                     html_report_lines += ['</a>']
                     html_report_lines += ['</b></font>']
@@ -5283,8 +5291,8 @@ class kb_hmmer:
 
                     # build html report table line
                     html_report_lines += ['<tr>']
-                    html_report_lines += ['<td align=right><font color="' + text_color + '" size=' +
-                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></td>']
+                    html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +
+                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></div></td>']
                     for cat in cats:
                         if not cat_seen.get(cat) and not show_blanks:
                             continue
@@ -5331,9 +5339,10 @@ class kb_hmmer:
 
                 html_report_lines += ['<tr>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '" style="border-right:solid 4px ' + border_color +
-                                      '">' + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + '<a name="'+key_link+'">' + cat_disp + '</font>' + '</td>']
+                                      '">' + '<div class="horz-text">' + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + '<a name="'+key_link+'">' + cat_disp + '</font>' + '</div>' + '</td>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '">' +
-                                      '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_desc + '</font>' + '</td>']
+                                      '<div class="horz-text">' +
+                                      '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_desc + '</font>' + '</div>' + '</td>']
                 html_report_lines += ['</tr>']
                 
             # close
@@ -7023,7 +7032,7 @@ class kb_hmmer:
             cell_width = '20'
             cell_height = '18'
             #corner_radius = str(int(0.2*int(cell_width)+0.5))
-            corner_radius = '4'
+            corner_radius = '5'
             if len(genome_refs) > 20:
                 graph_gen_fontsize = "1"
 #            elif len(genome_refs) > 10:
@@ -7042,7 +7051,8 @@ class kb_hmmer:
                 cell_fontsize = graph_gen_fontsize = graph_cat_fontsize
             else:
                 cell_fontsize = graph_cat_fontsize = graph_gen_fontsize
-            graph_padding = "5"
+            #graph_padding = "5"
+            graph_padding = "1"
             graph_spacing = "3"
             #border = "1"
             border = "0"
@@ -7060,9 +7070,11 @@ class kb_hmmer:
             html_report_lines += ['<title>KBase HMMER Custom Model Profile</title>']
             html_report_lines += ['<style>']
             html_report_lines += [
-                ".vertical-text {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+                ".horz-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\n}"]
             html_report_lines += [
-                ".vertical-text_title {\ndisplay: inline-block;\noverflow: hidden;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+                ".vertical-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+            html_report_lines += [
+                ".vertical-text_title {\ndisplay: inline-block;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
 
             # add colors as style for DIV
             for color_i,color_val in enumerate(color_list):
@@ -7092,7 +7104,7 @@ class kb_hmmer:
                 label = ''
                 html_report_lines += ['<tr>']
                 html_report_lines += ['<td valign=bottom align=right rowspan=' + corner_rowspan +
-                                      '><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="' + text_color + '">' + label + '</font></div></div></td>']
+                                      '><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="' + text_color + '">' + sp + label + '</font></div></div></td>']
 
                 # column headers
                 for cat_i, cat in enumerate(cats):
@@ -7111,6 +7123,7 @@ class kb_hmmer:
                     #        html_report_lines += [c+'<br>']
                     #    else:
                     #        html_report_lines += [c]
+                    html_report_lines += [sp]
                     html_report_lines += [cat_disp]
                     html_report_lines += ['</b></font>']
                     html_report_lines += ['</div></div>']
@@ -7136,8 +7149,8 @@ class kb_hmmer:
 
                     # build html report table line
                     html_report_lines += ['<tr>']
-                    html_report_lines += ['<td align=right><font color="' + text_color + '" size=' +
-                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></td>']
+                    html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +
+                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></div></td>']
                     for cat in cats:
                         if not cat_seen.get(cat) and not show_blanks:
                             continue
@@ -7196,9 +7209,9 @@ class kb_hmmer:
 
                 html_report_lines += ['<tr>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '" style="border-right:solid 4px ' + border_color +
-                                      '">' + link_open + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_disp + '</font>' + link_close + '</td>']
-                html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '">' + link_open +
-                                      '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + desc + '</font>' + link_close + '</td>']
+                                      '">' + '<div class="horz-text">' + link_open + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_disp + '</font>' + link_close + '</div></td>']
+                html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '">' + '<div class="horz-text">' + link_open +
+                                      '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + desc + '</font>' + link_close + '</div></td>']
                 html_report_lines += ['</tr>']
 
             html_report_lines += ['</table>']
