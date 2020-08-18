@@ -3275,9 +3275,9 @@ class kb_hmmer:
             html_report_lines += ['<title>KBase HMMER Custom Model Profile</title>']
             html_report_lines += ['<style>']
             html_report_lines += [
-                ".horz-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\n}"]
+                ".horz-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\ntext-decoration: none;\n}"]
             html_report_lines += [
-                ".vertical-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+                ".vertical-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\ntext-decoration: none;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
             html_report_lines += [
                 ".vertical-text_title {\ndisplay: inline-block;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
             
@@ -3346,7 +3346,7 @@ class kb_hmmer:
                     # build html report table line
                     html_report_lines += ['<tr>']
                     html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +
-                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></div></td>']
+                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + sp + '</nobr></b></font></div></td>']
                     for cat in cats:
                         if not cat_seen.get(cat) and not show_blanks:
                             continue
@@ -5216,9 +5216,9 @@ class kb_hmmer:
             html_report_lines += ['<title>KBase HMMER Custom Model Profile</title>']
             html_report_lines += ['<style>']
             html_report_lines += [
-                ".horz-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\n}"]
+                ".horz-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\ntext-decoration: none;\n}"]
             html_report_lines += [
-                ".vertical-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+                ".vertical-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\ntext-decoration: none;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
             html_report_lines += [
                 ".vertical-text_title {\ndisplay: inline-block;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
 
@@ -5304,7 +5304,7 @@ class kb_hmmer:
                     # build html report table line
                     html_report_lines += ['<tr>']
                     html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +
-                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></div></td>']
+                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + sp + '</nobr></b></font></div></td>']
                     for cat in cats:
                         if not cat_seen.get(cat) and not show_blanks:
                             continue
@@ -7085,9 +7085,9 @@ class kb_hmmer:
             html_report_lines += ['<title>KBase HMMER Custom Model Profile</title>']
             html_report_lines += ['<style>']
             html_report_lines += [
-                ".horz-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\n}"]
+                ".horz-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\ntext-decoration: none;\n}"]
             html_report_lines += [
-                ".vertical-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
+                ".vertical-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\ntext-decoration: none;\nwidth: 0.65em;\n}\n.vertical-text__inner {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.1;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
             html_report_lines += [
                 ".vertical-text_title {\ndisplay: inline-block;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
 
@@ -7165,7 +7165,7 @@ class kb_hmmer:
                     # build html report table line
                     html_report_lines += ['<tr>']
                     html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +
-                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + '</nobr></b></font></div></td>']
+                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + sp + '</nobr></b></font></div></td>']
                     for cat in cats:
                         if not cat_seen.get(cat) and not show_blanks:
                             continue
