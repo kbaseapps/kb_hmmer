@@ -123,6 +123,7 @@ module kb_hmmer {
         string         genome_disp_name_config;
 
 	bool  coalesce_output;
+	bool  save_ALL_featureSets;
 	float e_value;
 	float bitscore;
 	float overlap_perc;

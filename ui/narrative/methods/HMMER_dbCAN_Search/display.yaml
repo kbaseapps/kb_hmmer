@@ -77,11 +77,11 @@ parameters :
             Output FeatureSet basename
         short-hint : |
             FeatureSets containing hits with thresholds.  Object names will be HMM name attached to configured basename.
-    coalesce_output:
+    save_ALL_featureSets:
         ui-name : |
-            Coalesce output
+            Save ALL featureSets
         short-hint : |
-            Combine output for each CAZy category (GH, GT, CE, PL, AA, cellulosome) into one object instead of splitting into a separate object per HMM Search
+            Rather than just creating featureSets for explictly requested models, save every model in a category (GH, GT, CE, PL, AA, cellulosome) for which 'ALL' models were used to search.
     e_value:
         ui-name : |
             E-value

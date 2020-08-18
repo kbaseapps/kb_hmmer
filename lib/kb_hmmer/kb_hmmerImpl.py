@@ -56,7 +56,7 @@ class kb_hmmer:
     ######################################### noqa
     VERSION = "1.5.0"
     GIT_URL = "https://github.com/dcchivian/kb_hmmer"
-    GIT_COMMIT_HASH = "88c6ec47e97753f7ef26fc4f13c66b3df61d2a9b"
+    GIT_COMMIT_HASH = "f9f37561b20d745455034737837d57634b132a10"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -3602,11 +3602,12 @@ class kb_hmmer:
            "input_many_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "genome_disp_name_config" of String, parameter "coalesce_output"
-           of type "bool", parameter "e_value" of Double, parameter
-           "bitscore" of Double, parameter "overlap_perc" of Double,
-           parameter "maxaccepts" of Double, parameter "heatmap" of type
-           "bool", parameter "low_val" of type "bool", parameter "vertical"
-           of type "bool", parameter "show_blanks" of type "bool"
+           of type "bool", parameter "save_ALL_featureSets" of type "bool",
+           parameter "e_value" of Double, parameter "bitscore" of Double,
+           parameter "overlap_perc" of Double, parameter "maxaccepts" of
+           Double, parameter "heatmap" of type "bool", parameter "low_val" of
+           type "bool", parameter "vertical" of type "bool", parameter
+           "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"
@@ -3652,7 +3653,8 @@ class kb_hmmer:
         ws_id = input_many_ref.split('/')[0]
 
 
-        # validate that at least one fam is selected
+        # validate that at least one fam is selected and store which fam_ids are explicitly config
+        explicitly_requested_models = dict()
         fam_groups = ['cellulosome',
                       'GH',
                       'GT',
@@ -3667,6 +3669,8 @@ class kb_hmmer:
                 for fam_id in params[fam_field]:
                     if fam_id == 'none':
                         continue
+                    if fam_id.upper() != 'ALL':
+                        explicitly_requested_models[fam_id] = True                        
                     some_fam_found = True
                     break
             if some_fam_found:
@@ -4424,6 +4428,9 @@ class kb_hmmer:
                 #
                 if accepted_hit_cnt == 0:
                     self.log(console, "\tNO ACCEPTED HITS ABOVE FILTERS")
+                elif (not params.get('save_ALL_featureSets') or int(params['save_ALL_featureSets']) != 1) and \
+                     not explicitly_requested_models.get(hmm_id):
+                    self.log(console, "\tMODEL "+hmm_id+" NOT EXPLICITLY REQUESTED, SO NOT SAVING FEATURESET.  MUST EXPLICITLY REQUEST MODEL OR CHANGE 'save_ALL_featureSets' to TRUE.")
                 else:
                     #self.log(console, "\tEXTRACTING ACCEPTED HITS FROM INPUT")
                     ##self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
@@ -4866,7 +4873,10 @@ class kb_hmmer:
                             html_report_chunk += ['</tr>']
 
                     # attach chunk
-                    if total_hit_cnts[hmm_id] == 0:
+                    if hmm_id not in total_hit_cnts:
+                        self.log(console, "MODEL "+hmm_id+" NOT REQUESTED.  NOT ADDING TO HTML HIT REPORT.")
+                        html_report_chunk_str = '<tr><td colspan=table_col_width><blockquote><i>Model '+hmm_id+' not requested</i></td></tr>'
+                    elif total_hit_cnts[hmm_id] == 0:
                         #self.log(console, "NO HITS FOR HMM["+str(hmm_i)+"] "+hmm_id+".  NOT ADDING TO HTML HIT REPORT.")
                         html_report_chunk_str = '<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>'
                     else:
@@ -5029,7 +5039,9 @@ class kb_hmmer:
                 for hmm_i, hmm_id in enumerate(input_HMM_ids[hmm_group]):
                     html_report_lines += ['<tr><td colspan=table_col_width>Hits to <b>' +
                                           str(hmm_id) + '</b></td></tr>']
-                    if total_hit_cnts[hmm_id] == 0 or html_report_chunks[hmm_i] == None or html_report_chunks[hmm_i] == '':
+                    if hmm_id not in total_hit_cnts:
+                        html_report_lines += ['<tr><td colspan=table_col_width><blockquote><i>Model '+hmm_id+' not requested</i></td></tr>']
+                    elif total_hit_cnts[hmm_id] == 0 or html_report_chunks[hmm_i] == None or html_report_chunks[hmm_i] == '':
                         html_report_lines += ['<tr><td colspan=table_col_width><blockquote><i>no hits found</i></td></tr>']
                     else:
                         #html_report_lines.extend(html_report_chunks[hmm_i])
@@ -5386,7 +5398,10 @@ class kb_hmmer:
                 os.makedirs(output_hit_MSA_dir)
 
             for hmm_i, hmm_id in enumerate(all_HMM_ids_order):
-                if total_hit_cnts[hmm_id] == 0:
+                if hmm_id not in total_hit_cnts:
+                    self.log(console, 'MODEL NOT REQUESTED.  SKIPPING UPLOAD FOR HMM ' + hmm_id)
+                    continue
+                elif total_hit_cnts[hmm_id] == 0:
                     self.log(console, 'SKIPPING UPLOAD OF EMPTY HMMER OUTPUT FOR HMM ' + hmm_id)
                     continue
                 else:

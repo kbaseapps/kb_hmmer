@@ -4,6 +4,7 @@ __Changes__
 - DEBUGGING updated dbCAN to v8
 - DEBUGGING updated dbCAN defaults to match dbCAN2 server E-Value < 1e-15, coverage > 0.35
 - DEBUGGING added descriptions to dbCAN HMMs in key and rollover
+- DEBUGGING added option to dbCAN to save hits to explicitly requested or ALL models in a category
 - PENDING added genes hit to rollover behavior in report
 - PENDING create DomainAnnotation object
 - PENDING added HMM-specific thresholds in config

@@ -4053,6 +4053,30 @@
             }
         },
         {
+            "id": "save_ALL_featureSets",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "0" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                    "value": "0",
+                                    "display": "Save only hits to explicitly requested models",
+                                    "id": "save_explicit",
+                                    "ui-name": "save_explicit"
+                                },
+                                {
+                                    "value": "1",
+                                    "display": "Save hits to ALL models",
+                                    "id": "save_ALL",
+                                    "ui-name": "save_ALL"
+                                }
+                        ]
+            }
+        },
+        {
             "id": "e_value",
             "optional": false,
             "advanced": false,
@@ -4235,6 +4259,10 @@
                 {
                     "constant_value": "0",
                     "target_property": "coalesce_output"
+                },
+                {
+                    "input_parameter": "save_ALL_featureSets",
+                    "target_property": "save_ALL_featureSets"
                 },
                 {
                     "input_parameter": "e_value",
