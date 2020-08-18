@@ -807,6 +807,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 0,
+                       'save_ALL_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'overlap_fraction': "50.0",
@@ -863,6 +864,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 0,
+                       'save_ALL_featureSets': 1,
                        #'e_value': ".001",
                        'e_value': ".1",
                        #'bitscore': "50",
@@ -922,6 +924,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,  # KEY
+                       'save_ALL_featureSets': 0,
                        'e_value': ".001",
                        'bitscore': "50",
                        'overlap_fraction': "50.0",
@@ -978,6 +981,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 1,  # KEY
+                       'save_ALL_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'overlap_fraction': "50.0",

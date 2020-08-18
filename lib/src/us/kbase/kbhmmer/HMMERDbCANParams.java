@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "output_filtered_name",
     "genome_disp_name_config",
     "coalesce_output",
+    "save_ALL_featureSets",
     "e_value",
     "bitscore",
     "overlap_perc",
@@ -68,6 +69,8 @@ public class HMMERDbCANParams {
     private String genomeDispNameConfig;
     @JsonProperty("coalesce_output")
     private Long coalesceOutput;
+    @JsonProperty("save_ALL_featureSets")
+    private Long saveALLFeatureSets;
     @JsonProperty("e_value")
     private Double eValue;
     @JsonProperty("bitscore")
@@ -266,6 +269,21 @@ public class HMMERDbCANParams {
         return this;
     }
 
+    @JsonProperty("save_ALL_featureSets")
+    public Long getSaveALLFeatureSets() {
+        return saveALLFeatureSets;
+    }
+
+    @JsonProperty("save_ALL_featureSets")
+    public void setSaveALLFeatureSets(Long saveALLFeatureSets) {
+        this.saveALLFeatureSets = saveALLFeatureSets;
+    }
+
+    public HMMERDbCANParams withSaveALLFeatureSets(Long saveALLFeatureSets) {
+        this.saveALLFeatureSets = saveALLFeatureSets;
+        return this;
+    }
+
     @JsonProperty("e_value")
     public Double getEValue() {
         return eValue;
@@ -398,7 +416,7 @@ public class HMMERDbCANParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((((((((((((((((((((((("HMMERDbCANParams"+" [workspaceName=")+ workspaceName)+", inputDbCANAAIds=")+ inputDbCANAAIds)+", inputDbCANCBMIds=")+ inputDbCANCBMIds)+", inputDbCANCEIds=")+ inputDbCANCEIds)+", inputDbCANGHIds=")+ inputDbCANGHIds)+", inputDbCANGTIds=")+ inputDbCANGTIds)+", inputDbCANPLIds=")+ inputDbCANPLIds)+", inputDbCANCellulosomeIds=")+ inputDbCANCellulosomeIds)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", coalesceOutput=")+ coalesceOutput)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", overlapPerc=")+ overlapPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", lowVal=")+ lowVal)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((((((((((((((((((("HMMERDbCANParams"+" [workspaceName=")+ workspaceName)+", inputDbCANAAIds=")+ inputDbCANAAIds)+", inputDbCANCBMIds=")+ inputDbCANCBMIds)+", inputDbCANCEIds=")+ inputDbCANCEIds)+", inputDbCANGHIds=")+ inputDbCANGHIds)+", inputDbCANGTIds=")+ inputDbCANGTIds)+", inputDbCANPLIds=")+ inputDbCANPLIds)+", inputDbCANCellulosomeIds=")+ inputDbCANCellulosomeIds)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", coalesceOutput=")+ coalesceOutput)+", saveALLFeatureSets=")+ saveALLFeatureSets)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", overlapPerc=")+ overlapPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", lowVal=")+ lowVal)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
