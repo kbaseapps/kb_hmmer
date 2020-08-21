@@ -3674,11 +3674,9 @@ class kb_hmmer:
                     if fam_id == 'none':
                         continue
                     if fam_id.upper() != 'ALL':
+                        self.log(console, 'RECORDING EXPLICITLY REQUESTED MODEL '+fam_id)  # DEBUG
                         explicitly_requested_models[fam_id] = True                        
                     some_fam_found = True
-                    break
-            if some_fam_found:
-                break
         if not some_fam_found:
             self.log(console,'You must request at least one HMM')
             self.log(invalid_msgs,'You must request at least one HMM')
@@ -4436,7 +4434,7 @@ class kb_hmmer:
                      not explicitly_requested_models.get(hmm_id):
                     self.log(console, "\tMODEL "+hmm_id+" NOT EXPLICITLY REQUESTED, SO NOT SAVING FEATURESET.  MUST EXPLICITLY REQUEST MODEL OR CHANGE 'save_ALL_featureSets' to TRUE.")
                 else:
-                    #self.log(console, "\tEXTRACTING ACCEPTED HITS FROM INPUT")
+                    self.log(console, "\tEXTRACTING ACCEPTED HITS FROM INPUT for model "+hmm_id)
                     ##self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
 
                     # SequenceSet input -> SequenceSet output
