@@ -3310,6 +3310,8 @@ class kb_hmmer:
                     cell_title = input_msa_descs[cat_i]
                     if len(cat_disp) > cat_disp_trunc_len + 1:
                         cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
+                    if cat_disp.lower().endswith('.msa'):
+                        cat_disp = re.sub ("(?i).msa$", "", cat_disp)
                     html_report_lines += ['<td style="border-right:solid 2px ' + border_cat_color + '; border-bottom:solid 2px ' +
                                           border_cat_color + '" bgcolor="' + head_color_2 + '"title="' + cell_title + '" valign=bottom align=center>']
                     html_report_lines += ['<div class="vertical-text"><div class="vertical-text__inner">']
@@ -3319,9 +3321,9 @@ class kb_hmmer:
                     #        html_report_lines += [c+'<br>']
                     #    else:
                     #        html_report_lines += [c]
-                    html_report_lines += [sp]
+                    html_report_lines += ['<nobr>'+sp]
                     html_report_lines += [cat_disp]
-                    html_report_lines += ['</b></font>']
+                    html_report_lines += ['</nobr></b></font>']
                     html_report_lines += ['</div></div>']
                     html_report_lines += ['</td>']
                 html_report_lines += ['</tr>']
@@ -3389,6 +3391,8 @@ class kb_hmmer:
                 cat_disp = cat
                 if len(cat_disp) > cat_disp_trunc_len + 1:
                     cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
+                if cat_disp.lower().endswith('.msa'):
+                    cat_disp = re.sub ("(?i).msa$", "", cat_disp)
                 html_report_lines += ['<tr>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '" style="border-right:solid 4px ' +
                                       border_color + '"><div class="horz-text"><font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_disp + '</font></div></td>']
@@ -3670,11 +3674,9 @@ class kb_hmmer:
                     if fam_id == 'none':
                         continue
                     if fam_id.upper() != 'ALL':
+                        self.log(console, 'RECORDING EXPLICITLY REQUESTED MODEL '+fam_id)  # DEBUG
                         explicitly_requested_models[fam_id] = True                        
                     some_fam_found = True
-                    break
-            if some_fam_found:
-                break
         if not some_fam_found:
             self.log(console,'You must request at least one HMM')
             self.log(invalid_msgs,'You must request at least one HMM')
@@ -4432,7 +4434,7 @@ class kb_hmmer:
                      not explicitly_requested_models.get(hmm_id):
                     self.log(console, "\tMODEL "+hmm_id+" NOT EXPLICITLY REQUESTED, SO NOT SAVING FEATURESET.  MUST EXPLICITLY REQUEST MODEL OR CHANGE 'save_ALL_featureSets' to TRUE.")
                 else:
-                    #self.log(console, "\tEXTRACTING ACCEPTED HITS FROM INPUT")
+                    self.log(console, "\tEXTRACTING ACCEPTED HITS FROM INPUT for model "+hmm_id)
                     ##self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
 
                     # SequenceSet input -> SequenceSet output
@@ -5275,10 +5277,10 @@ class kb_hmmer:
                     #        html_report_lines += [c+'<br>']
                     #    else:
                     #        html_report_lines += [c]
+                    html_report_lines += ['<nobr>'+sp]
                     html_report_lines += ['<a href="#'+key_link+'" target="_key_tab">']
-                    html_report_lines += [sp]
                     html_report_lines += [cat_disp]
-                    html_report_lines += ['</a>']
+                    html_report_lines += ['</a></nobr>']
                     html_report_lines += ['</b></font>']
                     html_report_lines += ['</div></div>']
                     html_report_lines += ['</td>']
@@ -5351,9 +5353,10 @@ class kb_hmmer:
 
                 html_report_lines += ['<tr>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '" style="border-right:solid 4px ' + border_color +
-                                      '">' + '<div class="horz-text">' + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + '<a name="'+key_link+'">' + cat_disp + '</font>' + '</div>' + '</td>']
+                                      '">' + '<div class="horz-text">' + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_disp + '</font>' + '</div>' + '</td>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '">' +
                                       '<div class="horz-text">' +
+                                      '<a name="'+key_link+'">' +
                                       '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_desc + '</font>' + '</div>' + '</td>']
                 html_report_lines += ['</tr>']
                 
