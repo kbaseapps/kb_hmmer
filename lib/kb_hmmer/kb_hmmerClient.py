@@ -54,7 +54,7 @@ class kb_hmmer(object):
            "input_msa_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "genome_disp_name_config" of String, parameter "e_value" of
-           Double, parameter "bitscore" of Double, parameter "overlap_perc"
+           Double, parameter "bitscore" of Double, parameter "model_cov_perc"
            of Double, parameter "maxaccepts" of Double
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
@@ -84,7 +84,7 @@ class kb_hmmer(object):
            "output_filtered_name" of type "data_obj_name", parameter
            "genome_disp_name_config" of String, parameter "coalesce_output"
            of type "bool", parameter "e_value" of Double, parameter
-           "bitscore" of Double, parameter "overlap_perc" of Double,
+           "bitscore" of Double, parameter "model_cov_perc" of Double,
            parameter "maxaccepts" of Double, parameter "heatmap" of type
            "bool", parameter "low_val" of type "bool", parameter "vertical"
            of type "bool", parameter "show_blanks" of type "bool"
@@ -123,7 +123,7 @@ class kb_hmmer(object):
            "genome_disp_name_config" of String, parameter "coalesce_output"
            of type "bool", parameter "save_ALL_featureSets" of type "bool",
            parameter "e_value" of Double, parameter "bitscore" of Double,
-           parameter "overlap_perc" of Double, parameter "maxaccepts" of
+           parameter "model_cov_perc" of Double, parameter "maxaccepts" of
            Double, parameter "heatmap" of type "bool", parameter "low_val" of
            type "bool", parameter "vertical" of type "bool", parameter
            "show_blanks" of type "bool"

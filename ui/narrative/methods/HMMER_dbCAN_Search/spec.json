@@ -4069,7 +4069,7 @@
                                 },
                                 {
                                     "value": "1",
-                                    "display": "Save hits to ALL models",
+                                    "display": "Save hits to ALL requested models",
                                     "id": "save_ALL",
                                     "ui-name": "save_ALL"
                                 }
@@ -4102,7 +4102,7 @@
             }
         },
         {
-            "id": "overlap_perc",
+            "id": "model_cov_perc",
             "optional": true,
             "advanced": true,
             "allow_multiple": false,
@@ -4273,8 +4273,8 @@
                     "target_property": "bitscore"
                 },
                 {
-                    "input_parameter": "overlap_perc",
-                    "target_property": "overlap_perc"
+                    "input_parameter": "model_cov_perc",
+                    "target_property": "model_cov_perc"
                 },
                 {
                     "input_parameter": "maxaccepts",

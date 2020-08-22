@@ -56,7 +56,7 @@ class kb_hmmer:
     ######################################### noqa
     VERSION = "1.5.0"
     GIT_URL = "https://github.com/dcchivian/kb_hmmer"
-    GIT_COMMIT_HASH = "f9f37561b20d745455034737837d57634b132a10"
+    GIT_COMMIT_HASH = "0faacfc7140a9fc60ec64ed817f16b55b09c6a95"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -253,7 +253,7 @@ class kb_hmmer:
            "input_msa_ref" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "genome_disp_name_config" of String, parameter "e_value" of
-           Double, parameter "bitscore" of Double, parameter "overlap_perc"
+           Double, parameter "bitscore" of Double, parameter "model_cov_perc"
            of Double, parameter "maxaccepts" of Double
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
@@ -763,6 +763,16 @@ class kb_hmmer:
         elif not os.path.getsize(HMM_file_path) > 0:
             raise ValueError("HMMER_BUILD created empty HMM file '" + HMM_file_path + "'")
 
+        # get model len
+        model_len = 0
+        with open (HMM_file_path, 'r') as HMM_handle:
+            for HMM_line in HMM_handle.readlines():
+                if HMM_line.startswith('LENG '):
+                    model_len = int(HMM_line.replace('LENG ','').strip())
+                    break
+        if model_len == 0:
+            raise ValueError ("No length found in HMM file")
+                
         # DEBUG
         #with open (HMM_file_path, 'r') as HMM_file_handle:
         #    for line in HMM_file_handle.readlines():
@@ -989,9 +999,9 @@ class kb_hmmer:
             if 'bitscore' in params and float(params['bitscore']) > float(high_bitscore_score[hit_seq_id]):
                 filter = True
                 filtering_fields[hit_seq_id]['bitscore'] = True
-            if 'overlap_perc' in params and float(params['overlap_perc']) > 100.0 * float(longest_alnlen[hit_seq_id]) / float(hit_seq_len[hit_seq_id]):
+            if 'model_cov_perc' in params and float(params['model_cov_perc']) > 100.0 * float(longest_alnlen[hit_seq_id]) / float(model_len):
                 filter = True
-                filtering_fields[hit_seq_id]['overlap_perc'] = True
+                filtering_fields[hit_seq_id]['model_cov_perc'] = True
             if 'maxaccepts' in params and params['maxaccepts'] != None and accepted_hit_cnt == int(params['maxaccepts']):
                 filter = True
                 filtering_fields[hit_seq_id]['maxaccepts'] = True
@@ -1296,7 +1306,7 @@ class kb_hmmer:
                 h_beg = hit_beg[hit_id]
                 h_end = hit_end[hit_id]
                 aln_len = abs(h_end - h_beg) + 1
-                aln_len_perc = round(100.0 * float(aln_len) / float(h_len), 1)
+                aln_len_perc = round(100.0 * float(aln_len) / float(model_len), 1)
 
                 #if many_type_name == 'SingleEndLibrary':
                 #    pass
@@ -1416,7 +1426,7 @@ class kb_hmmer:
  #                   html_report_lines += ['<td align=center bgcolor="'+this_cell_color+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(identity)+'%</font></td>']
 
                     # aln len
-                    if 'overlap_perc' in filtering_fields[hit_id]:
+                    if 'model_cov_perc' in filtering_fields[hit_id]:
                         this_cell_color = reject_cell_color
                     else:
                         this_cell_color = row_color
@@ -1633,7 +1643,7 @@ class kb_hmmer:
            "output_filtered_name" of type "data_obj_name", parameter
            "genome_disp_name_config" of String, parameter "coalesce_output"
            of type "bool", parameter "e_value" of Double, parameter
-           "bitscore" of Double, parameter "overlap_perc" of Double,
+           "bitscore" of Double, parameter "model_cov_perc" of Double,
            parameter "maxaccepts" of Double, parameter "heatmap" of type
            "bool", parameter "low_val" of type "bool", parameter "vertical"
            of type "bool", parameter "show_blanks" of type "bool"
@@ -2170,7 +2180,8 @@ class kb_hmmer:
         coalesce_featureIds_genome_ordering = []
         html_report_chunks = []
         hit_cnt_by_genome_and_model = dict()
-
+        model_len = []
+        
         for msa_i, input_msa_ref in enumerate(input_msa_refs):
 
             # init hit counts
@@ -2243,6 +2254,17 @@ class kb_hmmer:
                 raise ValueError("HMMER_BUILD failed to create HMM file '" + HMM_file_path + "'")
             elif not os.path.getsize(HMM_file_path) > 0:
                 raise ValueError("HMMER_BUILD created empty HMM file '" + HMM_file_path + "'")
+
+            # get model len
+            model_len.append(0)
+            with open (HMM_file_path, 'r') as HMM_handle:
+                for HMM_line in HMM_handle.readlines():
+                    if HMM_line.startswith('LENG '):
+                        model_len[msa_i] = int(HMM_line.replace('LENG ','').strip())
+                        break
+            if model_len[msa_i] == 0:
+                raise ValueError ("No length found in HMM file")
+                    
 
             ### Construct the HMMER_SEARCH command
             #
@@ -2469,9 +2491,9 @@ class kb_hmmer:
                 if 'bitscore' in params and float(params['bitscore']) > float(high_bitscore_score[hit_seq_id]):
                     filter = True
                     filtering_fields[hit_seq_id]['bitscore'] = True
-                if 'overlap_perc' in params and float(params['overlap_perc']) > 100.0 * float(longest_alnlen[hit_seq_id]) / float(hit_seq_len[hit_seq_id]):
+                if 'model_cov_perc' in params and float(params['model_cov_perc']) > 100.0 * float(longest_alnlen[hit_seq_id]) / float(model_len[msa_i]):
                     filter = True
-                    filtering_fields[hit_seq_id]['overlap_perc'] = True
+                    filtering_fields[hit_seq_id]['model_cov_perc'] = True
                 if 'maxaccepts' in params and params['maxaccepts'] != None and accepted_hit_cnt == int(params['maxaccepts']):
                     filter = True
                     filtering_fields[hit_seq_id]['maxaccepts'] = True
@@ -2802,7 +2824,7 @@ class kb_hmmer:
                     h_beg = hit_beg[hit_id]
                     h_end = hit_end[hit_id]
                     aln_len = abs(h_end - h_beg) + 1
-                    aln_len_perc = round(100.0 * float(aln_len) / float(h_len), 1)
+                    aln_len_perc = round(100.0 * float(aln_len) / float(model_len[msa_i]), 1)
 
                     #if many_type_name == 'SingleEndLibrary':
                     #    pass
@@ -2922,7 +2944,7 @@ class kb_hmmer:
      #                   html_report_chunk += ['<td align=center bgcolor="'+this_cell_color+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(identity)+'%</font></td>']
 
                         # aln len
-                        if 'overlap_perc' in filtering_fields[hit_id]:
+                        if 'model_cov_perc' in filtering_fields[hit_id]:
                             this_cell_color = reject_cell_color
                         else:
                             this_cell_color = row_color
@@ -3608,7 +3630,7 @@ class kb_hmmer:
            "genome_disp_name_config" of String, parameter "coalesce_output"
            of type "bool", parameter "save_ALL_featureSets" of type "bool",
            parameter "e_value" of Double, parameter "bitscore" of Double,
-           parameter "overlap_perc" of Double, parameter "maxaccepts" of
+           parameter "model_cov_perc" of Double, parameter "maxaccepts" of
            Double, parameter "heatmap" of type "bool", parameter "low_val" of
            type "bool", parameter "vertical" of type "bool", parameter
            "show_blanks" of type "bool"
@@ -3990,6 +4012,7 @@ class kb_hmmer:
         all_HMM_ids = dict()
         all_HMM_ids_order = []
         input_HMM_descs = dict()
+        model_len = dict()
         hmm_group_config_path = os.path.join(self.dbCAN_HMMS_DIR, 'dbCAN-categories.txt')
         HMM_fam_config_dir = os.path.join(self.dbCAN_HMMS_DIR, 'dbCAN-fams')
         HMM_fam_input_dir = os.path.join(self.output_dir, 'HMMs')
@@ -4162,6 +4185,16 @@ class kb_hmmer:
                     raise ValueError("HMMER_BUILD failed to create HMM file '" + HMM_file_path + "'")
                 elif not os.path.getsize(HMM_file_path) > 0:
                     raise ValueError("HMMER_BUILD created empty HMM file '" + HMM_file_path + "'")
+
+                # get model len
+                model_len[hmm_id] = 0
+                for HMM_line in HMM_bufs[hmm_id]:
+                    if HMM_line.startswith('LENG '):
+                        model_len[hmm_id] = int(HMM_line.replace('LENG ','').strip())
+                        break
+                if model_len[hmm_id] == 0:
+                    raise ValueError ("No length found in HMM file for model "+hmm_id)
+                
 
                 ### Construct the HMMER_SEARCH command
                 #
@@ -4395,9 +4428,9 @@ class kb_hmmer:
                     if 'bitscore' in params and float(params['bitscore']) > float(high_bitscore_score[hit_seq_id]):
                         filter = True
                         filtering_fields[hit_seq_id]['bitscore'] = True
-                    if 'overlap_perc' in params and float(params['overlap_perc']) > 100.0 * float(longest_alnlen[hit_seq_id]) / float(hit_seq_len[hit_seq_id]):
+                    if 'model_cov_perc' in params and float(params['model_cov_perc']) > 100.0 * float(longest_alnlen[hit_seq_id]) / float(model_len[hmm_id]):
                         filter = True
-                        filtering_fields[hit_seq_id]['overlap_perc'] = True
+                        filtering_fields[hit_seq_id]['model_cov_perc'] = True
                     if 'maxaccepts' in params and params['maxaccepts'] != None and accepted_hit_cnt == int(params['maxaccepts']):
                         filter = True
                         filtering_fields[hit_seq_id]['maxaccepts'] = True
@@ -4726,7 +4759,7 @@ class kb_hmmer:
                         h_beg = hit_beg[hit_id]
                         h_end = hit_end[hit_id]
                         aln_len = abs(h_end - h_beg) + 1
-                        aln_len_perc = round(100.0 * float(aln_len) / float(h_len), 1)
+                        aln_len_perc = round(100.0 * float(aln_len) / float(model_len[hmm_id]), 1)
 
                         #if many_type_name == 'SingleEndLibrary':
                         #    pass
@@ -4846,7 +4879,7 @@ class kb_hmmer:
      #                   html_report_chunk += ['<td align=center bgcolor="'+this_cell_color+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(identity)+'%</font></td>']
 
                             # aln len
-                            if 'overlap_perc' in filtering_fields[hit_id]:
+                            if 'model_cov_perc' in filtering_fields[hit_id]:
                                 this_cell_color = reject_cell_color
                             else:
                                 this_cell_color = row_color

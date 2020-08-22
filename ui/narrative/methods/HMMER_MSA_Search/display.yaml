@@ -59,11 +59,11 @@ parameters :
             Bit Score
         short-hint : |
             The bit score threshold for true hits.
-    overlap_perc:
+    model_cov_perc:
         ui-name : |
-            Alignment Overlap Threshold (%)
+            Model coverage minimum(%)
         short-hint : |
-            The overlap threshold with respect to hit sequence length.
+            The minimum coverage of the model length for a given hit.
     maxaccepts:
         ui-name : |
             Max Accepts

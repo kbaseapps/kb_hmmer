@@ -132,7 +132,7 @@ HMMER_Params is a reference to a hash where the following keys are defined:
 	genome_disp_name_config has a value which is a string
 	e_value has a value which is a float
 	bitscore has a value which is a float
-	overlap_perc has a value which is a float
+	model_cov_perc has a value which is a float
 	maxaccepts has a value which is a float
 workspace_name is a string
 data_obj_ref is a string
@@ -157,7 +157,7 @@ HMMER_Params is a reference to a hash where the following keys are defined:
 	genome_disp_name_config has a value which is a string
 	e_value has a value which is a float
 	bitscore has a value which is a float
-	overlap_perc has a value which is a float
+	model_cov_perc has a value which is a float
 	maxaccepts has a value which is a float
 workspace_name is a string
 data_obj_ref is a string
@@ -252,7 +252,7 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	coalesce_output has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
-	overlap_perc has a value which is a float
+	model_cov_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
 	low_val has a value which is a kb_hmmer.bool
@@ -283,7 +283,7 @@ HMMER_Local_MSA_Group_Params is a reference to a hash where the following keys a
 	coalesce_output has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
-	overlap_perc has a value which is a float
+	model_cov_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
 	low_val has a value which is a kb_hmmer.bool
@@ -389,7 +389,7 @@ HMMER_dbCAN_Params is a reference to a hash where the following keys are defined
 	save_ALL_featureSets has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
-	overlap_perc has a value which is a float
+	model_cov_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
 	low_val has a value which is a kb_hmmer.bool
@@ -427,7 +427,7 @@ HMMER_dbCAN_Params is a reference to a hash where the following keys are defined
 	save_ALL_featureSets has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
-	overlap_perc has a value which is a float
+	model_cov_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
 	low_val has a value which is a kb_hmmer.bool
@@ -912,7 +912,7 @@ output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
 e_value has a value which is a float
 bitscore has a value which is a float
-overlap_perc has a value which is a float
+model_cov_perc has a value which is a float
 maxaccepts has a value which is a float
 
 </pre>
@@ -929,7 +929,7 @@ output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
 e_value has a value which is a float
 bitscore has a value which is a float
-overlap_perc has a value which is a float
+model_cov_perc has a value which is a float
 maxaccepts has a value which is a float
 
 
@@ -1001,7 +1001,7 @@ genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
-overlap_perc has a value which is a float
+model_cov_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
 low_val has a value which is a kb_hmmer.bool
@@ -1023,7 +1023,7 @@ genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
-overlap_perc has a value which is a float
+model_cov_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
 low_val has a value which is a kb_hmmer.bool
@@ -1069,7 +1069,7 @@ coalesce_output has a value which is a kb_hmmer.bool
 save_ALL_featureSets has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
-overlap_perc has a value which is a float
+model_cov_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
 low_val has a value which is a kb_hmmer.bool
@@ -1098,7 +1098,7 @@ coalesce_output has a value which is a kb_hmmer.bool
 save_ALL_featureSets has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
-overlap_perc has a value which is a float
+model_cov_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
 low_val has a value which is a kb_hmmer.bool

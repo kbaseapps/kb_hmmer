@@ -116,7 +116,7 @@
             }
         },
         {
-            "id": "overlap_perc",
+            "id": "model_cov_perc",
             "optional": true,
             "advanced": true,
             "allow_multiple": false,
@@ -178,8 +178,8 @@
                     "target_property": "bitscore"
                 },
                 {
-                    "input_parameter": "overlap_perc",
-                    "target_property": "overlap_perc"
+                    "input_parameter": "model_cov_perc",
+                    "target_property": "model_cov_perc"
                 },
                 {
                     "input_parameter": "maxaccepts",

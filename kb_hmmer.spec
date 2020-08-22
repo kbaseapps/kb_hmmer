@@ -37,7 +37,7 @@ module kb_hmmer {
 
 	float e_value;
 	float bitscore;
-	float overlap_perc;
+	float model_cov_perc;
 	float maxaccepts;
 
 /*	float ident_thresh;
@@ -84,7 +84,7 @@ module kb_hmmer {
 	bool  coalesce_output;
 	float e_value;
 	float bitscore;
-	float overlap_perc;
+	float model_cov_perc;
 	float maxaccepts;
 /*	float ident_thresh;
 */
@@ -126,7 +126,7 @@ module kb_hmmer {
 	bool  save_ALL_featureSets;
 	float e_value;
 	float bitscore;
-	float overlap_perc;
+	float model_cov_perc;
 	float maxaccepts;
 /*	float ident_thresh;
 */
