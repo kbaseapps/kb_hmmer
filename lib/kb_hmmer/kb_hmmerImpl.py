@@ -102,46 +102,21 @@ class kb_hmmer:
     # Helper script borrowed from the transform service, logger removed
     #
 
-    def upload_file_to_shock(self,
-                             console,  # DEBUG
-                             shock_service_url=None,
-                             filePath=None,
-                             ssl_verify=True,
-                             token=None):
-        """
-        Use HTTP multi-part POST to save a file to a SHOCK instance.
-        """
-        self.log(console, "UPLOADING FILE " + filePath + " TO SHOCK")
-
-        if token is None:
-            raise Exception("Authentication token required!")
-
-        #build the header
-        header = dict()
-        header["Authorization"] = "Oauth {0}".format(token)
-        if filePath is None:
-            raise Exception("No file given for upload to SHOCK!")
-
-        dataFile = open(os.path.abspath(filePath), 'rb')
-        m = MultipartEncoder(fields={'upload': (os.path.split(filePath)[-1], dataFile)})
-        header['Content-Type'] = m.content_type
-
-        #logger.info("Sending {0} to {1}".format(filePath,shock_service_url))
-        try:
-            response = requests.post(shock_service_url + "/node", headers=header,
-                                     data=m, allow_redirects=True, verify=ssl_verify)
-            dataFile.close()
-        except:
-            dataFile.close()
-            raise
-        if not response.ok:
-            response.raise_for_status()
-        result = response.json()
-        if result['error']:
-            raise Exception(result['error'][0])
+    def _parse_genome_and_feature_id_from_hit_id(self,
+                                                 hit_id,
+                                                 target_type,
+                                                 target_ref,
+                                                 genome_id_feature_id_delim):
+        genome_ref = None
+        feature_id = None
+        if target_type == 'Genome' or target_type == 'AnnotatedMetagenomeAssembly':
+            genome_ref = target_ref
+            feature_id = hit_id
         else:
-            return result["data"]
-
+            [genome_ref, feature_id] = hit_id.split(genome_id_feature_id_delim)
+        return [genome_ref, feature_id]
+    
+        
     def _check_MSA_sequence_type_correct(self, MSA_in, row_order, seq_type):
         PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
         DNA_MSA_pattern = re.compile("^[\.\-_ACGTUXNRYSWKMBDHVacgtuxnryswkmbdhv \t\n]+$")
@@ -4131,6 +4106,7 @@ class kb_hmmer:
                 hmm_groups_used.append(hmm_group)
 
         # Group loop
+        hit_info_by_genome_feature_and_hmm = dict()  # used to build DomainAnnotation object
         total_hit_cnts = dict()
         accepted_hit_cnts = dict()
         hit_cnt_by_genome_and_model = dict()
@@ -4303,6 +4279,7 @@ class kb_hmmer:
                 hit_beg = dict()
                 hit_end = dict()
                 longest_alnlen = dict()
+                all_hits = dict()
                 with open(output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
                     for MSA_out_line in output_hit_MSA_file_handle.readlines():
                         MSA_out_line = MSA_out_line.strip()
@@ -4316,6 +4293,8 @@ class kb_hmmer:
                             beg = int(beg_str)
                             end = int(end_str)
                             this_alnlen = abs(end - beg) + 1
+
+                            # store longest alignment
                             if hit_id in hit_beg:
                                 if this_alnlen > longest_alnlen[hit_id]:
                                     hit_beg[hit_id] = int(beg_str)
@@ -4328,7 +4307,13 @@ class kb_hmmer:
                                 longest_alnlen[hit_id] = this_alnlen
                                 #self.log(console, "ADDING HIT_BEG for "+hit_id)  # DEBUG
 
-                # Measure length of hit sequences
+                            # store all alignments
+                            if hit_id not in all_hits:
+                                all_hits[hit_id] = []
+                            all_hits[hit_id].append([int(beg_str),int(end_str)])
+
+                            
+                # Measure length of hit sequences (TODO: THIS SHOULD GO OUTSIDE AFTER FILE CREATED)
                 #
                 #self.log(console, 'MEASURING HIT GENES LENGTHS')
                 hit_seq_len = dict()
@@ -4413,6 +4398,22 @@ class kb_hmmer:
                             high_bitscore_line[hit_seq_id] = line
                         else:
                             self.log(console, "ALERT!!!  HIT "+hit_seq_id+" not found in MSA alignment and is likely a very weak hit (E-value is "+str(hit_e_value)+" and bitscore is "+str(hit_bitscore)+".  SKIPPING HIT.")
+
+                # TODO: need to filter on all hits, not just high bitscore hit
+                """
+                #hit_info_by_genome_feature_and_hmm = dict()
+                [hit_genome_ref, hit_feature_id] = self._parse_genome_and_feature_id_from_hit_id (hit_id, many_type_name, input_many_ref, genome_id_feature_id_delim)
+                if hit_genome_ref not in hit_info_by_genome_feature_and_hmm:
+                    hit_info_by_genome_feature_and_hmm[hit_genome_ref] = dict()
+                if hit_feature_id not in hit_info_by_genome_feature_and_hmm[hit_genome_ref]:
+                    hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id] = dict()
+                if hmm_id not in hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id]:
+                    hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id][hmm_id] = list()
+                # domain_place: tuple<int start_in_feature,int stop_in_feature,float evalue, float bitscore,float domain_coverage>).
+                this_hit = {'start_in_feature': int(beg_str),
+                            'stop_in_feature': int(end_str)}
+                hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id][hmm_id].append(this_hit)
+                """                            
 
                 filtering_fields = dict()
                 total_hit_cnts[hmm_id] = len(hit_order)
