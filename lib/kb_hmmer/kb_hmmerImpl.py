@@ -4162,7 +4162,7 @@ class kb_hmmer:
                 elif not os.path.getsize(HMM_file_path) > 0:
                     raise ValueError("HMMER_BUILD created empty HMM file '" + HMM_file_path + "'")
 
-                # get model len
+                # get model len (this can also be obtained from the -domtblout output)
                 model_len[hmm_id] = 0
                 for HMM_line in HMM_bufs[hmm_id]:
                     if HMM_line.startswith('LENG '):
@@ -4176,7 +4176,7 @@ class kb_hmmer:
                 #
                 # SYNTAX (from http://eddylab.org/software/hmmer3/3.1b2/Userguide.pdf)
                 #
-                # hmmsearch --tblout <TAB_out> -A <MSA_out> --noali --notextw -E <e_value> -T <bit_score> <hmmfile> <seqdb>
+                # hmmsearch --domtblout <TAB_out> -A <MSA_out> --noali --notextw -E <e_value> -T <bit_score> <hmmfile> <seqdb>
                 #
                 hmmer_search_bin = self.HMMER_SEARCH
                 hmmer_search_cmd = [hmmer_search_bin]
@@ -4201,7 +4201,7 @@ class kb_hmmer:
                 output_filtered_fasta_file_paths.append(output_filtered_fasta_file_path)
 
                 # this is command for basic search mode
-                hmmer_search_cmd.append('--tblout')
+                hmmer_search_cmd.append('--domtblout')
                 hmmer_search_cmd.append(output_hit_TAB_file_path)
                 hmmer_search_cmd.append('-A')
                 hmmer_search_cmd.append(output_hit_MSA_file_path)
@@ -4261,7 +4261,7 @@ class kb_hmmer:
                 #self.log(console, "DEBUG: output_hit_TAB_file_path: '"+str(output_hit_TAB_file_path))
                 #self.log(console, "DEBUG: output_hit_MSA_file_path: '"+str(output_hit_MSA_file_path))
                 # DEBUG
-                """
+                report = "MODEL ID:"+hmm_id+"\n"
                 report = "TAB:\n\n"
                 with open (output_hit_TAB_file_path, 'r') as output_handle:
                     for line in output_handle:
@@ -4271,94 +4271,21 @@ class kb_hmmer:
                     for line in output_handle:
                         report += line+"\n"
                 self.log(console, report)
-                """
 
-                # Get hit beg and end positions from Stockholm format MSA output
-                #
-                #self.log(console, 'PARSING HMMER SEARCH MSA OUTPUT')
-                hit_beg = dict()
-                hit_end = dict()
-                longest_alnlen = dict()
-                all_hits = dict()
-                with open(output_hit_MSA_file_path, 'r', 0) as output_hit_MSA_file_handle:
-                    for MSA_out_line in output_hit_MSA_file_handle.readlines():
-                        MSA_out_line = MSA_out_line.strip()
-                        if MSA_out_line.startswith('#=GS '):
-                            hit_rec = re.sub('#=GS ', '', MSA_out_line)
-                            hit_rec = re.sub('\s+.*?$', '', hit_rec)
-                            hit_range = re.sub('^.*\/', '', hit_rec)
-                            hit_id = re.sub('\/[^\/]+$', '', hit_rec)
-                            #self.log(console, "HIT_ID: '"+hit_id+"' HIT_REC: '"+hit_rec+"'")  # DEBUG
-                            (beg_str, end_str) = hit_range.split('-')
-                            beg = int(beg_str)
-                            end = int(end_str)
-                            this_alnlen = abs(end - beg) + 1
-
-                            # store longest alignment
-                            if hit_id in hit_beg:
-                                if this_alnlen > longest_alnlen[hit_id]:
-                                    hit_beg[hit_id] = int(beg_str)
-                                    hit_end[hit_id] = int(end_str)
-                                    longest_alnlen[hit_id] = this_alnlen
-                                    #self.log(console, "ADDING HIT_BEG for "+hit_id)  # DEBUG
-                            else:
-                                hit_beg[hit_id] = int(beg_str)
-                                hit_end[hit_id] = int(end_str)
-                                longest_alnlen[hit_id] = this_alnlen
-                                #self.log(console, "ADDING HIT_BEG for "+hit_id)  # DEBUG
-
-                            # store all alignments
-                            if hit_id not in all_hits:
-                                all_hits[hit_id] = []
-                            all_hits[hit_id].append([int(beg_str),int(end_str)])
-
-                            
-                # Measure length of hit sequences (TODO: THIS SHOULD GO OUTSIDE AFTER FILE CREATED)
-                #
-                #self.log(console, 'MEASURING HIT GENES LENGTHS')
-                hit_seq_len = dict()
-                with open(many_forward_reads_file_path, 'r', 0) as many_forward_reads_file_handle:
-                    last_id = None
-                    last_buf = ''
-                    for fasta_line in many_forward_reads_file_handle.readlines():
-                        fasta_line = fasta_line.strip()
-                        if fasta_line.startswith('>'):
-                            if last_id != None:
-                                id_untrans = last_id
-                                id_trans = re.sub('\|', ':', id_untrans)
-                                #if id_untrans in hit_order or id_trans in hit_order:
-                                if id_untrans in hit_beg or id_trans in hit_beg:
-                                    hit_seq_len[id_untrans] = len(last_buf)
-                                    #self.log(console, "ADDING HIT_SEQ_LEN for "+id_untrans)  # DEBUG
-                            header = re.sub('^>', '', fasta_line)
-                            last_id = re.sub('\s+.*?$', '', header)
-                            last_buf = ''
-                        else:
-                            last_buf += fasta_line
-                    if last_id != None:
-                        id_untrans = last_id
-                        id_trans = re.sub('\|', ':', id_untrans)
-                        #if id_untrans in hit_order or id_trans in hit_order:
-                        if id_untrans in hit_beg or id_trans in hit_beg:
-                            hit_seq_len[id_untrans] = len(last_buf)
-                            #self.log(console, "ADDING HIT_SEQ_LEN for "+id_untrans)  # DEBUG
-
+                
                 ### Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
                 #
                 #self.log(console, 'PARSING HMMER SEARCH TAB OUTPUT')
+                with open(output_hit_TAB_file_path, "r") as output_hit_TAB_file_handle:
+                    output_aln_buf = output_hit_TAB_file_handle.readlines()
                 hit_seq_ids = dict()
+                accepted_hit_cnt = 0  # may be more than one hit per gene
+                accepted_hit_seq_ids = dict()
                 accept_fids = dict()
-                output_hit_TAB_file_handle = open(output_hit_TAB_file_path, "r", 0)
-                output_aln_buf = output_hit_TAB_file_handle.readlines()
-                output_hit_TAB_file_handle.close()
-                accepted_hit_cnt = 0
-                high_bitscore_line = dict()
-                high_bitscore_score = dict()
-                #high_bitscore_ident = dict()
-                #longest_alnlen = dict()
+                filtering_fields = dict()
                 hit_order = []
-                hit_buf = []
-                #header_done = False
+                hit_buf = dict()
+
                 for line in output_aln_buf:
                     if line.startswith('#'):
                         #if not header_done:
@@ -4366,6 +4293,7 @@ class kb_hmmer:
                         continue
                     #header_done = True
                     #self.log(console,'HIT LINE: '+line)  # DEBUG
+                    """ format for -tblout.  we're now using -domtblout" 
                     hit_info = re.split('\s+', line)
                     hit_seq_id = hit_info[0]
                     hit_accession = hit_info[1]
@@ -4386,62 +4314,78 @@ class kb_hmmer:
                     hit_doms_within_rep_thresh = float(hit_info[16])
                     hit_doms_within_inc_thresh = float(hit_info[17])
                     hit_desc = hit_info[18]
+                    """
+                    # format for -domtblout http://eddylab.org/software/hmmer3/3.1b2/Userguide.pdf
+                    hit_info = re.split('\s+', line)
+                    hit_seq_id = hit_info[0]
+                    hit_accession = hit_info[1]
+                    hit_seq_len = int(hit_info[2])  # diff from -tblout format
+                    query_name = hit_info[3]
+                    query_accession = hit_info[4]
+                    query_model_len = int(hit_info[5])  # diff from -tblout format
+                    hit_e_value_alldoms = float(hit_info[6])
+                    hit_bitscore_alldoms = float(hit_info[7])
+                    hit_bias_alldoms = float(hit_info[8])
+                    hit_dom_n = int(hit_info[9])  # diff from -tblout format
+                    hit_dom_total = int(hit_info[10])  # diff from -tblout format
+                    hit_c_e_value_this_dom = float(hit_info[11])  # diff from -tblout format
+                    hit_i_e_value_this_dom = float(hit_info[12])  # diff from -tblout format
+                    hit_bitscore_this_dom = float(hit_info[13])  # diff from -tblout format
+                    hit_bias_this_dom = float(hit_info[14])  # diff from -tblout format
+                    query_beg_pos = int(hit_info[15])  # diff from -tblout format
+                    query_end_pos = int(hit_info[16])  # diff from -tblout format
+                    hit_beg_pos = int(hit_info[17])  # diff from -tblout format
+                    hit_end_pos = int(hit_info[18])  # diff from -tblout format
+                    envelope_beg_pos = int(hit_info[19])  # diff from -tblout format
+                    envelope_end_pos = int(hit_info[20])  # diff from -tblout format
+                    hit_acc_posterior_prob = float(hit_info[21])  # diff from -tblout format
+                    hit_desc = hit_info[22]
 
-                    try:
-                        if hit_bitscore > high_bitscore_score[hit_seq_id]:
-                            high_bitscore_score[hit_seq_id] = hit_bitscore
-                            high_bitscore_line[hit_seq_id] = line
-                    except:
-                        if hit_seq_id in hit_seq_len:
-                            hit_order.append(hit_seq_id)
-                            high_bitscore_score[hit_seq_id] = hit_bitscore
-                            high_bitscore_line[hit_seq_id] = line
-                        else:
-                            self.log(console, "ALERT!!!  HIT "+hit_seq_id+" not found in MSA alignment and is likely a very weak hit (E-value is "+str(hit_e_value)+" and bitscore is "+str(hit_bitscore)+".  SKIPPING HIT.")
+                    if hit_seq_id not in hit_seq_ids:
+                        hit_seq_ids[hit_seq_id] = True
+                        hit_order.append(hit_seq_id)
+                        hit_buf[hit_seq_id] = []
+                        filtering_fields[hit_seq_id] = []
+                        
+                    # store all non-filtered domain hits for domainAnnotation
+                    #hit_info_by_genome_feature_and_hmm = dict()
+                    [hit_genome_ref, hit_feature_id] = self._parse_genome_and_feature_id_from_hit_id (hit_seq_id, many_type_name, input_many_ref, genome_id_feature_id_delim)
+                    hit_alnlen = query_end_pos - query_beg_pos + 1
 
-                # TODO: need to filter on all hits, not just high bitscore hit
-                """
-                #hit_info_by_genome_feature_and_hmm = dict()
-                [hit_genome_ref, hit_feature_id] = self._parse_genome_and_feature_id_from_hit_id (hit_id, many_type_name, input_many_ref, genome_id_feature_id_delim)
-                if hit_genome_ref not in hit_info_by_genome_feature_and_hmm:
-                    hit_info_by_genome_feature_and_hmm[hit_genome_ref] = dict()
-                if hit_feature_id not in hit_info_by_genome_feature_and_hmm[hit_genome_ref]:
-                    hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id] = dict()
-                if hmm_id not in hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id]:
-                    hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id][hmm_id] = list()
-                # domain_place: tuple<int start_in_feature,int stop_in_feature,float evalue, float bitscore,float domain_coverage>).
-                this_hit = {'start_in_feature': int(beg_str),
-                            'stop_in_feature': int(end_str)}
-                hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id][hmm_id].append(this_hit)
-                """                            
-
-                filtering_fields = dict()
-                total_hit_cnts[hmm_id] = len(hit_order)
-
-                for hit_seq_id in hit_order:
-                    hit_buf.append(high_bitscore_line[hit_seq_id])
-                    filtering_fields[hit_seq_id] = dict()
+                    if hit_genome_ref not in hit_info_by_genome_feature_and_hmm:
+                        hit_info_by_genome_feature_and_hmm[hit_genome_ref] = dict()
+                    if hit_feature_id not in hit_info_by_genome_feature_and_hmm[hit_genome_ref]:
+                        hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id] = dict()
+                    if hmm_id not in hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id]:
+                        hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id][hmm_id] = list()
 
                     filter = False
+                    this_filter_fields = dict()
                     #self.log(console,"HIT_SEQ_ID: '"+hit_seq_id+"'")
                     #if 'ident_thresh' in params and float(params['ident_thresh']) > float(high_bitscore_ident[hit_seq_id]):
                     #    continue
-                    if 'bitscore' in params and float(params['bitscore']) > float(high_bitscore_score[hit_seq_id]):
+                    if 'bitscore' in params and float(params['bitscore']) > float(hit_bitscore_this_dom):
+                        self.log(console, "model "+hmm_id+" filtering "+hit_seq_id+" with bitscore "+str(hit_bitscore_this_dom))  # DEBUG
                         filter = True
-                        filtering_fields[hit_seq_id]['bitscore'] = True
-                    if 'model_cov_perc' in params and float(params['model_cov_perc']) > 100.0 * float(longest_alnlen[hit_seq_id]) / float(model_len[hmm_id]):
+                        this_filter_fields['bitscore'] = True
+                    if 'model_cov_perc' in params and float(params['model_cov_perc']) > 100.0 * float(hit_alnlen) / float(model_len[hmm_id]):
+                        self.log(console, "model "+hmm_id+" filtering "+hit_seq_id+" with model_cov "+str(hit_alnlen))  # DEBUG
                         filter = True
-                        filtering_fields[hit_seq_id]['model_cov_perc'] = True
-                    if 'maxaccepts' in params and params['maxaccepts'] != None and accepted_hit_cnt == int(params['maxaccepts']):
+                        this_filter_fields['model_cov_perc'] = True
+                    if 'maxaccepts' in params and params['maxaccepts'] != None and accepted_hit_cnt >= int(params['maxaccepts']):
+                        self.log(console, "model "+hmm_id+" filtering "+hit_seq_id+" with maxaccepts "+str(accepted_hit_cnt))  # DEBUG
                         filter = True
-                        filtering_fields[hit_seq_id]['maxaccepts'] = True
+                        this_filter_fields['maxaccepts'] = True
 
+                    filtering_fields[hit_seq_id].append(this_filter_fields)
                     if filter:
                         continue
 
-                    hit_accept_something[hmm_group] = True
+                    # store hit
                     accepted_hit_cnt += 1
-                    hit_seq_ids[hit_seq_id] = True
+                    accepted_hit_seq_ids[hit_seq_id] = True
+                    hit_buf[hit_seq_id].append(line)
+                    hit_accept_something[hmm_group] = True
                     #self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
 
                     # capture accepted hit count by genome_ref and model
@@ -4457,11 +4401,27 @@ class kb_hmmer:
                         hit_cnt_by_genome_and_model[genome_ref][hmm_id] = 0
                     hit_cnt_by_genome_and_model[genome_ref][hmm_id] += 1
 
-                accepted_hit_cnts[hmm_id] = accepted_hit_cnt
+                    
+                    # prep for storing DomainAnnotation
+                    # domain_place: tuple<int start_in_feature,int stop_in_feature,float evalue, float bitscore,float domain_coverage>).
+                    this_hit = {'start_in_feature': hit_beg_pos,
+                                'stop_in_feature': hit_end_pos,
+                                'evalue': hit_i_e_value_this_dom,
+                                'bitscore': hit_bitscore_this_dom,
+                                'domain_coverage': round (hit_alnlen / model_len[hmm_id],2)
+                                
+                    }
+                    hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id][hmm_id].append(this_hit)
+                    # DEBUG
+                    if hmm_id == 'AA6':
+                        pprint (this_hit)
 
-                #
+
                 ### Create output objects
                 #
+                total_hit_cnts[hmm_id] = len(hit_order)  # this is just gene total
+                accepted_hit_cnts[hmm_id] = accepted_hit_cnt  # this may incude multiple hits per gene
+
                 if accepted_hit_cnt == 0:
                     self.log(console, "\tNO ACCEPTED HITS ABOVE FILTERS")
                 elif (not params.get('save_ALL_featureSets') or int(params['save_ALL_featureSets']) != 1) and \
@@ -4497,7 +4457,7 @@ class kb_hmmer:
 
                             id_untrans = header_id
                             id_trans = re.sub('\|', ':', id_untrans)
-                            if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
+                            if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
                                 #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
                                 accept_fids[id_untrans] = True
                                 output_sequenceSet['sequences'].append(seq_obj)
@@ -4520,7 +4480,7 @@ class kb_hmmer:
                             for genome_ref in input_many_featureSet['elements'][fId]:
                                 id_untrans = genome_ref + genome_id_feature_id_delim + fId
                                 id_trans = re.sub('\|', ':', id_untrans)
-                                if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
+                                if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
                                     #self.log(console, 'FOUND HIT '+fId)  # DEBUG
                                     accept_fids[id_untrans] = True
                                     #fId = id_untrans  # don't change fId for output FeatureSet
@@ -4545,7 +4505,7 @@ class kb_hmmer:
                         for fid in feature_ids:
                             id_untrans = fid
                             id_trans = re.sub('\|', ':', id_untrans)
-                            if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
+                            if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
                                 #self.log(console, 'FOUND HIT '+fid)  # DEBUG
                                 #output_featureSet['element_ordering'].append(fid)
                                 accept_fids[id_untrans] = True
@@ -4572,7 +4532,7 @@ class kb_hmmer:
                             for feature_id in feature_ids_by_genome_id[genome_id]:
                                 id_untrans = genome_ref + genome_id_feature_id_delim + feature_id
                                 id_trans = re.sub('\|', ':', id_untrans)
-                                if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
+                                if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
                                     #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
                                     #output_featureSet['element_ordering'].append(feature['id'])
                                     accept_fids[id_untrans] = True
@@ -4604,7 +4564,7 @@ class kb_hmmer:
                             id_trans = re.sub ('\|',':',id_untrans)
                             #print ("TESTING FEATURES: ID_UNTRANS: '"+id_untrans+"'")  # DEBUG
                             #print ("TESTING FEATURES: ID_TRANS: '"+id_trans+"'")  # DEBUG
-                            if id_trans in hit_seq_ids or id_untrans in hit_seq_ids:
+                            if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
                                 self.log(console, 'FOUND HIT '+fid)  # DEBUG
                                 #output_featureSet['element_ordering'].append(fid)
                                 accept_fids[id_untrans] = True
@@ -4631,7 +4591,7 @@ class kb_hmmer:
                     #
                     if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
                         if len(invalid_msgs) == 0:
-                            if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
+                            if len(accepted_hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
                                 #self.log(console,"No Object to Upload for HMM "+hmm_id)  # DEBUG
                                 continue
 
@@ -4652,7 +4612,7 @@ class kb_hmmer:
                         output_name = hmm_id + '-' + params['output_filtered_name']
 
                         if len(invalid_msgs) == 0:
-                            if len(hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
+                            if len(accepted_hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
                                 #self.log(console,"No Object to Upload for HMM "+hmm_id)  # DEBUG
                                 continue
 
@@ -4699,7 +4659,7 @@ class kb_hmmer:
                     report += 'HMM[' + str(hmm_i) + ']: ' + hmm_id + "\n"
                     report += 'sequences in search db: ' + str(seq_total) + "\n"
                     report += 'sequences in hit set: ' + str(total_hit_cnts[hmm_id]) + "\n"
-                    report += 'sequences in accepted hit set: ' + str(accepted_hit_cnts[hmm_id]) + "\n"
+                    report += 'domain hits in accepted hit set: ' + str(accepted_hit_cnts[hmm_id]) + "\n"
                     report += "\n"
                     #for line in hit_buf:
                     #    report += line
@@ -4743,171 +4703,205 @@ class kb_hmmer:
 
                     html_report_chunk = []
 
-                    for line in hit_buf:
-                        line = line.strip()
-                        if line == '' or line.startswith('#'):
-                            continue
+                    for hit_seq_id in hit_order:
+                        for hit_i,line in enumerate(hit_buf[hit_seq_id]):
+                            line = line.strip()
+                            if line == '' or line.startswith('#'):
+                                continue
 
-                        [hit_id, hit_accession, query_name, query_accession, e_value, bit_score, bias, e_value_best_dom, bit_score_best_dom, bias_best_dom, expected_dom_n,
+                            """ This is -tbleout format
+                            [hit_id, hit_accession, query_name, query_accession, e_value, bit_score, bias, e_value_best_dom, bit_score_best_dom, bias_best_dom, expected_dom_n,
                             regions, regions_multidom, overlaps, envelopes, dom_n, doms_within_rep_thresh, doms_within_inc_thresh, hit_desc] = re.split('\s+', line)[0:19]
+                            """
 
-                        #                [query_id, hit_id, identity, aln_len, mismatches, gap_openings, q_beg, q_end, h_beg, h_end, e_value, bit_score] = line.split("\t")[0:12]
-                        #                identity = str(round(float(identity), 1))
-                        #                if identity == '100.0':  identity = '100'
+                            # use -domtbleout format
+                            #                [query_id, hit_id, identity, aln_len, mismatches, gap_openings, q_beg, q_end, h_beg, h_end, e_value, bit_score] = line.split("\t")[0:12]
+                            #                identity = str(round(float(identity), 1))
+                            #                if identity == '100.0':  identity = '100'
+                            [hit_seq_id,
+                             hit_accession,
+                             hit_seq_len,
+                             query_name,
+                             query_accession,
+                             query_model_len,
+                             hit_e_value_alldoms,
+                             hit_bitscore_alldoms,
+                             hit_bias_alldoms,
+                             hit_dom_n,
+                             hit_dom_total,
+                             hit_c_e_value_this_dom,
+                             hit_i_e_value_this_dom,
+                             hit_bitscore_this_dom,
+                             hit_bias_this_dom,
+                             query_beg_pos,
+                             query_end_pos,
+                             hit_beg_pos,
+                             hit_end_pos,
+                             envelope_beg_pos,
+                             envelope_end_pos,
+                             hit_acc_posterior_prob,
+                             hit_desc
+                            ] = re.split('\s+', line)[0:23]
+                        
+                            # get coords with respect to hit sequence and model
+                            h_len = int(hit_seq_len)
+                            h_beg = int(hit_beg_pos)
+                            h_end = int(hit_end_pos)
+                            e_beg = int(envelope_beg_pos)
+                            e_end = int(envelope_end_pos)
+                            q_len = int(query_model_len)
+                            q_beg = int(query_beg_pos)
+                            q_end = int(query_end_pos)
+                            aln_len = abs(q_end - q_beg) + 1
+                            aln_len_perc = round(100.0 * float(aln_len) / float(q_len), 1)
 
-                        # get coords with respect to hit sequence
-                        h_len = hit_seq_len[hit_id]
-                        h_beg = hit_beg[hit_id]
-                        h_end = hit_end[hit_id]
-                        aln_len = abs(h_end - h_beg) + 1
-                        aln_len_perc = round(100.0 * float(aln_len) / float(model_len[hmm_id]), 1)
+                            #if many_type_name == 'SingleEndLibrary':
+                            #    pass
+                            #elif many_type_name == 'SequenceSet':
+                            if many_type_name == 'SequenceSet':
+                                pass
+                            elif many_type_name == 'Genome' or \
+                                 many_type_name == 'AnnotatedMetagenomeAssembly' or \
+                                 many_type_name == 'GenomeSet' or \
+                                 many_type_name == 'FeatureSet':
+                                
+                                if 'Set' in many_type_name:
+                                    [genome_ref, hit_fid] = hit_seq_id.split(genome_id_feature_id_delim)
+                                else:
+                                    genome_ref = input_many_ref
+                                    hit_fid = hit_seq_id
 
-                        #if many_type_name == 'SingleEndLibrary':
-                        #    pass
-                        #elif many_type_name == 'SequenceSet':
-                        if many_type_name == 'SequenceSet':
-                            pass
-                        elif many_type_name == 'Genome' or \
-                                many_type_name == 'AnnotatedMetagenomeAssembly' or \
-                                many_type_name == 'GenomeSet' or \
-                                many_type_name == 'FeatureSet':
+                                # can't just use hit_fid because may have pipes translated and can't translate back
+                                fid_lookup = None
+                                for fid in feature_id_to_function[genome_ref].keys():
+                                    id_untrans = fid
+                                    id_trans = re.sub('\|', ':', id_untrans)
 
-                            if 'Set' in many_type_name:
-                                [genome_ref, hit_fid] = hit_id.split(genome_id_feature_id_delim)
-                            else:
-                                genome_ref = input_many_ref
-                                hit_fid = hit_id
+                                    #self.log (console, "SCANNING FIDS.  HIT_FID: '"+str(hit_fid)+"' FID: '"+str(fid)+"' TRANS: '"+str(id_trans)+"'")  # DEBUG
 
-                            # can't just use hit_fid because may have pipes translated and can't translate back
-                            fid_lookup = None
-                            for fid in feature_id_to_function[genome_ref].keys():
-                                id_untrans = fid
-                                id_trans = re.sub('\|', ':', id_untrans)
+                                    if id_untrans == hit_fid or id_trans == hit_fid:
+                                        #self.log (console, "GOT ONE!")  # DEBUG
+                                        if many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
+                                            accept_id = fid
+                                        elif many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
+                                            accept_id = genome_ref + genome_id_feature_id_delim + fid
+                                        if accept_id in accept_fids:
+                                            row_color = accept_row_color
+                                        else:
+                                            row_color = reject_row_color
+                                        fid_lookup = fid
+                                        break
+                                    #self.log (console, "HIT_FID: '"+str(hit_fid)+"' FID_LOOKUP: '"+str(fid_lookup)+"'")  # DEBUG
+                                if fid_lookup == None:
+                                    raise ValueError("unable to find fid for hit_fid: '" + str(hit_fid))
+                                elif fid_lookup not in feature_id_to_function[genome_ref]:
+                                    raise ValueError("unable to find function for fid: '" + str(fid_lookup))
+                                fid_disp = re.sub(r"^.*\.([^\.]+)\.([^\.]+)$", r"\1.\2", fid_lookup)
 
-                                #self.log (console, "SCANNING FIDS.  HIT_FID: '"+str(hit_fid)+"' FID: '"+str(fid)+"' TRANS: '"+str(id_trans)+"'")  # DEBUG
+                                func_disp = feature_id_to_function[genome_ref][fid_lookup]
 
-                                if id_untrans == hit_fid or id_trans == hit_fid:
-                                    #self.log (console, "GOT ONE!")  # DEBUG
-                                    if many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
-                                        accept_id = fid
-                                    elif many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
-                                        accept_id = genome_ref + genome_id_feature_id_delim + fid
-                                    if accept_id in accept_fids:
-                                        row_color = accept_row_color
-                                    else:
-                                        row_color = reject_row_color
-                                    fid_lookup = fid
-                                    break
-                            #self.log (console, "HIT_FID: '"+str(hit_fid)+"' FID_LOOKUP: '"+str(fid_lookup)+"'")  # DEBUG
-                            if fid_lookup == None:
-                                raise ValueError("unable to find fid for hit_fid: '" + str(hit_fid))
-                            elif fid_lookup not in feature_id_to_function[genome_ref]:
-                                raise ValueError("unable to find function for fid: '" + str(fid_lookup))
-                            fid_disp = re.sub(r"^.*\.([^\.]+)\.([^\.]+)$", r"\1.\2", fid_lookup)
+                                # set genome_disp_name
+                                if many_type_name == 'AnnotatedMetagenomeAssembly':
+                                    genome_disp_name = ama_ref_to_obj_name[genome_ref]
+                                else:
+                                    genome_obj_name = genome_ref_to_obj_name[genome_ref]
+                                    genome_sci_name = genome_ref_to_sci_name[genome_ref]
+                                    [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
+                                    genome_disp_name = ''
+                                    if 'obj_name' in params['genome_disp_name_config']:
+                                        genome_disp_name += genome_obj_name
+                                    if 'ver' in params['genome_disp_name_config']:
+                                        genome_disp_name += '.v'+str(genome_obj_version)
+                                    if 'sci_name' in params['genome_disp_name_config']:
+                                        genome_disp_name += ': '+genome_sci_name
 
-                            func_disp = feature_id_to_function[genome_ref][fid_lookup]
+                                # build html report table line
+                                html_report_chunk += ['<tr bgcolor="' + row_color + '">']
+                                #html_report_chunk += ['<tr bgcolor="'+'white'+'">']  # DEBUG
+                                # add overlap bar
 
-                            # set genome_disp_name
-                            if many_type_name == 'AnnotatedMetagenomeAssembly':
-                                genome_disp_name = ama_ref_to_obj_name[genome_ref]
-                            else:
-                                genome_obj_name = genome_ref_to_obj_name[genome_ref]
-                                genome_sci_name = genome_ref_to_sci_name[genome_ref]
-                                [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
-                                genome_disp_name = ''
-                                if 'obj_name' in params['genome_disp_name_config']:
-                                    genome_disp_name += genome_obj_name
-                                if 'ver' in params['genome_disp_name_config']:
-                                    genome_disp_name += '.v'+str(genome_obj_version)
-                                if 'sci_name' in params['genome_disp_name_config']:
-                                    genome_disp_name += ': '+genome_sci_name
+                                # coverage graphic (with respect to hit seq)
+                                html_report_chunk += ['<td valign=middle align=center style="border-right:solid 1px ' +
+                                                      border_body_color + '; border-bottom:solid 1px ' + border_body_color + '">']
+                                html_report_chunk += ['<table style="height:' + str(bar_height) + 'px; width:' + str(
+                                    bar_width) + 'px" border=0 cellpadding=0 cellspacing=0>']
+                                full_len_pos = bar_width
+                                aln_beg_pos = int(float(bar_width) * float(int(h_beg) - 1) / float(int(h_len) - 1))
+                                aln_end_pos = int(float(bar_width) * float(int(h_end) - 1) / float(int(h_len) - 1))
+                                cell_pix_height = str(int(round(float(bar_height) / 3.0, 0)))
 
-                            # build html report table line
-                            html_report_chunk += ['<tr bgcolor="' + row_color + '">']
-                            #html_report_chunk += ['<tr bgcolor="'+'white'+'">']  # DEBUG
-                            # add overlap bar
+                                cell_color = ['', '', '']
+                                cell_width = []
+                                cell_width.append(aln_beg_pos)
+                                cell_width.append(aln_end_pos - aln_beg_pos)
+                                cell_width.append(bar_width - aln_end_pos)
 
-                            # coverage graphic (with respect to hit seq)
-                            html_report_chunk += ['<td valign=middle align=center style="border-right:solid 1px ' +
-                                                  border_body_color + '; border-bottom:solid 1px ' + border_body_color + '">']
-                            html_report_chunk += ['<table style="height:' + str(bar_height) + 'px; width:' + str(
-                                bar_width) + 'px" border=0 cellpadding=0 cellspacing=0>']
-                            full_len_pos = bar_width
-                            aln_beg_pos = int(float(bar_width) * float(int(h_beg) - 1) / float(int(h_len) - 1))
-                            aln_end_pos = int(float(bar_width) * float(int(h_end) - 1) / float(int(h_len) - 1))
-                            cell_pix_height = str(int(round(float(bar_height) / 3.0, 0)))
+                                for row_i in range(3):
+                                    html_report_chunk += ['<tr style="height:' + cell_pix_height + 'px">']
+                                    unalign_color = row_color
+                                    if row_i == 1:
+                                        unalign_color = bar_line_color
+                                    cell_color[0] = unalign_color
+                                    cell_color[1] = bar_color
+                                    cell_color[2] = unalign_color
 
-                            cell_color = ['', '', '']
-                            cell_width = []
-                            cell_width.append(aln_beg_pos)
-                            cell_width.append(aln_end_pos - aln_beg_pos)
-                            cell_width.append(bar_width - aln_end_pos)
+                                    for col_i in range(3):
+                                        cell_pix_width = str(cell_width[col_i])
+                                        cell_pix_color = cell_color[col_i]
+                                        html_report_chunk += ['<td style="height:' + cell_pix_height +
+                                                              'px; width:' + cell_pix_width + 'px" bgcolor="' + cell_pix_color + '"></td>']
+                                    html_report_chunk += ['</tr>']
+                                html_report_chunk += ['</table>']
+                                html_report_chunk += ['</td>']
 
-                            for row_i in range(3):
-                                html_report_chunk += ['<tr style="height:' + cell_pix_height + 'px">']
-                                unalign_color = row_color
-                                if row_i == 1:
-                                    unalign_color = bar_line_color
-                                cell_color[0] = unalign_color
-                                cell_color[1] = bar_color
-                                cell_color[2] = unalign_color
+                                # add other cells
+                                # fid
+                                html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                                      border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + str(fid_disp) + '</font></td>']
+                                #                    html_report_chunk += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(hit_accession)+'</font></td>']
+                                # func
+                                html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                                      border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + func_disp + '</font></td>']
+                                # genome name
+                                html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                                      border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + genome_disp_name + '</font></td>']
+                                # ident
+                                #                    if 'ident_thresh' in filtering_fields[hit_id]:
+                                #                       this_cell_color = reject_cell_color
+                                #                   else:
+                                #                       this_cell_color = row_color
+                                #                   html_report_chunk += ['<td align=center bgcolor="'+this_cell_color+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(identity)+'%</font></td>']
 
-                                for col_i in range(3):
-                                    cell_pix_width = str(cell_width[col_i])
-                                    cell_pix_color = cell_color[col_i]
-                                    html_report_chunk += ['<td style="height:' + cell_pix_height +
-                                                          'px; width:' + cell_pix_width + 'px" bgcolor="' + cell_pix_color + '"></td>']
+                                # aln len
+                                if 'model_cov_perc' in filtering_fields[hit_seq_id]:
+                                    this_cell_color = reject_cell_color
+                                else:
+                                    this_cell_color = row_color
+                                html_report_chunk += ['<td align=center bgcolor="' + str(this_cell_color) + '" style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                                      border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + str(aln_len) + ' (' + str(aln_len_perc) + '%)</font></td>']
+
+                                # evalue
+                                html_report_chunk += ['<td align=center style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                                      border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(hit_i_e_value_this_dom) + '</nobr></font></td>']
+
+                                # bit score
+                                if 'bitscore' in filtering_fields[hit_seq_id]:
+                                    this_cell_color = reject_cell_color
+                                else:
+                                    this_cell_color = row_color
+                                html_report_chunk += ['<td align=center bgcolor="' + str(this_cell_color) + '" style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
+                                                      border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(hit_bitscore_this_dom) + '</nobr></font></td>']
+                                # bias
+                                #                    html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bias)+'</nobr><br><nobr>('+str(bias_best_dom)+')</nobr></font></td>']
+
+                                # aln coords only for hit seq
+                                html_report_chunk += ['<td align=center style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' + border_body_color +
+                                                      '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(h_beg) + '-' + str(h_end) + '</nobr></font></td>']
+
+                                # close chunk
                                 html_report_chunk += ['</tr>']
-                            html_report_chunk += ['</table>']
-                            html_report_chunk += ['</td>']
 
-                            # add other cells
-                            # fid
-                            html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
-                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + str(fid_disp) + '</font></td>']
-                            #                    html_report_chunk += ['<td style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(hit_accession)+'</font></td>']
-                            # func
-                            html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
-                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + func_disp + '</font></td>']
-                            # genome name
-                            html_report_chunk += ['<td style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
-                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + genome_disp_name + '</font></td>']
-                            # ident
-                            #                    if 'ident_thresh' in filtering_fields[hit_id]:
-                            #                       this_cell_color = reject_cell_color
-                            #                   else:
-                            #                       this_cell_color = row_color
-     #                   html_report_chunk += ['<td align=center bgcolor="'+this_cell_color+'" style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'>'+str(identity)+'%</font></td>']
-
-                            # aln len
-                            if 'model_cov_perc' in filtering_fields[hit_id]:
-                                this_cell_color = reject_cell_color
-                            else:
-                                this_cell_color = row_color
-                            html_report_chunk += ['<td align=center bgcolor="' + str(this_cell_color) + '" style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
-                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + str(aln_len) + ' (' + str(aln_len_perc) + '%)</font></td>']
-
-                            # evalue
-                            html_report_chunk += ['<td align=center style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
-                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(e_value) + '</nobr></font></td>']
-
-                            # bit score
-                            if 'bitscore' in filtering_fields[hit_id]:
-                                this_cell_color = reject_cell_color
-                            else:
-                                this_cell_color = row_color
-                            html_report_chunk += ['<td align=center bgcolor="' + str(this_cell_color) + '" style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' +
-                                                  border_body_color + '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(bit_score) + '</nobr></font></td>']
-                            # bias
-                            #                    html_report_chunk += ['<td align=center style="border-right:solid 1px '+border_body_color+'; border-bottom:solid 1px '+border_body_color+'"><font color="'+text_color+'" size='+text_fontsize+'><nobr>'+str(bias)+'</nobr><br><nobr>('+str(bias_best_dom)+')</nobr></font></td>']
-
-                            # aln coords only for hit seq
-                            html_report_chunk += ['<td align=center style="border-right:solid 1px ' + border_body_color + '; border-bottom:solid 1px ' + border_body_color +
-                                                  '"><font color="' + text_color + '" size=' + text_fontsize + '><nobr>' + str(h_beg) + '-' + str(h_end) + '</nobr></font></td>']
-
-                            # close chunk
-                            html_report_chunk += ['</tr>']
-
+                                
                     # attach chunk
                     if hmm_id not in total_hit_cnts:
                         self.log(console, "MODEL "+hmm_id+" NOT REQUESTED.  NOT ADDING TO HTML HIT REPORT.")
@@ -4920,6 +4914,7 @@ class kb_hmmer:
                     html_report_chunks[hmm_i] = html_report_chunk_str
                     #self.log(console, "HTML_REPORT_CHUNK: '"+str(html_report_chunk_str)+"'")  # DEBUG
 
+# HERE                    
             #### Create and Upload output objects if coalesce_output is true
             ##
             if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
@@ -5063,7 +5058,7 @@ class kb_hmmer:
                 html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
                                       border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'ALN_LEN' + '</font></td>']
                 html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
-                                      border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'E-VALUE' + '</font></td>']
+                                      border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'i-EVALUE' + '</font></td>']
                 html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +
                                       border_head_color + '"><font color="' + text_color + '" size=' + text_fontsize + '>' + 'BIT SCORE' + '</font></td>']
                 html_report_lines += ['<td align=center  style="border-right:solid 2px ' + border_head_color + '; border-bottom:solid 2px ' +

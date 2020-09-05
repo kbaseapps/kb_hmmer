@@ -6,7 +6,6 @@ __Changes__
 - DEBUGGING added descriptions to dbCAN HMMs in key and link to key from column title
 - DEBUGGING added option to dbCAN to save hits to explicitly requested or ALL models in a category
 - DEBUGGING changed gene overlap_perc to model_cov_perc
-- PENDING added hit overlap config and rules to allow multiple non-overlapping hits to same gene
 - PENDING create DomainAnnotation object
 - PENDING added HMM-specific thresholds in config
 - PENDING added genes hit to rollover behavior in report
