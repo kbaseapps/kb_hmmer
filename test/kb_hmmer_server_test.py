@@ -100,7 +100,6 @@ class kb_hmmerTest(unittest.TestCase):
 
         # Upload a few genomes
         cls.genome_refs = []
-#        for i,genome_filename in enumerate(['GCF_000018425.1_ASM1842v1_genomic.gbff']):  # DEBUG
         for i,genome_filename in enumerate(['GCF_000018425.1_ASM1842v1_genomic.gbff', \
                                             'GCF_000022285.1_ASM2228v1_genomic.gbff', \
                                             'GCF_001439985.1_wTPRE_1.0_genomic.gbff', \
@@ -108,7 +107,7 @@ class kb_hmmerTest(unittest.TestCase):
                                             'GCF_000164865.1_ASM16486v1_genomic.gbff']):
                                             #'GCF_000287295.1_ASM28729v1_genomic.gbff', \
                                             #'GCF_000306885.1_ASM30688v1_genomic.gbff', \
-
+        #for i,genome_filename in enumerate(['GCF_000018425.1_ASM1842v1_genomic.gbff']):  # DEBUG
             print ("prepare_data(): UPLOADING GENOME: "+genome_filename)  # DEBUG
             genome_file_path = os.path.join(cls.scratch, genome_filename)
             shutil.copy(os.path.join("data", "genomes", genome_filename), genome_file_path)
@@ -146,6 +145,7 @@ class kb_hmmerTest(unittest.TestCase):
                                                   }]
                                           })[0]
         cls.genomeSet_refs.append(str(obj_info[WSID_I]) +'/'+ str(obj_info[OBJID_I]) +'/'+ str(obj_info[VERSION_I]))
+
 
         # Upload a test Annotated Metagenome Assembly
         cls.ama_refs = []
@@ -212,6 +212,7 @@ class kb_hmmerTest(unittest.TestCase):
                     ]})[0]
                 cls.MSA_refs.append(str(MSA_info[WSID_I])+'/'+str(MSA_info[OBJID_I])+'/'+str(MSA_info[VERSION_I]))
 
+                
     #
     # NOTE: According to Python unittest naming rules test method names should start from 'test'.
     #
@@ -1027,26 +1028,92 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params
         parameters = { 'workspace_name': self.getWsName(),
-                       'input_env-bioelement_S_ids': [],
-                       'input_env-bioelement_O_ids': [],
-                       'input_env-bioelement_CH4_ids': [],
-                       'input_env-bioelement_CFix_ids': [],
-                       'input_env-bioelement_CMono_ids': [],
-                       'input_env-bioelement_C1_ids': [],
-                       'input_env-bioelement_H_ids': [],
-                       'input_env-bioelement_Halo_ids': [],
-                       'input_env-bioelement_As_ids': [],
-                       'input_env-bioelement_Se_ids': [],
-                       'input_env-bioelement_Ur_ids': [],
-                       'input_env-bioelement_Me_ids': [],
-                       'input_env-bioelement_CN_ids': [],
+                       'input_EnvBioelement_Nitrogen_ids': ['ALL'],
+                       'input_EnvBioelement_Hydrogen_ids': ['ALL'],
+                       'input_EnvBioelement_Oxygen_ids': ['ALL'],
+                       'input_EnvBioelement_CarbonFixation_ids': ['ALL'],
+                       'input_EnvBioelement_C1Compounds_ids': ['ALL'],
+                       'input_EnvBioelement_Methane_ids': ['ALL'],
+                       'input_EnvBioelement_CarbonMonoxide_ids': ['ALL'],
+                       'input_EnvBioelement_Sulfur_ids': ['ALL'],
+                       'input_EnvBioelement_Nitriles_ids': ['ALL'],
+                       'input_EnvBioelement_Urea_ids': ['ALL'],
+                       'input_EnvBioelement_Selenium_ids': ['ALL'],
+                       'input_EnvBioelement_Metals_ids': ['ALL'],
+                       'input_EnvBioelement_Arsenic_ids': ['ALL'],
+                       'input_EnvBioelement_HalogenatedCompounds_ids': ['ALL'],
                        'input_many_ref': self.genome_refs[3],  # Single Genome
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,
+                       'save_ALL_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
-                       'overlap_fraction': "50.0",
+                       'model_cov_perc': "35.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'low_val': "detect",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_EnvBioelement_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created obj
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 13_02: envbioelement Models against Single AMA
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_13_02_kb_hmmer_HMMER_envbioelement_Search_AMA()")
+    def test_13_02_kb_hmmer_HMMER_envbioelement_Search_AMA(self):
+        test_name = 'test_13_02_kb_hmmer_HMMER_envbioelement_Search_AMA'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_EnvBioelement_Nitrogen_ids': ['ALL'],
+                       'input_EnvBioelement_Hydrogen_ids': ['ALL'],
+                       'input_EnvBioelement_Oxygen_ids': ['ALL'],
+                       'input_EnvBioelement_CarbonFixation_ids': ['ALL'],
+                       'input_EnvBioelement_C1Compounds_ids': ['ALL'],
+                       'input_EnvBioelement_Methane_ids': ['ALL'],
+                       'input_EnvBioelement_CarbonMonoxide_ids': ['ALL'],
+                       'input_EnvBioelement_Sulfur_ids': ['ALL'],
+                       'input_EnvBioelement_Nitriles_ids': ['ALL'],
+                       'input_EnvBioelement_Urea_ids': ['ALL'],
+                       'input_EnvBioelement_Selenium_ids': ['ALL'],
+                       'input_EnvBioelement_Metals_ids': ['ALL'],
+                       'input_EnvBioelement_Arsenic_ids': ['ALL'],
+                       'input_EnvBioelement_HalogenatedCompounds_ids': ['ALL'],
+                       'input_many_ref': self.ama_refs[0],  # Single AMA
+                       'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
+                       'coalesce_output': 0,
+                       'save_ALL_featureSets': 1,
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'model_cov_perc': "35.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'low_val': "detect",
@@ -1089,26 +1156,27 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params
         parameters = { 'workspace_name': self.getWsName(),
-                       'input_env-bioelement_S_ids': [],
-                       'input_env-bioelement_O_ids': [],
-                       'input_env-bioelement_CH4_ids': [],
-                       'input_env-bioelement_CFix_ids': [],
-                       'input_env-bioelement_CMono_ids': [],
-                       'input_env-bioelement_C1_ids': [],
-                       'input_env-bioelement_H_ids': [],
-                       'input_env-bioelement_Halo_ids': [],
-                       'input_env-bioelement_As_ids': [],
-                       'input_env-bioelement_Se_ids': [],
-                       'input_env-bioelement_Ur_ids': [],
-                       'input_env-bioelement_Me_ids': [],
-                       'input_env-bioelement_CN_ids': [],
+                       'input_EnvBioelement_Nitrogen_ids': ['ALL'],
+                       'input_EnvBioelement_Hydrogen_ids': ['ALL'],
+                       'input_EnvBioelement_Oxygen_ids': ['ALL'],
+                       'input_EnvBioelement_CarbonFixation_ids': ['ALL'],
+                       'input_EnvBioelement_C1Compounds_ids': ['ALL'],
+                       'input_EnvBioelement_Methane_ids': ['ALL'],
+                       'input_EnvBioelement_CarbonMonoxide_ids': ['ALL'],
+                       'input_EnvBioelement_Sulfur_ids': ['ALL'],
+                       'input_EnvBioelement_Nitriles_ids': ['ALL'],
+                       'input_EnvBioelement_Urea_ids': ['ALL'],
+                       'input_EnvBioelement_Selenium_ids': ['ALL'],
+                       'input_EnvBioelement_Metals_ids': ['ALL'],
+                       'input_EnvBioelement_Arsenic_ids': ['ALL'],
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,  # KEY
+                       'save_ALL_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
-                       'overlap_fraction': "50.0",
+                       'model_cov_perc': "35.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'low_val': "1",
@@ -1151,26 +1219,27 @@ class kb_hmmerTest(unittest.TestCase):
 
         # app run params
         parameters = { 'workspace_name': self.getWsName(),
-                       'input_env-bioelement_S_ids': [],
-                       'input_env-bioelement_O_ids': [],
-                       'input_env-bioelement_CH4_ids': [],
-                       'input_env-bioelement_CFix_ids': [],
-                       'input_env-bioelement_CMono_ids': [],
-                       'input_env-bioelement_C1_ids': [],
-                       'input_env-bioelement_H_ids': [],
-                       'input_env-bioelement_Halo_ids': [],
-                       'input_env-bioelement_As_ids': [],
-                       'input_env-bioelement_Se_ids': [],
-                       'input_env-bioelement_Ur_ids': [],
-                       'input_env-bioelement_Me_ids': [],
-                       'input_env-bioelement_CN_ids': [],
+                       'input_EnvBioelement_Nitrogen_ids': ['ALL'],
+                       'input_EnvBioelement_Hydrogen_ids': ['ALL'],
+                       'input_EnvBioelement_Oxygen_ids': ['ALL'],
+                       'input_EnvBioelement_CarbonFixation_ids': ['ALL'],
+                       'input_EnvBioelement_C1Compounds_ids': ['ALL'],
+                       'input_EnvBioelement_Methane_ids': ['ALL'],
+                       'input_EnvBioelement_CarbonMonoxide_ids': ['ALL'],
+                       'input_EnvBioelement_Sulfur_ids': ['ALL'],
+                       'input_EnvBioelement_Nitriles_ids': ['ALL'],
+                       'input_EnvBioelement_Urea_ids': ['ALL'],
+                       'input_EnvBioelement_Selenium_ids': ['ALL'],
+                       'input_EnvBioelement_Metals_ids': ['ALL'],
+                       'input_EnvBioelement_Arsenic_ids': ['ALL'],
                        'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 1,  # KEY
+                       'save_ALL_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
-                       'overlap_fraction': "50.0",
+                       'model_cov_perc': "35.0",
                        'maxaccepts': "1000",
                        'heatmap': "1",
                        'low_val': "0.1",

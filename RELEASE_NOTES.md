@@ -5,7 +5,8 @@ __Changes__
 - DEBUGGING updated dbCAN defaults to match dbCAN2 server E-Value < 1e-15, coverage > 0.35
 - DEBUGGING added descriptions to dbCAN HMMs in key and link to key from column title
 - DEBUGGING added option to dbCAN to save hits to explicitly requested or ALL models in a category
-- PENDING added overlap config and rules to allow multiple non-overlapping hits to same gene
+- DEBUGGING changed gene overlap_perc to model_cov_perc
+- DEBUGGING made addition of new model groups much easier
 - PENDING create DomainAnnotation object
 - PENDING added HMM-specific thresholds in config
 - PENDING added genes hit to rollover behavior in report

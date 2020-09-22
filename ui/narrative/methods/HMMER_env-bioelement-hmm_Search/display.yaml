@@ -27,76 +27,6 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
-    input_env-bioelement_N_ids:
-        ui-name : |
-            Nitrogen - N (default: ALL)
-        short-hint : |
-            Select HMMs for Nitrogen Bioelement Families, or will use ALL if left blank
-    input_env-bioelement_S_ids:
-        ui-name : |
-            Sulfur - S (default: ALL)
-        short-hint : |
-            Select HMMs for Sulfur Bioelement Families, or will use ALL if left blank
-    input_env-bioelement_O_ids:
-        ui-name : |
-            Oxygen - O (default: ALL)
-        short-hint : |
-            Select HMMs for Oxygen Bioelement Families, or will use ALL if left blank
-    input_env-bioelement_CH4_ids:
-        ui-name : |
-            Methane - CH4 (default: ALL)
-        short-hint : |
-            Select HMMs for Methane Bioelement Families, or will use ALL if left blank
-    input_env-bioelement_CFix_ids:
-        ui-name : |
-            Carbon Fixation - CFix (default: ALL)
-        short-hint : |
-            Select HMMs for Carbon Fixation Bioelement Families, or will use ALL if left blank
-    input_env-bioelement_CMono_ids:
-        ui-name : |
-            Carbon Monoxide - CMono (default: ALL)
-        short-hint : |
-            Select HMMs for Carbon Monoxide Bioelement Families, or will use ALL if left blank
-    input_env-bioelement_C1_ids:
-        ui-name : |
-            C1 Compounds - C1 (default: ALL)
-        short-hint : |
-            Select HMMs for C1 Compound Bioelement Families, or will use ALL if left blank
-    input_env-bioelement_H_ids:
-        ui-name : |
-            Hydrogen - H (default: ALL)
-        short-hint : |
-            Select HMMs for Hydrogen Bioelement Families, or will use ALL if left blank
-    input_env-bioelement_Halo_ids:
-        ui-name : |
-            Halogenated Compounds - Halo (default: ALL)
-        short-hint : |
-            Select HMMs for Halogenated Compound Bioelement Families, or will use ALL if left blank
-    input_env-bioelement_As_ids:
-        ui-name : |
-            Arsenic - As (default: ALL)
-        short-hint : |
-            Select HMMs for Arsenic Bioelement Families, or will use ALL if left blank
-    input_env-bioelement_Se_ids:
-        ui-name : |
-            Selenium - Se (default: ALL)
-        short-hint : |
-            Select HMMs for Nitrogen Bioelement Families, or will use ALL if left blank
-    input_env-bioelement_Ur_ids:
-        ui-name : |
-            Urea - Ur (default: ALL)
-        short-hint : |
-            Select HMMs for Urea Bioelement Families, or will use ALL if left blank
-    input_env-bioelement_Me_ids:
-        ui-name : |
-            Metal - Me (default: ALL)
-        short-hint : |
-            Select HMMs for Metal Bioelement Families, or will use ALL if left blank
-    input_env-bioelement_CN_ids:
-        ui-name : |
-            Nitrile - CN (default: ALL)
-        short-hint : |
-            Select HMMs for Nitrile Bioelement Families, or will use ALL if left blank
     input_many_ref:
         ui-name : |
             Targets Object
@@ -107,16 +37,86 @@ parameters :
             Display genome as
         short-hint : |
             Use the object name, object version, and/or scientific name of the Genome in the function profile report
+    input_EnvBioelement_Nitrogen_ids:
+        ui-name : |
+            Nitrogen - N (default: None)
+        short-hint : |
+            Select HMMs for Nitrogen Bioelement Families, or will use None if left blank
+    input_EnvBioelement_Hydrogen_ids:
+        ui-name : |
+            Hydrogen - H (default: None)
+        short-hint : |
+            Select HMMs for Hydrogen Bioelement Families, or will use None if left blank
+    input_EnvBioelement_Oxygen_ids:
+        ui-name : |
+            Oxygen - O (default: None)
+        short-hint : |
+            Select HMMs for Oxygen Bioelement Families, or will use None if left blank
+    input_EnvBioelement_CarbonFixation_ids:
+        ui-name : |
+            Carbon Fixation - CFix (default: None)
+        short-hint : |
+            Select HMMs for Carbon Fixation Bioelement Families, or will use None if left blank
+    input_EnvBioelement_C1Compounds_ids:
+        ui-name : |
+            C1 Compounds - C1 (default: None)
+        short-hint : |
+            Select HMMs for C1 Compound Bioelement Families, or will use None if left blank
+    input_EnvBioelement_Methane_ids:
+        ui-name : |
+            Methane - CH4 (default: None)
+        short-hint : |
+            Select HMMs for Methane Bioelement Families, or will use None if left blank
+    input_EnvBioelement_CarbonMonoxide_ids:
+        ui-name : |
+            Carbon Monoxide - CMono (default: None)
+        short-hint : |
+            Select HMMs for Carbon Monoxide Bioelement Families, or will use None if left blank
+    input_EnvBioelement_Sulfur_ids:
+        ui-name : |
+            Sulfur - S (default: None)
+        short-hint : |
+            Select HMMs for Sulfur Bioelement Families, or will use None if left blank
+    input_EnvBioelement_Nitriles_ids:
+        ui-name : |
+            Nitrile - CN (default: None)
+        short-hint : |
+            Select HMMs for Nitrile Bioelement Families, or will use None if left blank
+    input_EnvBioelement_Urea_ids:
+        ui-name : |
+            Urea - Ur (default: None)
+        short-hint : |
+            Select HMMs for Urea Bioelement Families, or will use None if left blank
+    input_EnvBioelement_Selenium_ids:
+        ui-name : |
+            Selenium - Se (default: None)
+        short-hint : |
+            Select HMMs for Selenium Bioelement Families, or will use None if left blank
+    input_EnvBioelement_Metals_ids:
+        ui-name : |
+            Metal - Me (default: None)
+        short-hint : |
+            Select HMMs for Metal Bioelement Families, or will use None if left blank
+    input_EnvBioelement_Arsenic_ids:
+        ui-name : |
+            Arsenic - As (default: None)
+        short-hint : |
+            Select HMMs for Arsenic Bioelement Families, or will use None if left blank
+    input_EnvBioelement_HalogenatedCompounds_ids:
+        ui-name : |
+            Halogenated Compounds - Halo (default: None)
+        short-hint : |
+            Select HMMs for Halogenated Compound Bioelement Families, or will use None if left blank
     output_filtered_name:
         ui-name : |
             Output FeatureSet basename
         short-hint : |
             FeatureSets containing hits within thresholds.  Object names will be HMM name attached to configured basename.
-    coalesce_output:
+    save_ALL_featureSets:
         ui-name : |
-            Coalesce output
+            Save ALL featureSets
         short-hint : |
-            Combine output for each env-bioelement category (N, S, O, CH4, CFix, CMono, C1, H, Halo, As, Se, Ur, Me, CN) into one object instead of splitting into a separate object per HMM Search
+            Rather than just creating featureSets for explicitly requested models, save every model in a category (N, S, O, CH4, CFix, CMono, C1, H, Halo, As, Se, Ur, Me, CN) for which 'ALL' models were used to search
     e_value:
         ui-name : |
             E-value
@@ -127,11 +127,11 @@ parameters :
             Bit Score
         short-hint : |
             threshold for hits
-    overlap_perc:
+    model_cov_perc:
         ui-name : |
-            Alignment Overlap Threshold (%)
+            Model coverage minimum(%)
         short-hint : |
-            overlap threshold is with respect to hit sequence length
+            The minimum coverage of the model length for a given hit
     maxaccepts:
         ui-name : |
             Max Accepts

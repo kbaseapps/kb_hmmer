@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "genome_disp_name_config",
     "e_value",
     "bitscore",
-    "overlap_perc",
+    "model_cov_perc",
     "maxaccepts"
 })
 public class HMMERParams {
@@ -47,8 +47,8 @@ public class HMMERParams {
     private Double eValue;
     @JsonProperty("bitscore")
     private Double bitscore;
-    @JsonProperty("overlap_perc")
-    private Double overlapPerc;
+    @JsonProperty("model_cov_perc")
+    private Double modelCovPerc;
     @JsonProperty("maxaccepts")
     private Double maxaccepts;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -158,18 +158,18 @@ public class HMMERParams {
         return this;
     }
 
-    @JsonProperty("overlap_perc")
-    public Double getOverlapPerc() {
-        return overlapPerc;
+    @JsonProperty("model_cov_perc")
+    public Double getModelCovPerc() {
+        return modelCovPerc;
     }
 
-    @JsonProperty("overlap_perc")
-    public void setOverlapPerc(Double overlapPerc) {
-        this.overlapPerc = overlapPerc;
+    @JsonProperty("model_cov_perc")
+    public void setModelCovPerc(Double modelCovPerc) {
+        this.modelCovPerc = modelCovPerc;
     }
 
-    public HMMERParams withOverlapPerc(Double overlapPerc) {
-        this.overlapPerc = overlapPerc;
+    public HMMERParams withModelCovPerc(Double modelCovPerc) {
+        this.modelCovPerc = modelCovPerc;
         return this;
     }
 
@@ -200,7 +200,7 @@ public class HMMERParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((("HMMERParams"+" [workspaceName=")+ workspaceName)+", inputManyRef=")+ inputManyRef)+", inputMsaRef=")+ inputMsaRef)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", overlapPerc=")+ overlapPerc)+", maxaccepts=")+ maxaccepts)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((("HMMERParams"+" [workspaceName=")+ workspaceName)+", inputManyRef=")+ inputManyRef)+", inputMsaRef=")+ inputMsaRef)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", modelCovPerc=")+ modelCovPerc)+", maxaccepts=")+ maxaccepts)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

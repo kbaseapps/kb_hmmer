@@ -1,0 +1,14 @@
+Nitrogen	filler	filler
+Hydrogen	filler	filler
+Oxygen	filler	filler
+CarbonFixation	filler	filler
+C1Compounds	filler	filler
+Methane	filler	filler
+CarbonMonoxide	filler	filler
+Sulfur	filler	filler
+Nitriles	filler	filler
+Urea	filler	filler
+Selenium	filler	filler
+Metals	filler	filler
+Arsenic	filler	filler
+HalogenatedCompounds	filler	filler

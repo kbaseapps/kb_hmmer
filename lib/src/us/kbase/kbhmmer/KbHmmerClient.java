@@ -172,7 +172,7 @@ public class KbHmmerClient {
      * **
      * **    overloading as follows:
      * **        input_msa_ref: MSA
-     * **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+     * **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SequenceSet deactivated)
      * **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
      * </pre>
      * @param   params   instance of type {@link us.kbase.kbhmmer.HMMERParams HMMERParams} (original type "HMMER_Params")
@@ -194,7 +194,7 @@ public class KbHmmerClient {
      * Method for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
      * **
      * **    overloading as follows:
-     * **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+     * **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SeqeuenceSet deactivated)
      * **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
      * </pre>
      * @param   params   instance of type {@link us.kbase.kbhmmer.HMMERLocalMSAGroupParams HMMERLocalMSAGroupParams} (original type "HMMER_Local_MSA_Group_Params")
@@ -216,7 +216,7 @@ public class KbHmmerClient {
      * Method for HMMER search of dbCAN Markov Models of CAZy families
      * **
      * **    overloading as follows:
-     * **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+     * **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SequenceSet deactivated)
      * **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
      * </pre>
      * @param   params   instance of type {@link us.kbase.kbhmmer.HMMERDbCANParams HMMERDbCANParams} (original type "HMMER_dbCAN_Params")
@@ -238,7 +238,7 @@ public class KbHmmerClient {
      * Method for HMMER search of Markov Models of environmental bioelement families
      * **
      * **    overloading as follows:
-     * **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+     * **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SeqquenceSet deactivated)
      * **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
      * </pre>
      * @param   params   instance of type {@link us.kbase.kbhmmer.HMMEREnvBioelementParams HMMEREnvBioelementParams} (original type "HMMER_EnvBioelement_Params")
