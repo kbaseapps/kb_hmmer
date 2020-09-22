@@ -175,7 +175,7 @@ Method for HMMER search of an MSA against many sequences
 **
 **    overloading as follows:
 **        input_msa_ref: MSA
-**        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+**        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SequenceSet deactivated)
 **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
 
 =back
@@ -305,7 +305,7 @@ HMMER_Output is a reference to a hash where the following keys are defined:
 Method for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
 **
 **    overloading as follows:
-**        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+**        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SeqeuenceSet deactivated)
 **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
 
 =back
@@ -449,7 +449,7 @@ HMMER_Output is a reference to a hash where the following keys are defined:
 Method for HMMER search of dbCAN Markov Models of CAZy families
 **
 **    overloading as follows:
-**        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+**        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SequenceSet deactivated)
 **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
 
 =back
@@ -519,27 +519,28 @@ $params is a kb_hmmer.HMMER_EnvBioelement_Params
 $return is a kb_hmmer.HMMER_Output
 HMMER_EnvBioelement_Params is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_hmmer.workspace_name
-	input_env-bioelement_N_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_S_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_O_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_CH4_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_CFix_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_CMono_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_C1_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_H_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_As_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_Se_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_Ur_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_Me_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_CN_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Nitrogen_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Hydrogen_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Oxygen_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CarbonFixation_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_C1Compounds_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Methane_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CarbonMonoxide_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Sulfur_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Nitriles_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Urea_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Selenium_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Metals_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Arsenic_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_HalogenatedCompounds_ids has a value which is a kb_hmmer.data_obj_ref
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
 	coalesce_output has a value which is a kb_hmmer.bool
+	save_ALL_featureSets has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
-	overlap_perc has a value which is a float
+	model_cov_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
 	low_val has a value which is a kb_hmmer.bool
@@ -563,27 +564,28 @@ $params is a kb_hmmer.HMMER_EnvBioelement_Params
 $return is a kb_hmmer.HMMER_Output
 HMMER_EnvBioelement_Params is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_hmmer.workspace_name
-	input_env-bioelement_N_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_S_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_O_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_CH4_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_CFix_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_CMono_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_C1_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_H_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_As_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_Se_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_Ur_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_Me_ids has a value which is a kb_hmmer.data_obj_ref
-	input_env-bioelement_CN_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Nitrogen_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Hydrogen_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Oxygen_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CarbonFixation_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_C1Compounds_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Methane_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CarbonMonoxide_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Sulfur_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Nitriles_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Urea_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Selenium_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Metals_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Arsenic_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_HalogenatedCompounds_ids has a value which is a kb_hmmer.data_obj_ref
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
 	coalesce_output has a value which is a kb_hmmer.bool
+	save_ALL_featureSets has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
-	overlap_perc has a value which is a float
+	model_cov_perc has a value which is a float
 	maxaccepts has a value which is a float
 	heatmap has a value which is a kb_hmmer.bool
 	low_val has a value which is a kb_hmmer.bool
@@ -605,7 +607,7 @@ HMMER_Output is a reference to a hash where the following keys are defined:
 Method for HMMER search of Markov Models of environmental bioelement families
 **
 **    overloading as follows:
-**        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+**        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SeqquenceSet deactivated)
 **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
 
 =back
@@ -1130,27 +1132,28 @@ HMMER EnvBioelement Input Params
 <pre>
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_hmmer.workspace_name
-input_env-bioelement_N_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_S_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_O_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_CH4_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_CFix_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_CMono_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_C1_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_H_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_As_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_Se_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_Ur_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_Me_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_CN_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Nitrogen_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Hydrogen_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Oxygen_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CarbonFixation_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_C1Compounds_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Methane_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CarbonMonoxide_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Sulfur_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Nitriles_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Urea_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Selenium_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Metals_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Arsenic_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_HalogenatedCompounds_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool
+save_ALL_featureSets has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
-overlap_perc has a value which is a float
+model_cov_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
 low_val has a value which is a kb_hmmer.bool
@@ -1165,27 +1168,28 @@ show_blanks has a value which is a kb_hmmer.bool
 
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_hmmer.workspace_name
-input_env-bioelement_N_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_S_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_O_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_CH4_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_CFix_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_CMono_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_C1_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_H_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_As_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_Se_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_Ur_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_Me_ids has a value which is a kb_hmmer.data_obj_ref
-input_env-bioelement_CN_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Nitrogen_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Hydrogen_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Oxygen_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CarbonFixation_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_C1Compounds_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Methane_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CarbonMonoxide_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Sulfur_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Nitriles_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Urea_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Selenium_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Metals_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Arsenic_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_HalogenatedCompounds_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool
+save_ALL_featureSets has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
-overlap_perc has a value which is a float
+model_cov_perc has a value which is a float
 maxaccepts has a value which is a float
 heatmap has a value which is a kb_hmmer.bool
 low_val has a value which is a kb_hmmer.bool

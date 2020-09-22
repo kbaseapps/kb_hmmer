@@ -16,7 +16,7 @@ while (<ID_LIST_FILE>) {
     print "$ind_1\{\n";
     print "$ind\"value\": \"$id\",\n";
     print "$ind\"display\": \"$cat_name - $id\",\n";
-    print "$ind\"id\": \"env-bioelement_".$cat."_".$id."\",\n";
-    print "$ind\"ui-name\": \"env-bioelement_".$cat."_".$id."\"\n";
+    print "$ind\"id\": \"EnvBioelement_".$cat."_".$id."\",\n";
+    print "$ind\"ui-name\": \"EnvBioelement_".$cat."_".$id."\"\n";
     print "$ind_1\},\n";
 }

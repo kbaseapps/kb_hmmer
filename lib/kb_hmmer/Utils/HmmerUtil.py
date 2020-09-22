@@ -49,17 +49,6 @@ class HmmerUtil:
     #HMMER_SCAN       = '/kb/module/hmmer/binaries/hmmscan'  # scan prot sequence(s) against protein profile db
     #HMMER_NSCAN       = '/kb/module/hmmer/binaries/nhmmscan'  # scan nuc sequence(s) against nuc profile db
 
-    # dbCAN CAZy search App
-    dbCAN_version = 'v8'
-    dbCAN_HMMS_DIR = os.path.join(os.sep, 'kb', 'module', 'data', 'dbCAN', 'dbCAN-' + dbCAN_version)
-    dbCAN_HMMS_PATH = os.path.join(dbCAN_HMMS_DIR, 'dbCAN-fam-HMMs.txt.' + dbCAN_version)
-
-
-    # EnvBioelement search App
-    envbioelement_version = 'v1'
-    envbioelement_HMMS_DIR = os.path.join(os.sep, 'kb', 'module', 'data', 'EnvBioelement', 'EnvBioelement-' + envbioelement_version)
-    envbioelement_HMMS_PATH = os.path.join(envbioelement_HMMS_DIR, 'env-bioelement-fam-HMMs.txt.' + envbioelement_version)
-
 
     # config contains contents of config file in a hash or None if it couldn't
     # be found
@@ -122,7 +111,88 @@ class HmmerUtil:
         else:
             [genome_ref, feature_id] = hit_id.split(genome_id_feature_id_delim)
         return [genome_ref, feature_id]
+
+    # read model group version
+    def _get_version(self, this_model_group, this_model_group_data_dir):
+        this_version = None
+        this_version_file = os.path.join(this_model_group_data_dir,this_model_group+'.version')
+        if not os.path.exists(this_version_file):
+            raise ValueError ("ABORT: missing version file "+this_version_file)
+        with open (this_version_file, 'r') as version_handle:
+            for version_line in version_handle.readlines():
+                version_line = version_line.strip()
+                if len(version_line) == 0:
+                    continue
+                if version_line.startswith('#'):
+                    continue
+                this_version = version_line
+                break
+        if this_version == None:
+            raise ValueError ("ABORT: No version found in file "+this_version_file)
+        return this_version
     
+
+    # read model group disp name
+    def _get_disp_name(self, this_model_group, this_model_group_data_dir):
+        this_disp_name = None
+        this_disp_name_file = os.path.join(this_model_group_data_dir,this_model_group+'.display_name')
+        if not os.path.exists(this_disp_name_file):
+            raise ValueError ("ABORT: missing display name file "+this_disp_name_file)
+        with open (this_disp_name_file, 'r') as disp_name_handle:
+            for disp_name_line in disp_name_handle.readlines():
+                disp_name_line = disp_name_line.strip()
+                if len(disp_name_line) == 0:
+                    continue
+                if disp_name_line.startswith('#'):
+                    continue
+                this_disp_name = disp_name_line
+                break
+        if this_disp_name == None:
+            raise ValueError ("ABORT: No display name found in file "+this_disp_name_file)
+        return this_disp_name
+    
+
+    # read model group's fam groups
+    def _get_fam_groups(self, this_model_group, this_hmms_dir):
+        this_fam_groups = []
+        this_fam_groups_file = os.path.join(this_hmms_dir,this_model_group+'-categories.txt')
+        if not os.path.exists(this_fam_groups_file):
+            raise ValueError ("ABORT: missing categories file "+this_fam_groups_file)
+        with open (this_fam_groups_file, 'r') as fam_groups_handle:
+            for fam_group_line in fam_groups_handle.readlines():
+                fam_group_line = fam_group_line.strip()
+                if len(fam_group_line) == 0:
+                    continue
+                if fam_group_line.startswith('#'):
+                    continue
+                this_fam_group = fam_group_line.split()[0]
+                this_fam_groups.append(this_fam_group)
+        if len(this_fam_groups) == 0:
+            raise ValueError ("ABORT: No fam groups found in "+this_fam_groups_file)
+        return this_fam_groups
+    
+
+    # set model group config
+    def _configure_by_model_group (self, this_model_group):
+        if this_model_group == None or this_model_group == '':
+            raise ValueError ('ABORT: missing model_group')
+        this_cfg = dict()
+        this_model_group_data_dir = os.path.join(os.sep, 'kb', 'module', 'data', this_model_group)
+        this_version = self._get_version(this_model_group, this_model_group_data_dir)
+        this_model_group_disp_name = self._get_disp_name(this_model_group, this_model_group_data_dir)
+        this_hmms_dir = os.path.join(this_model_group_data_dir, this_model_group+'-'+this_version)
+        this_hmms_path = os.path.join(this_hmms_dir, this_model_group+'-fam-HMMs.txt.'+this_version)
+        # HERE
+        this_cfg = { 'search_tool_name': 'HMMER_'+this_model_group,
+                     'group_name': this_model_group_disp_name,
+                     'version': this_version,
+                     'HMMS_DIR': this_hmms_dir,
+                     'HMMS_PATH': os.path.join(this_hmms_dir, this_model_group+'-fam-HMMs.txt.'+this_version)
+                   }
+        this_cfg['fam_groups'] = self._get_fam_groups(this_model_group, this_hmms_dir)
+        return this_cfg
+    
+
     # validate MSA type
     def _check_MSA_sequence_type_correct(self, MSA_in, row_order, seq_type):
         PROT_MSA_pattern = re.compile("^[\.\-_acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
@@ -180,15 +250,18 @@ class HmmerUtil:
         return (this_appropriate_sequence_found_in_MSA_input, msa_invalid_msgs)
 
 
-    def run_HMMER_dbCAN_Search(self, params):
+    def run_HMMER_Model_Group_Search(self, params):
         """
-        Method for HMMER search of dbCAN Markov Models of CAZy families
+        Method for HMMER search of a meaningful group of Hidden Markov Models
         """
         ctx = self.ctx
         console = []
         invalid_msgs = []
         msa_invalid_msgs = []
-        search_tool_name = 'HMMER_dbCAN'
+
+        model_group_config = self._configure_by_model_group(params['model_group'])
+        
+        search_tool_name = model_group_config['search_tool_name']
         self.log(console, 'Running ' + search_tool_name + '_Search with params=')
         self.log(console, "\n" + pformat(params))
         report = ''
@@ -225,16 +298,10 @@ class HmmerUtil:
 
         # validate that at least one fam is selected and store which fam_ids are explicitly config
         explicitly_requested_models = dict()
-        fam_groups = ['cellulosome',
-                      'GH',
-                      'GT',
-                      'CBM',
-                      'CE',
-                      'PL',
-                      'AA']
+        fam_groups = model_group_config['fam_groups']
         some_fam_found = False
         for fam_group in fam_groups:
-            fam_field = 'input_dbCAN_'+fam_group+'_ids'
+            fam_field = 'input_'+params['model_group']+'_'+fam_group+'_ids'
             if params.get(fam_field):
                 for fam_id in params[fam_field]:
                     if fam_id == 'none':
@@ -533,7 +600,7 @@ class HmmerUtil:
         HMM_bufs = dict()
         this_buf = []
         this_id = None
-        HMMS_PATH = self.dbCAN_HMMS_PATH
+        HMMS_PATH = model_group_config['HMMS_PATH']
         with open(HMMS_PATH, 'r', 0) as hmm_handle:
             for hmm_line in hmm_handle.readlines():
                 hmm_line = hmm_line.rstrip()
@@ -557,8 +624,8 @@ class HmmerUtil:
         all_HMM_ids_order = []
         input_HMM_descs = dict()
         model_len = dict()
-        hmm_group_config_path = os.path.join(self.dbCAN_HMMS_DIR, 'dbCAN-categories.txt')
-        HMM_fam_config_dir = os.path.join(self.dbCAN_HMMS_DIR, 'dbCAN-fams')
+        hmm_group_config_path = os.path.join(model_group_config['HMMS_DIR'], params['model_group']+'-categories.txt')
+        HMM_fam_config_dir = os.path.join(model_group_config['HMMS_DIR'], params['model_group']+'-fams')
         HMM_fam_input_dir = os.path.join(self.output_dir, 'HMMs')
 
         with open(hmm_group_config_path, 'r', 0) as hmm_group_config_handle:
@@ -568,7 +635,7 @@ class HmmerUtil:
                 all_HMM_groups_order.append(hmm_group)
                 all_HMM_ids[hmm_group] = []
                 #HMM_fam_config_path = os.path.join(HMM_fam_config_dir, 'dbCAN-' + hmm_group + '.txt')
-                HMM_fam_config_path = os.path.join(HMM_fam_config_dir, 'dbCAN-' + hmm_group + '.desc.tsv')
+                HMM_fam_config_path = os.path.join(HMM_fam_config_dir, params['model_group']+'-' + hmm_group + '.desc.tsv')
                 with open(HMM_fam_config_path, 'r', 0) as hmm_fam_config_handle:
                     for hmm_fam_config_line in hmm_fam_config_handle.readlines():
                         hmm_fam_config_line = hmm_fam_config_line.rstrip()
@@ -587,7 +654,7 @@ class HmmerUtil:
         input_HMM_ids = dict()
         for hmm_group in all_HMM_groups_order:
             input_HMM_ids[hmm_group] = []
-            input_field = 'input_dbCAN_' + hmm_group + '_ids'
+            input_field = 'input_'+params['model_group']+'_' + hmm_group + '_ids'
             if input_field in params and params[input_field] != None and len(params[input_field]) > 0:
                 only_none_found = True
                 for HMM_fam in params[input_field]:
@@ -830,6 +897,7 @@ class HmmerUtil:
                 #self.log(console, "DEBUG: output_hit_TAB_file_path: '"+str(output_hit_TAB_file_path))
                 #self.log(console, "DEBUG: output_hit_MSA_file_path: '"+str(output_hit_MSA_file_path))
                 # DEBUG
+                """
                 report = "MODEL ID:"+hmm_id+"\n"
                 report = "TAB:\n\n"
                 with open (output_hit_TAB_file_path, 'r') as output_handle:
@@ -840,7 +908,8 @@ class HmmerUtil:
                     for line in output_handle:
                         report += line+"\n"
                 self.log(console, report)
-
+                """
+                
                 
                 ### Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
                 #
@@ -1592,7 +1661,7 @@ class HmmerUtil:
                 html_report_lines = []
                 html_report_lines += ['<html>']
                 html_report_lines += ['<head>']
-                html_report_lines += ['<title>KBase CAZy dbCAN Model ' + str(hmm_group) + ' Search Hits</title>']
+                html_report_lines += ['<title>KBase '+model_group_config['group_name'] + ' Model ' + str(hmm_group) + ' Search Hits</title>']
                 html_report_lines += ['</head>']
                 html_report_lines += ['<body bgcolor="white">']
                 if many_type_name == 'GenomeSet':
@@ -2131,7 +2200,7 @@ class HmmerUtil:
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
-            raise ValueError('Method HMMER_dbCAN_Search return value ' +
+            raise ValueError('Method HMMER_Model_Group_Search return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return returnVal
