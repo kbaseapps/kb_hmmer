@@ -1916,13 +1916,30 @@ class HmmerUtil:
                 # table header
                 html_report_lines += ['<table cellpadding=' + graph_padding +
                                       ' cellspacing=' + graph_spacing + ' border=' + border + '>']
-                corner_rowspan = "1"
+                corner_rowspan = "2"
                 label = ''
                 html_report_lines += ['<tr>']
                 html_report_lines += ['<td valign=bottom align=right rowspan=' + corner_rowspan +
                                       '><div class="vertical-text_title"><div class="vertical-text__inner_title"><font color="' + text_color + '">' + sp + label + '</font></div></div></td>']
 
+                # fam groups
+                for fam_group in fam_groups:
+                    fam_seen_width = 0
+                    for cat in all_HMM_ids[fam_group]:
+                        if not cat_seen.get(cat) and not show_blanks:
+                            continue
+                        fam_seen_width += 1
+                    if fam_seen_width == 0:
+                        continue
+                    cell_title = fam_group
+                    html_report_lines += ['<td colspan='+str(fam_seen_width)+' style="border-right:solid 2px ' + border_cat_color + '; border-bottom: solid 2px ' +
+                                          border_cat_color + '" bgcolor="' + head_color_2 + '" title="' + cell_title + '" valign=bottom align=center>']
+                    html_report_lines += [fam_group]
+                    html_report_lines += ['</td>']
+                html_report_lines += ['</tr>']
+                        
                 # column headers
+                html_report_lines += ['<tr>']
                 for cat_i, cat in enumerate(cats):
                     if not cat_seen.get(cat) and not show_blanks:
                         continue
@@ -2008,24 +2025,34 @@ class HmmerUtil:
             html_report_lines += ['<tr><td valign=middle align=left colspan=2 style="border-bottom:solid 4px ' +
                                   border_color + '"><font color="' + text_color + '"><b>KEY</b></font></td></tr>']
 
-            for cat_i, cat in enumerate(cats):
-                cell_color = 'white'
-                if not cat_seen.get(cat) and not show_blanks:
-                    cell_color = "#eeeeee"
-                cat_desc = input_HMM_descs[cat]
-                key_link = cat
-                cat_disp = cat
-                if len(cat_disp) > cat_disp_trunc_len + 1:
-                    cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
-
+            # fam groups
+            for fam_group in fam_groups:
+                fam_group_col_width = '2'
+                fam_group_cell_color = 'white'
                 html_report_lines += ['<tr>']
-                html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '" style="border-right:solid 4px ' + border_color +
-                                      '">' + '<div class="horz-text">' + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_disp + '</font>' + '</div>' + '</td>']
-                html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '">' +
-                                      '<div class="horz-text">' +
-                                      '<a name="'+key_link+'">' +
-                                      '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_desc + '</font>' + '</div>' + '</td>']
+                html_report_lines += ['<td valign=middle align=left bgcolor="' + fam_group_cell_color + '">']
+                html_report_lines += ['<b><i>'+fam_group+'</i></b>']
+                html_report_lines += ['</td>']
                 html_report_lines += ['</tr>']
+
+                for cat in all_HMM_ids[fam_group]:
+                    cell_color = 'white'
+                    if not cat_seen.get(cat) and not show_blanks:
+                        cell_color = "#eeeeee"
+                    cat_desc = input_HMM_descs[cat]
+                    key_link = cat
+                    cat_disp = cat
+                    if len(cat_disp) > cat_disp_trunc_len + 1:
+                        cat_disp = cat_disp[0:cat_disp_trunc_len] + '*'
+
+                    html_report_lines += ['<tr>']
+                    html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '" style="border-right:solid 4px ' + border_color +
+                                          '">' + '<div class="horz-text">' + '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_disp + '</font>' + '</div>' + '</td>']
+                    html_report_lines += ['<td valign=middle align=left bgcolor="' + cell_color + '">' +
+                                          '<div class="horz-text">' +
+                                          '<a name="'+key_link+'">' +
+                                          '<font color="' + text_color + '" size=' + graph_cat_fontsize + '>' + cat_desc + '</font>' + '</div>' + '</td>']
+                    html_report_lines += ['</tr>']
                 
             # close
             html_report_lines += ['</table>']
