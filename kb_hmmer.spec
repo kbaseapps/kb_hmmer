@@ -149,20 +149,20 @@ module kb_hmmer {
     typedef structure {
         workspace_name workspace_name;
 
-	data_obj_ref   input_EnvBioelement_Nitrogen_ids;
-	data_obj_ref   input_EnvBioelement_Hydrogen_ids;
-	data_obj_ref   input_EnvBioelement_Oxygen_ids;
-	data_obj_ref   input_EnvBioelement_CarbonFixation_ids;
-	data_obj_ref   input_EnvBioelement_C1Compounds_ids;
-	data_obj_ref   input_EnvBioelement_Methane_ids;
-	data_obj_ref   input_EnvBioelement_CarbonMonoxide_ids;
-	data_obj_ref   input_EnvBioelement_Sulfur_ids;
-	data_obj_ref   input_EnvBioelement_Nitriles_ids;
-	data_obj_ref   input_EnvBioelement_Urea_ids;
-	data_obj_ref   input_EnvBioelement_Selenium_ids;
-	data_obj_ref   input_EnvBioelement_Metals_ids;
-	data_obj_ref   input_EnvBioelement_Arsenic_ids;
-	data_obj_ref   input_EnvBioelement_HalogenatedCompounds_ids;
+	data_obj_ref   input_EnvBioelement_N_ids;
+	data_obj_ref   input_EnvBioelement_H_ids;
+	data_obj_ref   input_EnvBioelement_O_ids;
+	data_obj_ref   input_EnvBioelement_CFix_ids;
+	data_obj_ref   input_EnvBioelement_C1_ids;
+	data_obj_ref   input_EnvBioelement_CH4_ids;
+	data_obj_ref   input_EnvBioelement_CO_ids;
+	data_obj_ref   input_EnvBioelement_S_ids;
+	data_obj_ref   input_EnvBioelement_CN_ids;
+	data_obj_ref   input_EnvBioelement_CH4N2O_ids;
+	data_obj_ref   input_EnvBioelement_Se_ids;
+	data_obj_ref   input_EnvBioelement_Metal_ids;
+	data_obj_ref   input_EnvBioelement_As_ids;
+	data_obj_ref   input_EnvBioelement_Halo_ids;
 	
 	data_obj_ref   input_many_ref;
         data_obj_name  output_filtered_name;

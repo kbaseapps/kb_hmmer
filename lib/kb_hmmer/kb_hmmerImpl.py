@@ -53,7 +53,7 @@ class kb_hmmer:
     ######################################### noqa
     VERSION = "1.5.0"
     GIT_URL = "https://github.com/dcchivian/kb_hmmer"
-    GIT_COMMIT_HASH = "4cdc5c4f83cbd4caec0f1ea532a7fa6d4a96a99b"
+    GIT_COMMIT_HASH = "b23a3bbc9a846a9aca88bb3417866c5659b54355"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -3638,32 +3638,29 @@ class kb_hmmer:
            "id" is a numerical identifier of the workspace or object, and
            should just be used for workspace ** "name" is a string identifier
            of a workspace or object.  This is received from Narrative.),
-           parameter "input_EnvBioelement_Nitrogen_ids" of type
-           "data_obj_ref", parameter "input_EnvBioelement_Hydrogen_ids" of
-           type "data_obj_ref", parameter "input_EnvBioelement_Oxygen_ids" of
-           type "data_obj_ref", parameter
-           "input_EnvBioelement_CarbonFixation_ids" of type "data_obj_ref",
-           parameter "input_EnvBioelement_C1Compounds_ids" of type
-           "data_obj_ref", parameter "input_EnvBioelement_Methane_ids" of
-           type "data_obj_ref", parameter
-           "input_EnvBioelement_CarbonMonoxide_ids" of type "data_obj_ref",
-           parameter "input_EnvBioelement_Sulfur_ids" of type "data_obj_ref",
-           parameter "input_EnvBioelement_Nitriles_ids" of type
-           "data_obj_ref", parameter "input_EnvBioelement_Urea_ids" of type
-           "data_obj_ref", parameter "input_EnvBioelement_Selenium_ids" of
-           type "data_obj_ref", parameter "input_EnvBioelement_Metals_ids" of
-           type "data_obj_ref", parameter "input_EnvBioelement_Arsenic_ids"
-           of type "data_obj_ref", parameter
-           "input_EnvBioelement_HalogenatedCompounds_ids" of type
-           "data_obj_ref", parameter "input_many_ref" of type "data_obj_ref",
-           parameter "output_filtered_name" of type "data_obj_name",
-           parameter "genome_disp_name_config" of String, parameter
-           "coalesce_output" of type "bool", parameter "save_ALL_featureSets"
-           of type "bool", parameter "e_value" of Double, parameter
-           "bitscore" of Double, parameter "model_cov_perc" of Double,
-           parameter "maxaccepts" of Double, parameter "heatmap" of type
-           "bool", parameter "low_val" of type "bool", parameter "vertical"
-           of type "bool", parameter "show_blanks" of type "bool"
+           parameter "input_EnvBioelement_N_ids" of type "data_obj_ref",
+           parameter "input_EnvBioelement_H_ids" of type "data_obj_ref",
+           parameter "input_EnvBioelement_O_ids" of type "data_obj_ref",
+           parameter "input_EnvBioelement_CFix_ids" of type "data_obj_ref",
+           parameter "input_EnvBioelement_C1_ids" of type "data_obj_ref",
+           parameter "input_EnvBioelement_CH4_ids" of type "data_obj_ref",
+           parameter "input_EnvBioelement_CO_ids" of type "data_obj_ref",
+           parameter "input_EnvBioelement_S_ids" of type "data_obj_ref",
+           parameter "input_EnvBioelement_CN_ids" of type "data_obj_ref",
+           parameter "input_EnvBioelement_CH4N2O_ids" of type "data_obj_ref",
+           parameter "input_EnvBioelement_Se_ids" of type "data_obj_ref",
+           parameter "input_EnvBioelement_Metal_ids" of type "data_obj_ref",
+           parameter "input_EnvBioelement_As_ids" of type "data_obj_ref",
+           parameter "input_EnvBioelement_Halo_ids" of type "data_obj_ref",
+           parameter "input_many_ref" of type "data_obj_ref", parameter
+           "output_filtered_name" of type "data_obj_name", parameter
+           "genome_disp_name_config" of String, parameter "coalesce_output"
+           of type "bool", parameter "save_ALL_featureSets" of type "bool",
+           parameter "e_value" of Double, parameter "bitscore" of Double,
+           parameter "model_cov_perc" of Double, parameter "maxaccepts" of
+           Double, parameter "heatmap" of type "bool", parameter "low_val" of
+           type "bool", parameter "vertical" of type "bool", parameter
+           "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"

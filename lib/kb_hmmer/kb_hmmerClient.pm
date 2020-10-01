@@ -519,20 +519,20 @@ $params is a kb_hmmer.HMMER_EnvBioelement_Params
 $return is a kb_hmmer.HMMER_Output
 HMMER_EnvBioelement_Params is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_hmmer.workspace_name
-	input_EnvBioelement_Nitrogen_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Hydrogen_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Oxygen_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_CarbonFixation_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_C1Compounds_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Methane_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_CarbonMonoxide_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Sulfur_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Nitriles_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Urea_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Selenium_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Metals_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Arsenic_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_HalogenatedCompounds_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_N_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_H_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_O_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CFix_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_C1_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CH4_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CO_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_S_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CN_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CH4N2O_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Se_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Metal_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_As_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
@@ -564,20 +564,20 @@ $params is a kb_hmmer.HMMER_EnvBioelement_Params
 $return is a kb_hmmer.HMMER_Output
 HMMER_EnvBioelement_Params is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a kb_hmmer.workspace_name
-	input_EnvBioelement_Nitrogen_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Hydrogen_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Oxygen_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_CarbonFixation_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_C1Compounds_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Methane_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_CarbonMonoxide_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Sulfur_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Nitriles_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Urea_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Selenium_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Metals_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_Arsenic_ids has a value which is a kb_hmmer.data_obj_ref
-	input_EnvBioelement_HalogenatedCompounds_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_N_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_H_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_O_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CFix_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_C1_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CH4_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CO_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_S_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CN_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_CH4N2O_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Se_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Metal_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_As_ids has a value which is a kb_hmmer.data_obj_ref
+	input_EnvBioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
 	input_many_ref has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
@@ -1132,20 +1132,20 @@ HMMER EnvBioelement Input Params
 <pre>
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_hmmer.workspace_name
-input_EnvBioelement_Nitrogen_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Hydrogen_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Oxygen_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_CarbonFixation_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_C1Compounds_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Methane_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_CarbonMonoxide_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Sulfur_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Nitriles_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Urea_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Selenium_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Metals_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Arsenic_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_HalogenatedCompounds_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_N_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_H_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_O_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CFix_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_C1_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CH4_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CO_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_S_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CN_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CH4N2O_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Se_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Metal_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_As_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
@@ -1168,20 +1168,20 @@ show_blanks has a value which is a kb_hmmer.bool
 
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_hmmer.workspace_name
-input_EnvBioelement_Nitrogen_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Hydrogen_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Oxygen_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_CarbonFixation_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_C1Compounds_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Methane_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_CarbonMonoxide_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Sulfur_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Nitriles_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Urea_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Selenium_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Metals_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_Arsenic_ids has a value which is a kb_hmmer.data_obj_ref
-input_EnvBioelement_HalogenatedCompounds_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_N_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_H_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_O_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CFix_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_C1_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CH4_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CO_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_S_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CN_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_CH4N2O_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Se_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Metal_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_As_ids has a value which is a kb_hmmer.data_obj_ref
+input_EnvBioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_ref has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string

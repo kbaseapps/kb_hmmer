@@ -66,6 +66,11 @@ class HmmerUtil:
         if self.callbackURL == None:
             raise ValueError("SDK_CALLBACK_URL not set in environment")
 
+        try:
+            self.wsClient = Workspace(self.workspaceURL, token=ctx['token'])
+        except:
+            raise ValueError ("unable to connect to Workspace service")
+            
         self.scratch = os.path.abspath(config['scratch'])
         if self.scratch == None:
             self.scratch = os.path.join('/kb', 'module', 'local_scratch')
@@ -97,6 +102,45 @@ class HmmerUtil:
         print(message)
         sys.stdout.flush()
 
+    # set provenance
+    def _set_provenance (self, ctx, service, method, input_obj_refs):
+        provenance = [{}]
+        if 'provenance' in ctx:
+            provenance = ctx['provenance']
+        # add additional info to provenance here, in this case the input data object reference
+        provenance[0]['input_ws_objects'] = []
+        provenance[0]['input_ws_objects'].extend(input_obj_refs)
+        provenance[0]['service'] = service
+        provenance[0]['method'] = method
+        return provenance
+    
+    # error report
+    def _create_error_report (self, workspace_name, message, provenance):
+        reportObj = {
+            'objects_created': [],
+            'text_message': message
+        }
+
+        reportName = 'hmmer_report_' + str(uuid.uuid4())
+        report_obj_info = self.wsClient.save_objects({
+            #                'id':info[6],
+            'workspace': workspace_name,
+            'objects': [
+                {
+                    'type': 'KBaseReport.Report',
+                    'data': reportObj,
+                    'name': reportName,
+                    'meta': {},
+                    'hidden': 1,
+                    'provenance': provenance
+                }
+            ]
+        })[0]
+        returnVal = {'report_name': report_obj_info[1],
+                     'report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4])
+                     }
+        return returnVal
+        
     # split genome from feature id if id from set
     def _parse_genome_and_feature_id_from_hit_id(self,
                                                  hit_id,
@@ -182,7 +226,6 @@ class HmmerUtil:
         this_model_group_disp_name = self._get_disp_name(this_model_group, this_model_group_data_dir)
         this_hmms_dir = os.path.join(this_model_group_data_dir, this_model_group+'-'+this_version)
         this_hmms_path = os.path.join(this_hmms_dir, this_model_group+'-fam-HMMs.txt.'+this_version)
-        # HERE
         this_cfg = { 'search_tool_name': 'HMMER_'+this_model_group,
                      'group_name': this_model_group_disp_name,
                      'version': this_version,
@@ -295,7 +338,14 @@ class HmmerUtil:
         input_many_ref = params['input_many_ref']
         ws_id = input_many_ref.split('/')[0]
 
-
+        # set provenance
+        self.log(console, "SETTING PROVENANCE")  # DEBUG
+        service = 'kb_hmmer'
+        method = search_tool_name+'_Search'
+        input_obj_refs = [params['input_many_ref']]
+        provenance = self._set_provenance (ctx, service, method, input_obj_refs)
+        
+        
         # validate that at least one fam is selected and store which fam_ids are explicitly config
         explicitly_requested_models = dict()
         fam_groups = model_group_config['fam_groups']
@@ -311,62 +361,16 @@ class HmmerUtil:
                         explicitly_requested_models[fam_id] = True                        
                     some_fam_found = True
         if not some_fam_found:
-            self.log(console,'You must request at least one HMM')
-            self.log(invalid_msgs,'You must request at least one HMM')
-            
-            # load the method provenance from the context object
-            #
-            self.log(console, "SETTING PROVENANCE")  # DEBUG
-            provenance = [{}]
-            if 'provenance' in ctx:
-                provenance = ctx['provenance']
-            # add additional info to provenance here, in this case the input data object reference
-            provenance[0]['input_ws_objects'] = []
-#            provenance[0]['input_ws_objects'].append(input_one_ref)
-            provenance[0]['input_ws_objects'].append(input_many_ref)
-            provenance[0]['service'] = 'kb_hmmer'
-            provenance[0]['method'] = search_tool_name + '_Search'
+            message = 'You must request at least one HMM'
+            self.log(invalid_msgs, message)
+            return self._create_error_report (params['workspace_name'], message, provenance)
 
-            # build output report object
-            #
-            self.log(console, "BUILDING REPORT")  # DEBUG
-            report += "FAILURE:\n\n" + "\n".join(invalid_msgs) + "\n"
-            reportObj = {
-                'objects_created': [],
-                'text_message': report
-            }
 
-            reportName = 'hmmer_report_' + str(uuid.uuid4())
-            ws = Workspace(self.workspaceURL, token=ctx['token'])
-            report_obj_info = ws.save_objects({
-                #'id':info[6],
-                'workspace': params['workspace_name'],
-                'objects': [
-                    {
-                        'type': 'KBaseReport.Report',
-                        'data': reportObj,
-                        'name': reportName,
-                        'meta': {},
-                        'hidden': 1,
-                        'provenance': provenance  # DEBUG
-                    }
-                ]
-            })[0]
-
-            self.log(console, "BUILDING RETURN OBJECT")
-            returnVal = {'report_name': reportName,
-                         'report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
-                         }
-            self.log(console, search_tool_name + "_Search DONE")
-            return [returnVal]
-
-            
         #### Get the input_many object
         ##
         try:
-            ws = Workspace(self.workspaceURL, token=ctx['token'])
             #objects = ws.get_objects([{'ref': input_many_ref}])
-            objects = ws.get_objects2({'objects': [{'ref': input_many_ref}]})['data']
+            objects = self.wsClient.get_objects2({'objects': [{'ref': input_many_ref}]})['data']
             input_many_data = objects[0]['data']
             info = objects[0]['info']
             input_many_name = str(info[1])
@@ -686,52 +690,10 @@ class HmmerUtil:
         #
         if len(invalid_msgs) > 0:
 
-            # load the method provenance from the context object
-            #
-            self.log(console, "SETTING PROVENANCE")  # DEBUG
-            provenance = [{}]
-            if 'provenance' in ctx:
-                provenance = ctx['provenance']
-            # add additional info to provenance here, in this case the input data object reference
-            provenance[0]['input_ws_objects'] = []
-#            provenance[0]['input_ws_objects'].append(input_one_ref)
-            provenance[0]['input_ws_objects'].append(input_many_ref)
-            provenance[0]['service'] = 'kb_hmmer'
-            provenance[0]['method'] = search_tool_name + '_Search'
+            message = "\n".join(invalid_msgs)
+            return self._create_error_report (params['workspace_name'], message, provenance)
 
-            # build output report object
-            #
-            self.log(console, "BUILDING REPORT")  # DEBUG
-            report += "FAILURE:\n\n" + "\n".join(invalid_msgs) + "\n"
-            reportObj = {
-                'objects_created': [],
-                'text_message': report
-            }
-
-            reportName = 'hmmer_report_' + str(uuid.uuid4())
-            ws = Workspace(self.workspaceURL, token=ctx['token'])
-            report_obj_info = ws.save_objects({
-                #'id':info[6],
-                'workspace': params['workspace_name'],
-                'objects': [
-                    {
-                        'type': 'KBaseReport.Report',
-                        'data': reportObj,
-                        'name': reportName,
-                        'meta': {},
-                        'hidden': 1,
-                        'provenance': provenance  # DEBUG
-                    }
-                ]
-            })[0]
-
-            self.log(console, "BUILDING RETURN OBJECT")
-            returnVal = {'report_name': reportName,
-                         'report_ref': str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4]),
-                         }
-            self.log(console, search_tool_name + "_Search DONE")
-            return [returnVal]
-
+        
         #### Iterate through categories and make separate Search HITs for each category
         ##
         hmm_groups_used = []
@@ -1211,20 +1173,6 @@ class HmmerUtil:
                                 output_featureSet['element_ordering'].append(fid)
                                 output_featureSet['elements'][fid] = [ama_ref]
 
-
-                    # load the method provenance from the context object
-                    #
-                    #self.log(console,"SETTING PROVENANCE")  # DEBUG
-                    provenance = [{}]
-                    if 'provenance' in ctx:
-                        provenance = ctx['provenance']
-                    # add additional info to provenance here, in this case the input data object reference
-                    provenance[0]['input_ws_objects'] = []
-                    #        provenance[0]['input_ws_objects'].append(input_one_ref)
-                    provenance[0]['input_ws_objects'].append(input_many_ref)
-                    provenance[0]['service'] = 'kb_blast'
-                    provenance[0]['method'] = search_tool_name + '_Search'
-
                     ### Create output object
                     #
                     if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
@@ -1259,7 +1207,7 @@ class HmmerUtil:
                             # input many SequenceSet -> save SequenceSet
                             #
                             if many_type_name == 'SequenceSet':
-                                new_obj_info = ws.save_objects({
+                                new_obj_info = self.wsClient.save_objects({
                                     'workspace': params['workspace_name'],
                                     'objects': [{
                                         'type': 'KBaseSequences.SequenceSet',
@@ -1271,7 +1219,7 @@ class HmmerUtil:
                                 })[0]
 
                             else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
-                                new_obj_info = ws.save_objects({
+                                new_obj_info = self.wsClient.save_objects({
                                     'workspace': params['workspace_name'],
                                     'objects': [{
                                         'type': 'KBaseCollections.FeatureSet',
@@ -1568,7 +1516,7 @@ class HmmerUtil:
                         if many_type_name == 'SequenceSet':  # input many SequenceSet -> save SequenceSet
 
                             output_sequenceSet['sequences'] = coalesced_sequenceObjs
-                            new_obj_info = ws.save_objects({
+                            new_obj_info = self.wsClient.save_objects({
                                 'workspace': params['workspace_name'],
                                 'objects': [{
                                     'type': 'KBaseSequences.SequenceSet',
@@ -1587,7 +1535,7 @@ class HmmerUtil:
                                 output_featureSet['elements'][fId] = []
                                 output_featureSet['elements'][fId].append(coalesce_featureIds_genome_ordering[f_i])
 
-                            new_obj_info = ws.save_objects({
+                            new_obj_info = self.wsClient.save_objects({
                                 'workspace': params['workspace_name'],
                                 'objects': [{
                                     'type': 'KBaseCollections.FeatureSet',
@@ -1778,42 +1726,8 @@ class HmmerUtil:
             if overall_high_val == -INSANE_VALUE:
                 error_msg = "unable to find any counts"
                 self.log(invalid_msgs, error_msg)
-                provenance = [{}]
-                if 'provenance' in ctx:
-                    provenance = ctx['provenance']
-                # add additional info to provenance here, in this case the input data object reference
-                provenance[0]['input_ws_objects'] = []
-                provenance[0]['input_ws_objects'].append(input_many_ref)
-                provenance[0]['service'] = 'kb_hmmer'
-                provenance[0]['method'] = search_tool_name + '_Search'
-                report += "FAILURE\n\n" + "\n".join(invalid_msgs) + "\n"
-                reportObj = {
-                    'objects_created': [],
-                    'text_message': report
-                }
-                reportName = 'hmmer_report_' + str(uuid.uuid4())
-                report_obj_info = ws.save_objects({
-                    #                'id':info[6],
-                    'workspace': params['workspace_name'],
-                    'objects': [
-                        {
-                            'type': 'KBaseReport.Report',
-                            'data': reportObj,
-                            'name': reportName,
-                            'meta': {},
-                            'hidden': 1,
-                            'provenance': provenance
-                        }
-                    ]
-                })[0]
-                report_info = dict()
-                report_info['name'] = report_obj_info[1]
-                report_info['ref'] = str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4])
-                self.log(console, "BUILDING RETURN OBJECT")
-                returnVal = {'report_name': report_info['name'],
-                             'report_ref': report_info['ref']
-                }
-                return [returnVal]
+                message = "\n".join(invalid_msgs)
+                return self._create_error_report (params['workspace_name'], message, provenance)
 
             
             # build html report
@@ -2187,32 +2101,10 @@ class HmmerUtil:
         #### data validation error
         ##
         if len(invalid_msgs) > 0:
-            report += "FAILURE\n\n" + "\n".join(invalid_msgs) + "\n"
+            message = "\n".join(invalid_msgs)
+            return self._create_error_report (params['workspace_name'], message, provenance)
 
-            reportObj = {
-                'objects_created': [],
-                'text_message': report
-            }
-
-            reportName = 'hmmer_report_' + str(uuid.uuid4())
-            report_obj_info = ws.save_objects({
-                #                'id':info[6],
-                'workspace': params['workspace_name'],
-                'objects': [
-                    {
-                        'type': 'KBaseReport.Report',
-                        'data': reportObj,
-                        'name': reportName,
-                        'meta': {},
-                        'hidden': 1,
-                        'provenance': provenance
-                    }
-                ]
-            })[0]
-            report_info = dict()
-            report_info['name'] = report_obj_info[1]
-            report_info['ref'] = str(report_obj_info[6]) + '/' + str(report_obj_info[0]) + '/' + str(report_obj_info[4])
-
+        
         #### Return Report
         ##
         self.log(console, "BUILDING RETURN OBJECT")
