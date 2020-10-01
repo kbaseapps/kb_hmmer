@@ -12,7 +12,7 @@
     },
     "parameters": [
         {
-            "id": "input_EnvBioelement_Nitrogen_ids",
+            "id": "input_EnvBioelement_N_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -216,7 +216,7 @@
             }
         },
         {
-            "id": "input_EnvBioelement_Sulfur_ids",
+            "id": "input_EnvBioelement_S_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -336,7 +336,7 @@
             }
         },
         {
-            "id": "input_EnvBioelement_Oxygen_ids",
+            "id": "input_EnvBioelement_O_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -426,7 +426,7 @@
             }
         },
         {
-            "id": "input_EnvBioelement_Methane_ids",
+            "id": "input_EnvBioelement_CH4_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -492,7 +492,7 @@
             }
         },
         {
-            "id": "input_EnvBioelement_CarbonFixation_ids",
+            "id": "input_EnvBioelement_CFix_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -503,68 +503,68 @@
                                 {
                                         "value": "ALL",
                                         "display": "ALL",
-                                        "id": "EnvBioelement_CarbonFixation_ALL",
-                                        "ui-name": "EnvBioelement_CarbonFixation_ALL"
+                                        "id": "EnvBioelement_CFix_ALL",
+                                        "ui-name": "EnvBioelement_CFix_ALL"
                                 },
 				{
 					"value": "Form_I",
 					"display": "Carbon Fixation - CBB cycle (Rubisco) - Form_I",
-					"id": "EnvBioelement_CarbonFixation_Form_I",
-					"ui-name": "EnvBioelement_CarbonFixation_Form_I"
+					"id": "EnvBioelement_CFix_Form_I",
+					"ui-name": "EnvBioelement_CFix_Form_I"
 				},
 				{
 					"value": "Form_II",
 					"display": "Carbon Fixation - CBB cycle (Rubisco) - Form_II",
-					"id": "EnvBioelement_CarbonFixation_Form_II",
-					"ui-name": "EnvBioelement_CarbonFixation_Form_II"
+					"id": "EnvBioelement_CFix_Form_II",
+					"ui-name": "EnvBioelement_CFix_Form_II"
 				},
 				{
 					"value": "Form_II-III",
 					"display": "Carbon Fixation - CBB cycle (Rubisco) - Form_II-III",
-					"id": "EnvBioelement_CarbonFixation_Form_II-III",
-					"ui-name": "EnvBioelement_CarbonFixation_Form_II-III"
+					"id": "EnvBioelement_CFix_Form_II-III",
+					"ui-name": "EnvBioelement_CFix_Form_II-III"
 				},
 				{
 					"value": "Form_III",
 					"display": "Carbon Fixation - CBB cycle (Rubisco) - Form_III",
-					"id": "EnvBioelement_CarbonFixation_Form_III",
-					"ui-name": "EnvBioelement_CarbonFixation_Form_III"
+					"id": "EnvBioelement_CFix_Form_III",
+					"ui-name": "EnvBioelement_CFix_Form_III"
 				},
 				{
 					"value": "aclA",
 					"display": "Carbon Fixation - Reverse TCA Cycle - aclA",
-					"id": "EnvBioelement_CarbonFixation_aclA",
-					"ui-name": "EnvBioelement_CarbonFixation_aclA"
+					"id": "EnvBioelement_CFix_aclA",
+					"ui-name": "EnvBioelement_CFix_aclA"
 				},
 				{
 					"value": "aclB",
 					"display": "Carbon Fixation - Reverse TCA Cycle - aclB",
-					"id": "EnvBioelement_CarbonFixation_aclB",
-					"ui-name": "EnvBioelement_CarbonFixation_aclB"
+					"id": "EnvBioelement_CFix_aclB",
+					"ui-name": "EnvBioelement_CFix_aclB"
 				},
 				{
 					"value": "codh_catalytic",
 					"display": "Carbon Fixation - Wood Ljungdahl Pathway - codh_catalytic",
-					"id": "EnvBioelement_CarbonFixation_codh_catalytic",
-					"ui-name": "EnvBioelement_CarbonFixation_codh_catalytic"
+					"id": "EnvBioelement_CFix_codh_catalytic",
+					"ui-name": "EnvBioelement_CFix_codh_catalytic"
 				},
 				{
 					"value": "codhC_beta",
 					"display": "Carbon Fixation - Wood Ljungdahl Pathway - codhC_beta",
-					"id": "EnvBioelement_CarbonFixation_codhC_beta",
-					"ui-name": "EnvBioelement_CarbonFixation_codhC_beta"
+					"id": "EnvBioelement_CFix_codhC_beta",
+					"ui-name": "EnvBioelement_CFix_codhC_beta"
 				},
 				{
 					"value": "codhD_delta",
 					"display": "Carbon Fixation - Wood Ljungdahl Pathway - codhD_delta",
-					"id": "EnvBioelement_CarbonFixation_codhD_delta",
-					"ui-name": "EnvBioelement_CarbonFixation_codhD_delta"
+					"id": "EnvBioelement_CFix_codhD_delta",
+					"ui-name": "EnvBioelement_CFix_codhD_delta"
 				}
                 ]
             }
         },
         {
-            "id": "input_EnvBioelement_CarbonMonoxide_ids",
+            "id": "input_EnvBioelement_CO_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -575,32 +575,32 @@
                                 {
                                         "value": "ALL",
                                         "display": "ALL",
-                                        "id": "EnvBioelement_CarbonMonoxide_ALL",
-                                        "ui-name": "EnvBioelement_CarbonMonoxide_ALL"
+                                        "id": "EnvBioelement_CO_ALL",
+                                        "ui-name": "EnvBioelement_CO_ALL"
                                 },
 				{
 					"value": "coxL",
 					"display": "Carbon Monoxide - CO oxidation - coxL",
-					"id": "EnvBioelement_CarbonMonoxide_coxL",
-					"ui-name": "EnvBioelement_CarbonMonoxide_coxL"
+					"id": "EnvBioelement_CO_coxL",
+					"ui-name": "EnvBioelement_CO_coxL"
 				},
 				{
 					"value": "coxM",
 					"display": "Carbon Monoxide - CO oxidation - coxM",
-					"id": "EnvBioelement_CarbonMonoxide_coxM",
-					"ui-name": "EnvBioelement_CarbonMonoxide_coxM"
+					"id": "EnvBioelement_CO_coxM",
+					"ui-name": "EnvBioelement_CO_coxM"
 				},
 				{
 					"value": "coxS",
 					"display": "Carbon Monoxide - CO oxidation - coxS",
-					"id": "EnvBioelement_CarbonMonoxide_coxS",
-					"ui-name": "EnvBioelement_CarbonMonoxide_coxS"
+					"id": "EnvBioelement_CO_coxS",
+					"ui-name": "EnvBioelement_CO_coxS"
 				}
                 ]
             }
         },
         {
-            "id": "input_EnvBioelement_C1Compounds_ids",
+            "id": "input_EnvBioelement_C1_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -702,7 +702,7 @@
             }
         },
         {
-            "id": "input_EnvBioelement_Hydrogen_ids",
+            "id": "input_EnvBioelement_H_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -780,7 +780,7 @@
             }
         },
         {
-            "id": "input_EnvBioelement_HalogenatedCompounds_ids",
+            "id": "input_EnvBioelement_Halo_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -828,7 +828,7 @@
             }
         },
         {
-            "id": "input_EnvBioelement_Arsenic_ids",
+            "id": "input_EnvBioelement_As_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -876,7 +876,7 @@
             }
         },
         {
-            "id": "input_EnvBioelement_Selenium_ids",
+            "id": "input_EnvBioelement_Se_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -912,7 +912,7 @@
             }
         },
         {
-            "id": "input_EnvBioelement_Urea_ids",
+            "id": "input_EnvBioelement_CH4N2O_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -948,7 +948,7 @@
             }
         },
         {
-            "id": "input_EnvBioelement_Metals_ids",
+            "id": "input_EnvBioelement_Metal_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -978,7 +978,7 @@
             }
         },
         {
-            "id": "input_EnvBioelement_Nitriles_ids",
+            "id": "input_EnvBioelement_CN_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
@@ -1017,8 +1017,7 @@
             "text_options": {
                 "valid_ws_types": [ "KBaseCollections.FeatureSet",
 				    "KBaseGenomes.Genome",
-				    "KBaseSearch.GenomeSet",
-				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly"
+				    "KBaseSearch.GenomeSet"
 				  ]
             }
         },
@@ -1239,60 +1238,60 @@
                     "target_property": "workspace_name"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_Nitrogen_ids",
-                    "target_property": "input_EnvBioelement_Nitrogen_ids"
+                    "input_parameter": "input_EnvBioelement_N_ids",
+                    "target_property": "input_EnvBioelement_N_ids"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_Sulfur_ids",
-                    "target_property": "input_EnvBioelement_Sulfur_ids"
+                    "input_parameter": "input_EnvBioelement_S_ids",
+                    "target_property": "input_EnvBioelement_S_ids"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_Oxygen_ids",
-                    "target_property": "input_EnvBioelement_Oxygen_ids"
+                    "input_parameter": "input_EnvBioelement_O_ids",
+                    "target_property": "input_EnvBioelement_O_ids"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_Methane_ids",
-                    "target_property": "input_EnvBioelement_Methane_ids"
+                    "input_parameter": "input_EnvBioelement_CH4_ids",
+                    "target_property": "input_EnvBioelement_CH4_ids"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_CarbonFixation_ids",
-                    "target_property": "input_EnvBioelement_CarbonFixation_ids"
+                    "input_parameter": "input_EnvBioelement_CFix_ids",
+                    "target_property": "input_EnvBioelement_CFix_ids"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_CarbonMonoxide_ids",
-                    "target_property": "input_EnvBioelement_CarbonMonoxide_ids"
+                    "input_parameter": "input_EnvBioelement_CO_ids",
+                    "target_property": "input_EnvBioelement_CO_ids"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_C1Compounds_ids",
-                    "target_property": "input_EnvBioelement_C1Compounds_ids"
+                    "input_parameter": "input_EnvBioelement_C1_ids",
+                    "target_property": "input_EnvBioelement_C1_ids"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_Hydrogen_ids",
-                    "target_property": "input_EnvBioelement_Hydrogen_ids"
+                    "input_parameter": "input_EnvBioelement_H_ids",
+                    "target_property": "input_EnvBioelement_H_ids"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_HalogenatedCompounds_ids",
-                    "target_property": "input_EnvBioelement_HalogenatedCompounds_ids"
+                    "input_parameter": "input_EnvBioelement_Halo_ids",
+                    "target_property": "input_EnvBioelement_Halo_ids"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_Arsenic_ids",
-                    "target_property": "input_EnvBioelement_Arsenic_ids"
+                    "input_parameter": "input_EnvBioelement_As_ids",
+                    "target_property": "input_EnvBioelement_As_ids"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_Selenium_ids",
-                    "target_property": "input_EnvBioelement_Selenium_ids"
+                    "input_parameter": "input_EnvBioelement_Se_ids",
+                    "target_property": "input_EnvBioelement_Se_ids"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_Urea_ids",
-                    "target_property": "input_EnvBioelement_Urea_ids"
+                    "input_parameter": "input_EnvBioelement_CH4N2O_ids",
+                    "target_property": "input_EnvBioelement_CH4N2O_ids"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_Metals_ids",
-                    "target_property": "input_EnvBioelement_Metals_ids"
+                    "input_parameter": "input_EnvBioelement_Metal_ids",
+                    "target_property": "input_EnvBioelement_Metal_ids"
                 },
                 {
-                    "input_parameter": "input_EnvBioelement_Nitriles_ids",
-                    "target_property": "input_EnvBioelement_Nitriles_ids"
+                    "input_parameter": "input_EnvBioelement_CN_ids",
+                    "target_property": "input_EnvBioelement_CN_ids"
                 },
                 {
                     "input_parameter": "input_many_ref",

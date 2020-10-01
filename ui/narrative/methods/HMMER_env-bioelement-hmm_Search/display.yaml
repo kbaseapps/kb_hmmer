@@ -37,74 +37,74 @@ parameters :
             Display genome as
         short-hint : |
             Use the object name, object version, and/or scientific name of the Genome in the function profile report
-    input_EnvBioelement_Nitrogen_ids:
+    input_EnvBioelement_N_ids:
         ui-name : |
-            Nitrogen - N (default: None)
+            Nitrogen - N
         short-hint : |
             Select HMMs for Nitrogen Bioelement Families, or will use None if left blank
-    input_EnvBioelement_Hydrogen_ids:
+    input_EnvBioelement_H_ids:
         ui-name : |
-            Hydrogen - H (default: None)
+            Hydrogen - H
         short-hint : |
             Select HMMs for Hydrogen Bioelement Families, or will use None if left blank
-    input_EnvBioelement_Oxygen_ids:
+    input_EnvBioelement_O_ids:
         ui-name : |
-            Oxygen - O (default: None)
+            Oxygen - O
         short-hint : |
             Select HMMs for Oxygen Bioelement Families, or will use None if left blank
-    input_EnvBioelement_CarbonFixation_ids:
+    input_EnvBioelement_CFix_ids:
         ui-name : |
-            Carbon Fixation - CFix (default: None)
+            Carbon Fixation - CFix
         short-hint : |
             Select HMMs for Carbon Fixation Bioelement Families, or will use None if left blank
-    input_EnvBioelement_C1Compounds_ids:
+    input_EnvBioelement_C1_ids:
         ui-name : |
-            C1 Compounds - C1 (default: None)
+            C1 Compounds - C1
         short-hint : |
             Select HMMs for C1 Compound Bioelement Families, or will use None if left blank
-    input_EnvBioelement_Methane_ids:
+    input_EnvBioelement_CH4_ids:
         ui-name : |
-            Methane - CH4 (default: None)
+            Methane - CH4
         short-hint : |
             Select HMMs for Methane Bioelement Families, or will use None if left blank
-    input_EnvBioelement_CarbonMonoxide_ids:
+    input_EnvBioelement_CO_ids:
         ui-name : |
-            Carbon Monoxide - CMono (default: None)
+            Carbon Monoxide - CMono
         short-hint : |
             Select HMMs for Carbon Monoxide Bioelement Families, or will use None if left blank
-    input_EnvBioelement_Sulfur_ids:
+    input_EnvBioelement_S_ids:
         ui-name : |
-            Sulfur - S (default: None)
+            Sulfur - S
         short-hint : |
             Select HMMs for Sulfur Bioelement Families, or will use None if left blank
-    input_EnvBioelement_Nitriles_ids:
+    input_EnvBioelement_CN_ids:
         ui-name : |
-            Nitrile - CN (default: None)
+            Nitrile - CN
         short-hint : |
             Select HMMs for Nitrile Bioelement Families, or will use None if left blank
-    input_EnvBioelement_Urea_ids:
+    input_EnvBioelement_CH4N2O_ids:
         ui-name : |
-            Urea - Ur (default: None)
+            Urea - Ur
         short-hint : |
             Select HMMs for Urea Bioelement Families, or will use None if left blank
-    input_EnvBioelement_Selenium_ids:
+    input_EnvBioelement_Se_ids:
         ui-name : |
-            Selenium - Se (default: None)
+            Selenium - Se
         short-hint : |
             Select HMMs for Selenium Bioelement Families, or will use None if left blank
-    input_EnvBioelement_Metals_ids:
+    input_EnvBioelement_Metal_ids:
         ui-name : |
-            Metal - Me (default: None)
+            Metal - Me
         short-hint : |
             Select HMMs for Metal Bioelement Families, or will use None if left blank
-    input_EnvBioelement_Arsenic_ids:
+    input_EnvBioelement_As_ids:
         ui-name : |
-            Arsenic - As (default: None)
+            Arsenic - As
         short-hint : |
             Select HMMs for Arsenic Bioelement Families, or will use None if left blank
-    input_EnvBioelement_HalogenatedCompounds_ids:
+    input_EnvBioelement_Halo_ids:
         ui-name : |
-            Halogenated Compounds - Halo (default: None)
+            Halogenated Compounds - Halo
         short-hint : |
             Select HMMs for Halogenated Compound Bioelement Families, or will use None if left blank
     output_filtered_name:
