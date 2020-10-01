@@ -1,8 +1,8 @@
 amoA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03080" target="_blank">TIGR03080</a> - methane monooxygenase/ammonia monooxygenase, subunit A
 amoB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03079" target="_blank">TIGR03079</a> - methane monooxygenase/ammonia monooxygenase, subunit B
 amoC	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03078" target="_blank">TIGR03078</a> - methane monooxygenase/ammonia monooxygenase, subunit C
-hzoA	Anammox <a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a>
-hzsA	Anammox <a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a>
+hzoA	<a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a> - Anammox
+hzsA	<a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a> - Anamox
 ANFD	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01861" target="_blank">TIGR01861</a> - nitrogenase iron-iron protein, alpha chain
 anfK_nitrog	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02931" target="_blank">TIGR02931</a> - Fe-only nitrogenase, beta subunit
 anfG_nitrog	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02929" target="_blank">TIGR02929</a> - Fe-only nitrogenase, delta subunit
@@ -16,16 +16,16 @@ napA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01706" target="_bla
 napB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01706" target="_blank">TIGR01706</a> - periplasmic nitrate reductase, large subunit
 napB	<a href="https://pfam.xfam.org/family/PF03892" target="_blank">PF03892</a> - Nitrate reductase cytochrome c-type subunit (NapB)
 narG	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01580" target="_blank">TIGR01580</a> - nitrate reductase, alpha subunit
-norB	Nitric oxide reduction <a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a>
-norC	Nitric oxide reduction <a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a>
-nxrA	Nitrite oxidation <a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a>
-nxrB	Nitrite oxidation <a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a>
+norB	<a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a> - Nitric oxide reduction
+norC	<a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a> - Nitric oxide reduction
+nxrA	<a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a> - Nitrite oxidation
+nxrB	<a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a> - Nitrite oxidation 
 cyt_c552_large_NrFA	<a href="https://pfam.xfam.org/family/PF02335" target="_blank">PF02335</a> - Cytochrome c552
 cyt_c552_small_NrfH	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03153" target="_blank">TIGR03153</a> - cytochrome c nitrite reductase, small subunit
 nirB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02374" target="_blank">TIGR02374</a> - nitrite reductase [NAD(P)H], large subunit
 nirD	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02378" target="_blank">TIGR02378</a> - nitrite reductase [NAD(P)H], small subunit
 nirK	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02376" target="_blank">TIGR02376</a> - nitrite reductase, copper-containing
-nirS	Nitrite reduction <a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a>
+nirS	<a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a> - Nitrite reduction
 nrfD	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03148" target="_blank">TIGR03148</a> - cytochrome c nitrite reductase, NrfD subunit
 nosD	<a href="https://pfam.xfam.org/family/PF05048" target="_blank">PF05048</a> - Periplasmic copper-binding protein (NosD)
 nosZ	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR04246" target="_blank">TIGR04246</a> - nitrous-oxide reductase, Sec-dependent
