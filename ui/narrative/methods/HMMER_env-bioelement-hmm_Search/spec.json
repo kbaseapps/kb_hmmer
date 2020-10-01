@@ -1017,8 +1017,7 @@
             "text_options": {
                 "valid_ws_types": [ "KBaseCollections.FeatureSet",
 				    "KBaseGenomes.Genome",
-				    "KBaseSearch.GenomeSet",
-				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly"
+				    "KBaseSearch.GenomeSet"
 				  ]
             }
         },
