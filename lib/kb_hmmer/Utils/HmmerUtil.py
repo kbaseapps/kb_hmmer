@@ -1673,7 +1673,7 @@ class HmmerUtil:
 
                 for hmm_i, hmm_id in enumerate(input_HMM_ids[hmm_group]):
                     html_report_lines += ['<tr><td colspan=table_col_width>' +
-                                          '<a name="'+str(hmm_id)+'</a>' +
+                                          '<a name="'+str(hmm_id)+'"></a>' +
                                           'Hits to <b>' +str(hmm_id) +
                                           '</b></td></tr>']
                     if hmm_id not in total_hit_cnts:
