@@ -210,7 +210,7 @@ class HmmerUtil:
                     continue
                 if fam_group_line.startswith('#'):
                     continue
-                this_fam_group_info = fam_group_line.split()
+                this_fam_group_info = fam_group_line.split("\t")
                 this_fam_group = this_fam_group_info[0]
                 this_fam_groups.append(this_fam_group)
                 this_fam_groups_disp[this_fam_group] = this_fam_group
@@ -358,14 +358,15 @@ class HmmerUtil:
         some_fam_found = False
         for fam_group in fam_groups:
             fam_field = 'input_'+params['model_group']+'_'+fam_group+'_ids'
-            if params.get(fam_field):
-                for fam_id in params[fam_field]:
-                    if fam_id == 'none':
-                        continue
-                    if fam_id.upper() != 'ALL':
-                        self.log(console, 'RECORDING EXPLICITLY REQUESTED MODEL '+fam_id)  # DEBUG
-                        explicitly_requested_models[fam_id] = True                        
-                    some_fam_found = True
+            if not params.get(fam_field):
+                params[fam_field] = ['ALL']
+            for fam_id in params[fam_field]:
+                if fam_id.upper() == 'NONE':
+                    continue
+                if fam_id.upper() != 'ALL':
+                    self.log(console, 'RECORDING EXPLICITLY REQUESTED MODEL '+fam_id)  # DEBUG
+                    explicitly_requested_models[fam_id] = True                        
+                some_fam_found = True
         if not some_fam_found:
             message = 'You must request at least one HMM'
             self.log(invalid_msgs, message)
@@ -668,9 +669,9 @@ class HmmerUtil:
             if input_field in params and params[input_field] != None and len(params[input_field]) > 0:
                 only_none_found = True
                 for HMM_fam in params[input_field]:
-                    if HMM_fam == 'none':
+                    if HMM_fam.upper() == 'NONE':
                         continue
-                    elif HMM_fam == 'ALL':
+                    elif HMM_fam.upper() == 'ALL':
                         input_HMM_ids[hmm_group] = all_HMM_ids[hmm_group]
                         only_none_found = False
                         break
@@ -1823,7 +1824,8 @@ class HmmerUtil:
                                   header_tab_fontsize + '><b>TABULAR PROFILE</b></font> | ']
 
             for this_hmm_group_i, this_hmm_group in enumerate(hmm_groups_used):
-                disp_hmm_group = this_hmm_group[0].upper() + this_hmm_group[1:]
+                #disp_hmm_group = this_hmm_group[0].upper() + this_hmm_group[1:]
+                disp_hmm_group = model_group_config['fam_groups_disp'][this_hmm_group]
                 this_html_search_file = search_tool_name + '_Search-' + \
                     str(this_hmm_group_i) + '-' + str(this_hmm_group) + '.html'
                 html_report_lines += [' <a href="' + this_html_search_file + '"><font color="' + header_tab_color +

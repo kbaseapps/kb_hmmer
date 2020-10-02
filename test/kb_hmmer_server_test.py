@@ -146,6 +146,7 @@ class kb_hmmerTest(unittest.TestCase):
                                           })[0]
         cls.genomeSet_refs.append(str(obj_info[WSID_I]) +'/'+ str(obj_info[OBJID_I]) +'/'+ str(obj_info[VERSION_I]))
 
+
         # Upload a test Annotated Metagenome Assembly
         cls.ama_refs = []
         ama_name = "ama_test.AMA"
@@ -210,7 +211,7 @@ class kb_hmmerTest(unittest.TestCase):
                         }
                     ]})[0]
                 cls.MSA_refs.append(str(MSA_info[WSID_I])+'/'+str(MSA_info[OBJID_I])+'/'+str(MSA_info[VERSION_I]))
-
+        
                 
     #
     # NOTE: According to Python unittest naming rules test method names should start from 'test'.

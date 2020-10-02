@@ -21,6 +21,12 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_Nitrogen_none",
+                                        "ui-name": "EnvBioelement_Nitrogen_none"
+                                },
+                                {
                                         "value": "ALL",
                                         "display": "ALL",
                                         "id": "EnvBioelement_Nitrogen_ALL",
@@ -225,6 +231,12 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_Sulfur_none",
+                                        "ui-name": "EnvBioelement_Sulfur_none"
+                                },
+                                {
                                         "value": "ALL",
                                         "display": "ALL",
                                         "id": "EnvBioelement_Sulfur_ALL",
@@ -345,6 +357,12 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_Oxygen_none",
+                                        "ui-name": "EnvBioelement_Oxygen_none"
+                                },
+                                {
                                         "value": "ALL",
                                         "display": "ALL",
                                         "id": "EnvBioelement_Oxygen_ALL",
@@ -435,6 +453,12 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_Methane_none",
+                                        "ui-name": "EnvBioelement_Methane_none"
+                                },
+                                {
                                         "value": "ALL",
                                         "display": "ALL",
                                         "id": "EnvBioelement_Methane_ALL",
@@ -501,10 +525,16 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_CFix_none",
+                                        "ui-name": "EnvBioelement_CFix_none"
+                                },
+                                {
                                         "value": "ALL",
                                         "display": "ALL",
-                                        "id": "EnvBioelement_CFix_ALL",
-                                        "ui-name": "EnvBioelement_CFix_ALL"
+                                        "id": "EnvBioelement_CFix_all",
+                                        "ui-name": "EnvBioelement_CFix_all"
                                 },
 				{
 					"value": "Form_I",
@@ -573,6 +603,12 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_CO_none",
+                                        "ui-name": "EnvBioelement_CO_none"
+                                },
+                                {
                                         "value": "ALL",
                                         "display": "ALL",
                                         "id": "EnvBioelement_CO_ALL",
@@ -608,6 +644,12 @@
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
+                                {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_C1Compounds_none",
+                                        "ui-name": "EnvBioelement_C1Compounds_none"
+                                },
                                 {
                                         "value": "ALL",
                                         "display": "ALL",
@@ -711,6 +753,12 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_Hydrogen_none",
+                                        "ui-name": "EnvBioelement_Hydrogen_none"
+                                },
+                                {
                                         "value": "ALL",
                                         "display": "ALL",
                                         "id": "EnvBioelement_Hydrogen_ALL",
@@ -789,6 +837,12 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_HalogenatedCompounds_none",
+                                        "ui-name": "EnvBioelement_HalogenatedCompounds_none"
+                                },
+                                {
                                         "value": "ALL",
                                         "display": "ALL",
                                         "id": "EnvBioelement_HalogenatedCompounds_ALL",
@@ -836,6 +890,12 @@
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
+                                {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_Arsenic_none",
+                                        "ui-name": "EnvBioelement_Arsenic_none"
+                                },
                                 {
                                         "value": "ALL",
                                         "display": "ALL",
@@ -885,6 +945,12 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_Selenium_none",
+                                        "ui-name": "EnvBioelement_Selenium_none"
+                                },
+                                {
                                         "value": "ALL",
                                         "display": "ALL",
                                         "id": "EnvBioelement_Selenium_ALL",
@@ -920,6 +986,12 @@
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
+                                {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_Urea_none",
+                                        "ui-name": "EnvBioelement_Urea_none"
+                                },
                                 {
                                         "value": "ALL",
                                         "display": "ALL",
@@ -957,6 +1029,12 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_Metals_none",
+                                        "ui-name": "EnvBioelement_Metals_none"
+                                },
+                                {
                                         "value": "ALL",
                                         "display": "ALL",
                                         "id": "EnvBioelement_Metals_ALL",
@@ -986,6 +1064,12 @@
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
+                                {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "EnvBioelement_Nitriles_none",
+                                        "ui-name": "EnvBioelement_Nitriles_none"
+                                },
                                 {
                                         "value": "ALL",
                                         "display": "ALL",
