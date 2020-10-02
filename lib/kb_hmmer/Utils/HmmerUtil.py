@@ -1806,6 +1806,9 @@ class HmmerUtil:
             html_report_lines += ['<head>']
             html_report_lines += ['<title>KBase HMMER Custom Model Profile</title>']
             html_report_lines += ['<style>']
+
+            html_report_lines += [
+                "/* unvisited link */\na:link {\n  color: "+text_color+";\n  text-decoration: none;\n}\n/* visited link */\na:visited {\n  color: "+text_color+";\n  text-decoration: none;\n}\n/* mouse over link */\na:hover {\n  color: blue;\n  text-decoration: underline;\n}\n/* selected link */\na:active {\n  color: red;\n  text-decoration: underline;\n}\n"]
             html_report_lines += [
                 ".horz-text {\ndisplay: inline-block;\nfont-family: Tahoma, Geneva, sans-serif;\ntext-decoration: none;\n}"]
             html_report_lines += [
@@ -1959,6 +1962,7 @@ class HmmerUtil:
                 fam_group_text_color = text_color
                 html_report_lines += ['<tr>']
                 html_report_lines += ['<td valign=middle align=left bgcolor="' + fam_group_cell_color + '">']
+                html_report_lines += ['<br>']
                 html_report_lines += ['<font color="'+fam_group_text_color+'"><b>']
                 html_report_lines += [fam_group_disp]
                 html_report_lines += ['</b></font>']

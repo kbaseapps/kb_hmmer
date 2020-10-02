@@ -6,7 +6,7 @@ tooltip: |
     Search for matches to HMMs of environmental bioelement cycling families using HMMER 3
 screenshots: []
 
-icon: env-bioelement-cyan.png
+icon: bioelement-cyan.png
 
 #
 # define a set of similar methods that might be useful to the user
