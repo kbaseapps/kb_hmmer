@@ -1944,8 +1944,8 @@ class HmmerUtil:
                         if 'heatmap' in params and params['heatmap'] == '1':
                             s = 's'
                             if cell_val == 1: s = ''
-                            cell_title = cell_val+' hit'+s+'<br>'+'<br>'.join(table_genes[genome_ref][cat])
-                            html_report_lines += ['<td title="'+cell_val+'" align=center valign=middle bgcolor=white><div class="heatmap_cell-'+str(cell_color_i)+'"></div></td>']
+                            cell_title = cell_val+' hit'+s+"\n"+"\n".join(table_genes[genome_ref][cat])
+                            html_report_lines += ['<td title="'+cell_title+'" align=center valign=middle bgcolor=white><div class="heatmap_cell-'+str(cell_color_i)+'"></div></td>']
                         else:
                             html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
