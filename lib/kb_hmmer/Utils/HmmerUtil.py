@@ -1962,7 +1962,7 @@ class HmmerUtil:
                             group_html_search_file = search_tool_name + '_Search-' + \
                                                     str(hmm_group_i) + '-' + str(hmm_group) + '.html'
                             html_report_lines += ['<td title="'+cell_title+'" align=center valign=middle bgcolor=white>' +
-                                                  '<a href="group_html_search_file#'+cat+'">' +
+                                                  '<a href="'+group_html_search_file+'#'+cat+'">' +
                                                   '<div class="heatmap_cell-'+str(cell_color_i)+'"></div>' +
                                                   '</a></td>']
                         else:
