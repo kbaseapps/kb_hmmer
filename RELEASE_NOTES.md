@@ -7,10 +7,8 @@ __Changes__
 - added option to dbCAN to save hits to explicitly requested or ALL models in a category
 - changed gene overlap_perc to model_cov_perc
 - made addition of new model groups much easier. Method now general in Utils/HmmerUtils.py
-- DEBUGGING added EnvBioelement
-- DEBUGGING added genes hit to rollover behavior in report
-- PENDING create DomainAnnotation object
-- PENDING added HMM-specific thresholds in config
+- added EnvBioelement
+- added genes hit to rollover behavior in report
 
 ### Version 1.4.5
 __Changes__
