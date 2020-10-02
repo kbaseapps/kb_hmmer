@@ -77,6 +77,12 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "dbCAN_cellulosome_none",
+                                        "ui-name": "dbCAN_cellulosome_none"
+                                },
+                                {
                                         "value": "ALL",
                                         "display": "ALL",
                                         "id": "dbCAN_cellulosome_all",
@@ -112,6 +118,12 @@
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
+                                {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "dbCAN_GH_none",
+                                        "ui-name": "dbCAN_GH_none"
+                                },
                                 {
                                         "value": "ALL",
                                         "display": "ALL",
@@ -1931,6 +1943,12 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "dbCAN_GT_none",
+                                        "ui-name": "dbCAN_GT_none"
+                                },
+                                {
                                         "value": "ALL",
                                         "display": "ALL",
                                         "id": "dbCAN_GT_all",
@@ -2621,6 +2639,12 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "dbCAN_CBM_none",
+                                        "ui-name": "dbCAN_CBM_none"
+                                },
+                                {
                                         "value": "ALL",
                                         "display": "ALL",
                                         "id": "dbCAN_CBM_all",
@@ -3137,6 +3161,12 @@
             "dropdown_options": {
                 "options": [
 		                {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "dbCAN_CE_none",
+                                        "ui-name": "dbCAN_CE_none"
+                                },
+		                {
                                         "value": "ALL",
                                         "display": "ALL",
                                         "id": "dbCAN_CE_all",
@@ -3250,6 +3280,12 @@
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
+                                {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "dbCAN_PL_none",
+                                        "ui-name": "dbCAN_PL_none"
+                                },
                                 {
                                         "value": "ALL",
                                         "display": "ALL",
@@ -3880,6 +3916,12 @@
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
+                                {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "dbCAN_AA_none",
+                                        "ui-name": "dbCAN_AA_none"
+                                },
                                 {
                                         "value": "ALL",
                                         "display": "ALL",

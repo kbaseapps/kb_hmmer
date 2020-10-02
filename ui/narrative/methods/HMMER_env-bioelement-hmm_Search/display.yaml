@@ -41,72 +41,72 @@ parameters :
         ui-name : |
             Nitrogen - N
         short-hint : |
-            Select HMMs for Nitrogen Bioelement Families, or will use None if left blank
+            Select HMMs for Nitrogen Bioelement Families, or will use ALL if left blank
     input_EnvBioelement_H_ids:
         ui-name : |
             Hydrogen - H
         short-hint : |
-            Select HMMs for Hydrogen Bioelement Families, or will use None if left blank
+            Select HMMs for Hydrogen Bioelement Families, or will use ALL if left blank
     input_EnvBioelement_O_ids:
         ui-name : |
             Oxygen - O
         short-hint : |
-            Select HMMs for Oxygen Bioelement Families, or will use None if left blank
+            Select HMMs for Oxygen Bioelement Families, or will use ALL if left blank
     input_EnvBioelement_CFix_ids:
         ui-name : |
             Carbon Fixation - CFix
         short-hint : |
-            Select HMMs for Carbon Fixation Bioelement Families, or will use None if left blank
+            Select HMMs for Carbon Fixation Bioelement Families, or will use ALL if left blank
     input_EnvBioelement_C1_ids:
         ui-name : |
             C1 Compounds - C1
         short-hint : |
-            Select HMMs for C1 Compound Bioelement Families, or will use None if left blank
+            Select HMMs for C1 Compound Bioelement Families, or will use ALL if left blank
     input_EnvBioelement_CH4_ids:
         ui-name : |
             Methane - CH4
         short-hint : |
-            Select HMMs for Methane Bioelement Families, or will use None if left blank
+            Select HMMs for Methane Bioelement Families, or will use ALL if left blank
     input_EnvBioelement_CO_ids:
         ui-name : |
             Carbon Monoxide - CMono
         short-hint : |
-            Select HMMs for Carbon Monoxide Bioelement Families, or will use None if left blank
+            Select HMMs for Carbon Monoxide Bioelement Families, or will use ALL if left blank
     input_EnvBioelement_S_ids:
         ui-name : |
             Sulfur - S
         short-hint : |
-            Select HMMs for Sulfur Bioelement Families, or will use None if left blank
+            Select HMMs for Sulfur Bioelement Families, or will use ALL if left blank
     input_EnvBioelement_CN_ids:
         ui-name : |
             Nitrile - CN
         short-hint : |
-            Select HMMs for Nitrile Bioelement Families, or will use None if left blank
+            Select HMMs for Nitrile Bioelement Families, or will use ALL if left blank
     input_EnvBioelement_CH4N2O_ids:
         ui-name : |
             Urea - Ur
         short-hint : |
-            Select HMMs for Urea Bioelement Families, or will use None if left blank
+            Select HMMs for Urea Bioelement Families, or will use ALL if left blank
     input_EnvBioelement_Se_ids:
         ui-name : |
             Selenium - Se
         short-hint : |
-            Select HMMs for Selenium Bioelement Families, or will use None if left blank
+            Select HMMs for Selenium Bioelement Families, or will use ALL if left blank
     input_EnvBioelement_Metal_ids:
         ui-name : |
             Metal - Me
         short-hint : |
-            Select HMMs for Metal Bioelement Families, or will use None if left blank
+            Select HMMs for Metal Bioelement Families, or will use ALL if left blank
     input_EnvBioelement_As_ids:
         ui-name : |
             Arsenic - As
         short-hint : |
-            Select HMMs for Arsenic Bioelement Families, or will use None if left blank
+            Select HMMs for Arsenic Bioelement Families, or will use ALL if left blank
     input_EnvBioelement_Halo_ids:
         ui-name : |
             Halogenated Compounds - Halo
         short-hint : |
-            Select HMMs for Halogenated Compound Bioelement Families, or will use None if left blank
+            Select HMMs for Halogenated Compound Bioelement Families, or will use ALL if left blank
     output_filtered_name:
         ui-name : |
             Output FeatureSet basename

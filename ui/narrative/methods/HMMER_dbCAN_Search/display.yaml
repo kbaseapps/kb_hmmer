@@ -29,39 +29,39 @@ suggestions:
 parameters :
     input_dbCAN_cellulosome_ids:
         ui-name : |
-            Cellulosome Fams (default: NONE)
+            Cellulosome Fams
         short-hint : |
-            Select HMMs for Cellulosome Families (dockerin, cohesin, S-Layer Homology), or will use NONE if left blank
+            Select HMMs for Cellulosome Families (dockerin, cohesin, S-Layer Homology), or will use ALL if left blank
     input_dbCAN_GH_ids:
         ui-name : |
-            Glycoside Hydrolases - GH (default: NONE)
+            Glycoside Hydrolases - GH
         short-hint : |
-            Select HMMs for Glycoside Hydrolase Families, or will use NONE if left blank
+            Select HMMs for Glycoside Hydrolase Families, or will use ALL if left blank
     input_dbCAN_GT_ids:
         ui-name : |
-            Glycosyl Transferases - GT (default: NONE)
+            Glycosyl Transferases - GT
         short-hint : |
-            Select HMMs for Glycosyl Transferase Families, or will use NONE if left blank
+            Select HMMs for Glycosyl Transferase Families, or will use ALL if left blank
     input_dbCAN_CBM_ids:
         ui-name : |
-            Carbohydrate-Binding Modules - CBM (default: NONE)
+            Carbohydrate-Binding Modules - CBM
         short-hint : |
-            Select HMMs for Carbohydrate-Binding Module Families, or will use NONE if left blank
+            Select HMMs for Carbohydrate-Binding Module Families, or will use ALL if left blank
     input_dbCAN_CE_ids:
         ui-name : |
-            Carbohydrate Esterases - CE (default: NONE)
+            Carbohydrate Esterases - CE
         short-hint : |
-            Select HMMs for Carbohydrate Esterase Families, or will use NONE if left blank
+            Select HMMs for Carbohydrate Esterase Families, or will use ALL if left blank
     input_dbCAN_PL_ids:
         ui-name : |
-            Polysaccharide Lyases - PL (default: NONE)
+            Polysaccharide Lyases - PL
         short-hint : |
-            Select HMMs for Polysaccharide Lyase Families, or will use NONE if left blank
+            Select HMMs for Polysaccharide Lyase Families, or will use ALL if left blank
     input_dbCAN_AA_ids:
         ui-name : |
-            Auxiliary Activities Fams (default: NONE)
+            Auxiliary Activities - AA
         short-hint : |
-            Select HMMs for Auxiliary Activiies Families, or will use NONE if left blank
+            Select HMMs for Auxiliary Activities Families, or will use ALL if left blank
     input_many_ref:
         ui-name : |
             Targets Object
