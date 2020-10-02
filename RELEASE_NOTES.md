@@ -1,15 +1,16 @@
 ### Version 1.5.0
 __Changes__
-- DEBUGGING changed heatmap cells to DIV
-- DEBUGGING updated dbCAN to v8
-- DEBUGGING updated dbCAN defaults to match dbCAN2 server E-Value < 1e-15, coverage > 0.35
-- DEBUGGING added descriptions to dbCAN HMMs in key and link to key from column title
-- DEBUGGING added option to dbCAN to save hits to explicitly requested or ALL models in a category
-- DEBUGGING changed gene overlap_perc to model_cov_perc
-- DEBUGGING made addition of new model groups much easier
+- changed heatmap cells to DIV
+- updated dbCAN to v8
+- updated dbCAN defaults to match dbCAN2 server E-Value < 1e-15, coverage > 0.35
+- added descriptions to dbCAN HMMs in key and link to key from column title
+- added option to dbCAN to save hits to explicitly requested or ALL models in a category
+- changed gene overlap_perc to model_cov_perc
+- made addition of new model groups much easier. Method now general in Utils/HmmerUtils.py
+- DEBUGGING added EnvBioelement
+- DEBUGGING added genes hit to rollover behavior in report
 - PENDING create DomainAnnotation object
 - PENDING added HMM-specific thresholds in config
-- PENDING added genes hit to rollover behavior in report
 
 ### Version 1.4.5
 __Changes__
