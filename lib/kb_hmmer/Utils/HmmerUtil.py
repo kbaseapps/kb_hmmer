@@ -715,6 +715,7 @@ class HmmerUtil:
         total_hit_cnts = dict()
         accepted_hit_cnts = dict()
         hit_cnt_by_genome_and_model = dict()
+        hit_genes_by_genome_and_model = dict()
         hit_accept_something = dict()
         output_hit_TAB_file_paths = dict()
         output_hit_MSA_file_paths = dict()
@@ -998,15 +999,19 @@ class HmmerUtil:
                     # capture accepted hit count by genome_ref and model
                     if many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
                         genome_ref = input_many_ref
+                        gene_id = hit_seq_id
                     else:
-                        genome_ref = hit_seq_id.split(genome_id_feature_id_delim)[0]
+                        [genome_ref, gene_id] = hit_seq_id.split(genome_id_feature_id_delim)
                     #self.log(console, "DEBUG: genome_ref: '"+str(genome_ref)+"'")
                     #self.log(console, "DEBUG: input_hmm_name: '"+str(hmm_id)+"'")
                     if genome_ref not in hit_cnt_by_genome_and_model:
                         hit_cnt_by_genome_and_model[genome_ref] = dict()
+                        hit_genes_by_genome_and_model[genome_ref] = dict()
                     if hmm_id not in hit_cnt_by_genome_and_model[genome_ref]:
                         hit_cnt_by_genome_and_model[genome_ref][hmm_id] = 0
+                        hit_genes_by_genome_and_model[genome_ref][hmm_id] = []
                     hit_cnt_by_genome_and_model[genome_ref][hmm_id] += 1
+                    hit_genes_by_genome_and_model[genome_ref][hmm_id].append(gene_id)
 
                     
                     # prep for storing DomainAnnotation
@@ -1019,11 +1024,8 @@ class HmmerUtil:
                                 
                     }
                     hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id][hmm_id].append(this_hit)
-                    # DEBUG
-                    if hmm_id == 'AA6':
-                        pprint (this_hit)
 
-
+                    
                 ### Create output objects
                 #
                 total_hit_cnts[hmm_id] = len(hit_order)  # this is just gene total
@@ -1694,6 +1696,7 @@ class HmmerUtil:
             #
             cats = all_HMM_ids_order
             table_data = dict()
+            table_genes = dict()
             INSANE_VALUE = 10000000000000000
             if params.get('low_val') and params['low_val'] != 'detect':
                 overall_low_val = float(params['low_val'])
@@ -1708,8 +1711,10 @@ class HmmerUtil:
             for genome_ref in genome_refs:
                 if genome_ref not in table_data:
                     table_data[genome_ref] = dict()
+                    table_genes[genome_ref] = dict()
                 for cat in cats:
                     table_data[genome_ref][cat] = 0
+                    table_genes[genome_ref][cat] = []
 
                 if genome_ref not in hit_cnt_by_genome_and_model:
                     continue
@@ -1718,6 +1723,7 @@ class HmmerUtil:
                     if cat in hit_cnt_by_genome_and_model[genome_ref] and \
                        hit_cnt_by_genome_and_model[genome_ref][cat] != 0:
                         table_data[genome_ref][cat] = hit_cnt_by_genome_and_model[genome_ref][cat]
+                        table_genes[genome_ref][cat] = hit_genes_by_genome_and_model[genome_ref][cat]
                         cat_seen[cat] = True
 
             # determine high and low val
@@ -1936,6 +1942,9 @@ class HmmerUtil:
                         cell_val = str(table_data[genome_ref][cat])  # the key line
 
                         if 'heatmap' in params and params['heatmap'] == '1':
+                            s = 's'
+                            if cell_val == 1: s = ''
+                            cell_title = cell_val+' hit'+s+'<br>'+'<br>'.join(table_genes[genome_ref][cat])
                             html_report_lines += ['<td title="'+cell_val+'" align=center valign=middle bgcolor=white><div class="heatmap_cell-'+str(cell_color_i)+'"></div></td>']
                         else:
                             html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
@@ -1971,7 +1980,8 @@ class HmmerUtil:
 
                 for cat in all_HMM_ids[fam_group]:
                     cell_color = 'white'
-                    if not cat_seen.get(cat) and not show_blanks:
+                    #if not cat_seen.get(cat) and not show_blanks:
+                    if not cat_seen.get(cat):
                         cell_color = "#eeeeee"
                     cat_desc = input_HMM_descs[cat]
                     key_link = cat
