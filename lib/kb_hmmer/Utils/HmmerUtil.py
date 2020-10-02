@@ -710,6 +710,14 @@ class HmmerUtil:
             else:
                 hmm_groups_used.append(hmm_group)
 
+        # get mapping to from hmm_id to hmm_groups used (for link to search html file)
+        hmm_id_to_hmm_group_name = dict()
+        hmm_id_to_hmm_group_index = dict()
+        for hmm_group_i, hmm_group in enumerate(hmm_groups_used):
+            for hmm_id in all_HMM_ids[hmm_group]:
+                hmm_id_to_hmm_group_name[hmm_id] = hmm_group
+                hmm_id_to_hmm_group_index[hmm_id] = hmm_group_i
+        
         # Group loop
         hit_info_by_genome_feature_and_hmm = dict()  # used to build DomainAnnotation object
         total_hit_cnts = dict()
@@ -1664,8 +1672,10 @@ class HmmerUtil:
                 html_report_lines += ['</tr>']
 
                 for hmm_i, hmm_id in enumerate(input_HMM_ids[hmm_group]):
-                    html_report_lines += ['<tr><td colspan=table_col_width>Hits to <b>' +
-                                          str(hmm_id) + '</b></td></tr>']
+                    html_report_lines += ['<tr><td colspan=table_col_width>' +
+                                          '<a name="'+str(hmm_id)+'</a>' +
+                                          'Hits to <b>' +str(hmm_id) +
+                                          '</b></td></tr>']
                     if hmm_id not in total_hit_cnts:
                         html_report_lines += ['<tr><td colspan=table_col_width><blockquote><i>Model '+hmm_id+' not requested</i></td></tr>']
                     elif total_hit_cnts[hmm_id] == 0 or html_report_chunks[hmm_i] == None or html_report_chunks[hmm_i] == '':
@@ -1867,9 +1877,11 @@ class HmmerUtil:
                     cell_title = fam_group_disp
                     html_report_lines += ['<td colspan='+str(fam_seen_width)+' style="border-right:solid 2px ' + border_cat_color + '; border-bottom: solid 2px ' +
                                           border_cat_color + '" bgcolor="' + head_color_2 + '" title="' + cell_title + '" valign=bottom align=center>']
+                    html_report_lines += ['<div class="horz_text">']
                     html_report_lines += ['<font color="'+text_color+'">']
                     html_report_lines += [fam_group_disp]
                     html_report_lines += ['</font.']
+                    html_report_lines += ['</div>']
                     html_report_lines += ['</td>']
                 html_report_lines += ['</tr>']
                         
@@ -1943,9 +1955,16 @@ class HmmerUtil:
 
                         if 'heatmap' in params and params['heatmap'] == '1':
                             s = 's'
-                            if cell_val == 1: s = ''
-                            cell_title = cell_val+' hit'+s+"\n"+"\n".join(table_genes[genome_ref][cat])
-                            html_report_lines += ['<td title="'+cell_title+'" align=center valign=middle bgcolor=white><div class="heatmap_cell-'+str(cell_color_i)+'"></div></td>']
+                            if cell_val == '1': s = ''
+                            cell_title = cell_val+' hit'+s+"\n"+"\n".join(sorted(table_genes[genome_ref][cat]))
+	                    hmm_group = hmm_id_to_hmm_group_name[cat]
+                            hmm_group_i = hmm_id_to_hmm_group_index[cat]
+                            group_html_search_file = search_tool_name + '_Search-' + \
+                                                    str(hmm_group_i) + '-' + str(hmm_group) + '.html'
+                            html_report_lines += ['<td title="'+cell_title+'" align=center valign=middle bgcolor=white>' +
+                                                  '<a href="group_html_search_file#'+cat+'">' +
+                                                  '<div class="heatmap_cell-'+str(cell_color_i)+'"></div>' +
+                                                  '</a></td>']
                         else:
                             html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
                                                   '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
