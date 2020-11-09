@@ -21,7 +21,8 @@
             "text_options": {
                 "valid_ws_types": [ "KBaseCollections.FeatureSet",
 				    "KBaseGenomes.Genome",
-				    "KBaseSearch.GenomeSet"
+				    "KBaseSearch.GenomeSet",
+				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly"
 				  ]
             }
         },

@@ -27,6 +27,21 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
+    input_many_ref:
+        ui-name : |
+            Targets Object
+        short-hint : |
+            PROTEIN Targets object to be searched.  Data types may be FeatureSet, Genome, GenomeSet, or AnnotatedMetagenomeAssembly.
+    genome_disp_name_config:
+        ui-name : |
+            Display genome as
+        short-hint : |
+            Use the object name, object version, and/or scientific name of the Genome in the function profile report
+    output_filtered_name:
+        ui-name : |
+            Output FeatureSet basename
+        short-hint : |
+            FeatureSets containing hits with thresholds.  Object names will be HMM name attached to configured basename.
     input_dbCAN_cellulosome_ids:
         ui-name : |
             Cellulosome Fams
@@ -62,21 +77,6 @@ parameters :
             Auxiliary Activities - AA
         short-hint : |
             Select HMMs for Auxiliary Activities Families, or will use ALL if left blank
-    input_many_ref:
-        ui-name : |
-            Targets Object
-        short-hint : |
-            PROTEIN Targets object to be searched.  Data types may be FeatureSet, Genome, or GenomeSet.
-    genome_disp_name_config:
-        ui-name : |
-            Display genome as
-        short-hint : |
-            Use the object name, object version, and/or scientific name of the Genome in the function profile report
-    output_filtered_name:
-        ui-name : |
-            Output FeatureSet basename
-        short-hint : |
-            FeatureSets containing hits with thresholds.  Object names will be HMM name attached to configured basename.
     save_ALL_featureSets:
         ui-name : |
             Save ALL featureSets
