@@ -1,3 +1,8 @@
+### Version 1.6.0
+__Changes__
+- updated HMMER to v3.3.2
+- fixed bug with EnvBioelement 'backconverted subseq didn't end at expected length' by removing MSA output
+
 ### Version 1.5.0
 __Changes__
 - changed heatmap cells to DIV
