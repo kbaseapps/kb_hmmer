@@ -13,7 +13,6 @@ VNFD	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01860" target="_bla
 vnfK_nitrog	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02932" target="_blank">TIGR02932</a> - V-containing nitrogenase, beta subunit
 vnfG_nitrog	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02930" target="_blank">TIGR02930</a> - V-containing nitrogenase, delta subunit
 napA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01706" target="_blank">TIGR01706</a> - periplasmic nitrate reductase, large subunit
-napB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01706" target="_blank">TIGR01706</a> - periplasmic nitrate reductase, large subunit
 napB	<a href="https://pfam.xfam.org/family/PF03892" target="_blank">PF03892</a> - Nitrate reductase cytochrome c-type subunit (NapB)
 narG	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01580" target="_blank">TIGR01580</a> - nitrate reductase, alpha subunit
 norB	<a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a> - Nitric oxide reduction
@@ -29,4 +28,4 @@ nirS	<a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model<
 nrfD	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03148" target="_blank">TIGR03148</a> - cytochrome c nitrite reductase, NrfD subunit
 nosD	<a href="https://pfam.xfam.org/family/PF05048" target="_blank">PF05048</a> - Periplasmic copper-binding protein (NosD)
 nosZ	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR04246" target="_blank">TIGR04246</a> - nitrous-oxide reductase, Sec-dependent
-octR	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR04315" target="_blank">TIGR04315</a> - octaheme c-type cytochrome, tetrathionate reductase family
+octR	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR04315" target="_blank">TIGR04315</a> - octaheme c-type cytochrome - Shewanella-type, tetrathionate reductase family

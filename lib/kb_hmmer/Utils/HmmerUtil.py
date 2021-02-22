@@ -213,9 +213,10 @@ class HmmerUtil:
                 this_fam_group_info = fam_group_line.split("\t")
                 this_fam_group = this_fam_group_info[0]
                 this_fam_groups.append(this_fam_group)
-                this_fam_groups_disp[this_fam_group] = this_fam_group
                 if len(this_fam_group_info) > 1:
                     this_fam_groups_disp[this_fam_group] = this_fam_group_info[1]
+                else:
+                    this_fam_groups_disp[this_fam_group] = this_fam_group_info[0]
                     
         if len(this_fam_groups) == 0:
             raise ValueError ("ABORT: No fam groups found in "+this_fam_groups_file)
@@ -231,12 +232,12 @@ class HmmerUtil:
         this_version = self._get_version(this_model_group, this_model_group_data_dir)
         this_model_group_disp_name = self._get_disp_name(this_model_group, this_model_group_data_dir)
         this_hmms_dir = os.path.join(this_model_group_data_dir, this_model_group+'-'+this_version)
-        this_hmms_path = os.path.join(this_hmms_dir, this_model_group+'-fam-HMMs.txt.'+this_version)
+        this_hmms_path = os.path.join(this_hmms_dir, this_model_group+'-fam-HMMs-'+this_version+'.txt')
         this_cfg = { 'search_tool_name': 'HMMER_'+this_model_group,
                      'group_name': this_model_group_disp_name,
                      'version': this_version,
                      'HMMS_DIR': this_hmms_dir,
-                     'HMMS_PATH': os.path.join(this_hmms_dir, this_model_group+'-fam-HMMs.txt.'+this_version)
+                     'HMMS_PATH': this_hmms_path
                    }
         (this_cfg['fam_groups'], this_cfg['fam_groups_disp']) = self._get_fam_groups(this_model_group, this_hmms_dir)
         return this_cfg
@@ -639,6 +640,7 @@ class HmmerUtil:
         HMM_fam_config_dir = os.path.join(model_group_config['HMMS_DIR'], params['model_group']+'-fams')
         HMM_fam_input_dir = os.path.join(self.output_dir, 'HMMs')
 
+        # HERE
         with open(hmm_group_config_path, 'r', 0) as hmm_group_config_handle:
             for hmm_group_config_line in hmm_group_config_handle.readlines():
                 hmm_group_config_line = hmm_group_config_line.rstrip()
@@ -726,7 +728,7 @@ class HmmerUtil:
         hit_genes_by_genome_and_model = dict()
         hit_accept_something = dict()
         output_hit_TAB_file_paths = dict()
-        output_hit_MSA_file_paths = dict()
+        #output_hit_MSA_file_paths = dict()
         objects_created_refs_coalesce = dict()
         objects_created_refs_by_hmm_id = dict()
 
@@ -808,17 +810,17 @@ class HmmerUtil:
                     raise ValueError("empty file '" + many_forward_reads_file_path + "'")
 
                 output_hit_TAB_file_path = os.path.join(hmmer_dir, hmm_id + '.hitout.txt')
-                output_hit_MSA_file_path = os.path.join(hmmer_dir, hmm_id + '.msaout.txt')
+                #output_hit_MSA_file_path = os.path.join(hmmer_dir, hmm_id + '.msaout.txt')
                 output_filtered_fasta_file_path = os.path.join(hmmer_dir, hmm_id + '.output_filtered.fasta')
                 output_hit_TAB_file_paths[hmm_id] = output_hit_TAB_file_path
-                output_hit_MSA_file_paths[hmm_id] = output_hit_MSA_file_path
+                #output_hit_MSA_file_paths[hmm_id] = output_hit_MSA_file_path
                 output_filtered_fasta_file_paths.append(output_filtered_fasta_file_path)
 
                 # this is command for basic search mode
                 hmmer_search_cmd.append('--domtblout')
                 hmmer_search_cmd.append(output_hit_TAB_file_path)
-                hmmer_search_cmd.append('-A')
-                hmmer_search_cmd.append(output_hit_MSA_file_path)
+                #hmmer_search_cmd.append('-A')
+                #hmmer_search_cmd.append(output_hit_MSA_file_path)
                 hmmer_search_cmd.append('--noali')
                 hmmer_search_cmd.append('--notextw')
                 hmmer_search_cmd.append('-E')  # can't use -T with -E, so we'll use -E
@@ -839,6 +841,8 @@ class HmmerUtil:
                 #report += "\n"+'running HMMER_SEARCH:'+"\n"
                 #report += '    '+' '.join(hmmer_search_cmd)+"\n"
 
+                self.log (console, "RUNNING HMMER") # DEBUG
+                
                 p = subprocess.Popen(hmmer_search_cmd,
                                      cwd=self.output_dir,
                                      stdout=subprocess.PIPE,
@@ -849,7 +853,7 @@ class HmmerUtil:
                     line = p.stdout.readline()
                     if not line:
                         break
-                    #self.log(console, line.replace('\n', ''))
+                    #self.log(console, line.replace('\n', ''))  # DEBUG
 
                 p.stdout.close()
                 p.wait()
@@ -858,11 +862,14 @@ class HmmerUtil:
                     raise ValueError('Error running HMMER_SEARCH, return code: ' + str(p.returncode) +
                                      '\n\n' + '\n'.join(console))
 
+                #self.log (console, "RAN HMMER") # DEBUG
+
                 # Check for output
                 if not os.path.isfile(output_hit_TAB_file_path):
                     raise ValueError("HMMER_SEARCH failed to create TAB file '" + output_hit_TAB_file_path + "'")
                 elif not os.path.getsize(output_hit_TAB_file_path) > 0:
                     raise ValueError("HMMER_SEARCH created empty TAB file '" + output_hit_TAB_file_path + "'")
+                """
                 if not os.path.isfile(output_hit_MSA_file_path):
                     raise ValueError("HMMER_SEARCH failed to create MSA file '" + output_hit_MSA_file_path + "'")
                 elif not os.path.getsize(output_hit_MSA_file_path) > 0:
@@ -870,7 +877,8 @@ class HmmerUtil:
                     #self.log(console,"HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
                     self.log(console, "\tHMMER_SEARCH: No hits")
                     continue
-
+                """
+                
                 # DEBUG
                 #self.log(console, "DEBUG: output_hit_TAB_file_path: '"+str(output_hit_TAB_file_path))
                 #self.log(console, "DEBUG: output_hit_MSA_file_path: '"+str(output_hit_MSA_file_path))
@@ -888,12 +896,26 @@ class HmmerUtil:
                 self.log(console, report)
                 """
                 
-                
                 ### Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
                 #
                 #self.log(console, 'PARSING HMMER SEARCH TAB OUTPUT')
                 with open(output_hit_TAB_file_path, "r") as output_hit_TAB_file_handle:
                     output_aln_buf = output_hit_TAB_file_handle.readlines()
+
+                # check for hits
+                hits_found = False
+                for line in output_aln_buf:
+                    if line.startswith('#'):
+                        continue
+                    hits_found = True
+                    break
+
+                if not hits_found:
+                    self.log(console, "\tHMMER_SEARCH: No hits")
+                    continue
+                
+                self.log (console, "PARSING HMMER OUTPUT") # DEBUG
+                    
                 hit_seq_ids = dict()
                 accepted_hit_cnt = 0  # may be more than one hit per gene
                 accepted_hit_seq_ids = dict()
@@ -2051,11 +2073,11 @@ class HmmerUtil:
         if len(invalid_msgs) == 0:
 
             output_hit_TAB_dir = os.path.join(self.output_dir, 'HMMER_output_TAB')
-            output_hit_MSA_dir = os.path.join(self.output_dir, 'HMMER_output_MSA')
+            #output_hit_MSA_dir = os.path.join(self.output_dir, 'HMMER_output_MSA')
             if not os.path.exists(output_hit_TAB_dir):
                 os.makedirs(output_hit_TAB_dir)
-            if not os.path.exists(output_hit_MSA_dir):
-                os.makedirs(output_hit_MSA_dir)
+            #if not os.path.exists(output_hit_MSA_dir):
+            #    os.makedirs(output_hit_MSA_dir)
 
             for hmm_i, hmm_id in enumerate(all_HMM_ids_order):
                 if hmm_id not in total_hit_cnts:
@@ -2067,10 +2089,10 @@ class HmmerUtil:
                 else:
                     self.log(console, 'PREPPING UPLOAD OF HMMER OUTPUT FOR HMM ' + hmm_id)
                 new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, hmm_id + '.hitout.txt')
-                new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, hmm_id + '.msaout.txt')
+                #new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, hmm_id + '.msaout.txt')
 
                 shutil.copy(output_hit_TAB_file_paths[hmm_id], new_hit_TAB_file_path)
-                shutil.copy(output_hit_MSA_file_paths[hmm_id], new_hit_MSA_file_path)
+                #shutil.copy(output_hit_MSA_file_paths[hmm_id], new_hit_MSA_file_path)
 
             # Upload output dirs
             TAB_upload_ret = None
@@ -2082,13 +2104,15 @@ class HmmerUtil:
                                                     'pack': 'zip'})
             except:
                 raise ValueError('Logging exception loading TAB output to shock')
+            '''
             try:
                 MSA_upload_ret = dfu.file_to_shock({'file_path': output_hit_MSA_dir,
                                                     'make_handle': 0,
                                                     'pack': 'zip'})
             except:
                 raise ValueError('Logging exception loading MSA output to shock')
-
+            '''
+            
         #### Create report object
         ##
         self.log(console, "CREATING REPORT OBJECT")  # DEBUG

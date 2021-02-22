@@ -153,6 +153,8 @@ class kb_hmmerTest(unittest.TestCase):
         ama_feature_cnt = 888
         ama_contigs_file_src = "data/AnnotatedMetagenomeAssembly/ama_contigs.fasta"
         ama_genes_file_src   = "data/AnnotatedMetagenomeAssembly/ama_genes.gff"
+        #ama_contigs_file_src = "data/AnnotatedMetagenomeAssembly/Unbinned_plus_LQ_bins.fasta"
+        #ama_genes_file_src   = "data/AnnotatedMetagenomeAssembly/Unbinned_plus_LQ_bins.gff"
         ama_contigs_file_upload = os.path.join (cls.scratch, os.path.basename(ama_contigs_file_src))
         ama_genes_file_upload = os.path.join (cls.scratch, os.path.basename(ama_genes_file_src))
         shutil.copy (ama_contigs_file_src, ama_contigs_file_upload)
@@ -211,7 +213,6 @@ class kb_hmmerTest(unittest.TestCase):
                         }
                     ]})[0]
                 cls.MSA_refs.append(str(MSA_info[WSID_I])+'/'+str(MSA_info[OBJID_I])+'/'+str(MSA_info[VERSION_I]))
-
                 
     #
     # NOTE: According to Python unittest naming rules test method names should start from 'test'.

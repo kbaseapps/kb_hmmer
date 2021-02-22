@@ -1,0 +1,126 @@
+#ID	ID_DISP	CAT_ID	CAT_DISP	SUBCAT(s)	SUBCAT(s)_COL_DISP
+amoA	amoA	N	Nitrogen	Ammonia oxidation	Am-Ox
+amoB	amoB	N	Nitrogen	Ammonia oxidation	Am-Ox
+amoC	amoC	N	Nitrogen	Ammonia oxidation	Am-Ox
+hzoA	hzoA	N	Nitrogen	Anammox	AnAm-Ox
+hzsA	hzsA	N	Nitrogen	Anammox	AnAm-Ox
+anfD_nitrog	anfD	N	Nitrogen	N2 fixation	N2-F
+anfK_nitrog	anfK	N	Nitrogen	N2 fixation	N2-F
+anfG_nitrog	anfG	N	Nitrogen	N2 fixation	N2-F
+nifD	nifD	N	Nitrogen	N2 fixation	N2-F
+nifK	nifK	N	Nitrogen	N2 fixation	N2-F
+nifH	nifH	N	Nitrogen	N2 fixation	N2-F
+vnfD_nitrog	vnfD	N	Nitrogen	N2 fixation	N2-F
+vnfK_nitrog	vnfK	N	Nitrogen	N2 fixation	N2-F
+vnfG_nitrog	vnfG	N	Nitrogen	N2 fixation	N2-F
+napA	napA	N	Nitrogen	Nitrate reduction	NO3-R
+napB	napB	N	Nitrogen	Nitrate reduction	NO3-R
+narG	narG	N	Nitrogen	Nitrate reduction	NO3-R
+norB	norB	N	Nitrogen	Nitric oxide reduction	NO-R
+norC	norC	N	Nitrogen	Nitric oxide reduction	NO-R
+nxrA	nxrA	N	Nitrogen	Nitrite oxidation	NO2-Ox
+nxrB	nxrB	N	Nitrogen	Nitrite oxidation	NO2-Ox
+cyt_c552_large_NrfA	nrfA	N	Nitrogen	Nitrite reduction	NO2-R
+cyt_c552_small_NrfH	nrfH	N	Nitrogen	Nitrite reduction	NO2-R
+nirB	nirB	N	Nitrogen	Nitrite reduction	NO2-R
+nirD	nirD	N	Nitrogen	Nitrite reduction	NO2-R
+nirK	nirK	N	Nitrogen	Nitrite reduction	NO2-R
+nirS	nirS	N	Nitrogen	Nitrite reduction	NO2-R
+nrfD	nrfD	N	Nitrogen	Nitrite reduction	NO2-R
+octR	octR	N	Nitrogen	Nitrite reduction	NO2-R
+nosD	nosD	N	Nitrogen	Nitrous oxide reduction	N2O-R
+nosZ	nosZ	N	Nitrogen	Nitrous oxide reduction	N2O-R
+aprA	aprA	S	Sulfur	Sulfate reduction	SO4-R
+cysC	cysC	S	Sulfur	Sulfate reduction	SO4-R
+cysN	cysN	S	Sulfur	Sulfate reduction	SO4-R
+sat	sat	S	Sulfur	Sulfate reduction	SO4-R
+fcc	fcc	S	Sulfur	Sulfide oxidation	H2S-Ox
+sqr	sqr	S	Sulfur	Sulfide oxidation	H2S-Ox
+asrA	asrA	S	Sulfur	Sulfite reduction	SO3-R
+asrB	asrB	S	Sulfur	Sulfite reduction	SO3-R
+asrC	asrB	S	Sulfur	Sulfite reduction	SO3-R
+dsrD	dsrD	S	Sulfur	Sulfite reduction	SO3-R
+dsrA	dsrA	S	Sulfur	Sulfite reduction	SO3-R
+dsrB	dsrB	S	Sulfur	Sulfite reduction	SO3-R
+sor	sor	S	Sulfur	Sulfur oxidation	S-Ox
+sulfur_dioxygenase	S_dioxygenase	S	Sulfur	Sulfur oxidation	S-Ox
+phsA	phsA	S	Sulfur	Thiosulfate disproportionation	S2O3-D
+soxB	soxB	S	Sulfur	Thiosulfate oxidation	S2O3-Ox
+soxC	soxC	S	Sulfur	Thiosulfate oxidation	S2O3-Ox
+soxY	soxY	S	Sulfur	Thiosulfate oxidation	S2O3-Ox
+qoxA	qoxA	O	Oxygen	Cytochrome-quinone oxidase	CytQ-Ox
+qoxB	qoxB	O	Oxygen	Cytochrome-quinone oxidase	CytQ-Ox
+cydA	cydA	O	Oxygen	Cytochrome-quinone oxidase	CytQ-Ox
+cydB	cydB	O	Oxygen	Cytochrome-quinone oxidase	CytQ-Ox
+cyoA	cyoA	O	Oxygen	Cytochrome-quinone oxidase	CytQ-Ox
+cyoD	cyoD	O	Oxygen	Cytochrome-quinone oxidase	CytQ-Ox
+cyoE	cyoE	O	Oxygen	Cytochrome-quinone oxidase	CytQ-Ox
+coxA	coxA	O	Oxygen	Cytochrome C oxidase	CyC-Ox
+coxB	coxB	O	Oxygen	Cytochrome C oxidase	CyC-Ox
+ccoN	ccoN	O	Oxygen	Cytochrome C oxidase	CyC-Ox
+ccoO	ccoO	O	Oxygen	Cytochrome C oxidase	CyC-Ox
+ccoP	ccoP	O	Oxygen	Cytochrome C oxidase	CyC-Ox
+pmoA	pmoA	CH4	Methane	Methane oxidation	CH4-Ox
+pmoB	pmoB	CH4	Methane	Methane oxidation	CH4-Ox
+pmoC	pmoC	CH4	Methane	Methane oxidation	CH4-Ox
+mmoB	mmoB	CH4	Methane	Methane oxidation	CH4-Ox
+mmoD	mmoD	CH4	Methane	Methane oxidation	CH4-Ox
+mcrA	mcrA	CH4	Methane	Methane production	CH3-R
+mcrB	mcrB	CH4	Methane	Methane production	CH3-R
+mcrG	mcrG	CH4	Methane	Methane production	CH3-R
+rubisco_form_I	Rubisco_I	CFix	Carbon Fixation	Calvin-Benson-Bassham cycle	CBB
+rubisco_form_II	Rubisco_II	CFix	Carbon Fixation	Calvin-Benson-Bassham cycle	CBB
+rubisco_form_II-III	Rubisco_II-III	CFix	Carbon Fixation	Calvin-Benson-Bassham cycle	CBB
+rubisco_form_III	Rubisco_III	CFix	Carbon Fixation	Calvin-Benson-Bassham cycle	CBB
+aclA	aclA	CFix	Carbon Fixation	Reverse TCA cycle	rTCA
+aclB	aclB	CFix	Carbon Fixation	Reverse TCA cycle	rTCA
+codh_catalytic	CO_DH_cata	CFix	Carbon Fixation	Wood-Ljungdahl pathway	WL
+codh_beta	cdhC	CFix	Carbon Fixation	Wood-Ljungdahl pathway	WL
+codh_delta	cdhD	CFix	Carbon Fixation	Wood-Ljungdahl pathway	WL
+coxL	coxL	CO	Carbon Monoxide	CO oxidation	CO-Ox
+coxM	coxM	CO	Carbon Monoxide	CO oxidation	CO-Ox
+coxS	coxS	CO	Carbon Monoxide	CO oxidation	CO-Ox
+one_C_fae	fae	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
+fdhA_non_GSH	fdhA	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
+one_C_fhcD	fhcD	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
+one_C_mch	mch	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
+adh_III_F_hyde	ADH	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
+fghA_ester_D	fghA	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
+mycoS_dep_FDH	MycoS_dep_FDH	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
+fdh_alpha	fdhA	C1	C1 Compounds	Formate oxidation	CH2O2-Ox
+fdh_beta	fdhB	C1	C1 Compounds	Formate oxidation	CH2O2-Ox
+fdh_gamma	FDH_gamma	C1	C1 Compounds	Formate oxidation	CH2O2-Ox
+NDMA_methanol	NDMA_methanol	C1	C1 Compounds	Methanol oxidation	CH3OH-Ox
+pqq	pqq	C1	C1 Compounds	Methanol oxidation	CH3OH-Ox
+madA	madA	C1	C1 Compounds	Methylamine -> formaldehyde	CH3NH2-DH
+madB	madB	C1	C1 Compounds	Methylamine -> formaldehyde	CH3NH2-DH
+FeFe_hydrog_A	hydrog_A	H	Hydrogen	Fe-Fe hydrogenase	FeFe-H
+FeFe_hydrog_B1	hydrog_B1	H	Hydrogen	Fe-Fe hydrogenase	FeFe-H
+NiFe_hydrog_1	hydrog_1	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
+NiFe_hydrog_2a	hydrog_2a	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
+NiFe_hydrog_2b	hydrog_2b	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
+NiFe_hydrog_3a	hydrog_3a	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
+NiFe_hydrog_3b	hydrog_3b	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
+NiFe_hydrog_3c	hydrog_3c	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
+NiFe_hydrog_3d	hydrog_3d	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
+NiFe_hydrog_4	hydrog_4	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
+Chlorite_dismutase	CLD	Halo	Halogenated Compounds	Chlorite reduction	ClO2-R
+HAD_type_II	dehII	Halo	Halogenated Compounds	Compound degradation	Halo
+RDH	RDH	Halo	Halogenated Compounds	Compound degradation	Halo
+pcrA	pcrA	Halo	Halogenated Compounds	Perchlorate reduction	KClO4-R
+pcrB	pcrB	Halo	Halogenated Compounds	Perchlorate reduction	KClO4-R
+arsC	arsC	As	Arsenic	Arsenate reduction	AsO4-R
+ars_reduc_gluta	ars_reduc_gluta	As	Arsenic	Arsenate reduction	AsO4-R
+arsC_pI258_fam	arsC_pI258	As	Arsenic	Arsenate reduction	AsO4-R
+arsenite_ox_L	aioA	As	Arsenic	Arsenite oxidation	AsO3-R
+arsenite_ox_S	aoxA	As	Arsenic	Arsenite oxidation	AsO3-R
+ygfN	ygfN	Se	Selenium	Selenate reduction	SeO4-R
+ygfK	ygfK	Se	Selenium	Selenate reduction	SeO4-R
+ygfM	ygfM	Se	Selenium	Selenate reduction	SeO4-R
+ureA	ureA	CH4N2O	Urea	Urea hydrolysis	CH4N2O-H
+ureB	ureB	CH4N2O	Urea	Urea hydrolysis	CH4N2O-H
+ureC	ureC	CH4N2O	Urea	Urea hydrolysis	CH4N2O-H
+mtrA	mtrA	Metal	Metals	Metal (Fe/Mn) oxidation	Fe/Mn-Ox
+mtrC	mtrC	Metal	Metals	Metal (Fe/Mn) oxidation	Fe/Mn-Ox
+nthA	nthA	CN	Nitriles	Nitrile hydratase	RCN-H
+nthB	nthB	CN	Nitriles	Nitrile hydratase	RCN-H
