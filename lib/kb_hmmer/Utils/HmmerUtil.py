@@ -1651,9 +1651,9 @@ class HmmerUtil:
                 html_report_lines += ['<title>KBase '+model_group_config['group_name'] + ' Model ' + str(hmm_group) + ' Search Hits</title>']
                 html_report_lines += ['</head>']
                 html_report_lines += ['<body bgcolor="white">']
-                if many_type_name == 'GenomeSet':
-                    html_report_lines += ['<a href="' + html_profile_file + '"><font color="' +
-                                          header_tab_color + '" size=' + header_tab_fontsize + '>TABULAR PROFILE</font></a> | ']
+                #if many_type_name == 'GenomeSet' or many_type_name == 'AnnotatedMetagenomeAssembly':
+                html_report_lines += ['<a href="' + html_profile_file + '"><font color="' +
+                                      header_tab_color + '" size=' + header_tab_fontsize + '>TABULAR PROFILE</font></a> | ']
                 for this_hmm_group_i, this_hmm_group in enumerate(hmm_groups_used):
                     #disp_hmm_group = this_hmm_group[0].upper() + this_hmm_group[1:]
                     disp_hmm_group = model_group_config['fam_groups_disp'][this_hmm_group]
