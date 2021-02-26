@@ -382,7 +382,7 @@ HMMER_dbCAN_Params is a reference to a hash where the following keys are defined
 	input_dbCAN_GT_ids has a value which is a kb_hmmer.data_obj_ref
 	input_dbCAN_PL_ids has a value which is a kb_hmmer.data_obj_ref
 	input_dbCAN_cellulosome_ids has a value which is a kb_hmmer.data_obj_ref
-	input_many_ref has a value which is a kb_hmmer.data_obj_ref
+	input_many_refs has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
 	coalesce_output has a value which is a kb_hmmer.bool
@@ -420,7 +420,7 @@ HMMER_dbCAN_Params is a reference to a hash where the following keys are defined
 	input_dbCAN_GT_ids has a value which is a kb_hmmer.data_obj_ref
 	input_dbCAN_PL_ids has a value which is a kb_hmmer.data_obj_ref
 	input_dbCAN_cellulosome_ids has a value which is a kb_hmmer.data_obj_ref
-	input_many_ref has a value which is a kb_hmmer.data_obj_ref
+	input_many_refs has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
 	coalesce_output has a value which is a kb_hmmer.bool
@@ -533,7 +533,7 @@ HMMER_EnvBioelement_Params is a reference to a hash where the following keys are
 	input_EnvBioelement_Metal_ids has a value which is a kb_hmmer.data_obj_ref
 	input_EnvBioelement_As_ids has a value which is a kb_hmmer.data_obj_ref
 	input_EnvBioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
-	input_many_ref has a value which is a kb_hmmer.data_obj_ref
+	input_many_refs has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
 	coalesce_output has a value which is a kb_hmmer.bool
@@ -578,7 +578,7 @@ HMMER_EnvBioelement_Params is a reference to a hash where the following keys are
 	input_EnvBioelement_Metal_ids has a value which is a kb_hmmer.data_obj_ref
 	input_EnvBioelement_As_ids has a value which is a kb_hmmer.data_obj_ref
 	input_EnvBioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
-	input_many_ref has a value which is a kb_hmmer.data_obj_ref
+	input_many_refs has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
 	coalesce_output has a value which is a kb_hmmer.bool
@@ -1064,7 +1064,7 @@ input_dbCAN_GH_ids has a value which is a kb_hmmer.data_obj_ref
 input_dbCAN_GT_ids has a value which is a kb_hmmer.data_obj_ref
 input_dbCAN_PL_ids has a value which is a kb_hmmer.data_obj_ref
 input_dbCAN_cellulosome_ids has a value which is a kb_hmmer.data_obj_ref
-input_many_ref has a value which is a kb_hmmer.data_obj_ref
+input_many_refs has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool
@@ -1093,7 +1093,7 @@ input_dbCAN_GH_ids has a value which is a kb_hmmer.data_obj_ref
 input_dbCAN_GT_ids has a value which is a kb_hmmer.data_obj_ref
 input_dbCAN_PL_ids has a value which is a kb_hmmer.data_obj_ref
 input_dbCAN_cellulosome_ids has a value which is a kb_hmmer.data_obj_ref
-input_many_ref has a value which is a kb_hmmer.data_obj_ref
+input_many_refs has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool
@@ -1146,7 +1146,7 @@ input_EnvBioelement_Se_ids has a value which is a kb_hmmer.data_obj_ref
 input_EnvBioelement_Metal_ids has a value which is a kb_hmmer.data_obj_ref
 input_EnvBioelement_As_ids has a value which is a kb_hmmer.data_obj_ref
 input_EnvBioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
-input_many_ref has a value which is a kb_hmmer.data_obj_ref
+input_many_refs has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool
@@ -1182,7 +1182,7 @@ input_EnvBioelement_Se_ids has a value which is a kb_hmmer.data_obj_ref
 input_EnvBioelement_Metal_ids has a value which is a kb_hmmer.data_obj_ref
 input_EnvBioelement_As_ids has a value which is a kb_hmmer.data_obj_ref
 input_EnvBioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
-input_many_ref has a value which is a kb_hmmer.data_obj_ref
+input_many_refs has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
 coalesce_output has a value which is a kb_hmmer.bool

@@ -1098,10 +1098,10 @@
             }
         },
         {
-            "id": "input_many_ref",
+            "id": "input_many_refs",
             "optional": false,
             "advanced": false,
-            "allow_multiple": false,
+            "allow_multiple": true,
             "default_values": [ "" ],
             "field_type": "text",
             "text_options": {
@@ -1385,9 +1385,9 @@
                     "target_property": "input_EnvBioelement_CN_ids"
                 },
                 {
-                    "input_parameter": "input_many_ref",
-                    "target_property": "input_many_ref",
-		    "target_type_transform": "resolved-ref"
+                    "input_parameter": "input_many_refs",
+                    "target_property": "input_many_refs",
+		    "target_type_transform": "list<resolved-ref>"
                 },
                 {
                     "input_parameter": "genome_disp_name_config",
