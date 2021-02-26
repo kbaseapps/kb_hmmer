@@ -805,7 +805,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_dbCAN_GT_ids': ['ALL'],
                        'input_dbCAN_PL_ids': ['ALL'],
                        'input_dbCAN_cellulosome_ids': ['ALL'],
-                       'input_many_ref': self.genome_refs[3],  # Single Genome
+                       'input_many_refs': [self.genome_refs[3]],  # Single Genome
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 0,
@@ -862,7 +862,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_dbCAN_GT_ids': ['ALL'],
                        'input_dbCAN_PL_ids': ['ALL'],
                        'input_dbCAN_cellulosome_ids': ['ALL'],
-                       'input_many_ref': self.ama_refs[0],  # Single AnnotatedMetagenomeAssembly
+                       'input_many_refs': [self.ama_refs[0]],  # Single AnnotatedMetagenomeAssembly
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 0,
@@ -922,7 +922,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_dbCAN_GT_ids': ['GT3','GT4'],
                        'input_dbCAN_PL_ids': ['PL9','PL22'],
                        'input_dbCAN_cellulosome_ids': ['dockerin','cohesin'],
-                       'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
+                       'input_many_refs': [self.genomeSet_refs[0]],  # GenomeSet
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,  # KEY
@@ -979,7 +979,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_dbCAN_GT_ids': ['ALL'],
                        'input_dbCAN_PL_ids': ['ALL'],
                        'input_dbCAN_cellulosome_ids': ['ALL'],
-                       'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
+                       'input_many_refs': [self.genomeSet_refs[0]],  # GenomeSet
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 1,  # KEY
@@ -1043,7 +1043,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_EnvBioelement_Metal_ids': ['ALL'],
                        'input_EnvBioelement_As_ids': ['ALL'],
                        'input_EnvBioelement_Halo_ids': ['ALL'],
-                       'input_many_ref': self.genome_refs[3],  # Single Genome
+                       'input_many_refs': [self.genome_refs[3]],  # Single Genome
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,
@@ -1107,7 +1107,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_EnvBioelement_Metal_ids': ['ALL'],
                        'input_EnvBioelement_As_ids': ['ALL'],
                        'input_EnvBioelement_Halo_ids': ['ALL'],
-                       'input_many_ref': self.ama_refs[0],  # Single AMA
+                       'input_many_refs': [self.ama_refs[0]],  # Single AMA
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,
@@ -1171,7 +1171,71 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_EnvBioelement_Metal_ids': ['ALL'],
                        'input_EnvBioelement_As_ids': ['ALL'],
                        'input_EnvBioelement_Halo_ids': ['ALL'],
-                       'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
+                       'input_many_refs': [self.genomeSet_refs[0]],  # GenomeSet
+                       'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
+                       'coalesce_output': 0,  # KEY
+                       'save_ALL_featureSets': 1,
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'model_cov_perc': "35.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'low_val': "1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_EnvBioelement_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created objs
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 14_02: envbioelement Models against GenomeSet+AMA, DON'T coalesce output
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_14_02_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_AMA_NOcoalesce()")
+    def test_14_02_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_AMA_NOcoalesce(self):
+        test_name = 'test_14_02_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_AMA_NOcoalesce'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_EnvBioelement_N_ids': ['nirB'],
+                       'input_EnvBioelement_H_ids': ['NONE'],
+                       'input_EnvBioelement_O_ids': ['NONE'],
+                       'input_EnvBioelement_CFix_ids': ['NONE'],
+                       'input_EnvBioelement_C1_ids': ['NONE'],
+                       'input_EnvBioelement_CH4_ids': ['NONE'],
+                       'input_EnvBioelement_CO_ids': ['NONE'],
+                       'input_EnvBioelement_S_ids': ['NONE'],
+                       'input_EnvBioelement_CN_ids': ['NONE'],
+                       'input_EnvBioelement_CH4N2O_ids': ['NONE'],
+                       'input_EnvBioelement_Se_ids': ['NONE'],
+                       'input_EnvBioelement_Metal_ids': ['NONE'],
+                       'input_EnvBioelement_As_ids': ['NONE'],
+                       'input_EnvBioelement_Halo_ids': ['NONE'],
+                       'input_many_refs': [self.genomeSet_refs[0], self.ama_refs[0]], # GenomeSet+AMA
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,  # KEY
@@ -1235,7 +1299,7 @@ class kb_hmmerTest(unittest.TestCase):
                        'input_EnvBioelement_Metal_ids': ['ALL'],
                        'input_EnvBioelement_As_ids': ['ALL'],
                        'input_EnvBioelement_Halo_ids': ['ALL'],
-                       'input_many_ref': self.genomeSet_refs[0],  # GenomeSet
+                       'input_many_refs': [self.genomeSet_refs[0]],  # GenomeSet
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 1,  # KEY

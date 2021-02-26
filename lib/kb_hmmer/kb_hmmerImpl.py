@@ -53,7 +53,7 @@ class kb_hmmer:
     ######################################### noqa
     VERSION = "1.6.0"
     GIT_URL = "https://github.com/dcchivian/kb_hmmer"
-    GIT_COMMIT_HASH = "70360ac18b3c11c74f187cfd2752b07298bdcdf6"
+    GIT_COMMIT_HASH = "3b08a58d4aebf1e37cff3bef5afa8d0d56edbb95"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -3591,7 +3591,7 @@ class kb_hmmer:
            "input_dbCAN_GT_ids" of type "data_obj_ref", parameter
            "input_dbCAN_PL_ids" of type "data_obj_ref", parameter
            "input_dbCAN_cellulosome_ids" of type "data_obj_ref", parameter
-           "input_many_ref" of type "data_obj_ref", parameter
+           "input_many_refs" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "genome_disp_name_config" of String, parameter "coalesce_output"
            of type "bool", parameter "save_ALL_featureSets" of type "bool",
@@ -3652,7 +3652,7 @@ class kb_hmmer:
            parameter "input_EnvBioelement_Metal_ids" of type "data_obj_ref",
            parameter "input_EnvBioelement_As_ids" of type "data_obj_ref",
            parameter "input_EnvBioelement_Halo_ids" of type "data_obj_ref",
-           parameter "input_many_ref" of type "data_obj_ref", parameter
+           parameter "input_many_refs" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "genome_disp_name_config" of String, parameter "coalesce_output"
            of type "bool", parameter "save_ALL_featureSets" of type "bool",
