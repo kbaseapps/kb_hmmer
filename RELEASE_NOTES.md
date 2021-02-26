@@ -1,6 +1,7 @@
 ### Version 1.6.0
 __Changes__
 - updated HMMER to v3.3.2
+- allow multiple target inputs to HMMER_Model_Group_Search()
 - fixed bug with EnvBioelement 'backconverted subseq didn't end at expected length' by removing MSA output
 
 ### Version 1.5.0
