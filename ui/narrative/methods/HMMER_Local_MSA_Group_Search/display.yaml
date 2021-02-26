@@ -1,7 +1,7 @@
 #
 # define display information
 #
-name: HMMER Search & Functional Profile with Custom Models - v3.1b2
+name: HMMER Custom Search & Functional Profile - v3.3.1
 tooltip: |
     Search for matches to all MSAs that are within workspace using Hidden Markov Model (HMMER) Search.
 screenshots:
@@ -39,17 +39,17 @@ parameters :
         ui-name : |
             Targets Object
         short-hint : |
-            PROTEIN Targets object to be searched.  Data types may be FeatureSet, Genome, or GenomeSet.
+            PROTEIN Targets object to be searched.  Data types may be FeatureSet, Genome, GenomeSet, or AnnotatedMetagenomeAssembly.
+    genome_disp_name_config:
+        ui-name : |
+            Display genome as
+        short-hint : |
+            Use the object name, object version, and/or scientific name of the Genome in the function profile report
     output_filtered_name:
         ui-name : |
-            Output Object
+            Output FeatureSet basename
         short-hint : |
-            Object containing matches.  Output will be will be FeatureSet.
-    coalesce_output:
-        ui-name : |
-            Coalesce output
-        short-hint : |
-            Combine output into one object instead of splitting into a separate object per HMM Search
+            FeatureSets containing hits within thresholds.  Object names will be MSA name attached to configured basename.
     e_value:
         ui-name : |
             E-value
@@ -60,11 +60,11 @@ parameters :
             Bit Score
         short-hint : |
             threshold for hits
-    overlap_perc:
+    model_cov_perc:
         ui-name : |
-            Alignment Overlap Threshold (%)
+            Model coverage minimum(%)
         short-hint : |
-            overlap threshold is with respect to hit sequence length
+            The minimum coverage of the model length for a given hit.
     maxaccepts:
         ui-name : |
             Max Accepts
@@ -77,13 +77,13 @@ parameters :
             Display as heatmap or numerical table (if input is GenomeSet)
         long-hint  : |
             Display as heatmap or numerical table (if input is GenomeSet)
-    vertical :
+    low_val :
         ui-name : |
-            View GenomeSet profile genomes as
+            Heatmap low value
         short-hint : |
-            Show table with genomes as rows
+            Use fixed value or lowest detected value as base of heatmap
         long-hint  : |
-            Show table with genomes as rows
+            Use fixed value or lowest detected value as base of heatmap
     show_blanks :
         ui-name : |
             Show GenomeSet profile empty categories
@@ -120,5 +120,5 @@ publications :
 
     -
         display-text: |
-            HMMER v3.1b2 source:
+            HMMER v3.3.1 source:
         link: http://HMMER.ORG

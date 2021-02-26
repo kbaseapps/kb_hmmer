@@ -1,9 +1,9 @@
 {
-    "ver": "1.0.0",
+    "ver": "1.6.0",
     "authors": [
-        "seanjungbluth"
+        "seanjungbluth", "dylan"
     ],
-    "contact": "http://kbase.us/contact-us/",
+    "contact": "http://www.kbase.us/support/",
     "visible": true,
     "categories": ["active","sequence"],
     "widgets": {
@@ -12,997 +12,1087 @@
     },
     "parameters": [
         {
-            "id": "input_env-bioelement_N_ids",
+            "id": "input_EnvBioelement_N_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_N_none",
-                                        "ui-name": "env-bioelement_N_none"
-                                },
+				{
+					"value": "NONE",
+					"display": "Nitrogen - NONE",
+					"id": "EnvBioelement_N_NONE",
+					"ui-name": "EnvBioelement_N_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Nitrogen - ALL",
+					"id": "EnvBioelement_N_ALL",
+					"ui-name": "EnvBioelement_N_ALL"
+				},
 				{
 					"value": "amoA",
-					"display": "Nitrogen - Ammonia oxidation - amoA",
-					"id": "env-bioelement_N_amoA",
-					"ui-name": "env-bioelement_N_amoA"
+					"display": "Ammonia oxidation - amoA",
+					"id": "EnvBioelement_N_amoA",
+					"ui-name": "EnvBioelement_N_amoA"
 				},
 				{
 					"value": "amoB",
-					"display": "Nitrogen - Ammonia oxidation - amoB",
-					"id": "env-bioelement_N_amoB",
-					"ui-name": "env-bioelement_N_amoB"
+					"display": "Ammonia oxidation - amoB",
+					"id": "EnvBioelement_N_amoB",
+					"ui-name": "EnvBioelement_N_amoB"
 				},
 				{
 					"value": "amoC",
-					"display": "Nitrogen - Ammonia oxidation - amoC",
-					"id": "env-bioelement_N_amoC",
-					"ui-name": "env-bioelement_N_amoC"
+					"display": "Ammonia oxidation - amoC",
+					"id": "EnvBioelement_N_amoC",
+					"ui-name": "EnvBioelement_N_amoC"
 				},
 				{
 					"value": "hzoA",
-					"display": "Nitrogen - Anammox - hzoA",
-					"id": "env-bioelement_N_hzoA",
-					"ui-name": "env-bioelement_N_hzoA"
+					"display": "Anammox - hzoA",
+					"id": "EnvBioelement_N_hzoA",
+					"ui-name": "EnvBioelement_N_hzoA"
 				},
 				{
 					"value": "hzsA",
-					"display": "Nitrogen - Anammox - hzsA",
-					"id": "env-bioelement_N_hzsA",
-					"ui-name": "env-bioelement_N_hzsA"
+					"display": "Anammox - hzsA",
+					"id": "EnvBioelement_N_hzsA",
+					"ui-name": "EnvBioelement_N_hzsA"
 				},
 				{
-					"value": "Fe_only_alpha",
-					"display": "Nitrogen - N2 fixation - Fe_only_alpha",
-					"id": "env-bioelement_N_Fe_only_alpha",
-					"ui-name": "env-bioelement_N_Fe_only_alpha"
+					"value": "anfD_nitrog",
+					"display": "N2 fixation - anfD",
+					"id": "EnvBioelement_N_anfD_nitrog",
+					"ui-name": "EnvBioelement_N_anfD_nitrog"
 				},
 				{
-					"value": "Fe_only_beta",
-					"display": "Nitrogen - N2 fixation - Fe_only_beta",
-					"id": "env-bioelement_N_Fe_only_beta",
-					"ui-name": "env-bioelement_N_Fe_only_beta"
+					"value": "anfK_nitrog",
+					"display": "N2 fixation - anfK",
+					"id": "EnvBioelement_N_anfK_nitrog",
+					"ui-name": "EnvBioelement_N_anfK_nitrog"
 				},
 				{
-					"value": "Fe_only_delta",
-					"display": "Nitrogen - N2 fixation - Fe_only_delta",
-					"id": "env-bioelement_N_Fe_only_delta",
-					"ui-name": "env-bioelement_N_Fe_only_delta"
+					"value": "anfG_nitrog",
+					"display": "N2 fixation - anfG",
+					"id": "EnvBioelement_N_anfG_nitrog",
+					"ui-name": "EnvBioelement_N_anfG_nitrog"
 				},
 				{
-					"value": "Mo-Fe_type_Alpha",
-					"display": "Nitrogen - N2 fixation - Mo-Fe_type_Alpha",
-					"id": "env-bioelement_N_Mo-Fe_type_Alpha",
-					"ui-name": "env-bioelement_N_Mo-Fe_type_Alpha"
+					"value": "nifD",
+					"display": "N2 fixation - nifD",
+					"id": "EnvBioelement_N_nifD",
+					"ui-name": "EnvBioelement_N_nifD"
 				},
 				{
-					"value": "Mo-Fe_type_beta",
-					"display": "Nitrogen - N2 fixation - Mo-Fe_type_beta",
-					"id": "env-bioelement_N_Mo-Fe_type_beta",
-					"ui-name": "env-bioelement_N_Mo-Fe_type_beta"
+					"value": "nifK",
+					"display": "N2 fixation - nifK",
+					"id": "EnvBioelement_N_nifK",
+					"ui-name": "EnvBioelement_N_nifK"
 				},
 				{
 					"value": "nifH",
-					"display": "Nitrogen - N2 fixation - nifH",
-					"id": "env-bioelement_N_nifH",
-					"ui-name": "env-bioelement_nifH"
+					"display": "N2 fixation - nifH",
+					"id": "EnvBioelement_N_nifH",
+					"ui-name": "EnvBioelement_N_nifH"
 				},
 				{
-					"value": "Vanadium-type_alpha",
-					"display": "Nitrogen - N2 fixation - Vanadium-type_alpha",
-					"id": "env-bioelement_N_Vanadium-type_alpha",
-					"ui-name": "env-bioelement_N_Vanadium-type_alpha"
+					"value": "vnfD_nitrog",
+					"display": "N2 fixation - vnfD",
+					"id": "EnvBioelement_N_vnfD_nitrog",
+					"ui-name": "EnvBioelement_N_vnfD_nitrog"
 				},
 				{
-					"value": "Vanadium-type_beta",
-					"display": "Nitrogen - N2 fixation - Vanadium-type_beta",
-					"id": "env-bioelement_N_Vanadium-type_beta",
-					"ui-name": "env-bioelement_N_Vanadium-type_beta"
+					"value": "vnfK_nitrog",
+					"display": "N2 fixation - vnfK",
+					"id": "EnvBioelement_N_vnfK_nitrog",
+					"ui-name": "EnvBioelement_N_vnfK_nitrog"
 				},
 				{
-					"value": "Vanadium-type_delta",
-					"display": "Nitrogen - N2 fixation - Vanadium-type_delta",
-					"id": "env-bioelement_N_Vanadium-type_delta",
-					"ui-name": "env-bioelement_N_Vanadium-type_delta"
+					"value": "vnfG_nitrog",
+					"display": "N2 fixation - vnfG",
+					"id": "EnvBioelement_N_vnfG_nitrog",
+					"ui-name": "EnvBioelement_N_vnfG_nitrog"
 				},
 				{
 					"value": "napA",
-					"display": "Nitrogen - Nitrate reduction - napA",
-					"id": "env-bioelement_N_napA",
-					"ui-name": "env-bioelement_N_napA"
+					"display": "Nitrate reduction - napA",
+					"id": "EnvBioelement_N_napA",
+					"ui-name": "EnvBioelement_N_napA"
 				},
 				{
 					"value": "napB",
-					"display": "Nitrogen - Nitrate reduction - napB",
-					"id": "env-bioelement_N_napB",
-					"ui-name": "env-bioelement_N_napB"
+					"display": "Nitrate reduction - napB",
+					"id": "EnvBioelement_N_napB",
+					"ui-name": "EnvBioelement_N_napB"
 				},
 				{
 					"value": "narG",
-					"display": "Nitrogen - Nitrate reduction - narG",
-					"id": "env-bioelement_N_narG",
-					"ui-name": "env-bioelement_N_narG"
+					"display": "Nitrate reduction - narG",
+					"id": "EnvBioelement_N_narG",
+					"ui-name": "EnvBioelement_N_narG"
 				},
 				{
 					"value": "norB",
-					"display": "Nitrogen - Nitric oxide reduction - norB",
-					"id": "env-bioelement_N_norB",
-					"ui-name": "env-bioelement_N_norB"
+					"display": "Nitric oxide reduction - norB",
+					"id": "EnvBioelement_N_norB",
+					"ui-name": "EnvBioelement_N_norB"
 				},
 				{
 					"value": "norC",
-					"display": "Nitrogen - Nitric oxide reduction - norC",
-					"id": "env-bioelement_N_norC",
-					"ui-name": "env-bioelement_N_norC"
+					"display": "Nitric oxide reduction - norC",
+					"id": "EnvBioelement_N_norC",
+					"ui-name": "EnvBioelement_N_norC"
 				},
 				{
 					"value": "nxrA",
-					"display": "Nitrogen - Nitrite oxidation - nxrA",
-					"id": "env-bioelement_N_nxrA",
-					"ui-name": "env-bioelement_N_nxrA"
+					"display": "Nitrite oxidation - nxrA",
+					"id": "EnvBioelement_N_nxrA",
+					"ui-name": "EnvBioelement_N_nxrA"
 				},
 				{
 					"value": "nxrB",
-					"display": "Nitrogen - Nitrite oxidation - nxrB",
-					"id": "env-bioelement_N_nxrB",
-					"ui-name": "env-bioelement_N_nxrB"
+					"display": "Nitrite oxidation - nxrB",
+					"id": "EnvBioelement_N_nxrB",
+					"ui-name": "EnvBioelement_N_nxrB"
 				},
 				{
-					"value": "cyt_c552_large_NrFA",
-					"display": "Nitrogen - Nitrite reduction - cyt_c552_large_NrFA",
-					"id": "env-bioelement_N_cyt_c552_large_NrFA",
-					"ui-name": "env-bioelement_N_cyt_c552_large_NrFA"
+					"value": "cyt_c552_large_NrfA",
+					"display": "Nitrite reduction - nrfA",
+					"id": "EnvBioelement_N_cyt_c552_large_NrfA",
+					"ui-name": "EnvBioelement_N_cyt_c552_large_NrfA"
 				},
 				{
 					"value": "cyt_c552_small_NrfH",
-					"display": "Nitrogen - Nitrite reduction - cyt_c552_small_NrfH",
-					"id": "env-bioelement_N_cyt_c552_small_NrfH",
-					"ui-name": "env-bioelement_N_cyt_c552_small_NrfH"
+					"display": "Nitrite reduction - nrfH",
+					"id": "EnvBioelement_N_cyt_c552_small_NrfH",
+					"ui-name": "EnvBioelement_N_cyt_c552_small_NrfH"
 				},
 				{
 					"value": "nirB",
-					"display": "Nitrogen - Nitrite reduction - nirB",
-					"id": "env-bioelement_N_nirB",
-					"ui-name": "env-bioelement_N_nirB"
+					"display": "Nitrite reduction - nirB",
+					"id": "EnvBioelement_N_nirB",
+					"ui-name": "EnvBioelement_N_nirB"
 				},
 				{
 					"value": "nirD",
-					"display": "Nitrogen - Nitrite reduction - nirD",
-					"id": "env-bioelement_N_nirD",
-					"ui-name": "env-bioelement_N_nirD"
+					"display": "Nitrite reduction - nirD",
+					"id": "EnvBioelement_N_nirD",
+					"ui-name": "EnvBioelement_N_nirD"
 				},
 				{
 					"value": "nirK",
-					"display": "Nitrogen - Nitrite reduction - nirK",
-					"id": "env-bioelement_N_nirK",
-					"ui-name": "env-bioelement_N_nirK"
+					"display": "Nitrite reduction - nirK",
+					"id": "EnvBioelement_N_nirK",
+					"ui-name": "EnvBioelement_N_nirK"
 				},
 				{
 					"value": "nirS",
-					"display": "Nitrogen - Nitrite reduction - nirS",
-					"id": "env-bioelement_N_nirS",
-					"ui-name": "env-bioelement_N_nirS"
+					"display": "Nitrite reduction - nirS",
+					"id": "EnvBioelement_N_nirS",
+					"ui-name": "EnvBioelement_N_nirS"
 				},
 				{
 					"value": "nrfD",
-					"display": "Nitrogen - Nitrite reduction - nrfD",
-					"id": "env-bioelement_N_nrfD",
-					"ui-name": "env-bioelement_N_nrfD"
-				},
-				{
-					"value": "nosD",
-					"display": "Nitrogen - Nitrous oxide reduction - nosD",
-					"id": "env-bioelement_N_nosD",
-					"ui-name": "env-bioelement_N_nosD"
-				},
-				{
-					"value": "nosZ",
-					"display": "Nitrogen - Nitrous oxide reduction - nosZ",
-					"id": "env-bioelement_N_nosZ",
-					"ui-name": "env-bioelement_N_nosZ"
+					"display": "Nitrite reduction - nrfD",
+					"id": "EnvBioelement_N_nrfD",
+					"ui-name": "EnvBioelement_N_nrfD"
 				},
 				{
 					"value": "octR",
-					"display": "Nitrogen - Octaheme c-type cytochrome Shewanella-type - octR",
-					"id": "env-bioelement_N_octR",
-					"ui-name": "env-bioelement_N_octR"
+					"display": "Nitrite reduction - octR",
+					"id": "EnvBioelement_N_octR",
+					"ui-name": "EnvBioelement_N_octR"
+				},
+				{
+					"value": "nosD",
+					"display": "Nitrous oxide reduction - nosD",
+					"id": "EnvBioelement_N_nosD",
+					"ui-name": "EnvBioelement_N_nosD"
+				},
+				{
+					"value": "nosZ",
+					"display": "Nitrous oxide reduction - nosZ",
+					"id": "EnvBioelement_N_nosZ",
+					"ui-name": "EnvBioelement_N_nosZ"
 				}
                 ]
             }
         },
         {
-            "id": "input_env-bioelement_S_ids",
+            "id": "input_EnvBioelement_S_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_S_none",
-                                        "ui-name": "env-bioelement_S_none"
-                                },
+				{
+					"value": "NONE",
+					"display": "Sulfur - NONE",
+					"id": "EnvBioelement_S_NONE",
+					"ui-name": "EnvBioelement_S_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Sulfur - ALL",
+					"id": "EnvBioelement_S_ALL",
+					"ui-name": "EnvBioelement_S_ALL"
+				},
 				{
 					"value": "aprA",
-					"display": "Sulfur - Sulfate reduction - aprA",
-					"id": "env-bioelement_S_aprA",
-					"ui-name": "env-bioelement_S_aprA"
-				},
-				{
-					"value": "asrB",
-					"display": "Sulfur - Sulfate reduction - asrB",
-					"id": "env-bioelement_S_asrB",
-					"ui-name": "env-bioelement_S_asrB"
-				},
-				{
-					"value": "asrC",
-					"display": "Sulfur - Sulfate reduction - asrC",
-					"id": "env-bioelement_S_asrC",
-					"ui-name": "env-bioelement_S_asrC"
+					"display": "Sulfate reduction - aprA",
+					"id": "EnvBioelement_S_aprA",
+					"ui-name": "EnvBioelement_S_aprA"
 				},
 				{
 					"value": "cysC",
-					"display": "Sulfur - Sulfate reduction - cysC",
-					"id": "env-bioelement_S_cysC",
-					"ui-name": "env-bioelement_S_cysC"
+					"display": "Sulfate reduction - cysC",
+					"id": "EnvBioelement_S_cysC",
+					"ui-name": "EnvBioelement_S_cysC"
 				},
 				{
 					"value": "cysN",
-					"display": "Sulfur - Sulfate reduction - cysN",
-					"id": "env-bioelement_S_cysN",
-					"ui-name": "env-bioelement_S_cysN"
+					"display": "Sulfate reduction - cysN",
+					"id": "EnvBioelement_S_cysN",
+					"ui-name": "EnvBioelement_S_cysN"
 				},
 				{
 					"value": "sat",
-					"display": "Sulfur - Sulfate reduction - sat",
-					"id": "env-bioelement_S_sat",
-					"ui-name": "env-bioelement_S_sat"
+					"display": "Sulfate reduction - sat",
+					"id": "EnvBioelement_S_sat",
+					"ui-name": "EnvBioelement_S_sat"
 				},
 				{
 					"value": "fcc",
-					"display": "Sulfur - Sulfide oxidation - fcc",
-					"id": "env-bioelement_S_fcc",
-					"ui-name": "env-bioelement_S_fcc"
+					"display": "Sulfide oxidation - fcc",
+					"id": "EnvBioelement_S_fcc",
+					"ui-name": "EnvBioelement_S_fcc"
 				},
 				{
 					"value": "sqr",
-					"display": "Sulfur - Sulfide oxidation - sqr",
-					"id": "env-bioelement_S_sqr",
-					"ui-name": "env-bioelement_S_sqr"
+					"display": "Sulfide oxidation - sqr",
+					"id": "EnvBioelement_S_sqr",
+					"ui-name": "EnvBioelement_S_sqr"
+				},
+				{
+					"value": "asrA",
+					"display": "Sulfite reduction - asrA",
+					"id": "EnvBioelement_S_asrA",
+					"ui-name": "EnvBioelement_S_asrA"
+				},
+				{
+					"value": "asrB",
+					"display": "Sulfite reduction - asrB",
+					"id": "EnvBioelement_S_asrB",
+					"ui-name": "EnvBioelement_S_asrB"
+				},
+				{
+					"value": "asrC",
+					"display": "Sulfite reduction - asrB",
+					"id": "EnvBioelement_S_asrC",
+					"ui-name": "EnvBioelement_S_asrC"
 				},
 				{
 					"value": "dsrD",
-					"display": "Sulfur - Sulfite reduction - dsrD",
-					"id": "env-bioelement_S_dsrD",
-					"ui-name": "env-bioelement_S_dsrD"
+					"display": "Sulfite reduction - dsrD",
+					"id": "EnvBioelement_S_dsrD",
+					"ui-name": "EnvBioelement_S_dsrD"
 				},
 				{
 					"value": "dsrA",
-					"display": "Sulfur - Sulfur oxidation - dsrA",
-					"id": "env-bioelement_S_dsrA",
-					"ui-name": "env-bioelement_S_dsrA"
+					"display": "Sulfite reduction - dsrA",
+					"id": "EnvBioelement_S_dsrA",
+					"ui-name": "EnvBioelement_S_dsrA"
 				},
 				{
 					"value": "dsrB",
-					"display": "Sulfur - Sulfur oxidation - dsrB",
-					"id": "env-bioelement_S_dsrB",
-					"ui-name": "env-bioelement_S_dsrB"
+					"display": "Sulfite reduction - dsrB",
+					"id": "EnvBioelement_S_dsrB",
+					"ui-name": "EnvBioelement_S_dsrB"
 				},
 				{
 					"value": "sor",
-					"display": "Sulfur - Sulfur oxidation - sor",
-					"id": "env-bioelement_S_sor",
-					"ui-name": "env-bioelement_S_sor"
+					"display": "Sulfur oxidation - sor",
+					"id": "EnvBioelement_S_sor",
+					"ui-name": "EnvBioelement_S_sor"
 				},
 				{
 					"value": "sulfur_dioxygenase",
-					"display": "Sulfur - Sulfur oxidation - sulfur_dioxygenase",
-					"id": "env-bioelement_S_sulfur_dioxygenase",
-					"ui-name": "env-bioelement_S_sulfur_dioxygenase"
+					"display": "Sulfur oxidation - S_dioxygenase",
+					"id": "EnvBioelement_S_sulfur_dioxygenase",
+					"ui-name": "EnvBioelement_S_sulfur_dioxygenase"
 				},
 				{
 					"value": "phsA",
-					"display": "Sulfur - Thiosulfate disproportionation - phsA",
-					"id": "env-bioelement_S_phsA",
-					"ui-name": "env-bioelement_S_phsA"
+					"display": "Thiosulfate disproportionation - phsA",
+					"id": "EnvBioelement_S_phsA",
+					"ui-name": "EnvBioelement_S_phsA"
 				},
 				{
 					"value": "soxB",
-					"display": "Sulfur - Thiosulfate oxidation - soxB",
-					"id": "env-bioelement_S_soxB",
-					"ui-name": "env-bioelement_S_soxB"
+					"display": "Thiosulfate oxidation - soxB",
+					"id": "EnvBioelement_S_soxB",
+					"ui-name": "EnvBioelement_S_soxB"
 				},
 				{
 					"value": "soxC",
-					"display": "Sulfur - Thiosulfate oxidation - soxC",
-					"id": "env-bioelement_S_soxC",
-					"ui-name": "env-bioelement_S_soxC"
+					"display": "Thiosulfate oxidation - soxC",
+					"id": "EnvBioelement_S_soxC",
+					"ui-name": "EnvBioelement_S_soxC"
 				},
 				{
 					"value": "soxY",
-					"display": "Sulfur - Thiosulfate oxidation - soxY",
-					"id": "env-bioelement_S_soxY",
-					"ui-name": "env-bioelement_S_soxY"
+					"display": "Thiosulfate oxidation - soxY",
+					"id": "EnvBioelement_S_soxY",
+					"ui-name": "EnvBioelement_S_soxY"
 				}
                 ]
             }
         },
         {
-            "id": "input_env-bioelement_O_ids",
+            "id": "input_EnvBioelement_O_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_O_none",
-                                        "ui-name": "env-bioelement_O_none"
-                                },
+				{
+					"value": "NONE",
+					"display": "Oxygen - NONE",
+					"id": "EnvBioelement_O_NONE",
+					"ui-name": "EnvBioelement_O_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Oxygen - ALL",
+					"id": "EnvBioelement_O_ALL",
+					"ui-name": "EnvBioelement_O_ALL"
+				},
 				{
 					"value": "qoxA",
-					"display": "Oxygen - Cytochrome-quinone oxidase - qoxA",
-					"id": "env-bioelement_O_qoxA",
-					"ui-name": "env-bioelement_O_qoxA"
+					"display": "Cytochrome-quinone oxidase - qoxA",
+					"id": "EnvBioelement_O_qoxA",
+					"ui-name": "EnvBioelement_O_qoxA"
 				},
 				{
 					"value": "qoxB",
-					"display": "Oxygen - Cytochrome-quinone oxidase - qoxB",
-					"id": "env-bioelement_O_qoxB",
-					"ui-name": "env-bioelement_O_qoxB"
+					"display": "Cytochrome-quinone oxidase - qoxB",
+					"id": "EnvBioelement_O_qoxB",
+					"ui-name": "EnvBioelement_O_qoxB"
 				},
 				{
 					"value": "cydA",
-					"display": "Oxygen - Cytochrome-quinone oxidase - cydA",
-					"id": "env-bioelement_O_cydA",
-					"ui-name": "env-bioelement_O_cydA"
+					"display": "Cytochrome-quinone oxidase - cydA",
+					"id": "EnvBioelement_O_cydA",
+					"ui-name": "EnvBioelement_O_cydA"
 				},
 				{
 					"value": "cydB",
-					"display": "Oxygen - Cytochrome-quinone oxidase - cydB",
-					"id": "env-bioelement_O_cydB",
-					"ui-name": "env-bioelement_O_cydB"
+					"display": "Cytochrome-quinone oxidase - cydB",
+					"id": "EnvBioelement_O_cydB",
+					"ui-name": "EnvBioelement_O_cydB"
 				},
 				{
 					"value": "cyoA",
-					"display": "Oxygen - Cytochrome-quinone oxidase - cyoA",
-					"id": "env-bioelement_O_cyoA",
-					"ui-name": "env-bioelement_O_cyoA"
+					"display": "Cytochrome-quinone oxidase - cyoA",
+					"id": "EnvBioelement_O_cyoA",
+					"ui-name": "EnvBioelement_O_cyoA"
 				},
 				{
 					"value": "cyoD",
-					"display": "Oxygen - Cytochrome-quinone oxidase - cyoD",
-					"id": "env-bioelement_O_cyoD",
-					"ui-name": "env-bioelement_O_cyoD"
+					"display": "Cytochrome-quinone oxidase - cyoD",
+					"id": "EnvBioelement_O_cyoD",
+					"ui-name": "EnvBioelement_O_cyoD"
 				},
 				{
 					"value": "cyoE",
-					"display": "Oxygen - Cytochrome-quinone oxidase - cyoE",
-					"id": "env-bioelement_O_cyoE",
-					"ui-name": "env-bioelement_O_cyoE"
+					"display": "Cytochrome-quinone oxidase - cyoE",
+					"id": "EnvBioelement_O_cyoE",
+					"ui-name": "EnvBioelement_O_cyoE"
 				},
 				{
 					"value": "coxA",
-					"display": "Oxygen - Cytochrome c oxidase - coxA",
-					"id": "env-bioelement_O_coxA",
-					"ui-name": "env-bioelement_O_coxA"
+					"display": "Cytochrome C oxidase - coxA",
+					"id": "EnvBioelement_O_coxA",
+					"ui-name": "EnvBioelement_O_coxA"
 				},
 				{
 					"value": "coxB",
-					"display": "Oxygen - Cytochrome c oxidase - coxB",
-					"id": "env-bioelement_O_coxB",
-					"ui-name": "env-bioelement_O_coxB"
+					"display": "Cytochrome C oxidase - coxB",
+					"id": "EnvBioelement_O_coxB",
+					"ui-name": "EnvBioelement_O_coxB"
 				},
 				{
 					"value": "ccoN",
-					"display": "Oxygen - Cytochrome c oxidase - ccoN",
-					"id": "env-bioelement_O_ccoN",
-					"ui-name": "env-bioelement_O_ccoN"
+					"display": "Cytochrome C oxidase - ccoN",
+					"id": "EnvBioelement_O_ccoN",
+					"ui-name": "EnvBioelement_O_ccoN"
 				},
 				{
 					"value": "ccoO",
-					"display": "Oxygen - Cytochrome c oxidase - ccoO",
-					"id": "env-bioelement_O_ccoO",
-					"ui-name": "env-bioelement_O_ccoO"
+					"display": "Cytochrome C oxidase - ccoO",
+					"id": "EnvBioelement_O_ccoO",
+					"ui-name": "EnvBioelement_O_ccoO"
 				},
 				{
 					"value": "ccoP",
-					"display": "Oxygen - Cytochrome c oxidase - ccoP",
-					"id": "env-bioelement_O_ccoP",
-					"ui-name": "env-bioelement_O_ccoP"
+					"display": "Cytochrome C oxidase - ccoP",
+					"id": "EnvBioelement_O_ccoP",
+					"ui-name": "EnvBioelement_O_ccoP"
 				}
                 ]
             }
         },
         {
-            "id": "input_env-bioelement_CH4_ids",
+            "id": "input_EnvBioelement_CH4_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_CH4_none",
-                                        "ui-name": "env-bioelement_CH4_none"
-                                },
+				{
+					"value": "NONE",
+					"display": "Methane - NONE",
+					"id": "EnvBioelement_CH4_NONE",
+					"ui-name": "EnvBioelement_CH4_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Methane - ALL",
+					"id": "EnvBioelement_CH4_ALL",
+					"ui-name": "EnvBioelement_CH4_ALL"
+				},
 				{
 					"value": "pmoA",
-					"display": "Methane - Methane oxidation - pmoA",
-					"id": "env-bioelement_CH4_pmoA",
-					"ui-name": "env-bioelement_CH4_pmoA"
+					"display": "Methane oxidation - pmoA",
+					"id": "EnvBioelement_CH4_pmoA",
+					"ui-name": "EnvBioelement_CH4_pmoA"
 				},
 				{
 					"value": "pmoB",
-					"display": "Methane - Methane oxidation - pmoB",
-					"id": "env-bioelement_CH4_pmoB",
-					"ui-name": "env-bioelement_CH4_pmoB"
+					"display": "Methane oxidation - pmoB",
+					"id": "EnvBioelement_CH4_pmoB",
+					"ui-name": "EnvBioelement_CH4_pmoB"
 				},
 				{
 					"value": "pmoC",
-					"display": "Methane - Methane oxidation - pmoC",
-					"id": "env-bioelement_CH4_pmoC",
-					"ui-name": "env-bioelement_CH4_pmoC"
+					"display": "Methane oxidation - pmoC",
+					"id": "EnvBioelement_CH4_pmoC",
+					"ui-name": "EnvBioelement_CH4_pmoC"
 				},
 				{
 					"value": "mmoB",
-					"display": "Methane - Methane oxidation - mmoB",
-					"id": "env-bioelement_CH4_mmoB",
-					"ui-name": "env-bioelement_CH4_mmoB"
+					"display": "Methane oxidation - mmoB",
+					"id": "EnvBioelement_CH4_mmoB",
+					"ui-name": "EnvBioelement_CH4_mmoB"
 				},
 				{
 					"value": "mmoD",
-					"display": "Methane - Methane oxidation - mmoD",
-					"id": "env-bioelement_CH4_mmoD",
-					"ui-name": "env-bioelement_CH4_mmoD"
+					"display": "Methane oxidation - mmoD",
+					"id": "EnvBioelement_CH4_mmoD",
+					"ui-name": "EnvBioelement_CH4_mmoD"
 				},
 				{
 					"value": "mcrA",
-					"display": "Methane - Methane production - mcrA",
-					"id": "env-bioelement_CH4_mcrA",
-					"ui-name": "env-bioelement_CH4_mcrA"
+					"display": "Methane production - mcrA",
+					"id": "EnvBioelement_CH4_mcrA",
+					"ui-name": "EnvBioelement_CH4_mcrA"
 				},
 				{
 					"value": "mcrB",
-					"display": "Methane - Methane production - mcrB",
-					"id": "env-bioelement_CH4_mcrB",
-					"ui-name": "env-bioelement_CH4_mcrB"
+					"display": "Methane production - mcrB",
+					"id": "EnvBioelement_CH4_mcrB",
+					"ui-name": "EnvBioelement_CH4_mcrB"
 				},
 				{
 					"value": "mcrG",
-					"display": "Methane - Methane production - mcrG",
-					"id": "env-bioelement_CH4_mcrG",
-					"ui-name": "env-bioelement_CH4_mcrG"
+					"display": "Methane production - mcrG",
+					"id": "EnvBioelement_CH4_mcrG",
+					"ui-name": "EnvBioelement_CH4_mcrG"
 				}
                 ]
             }
         },
         {
-            "id": "input_env-bioelement_CFix_ids",
+            "id": "input_EnvBioelement_CFix_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_CFix_none",
-                                        "ui-name": "env-bioelement_CFix_none"
-                                },
 				{
-					"value": "Form_I",
-					"display": "Carbon Fixation - CBB cycle (Rubisco) - Form_I",
-					"id": "env-bioelement_CFix_Form_I",
-					"ui-name": "env-bioelement_CFix_Form_I"
+					"value": "NONE",
+					"display": "Carbon Fixation - NONE",
+					"id": "EnvBioelement_CFix_NONE",
+					"ui-name": "EnvBioelement_CFix_NONE"
 				},
 				{
-					"value": "Form_II",
-					"display": "Carbon Fixation - CBB cycle (Rubisco) - Form_II",
-					"id": "env-bioelement_CFix_Form_II",
-					"ui-name": "env-bioelement_CFix_Form_II"
+					"value": "ALL",
+					"display": "Carbon Fixation - ALL",
+					"id": "EnvBioelement_CFix_ALL",
+					"ui-name": "EnvBioelement_CFix_ALL"
 				},
 				{
-					"value": "Form_II-III",
-					"display": "Carbon Fixation - CBB cycle (Rubisco) - Form_II-III",
-					"id": "env-bioelement_CFix_Form_II-III",
-					"ui-name": "env-bioelement_CFix_Form_II-III"
+					"value": "rubisco_form_I",
+					"display": "Calvin-Benson-Bassham cycle - Rubisco_I",
+					"id": "EnvBioelement_CFix_rubisco_form_I",
+					"ui-name": "EnvBioelement_CFix_rubisco_form_I"
 				},
 				{
-					"value": "Form_III",
-					"display": "Carbon Fixation - CBB cycle (Rubisco) - Form_III",
-					"id": "env-bioelement_CFix_Form_III",
-					"ui-name": "env-bioelement_CFix_Form_III"
+					"value": "rubisco_form_II",
+					"display": "Calvin-Benson-Bassham cycle - Rubisco_II",
+					"id": "EnvBioelement_CFix_rubisco_form_II",
+					"ui-name": "EnvBioelement_CFix_rubisco_form_II"
+				},
+				{
+					"value": "rubisco_form_II-III",
+					"display": "Calvin-Benson-Bassham cycle - Rubisco_II-III",
+					"id": "EnvBioelement_CFix_rubisco_form_II-III",
+					"ui-name": "EnvBioelement_CFix_rubisco_form_II-III"
+				},
+				{
+					"value": "rubisco_form_III",
+					"display": "Calvin-Benson-Bassham cycle - Rubisco_III",
+					"id": "EnvBioelement_CFix_rubisco_form_III",
+					"ui-name": "EnvBioelement_CFix_rubisco_form_III"
 				},
 				{
 					"value": "aclA",
-					"display": "Carbon Fixation - Reverse TCA Cycle - aclA",
-					"id": "env-bioelement_CFix_aclA",
-					"ui-name": "env-bioelement_CFix_aclA"
+					"display": "Reverse TCA cycle - aclA",
+					"id": "EnvBioelement_CFix_aclA",
+					"ui-name": "EnvBioelement_CFix_aclA"
 				},
 				{
 					"value": "aclB",
-					"display": "Carbon Fixation - Reverse TCA Cycle - aclB",
-					"id": "env-bioelement_CFix_aclB",
-					"ui-name": "env-bioelement_CFix_aclB"
+					"display": "Reverse TCA cycle - aclB",
+					"id": "EnvBioelement_CFix_aclB",
+					"ui-name": "EnvBioelement_CFix_aclB"
 				},
 				{
 					"value": "codh_catalytic",
-					"display": "Carbon Fixation - Wood Ljungdahl Pathway - codh_catalytic",
-					"id": "env-bioelement_CFix_codh_catalytic",
-					"ui-name": "env-bioelement_CFix_codh_catalytic"
+					"display": "Wood-Ljungdahl pathway - CO_DH_cata",
+					"id": "EnvBioelement_CFix_codh_catalytic",
+					"ui-name": "EnvBioelement_CFix_codh_catalytic"
 				},
 				{
-					"value": "codhC_beta",
-					"display": "Carbon Fixation - Wood Ljungdahl Pathway - codhC_beta",
-					"id": "env-bioelement_CFix_codhC_beta",
-					"ui-name": "env-bioelement_CFix_codhC_beta"
+					"value": "codh_beta",
+					"display": "Wood-Ljungdahl pathway - cdhC",
+					"id": "EnvBioelement_CFix_codh_beta",
+					"ui-name": "EnvBioelement_CFix_codh_beta"
 				},
 				{
-					"value": "codhD_delta",
-					"display": "Carbon Fixation - Wood Ljungdahl Pathway - codhD_delta",
-					"id": "env-bioelement_CFix_codhD_delta",
-					"ui-name": "env-bioelement_CFix_codhD_delta"
+					"value": "codh_delta",
+					"display": "Wood-Ljungdahl pathway - cdhD",
+					"id": "EnvBioelement_CFix_codh_delta",
+					"ui-name": "EnvBioelement_CFix_codh_delta"
 				}
                 ]
             }
         },
         {
-            "id": "input_env-bioelement_CMono_ids",
+            "id": "input_EnvBioelement_CO_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_CMono_none",
-                                        "ui-name": "env-bioelement_CMono_none"
-                                },
+				{
+					"value": "NONE",
+					"display": "Carbon Monoxide - NONE",
+					"id": "EnvBioelement_CO_NONE",
+					"ui-name": "EnvBioelement_CO_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Carbon Monoxide - ALL",
+					"id": "EnvBioelement_CO_ALL",
+					"ui-name": "EnvBioelement_CO_ALL"
+				},
 				{
 					"value": "coxL",
-					"display": "Carbon Monoxide - CO oxidation - coxL",
-					"id": "env-bioelement_CMono_coxL",
-					"ui-name": "env-bioelement_CMono_coxL"
+					"display": "CO oxidation - coxL",
+					"id": "EnvBioelement_CO_coxL",
+					"ui-name": "EnvBioelement_CO_coxL"
 				},
 				{
 					"value": "coxM",
-					"display": "Carbon Monoxide - CO oxidation - coxM",
-					"id": "env-bioelement_CMono_coxM",
-					"ui-name": "env-bioelement_CMono_coxM"
+					"display": "CO oxidation - coxM",
+					"id": "EnvBioelement_CO_coxM",
+					"ui-name": "EnvBioelement_CO_coxM"
 				},
 				{
 					"value": "coxS",
-					"display": "Carbon Monoxide - CO oxidation - coxS",
-					"id": "env-bioelement_CMono_coxS",
-					"ui-name": "env-bioelement_CMono_coxS"
+					"display": "CO oxidation - coxS",
+					"id": "EnvBioelement_CO_coxS",
+					"ui-name": "EnvBioelement_CO_coxS"
 				}
                 ]
             }
         },
         {
-            "id": "input_env-bioelement_C1_ids",
+            "id": "input_EnvBioelement_C1_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_C1_none",
-                                        "ui-name": "env-bioelement_C1_none"
-                                },
 				{
-					"value": "fae",
-					"display": "C1 Compounds - Formaldehyde oxidation - fae",
-					"id": "env-bioelement_C1_fae",
-					"ui-name": "env-bioelement_C1_fae"
+					"value": "NONE",
+					"display": "C1 Compounds - NONE",
+					"id": "EnvBioelement_C1_NONE",
+					"ui-name": "EnvBioelement_C1_NONE"
 				},
 				{
-					"value": "fdh_thiol-independent_type",
-					"display": "C1 Compounds - Formaldehyde oxidation - fdh_thiol-independent_type",
-					"id": "env-bioelement_C1_fdh_thiol-independent_type",
-					"ui-name": "env-bioelement_C1_fdh_thiol-independent_type"
+					"value": "ALL",
+					"display": "C1 Compounds - ALL",
+					"id": "EnvBioelement_C1_ALL",
+					"ui-name": "EnvBioelement_C1_ALL"
 				},
 				{
-					"value": "formylmethanofuran-tetrahyromethanopterin_formyltransferase",
-					"display": "C1 Compounds - Formaldehyde oxidation - formylmethanofuran-tetrahyromethanopterin_formyltransferase",
-					"id": "env-bioelement_C1_formylmethanofuran-tetrahyromethanopterin_formyltransferase",
-					"ui-name": "env-bioelement_C1_formylmethanofuran-tetrahyromethanopterin_formyltransferase"
+					"value": "one_C_fae",
+					"display": "Formaldehyde oxidation - fae",
+					"id": "EnvBioelement_C1_one_C_fae",
+					"ui-name": "EnvBioelement_C1_one_C_fae"
 				},
 				{
-					"value": "methenyltetrahydromethanopterin_cyclohydrolase",
-					"display": "C1 Compounds - Formaldehyde oxidation - methenyltetrahydromethanopterin_cyclohydrolase",
-					"id": "env-bioelement_C1_methenyltetrahydromethanopterin_cyclohydrolase",
-					"ui-name": "env-bioelement_C1_methenyltetrahydromethanopterin_cyclohydrolase"
+					"value": "fdhA_non_GSH",
+					"display": "Formaldehyde oxidation - fdhA",
+					"id": "EnvBioelement_C1_fdhA_non_GSH",
+					"ui-name": "EnvBioelement_C1_fdhA_non_GSH"
 				},
 				{
-					"value": "S--hydroxymethyl-glutathione_dehydrogenase",
-					"display": "C1 Compounds - Formaldehyde oxidation - S--hydroxymethyl-glutathione_dehydrogenase",
-					"id": "env-bioelement_C1_S--hydroxymethyl-glutathione_dehydrogenase",
-					"ui-name": "env-bioelement_C1_S--hydroxymethyl-glutathione_dehydrogenase"
+					"value": "one_C_fhcD",
+					"display": "Formaldehyde oxidation - fhcD",
+					"id": "EnvBioelement_C1_one_C_fhcD",
+					"ui-name": "EnvBioelement_C1_one_C_fhcD"
 				},
 				{
-					"value": "S-formylglutathione_hydrolase",
-					"display": "C1 Compounds - Formaldehyde oxidation - S-formylglutathione_hydrolase",
-					"id": "env-bioelement_C1_S-formylglutathione_hydrolase",
-					"ui-name": "env-bioelement_C1_S-formylglutathione_hydrolase"
+					"value": "one_C_mch",
+					"display": "Formaldehyde oxidation - mch",
+					"id": "EnvBioelement_C1_one_C_mch",
+					"ui-name": "EnvBioelement_C1_one_C_mch"
 				},
 				{
-					"value": "S-hydroxymethyl-mycothiol_dehydrogenase",
-					"display": "C1 Compounds - Formaldehyde oxidation - S-hydroxymethyl-mycothiol_dehydrogenase",
-					"id": "env-bioelement_C1_S-hydroxymethyl-mycothiol_dehydrogenase",
-					"ui-name": "env-bioelement_C1_S-hydroxymethyl-mycothiol_dehydrogenase"
+					"value": "adh_III_F_hyde",
+					"display": "Formaldehyde oxidation - ADH",
+					"id": "EnvBioelement_C1_adh_III_F_hyde",
+					"ui-name": "EnvBioelement_C1_adh_III_F_hyde"
 				},
 				{
-					"value": "formate_dehydrogenase_alpha_subunit",
-					"display": "C1 Compounds - Formate oxidation - formate_dehydrogenase_alpha_subunit",
-					"id": "env-bioelement_C1_formate_dehydrogenase_alpha_subunit",
-					"ui-name": "env-bioelement_C1_formate_dehydrogenase_alpha_subunit"
+					"value": "fghA_ester_D",
+					"display": "Formaldehyde oxidation - fghA",
+					"id": "EnvBioelement_C1_fghA_ester_D",
+					"ui-name": "EnvBioelement_C1_fghA_ester_D"
 				},
 				{
-					"value": "formate_dehydrogenase_beta_subunit",
-					"display": "C1 Compounds - Formate oxidation - formate_dehydrogenase_beta_subunit",
-					"id": "env-bioelement_C1_formate_dehydrogenase_beta_subunit",
-					"ui-name": "env-bioelement_C1_formate_dehydrogenase_beta_subunit"
+					"value": "mycoS_dep_FDH",
+					"display": "Formaldehyde oxidation - MycoS_dep_FDH",
+					"id": "EnvBioelement_C1_mycoS_dep_FDH",
+					"ui-name": "EnvBioelement_C1_mycoS_dep_FDH"
 				},
 				{
-					"value": "formate_dehydrogenase_gamma_subunit",
-					"display": "C1 Compounds - Formate oxidation - formate_dehydrogenase_gamma_subunit",
-					"id": "env-bioelement_C1_formate_dehydrogenase_gamma_subunit",
-					"ui-name": "env-bioelement_C1_formate_dehydrogenase_gamma_subunit"
+					"value": "fdh_alpha",
+					"display": "Formate oxidation - fdhA",
+					"id": "EnvBioelement_C1_fdh_alpha",
+					"ui-name": "EnvBioelement_C1_fdh_alpha"
 				},
 				{
-					"value": "NDMA-dependent_methanol_dehydrogenase",
-					"display": "C1 Compounds - Methanol oxidation - NDMA-dependent_methanol_dehydrogenase",
-					"id": "env-bioelement_C1_NDMA-dependent_methanol_dehydrogenase",
-					"ui-name": "env-bioelement_C1_NDMA-dependent_methanol_dehydrogenase"
+					"value": "fdh_beta",
+					"display": "Formate oxidation - fdhB",
+					"id": "EnvBioelement_C1_fdh_beta",
+					"ui-name": "EnvBioelement_C1_fdh_beta"
+				},
+				{
+					"value": "fdh_gamma",
+					"display": "Formate oxidation - FDH_gamma",
+					"id": "EnvBioelement_C1_fdh_gamma",
+					"ui-name": "EnvBioelement_C1_fdh_gamma"
+				},
+				{
+					"value": "NDMA_methanol",
+					"display": "Methanol oxidation - NDMA_methanol",
+					"id": "EnvBioelement_C1_NDMA_methanol",
+					"ui-name": "EnvBioelement_C1_NDMA_methanol"
 				},
 				{
 					"value": "pqq",
-					"display": "C1 Compounds - Methanol oxidation - pqq",
-					"id": "env-bioelement_C1_pqq",
-					"ui-name": "env-bioelement_C1_pqq"
+					"display": "Methanol oxidation - pqq",
+					"id": "EnvBioelement_C1_pqq",
+					"ui-name": "EnvBioelement_C1_pqq"
 				},
 				{
 					"value": "madA",
-					"display": "C1 Compounds - Methyl amine -> formaldehyde - madA",
-					"id": "env-bioelement_C1_madA",
-					"ui-name": "env-bioelement_C1_madA"
+					"display": "Methylamine -> formaldehyde - madA",
+					"id": "EnvBioelement_C1_madA",
+					"ui-name": "EnvBioelement_C1_madA"
 				},
 				{
 					"value": "madB",
-					"display": "C1 Compounds - Methyl amine -> formaldehyde - madB",
-					"id": "env-bioelement_C1_madB",
-					"ui-name": "env-bioelement_C1_madB"
+					"display": "Methylamine -> formaldehyde - madB",
+					"id": "EnvBioelement_C1_madB",
+					"ui-name": "EnvBioelement_C1_madB"
 				}
                 ]
             }
         },
         {
-            "id": "input_env-bioelement_H_ids",
+            "id": "input_EnvBioelement_H_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_H_none",
-                                        "ui-name": "env-bioelement_H_none"
-                                },
 				{
-					"value": "Group_A",
-					"display": "Hydrogen - FeFe hydrogenase - Group_A",
-					"id": "env-bioelement_H_Group_A",
-					"ui-name": "env-bioelement_H_Group_A"
+					"value": "NONE",
+					"display": "Hydrogen - NONE",
+					"id": "EnvBioelement_H_NONE",
+					"ui-name": "EnvBioelement_H_NONE"
 				},
 				{
-					"value": "Group_B1-B3",
-					"display": "Hydrogen - FeFe hydrogenase - Group_B1-B3",
-					"id": "env-bioelement_H_Group_B1-B3",
-					"ui-name": "env-bioelement_H_Group_B1-B3"
+					"value": "ALL",
+					"display": "Hydrogen - ALL",
+					"id": "EnvBioelement_H_ALL",
+					"ui-name": "EnvBioelement_H_ALL"
 				},
 				{
-					"value": "Group_1",
-					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_1",
-					"id": "env-bioelement_H_Group_1",
-					"ui-name": "env-bioelement_H_Group_1"
+					"value": "FeFe_hydrog_A",
+					"display": "Fe-Fe hydrogenase - hydrog_A",
+					"id": "EnvBioelement_H_FeFe_hydrog_A",
+					"ui-name": "EnvBioelement_H_FeFe_hydrog_A"
 				},
 				{
-					"value": "Group_2a",
-					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_2a",
-					"id": "env-bioelement_H_Group_2a",
-					"ui-name": "env-bioelement_H_Group_2a"
+					"value": "FeFe_hydrog_B1",
+					"display": "Fe-Fe hydrogenase - hydrog_B1",
+					"id": "EnvBioelement_H_FeFe_hydrog_B1",
+					"ui-name": "EnvBioelement_H_FeFe_hydrog_B1"
 				},
 				{
-					"value": "Group_2b",
-					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_2b",
-					"id": "env-bioelement_H_Group_2b",
-					"ui-name": "env-bioelement_H_Group_2b"
+					"value": "NiFe_hydrog_1",
+					"display": "Ni-Fe hydrogenase - hydrog_1",
+					"id": "EnvBioelement_H_NiFe_hydrog_1",
+					"ui-name": "EnvBioelement_H_NiFe_hydrog_1"
 				},
 				{
-					"value": "Group_3a",
-					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_3a",
-					"id": "env-bioelement_H_Group_3a",
-					"ui-name": "env-bioelement_H_Group_3a"
+					"value": "NiFe_hydrog_2a",
+					"display": "Ni-Fe hydrogenase - hydrog_2a",
+					"id": "EnvBioelement_H_NiFe_hydrog_2a",
+					"ui-name": "EnvBioelement_H_NiFe_hydrog_2a"
 				},
 				{
-					"value": "Group_3b",
-					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_3b",
-					"id": "env-bioelement_H_Group_3b",
-					"ui-name": "env-bioelement_H_Group_3b"
+					"value": "NiFe_hydrog_2b",
+					"display": "Ni-Fe hydrogenase - hydrog_2b",
+					"id": "EnvBioelement_H_NiFe_hydrog_2b",
+					"ui-name": "EnvBioelement_H_NiFe_hydrog_2b"
 				},
 				{
-					"value": "Group_3c",
-					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_3c",
-					"id": "env-bioelement_H_Group_3c",
-					"ui-name": "env-bioelement_H_Group_3c"
+					"value": "NiFe_hydrog_3a",
+					"display": "Ni-Fe hydrogenase - hydrog_3a",
+					"id": "EnvBioelement_H_NiFe_hydrog_3a",
+					"ui-name": "EnvBioelement_H_NiFe_hydrog_3a"
 				},
 				{
-					"value": "Group_3d",
-					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_3d",
-					"id": "env-bioelement_H_Group_3d",
-					"ui-name": "env-bioelement_H_Group_3d"
+					"value": "NiFe_hydrog_3b",
+					"display": "Ni-Fe hydrogenase - hydrog_3b",
+					"id": "EnvBioelement_H_NiFe_hydrog_3b",
+					"ui-name": "EnvBioelement_H_NiFe_hydrog_3b"
 				},
 				{
-					"value": "Group_4",
-					"display": "Hydrogen - Ni-Fe Hydrogenase - Group_4",
-					"id": "env-bioelement_H_Group_4",
-					"ui-name": "env-bioelement_H_Group_4"
+					"value": "NiFe_hydrog_3c",
+					"display": "Ni-Fe hydrogenase - hydrog_3c",
+					"id": "EnvBioelement_H_NiFe_hydrog_3c",
+					"ui-name": "EnvBioelement_H_NiFe_hydrog_3c"
+				},
+				{
+					"value": "NiFe_hydrog_3d",
+					"display": "Ni-Fe hydrogenase - hydrog_3d",
+					"id": "EnvBioelement_H_NiFe_hydrog_3d",
+					"ui-name": "EnvBioelement_H_NiFe_hydrog_3d"
+				},
+				{
+					"value": "NiFe_hydrog_4",
+					"display": "Ni-Fe hydrogenase - hydrog_4",
+					"id": "EnvBioelement_H_NiFe_hydrog_4",
+					"ui-name": "EnvBioelement_H_NiFe_hydrog_4"
 				}
                 ]
             }
         },
         {
-            "id": "input_env-bioelement_Halo_ids",
+            "id": "input_EnvBioelement_Halo_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_Halo_none",
-                                        "ui-name": "env-bioelement_Halo_none"
-                                },
+				{
+					"value": "NONE",
+					"display": "Halogenated Compounds - NONE",
+					"id": "EnvBioelement_Halo_NONE",
+					"ui-name": "EnvBioelement_Halo_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Halogenated Compounds - ALL",
+					"id": "EnvBioelement_Halo_ALL",
+					"ui-name": "EnvBioelement_Halo_ALL"
+				},
 				{
 					"value": "Chlorite_dismutase",
-					"display": "Halogenated Compounds - Chlorite reduction - Chlorite_dismutase",
-					"id": "env-bioelement_Halo_Chlorite_dismutase",
-					"ui-name": "env-bioelement_Halo_Chlorite_dismutase"
+					"display": "Chlorite reduction - CLD",
+					"id": "EnvBioelement_Halo_Chlorite_dismutase",
+					"ui-name": "EnvBioelement_Halo_Chlorite_dismutase"
 				},
 				{
-					"value": "Haloacid_dehydrogenase",
-					"display": "Halogenated Compounds - Compound Degradation - Haloacid_dehydrogenase",
-					"id": "env-bioelement_Halo_Haloacid_dehydrogenase",
-					"ui-name": "env-bioelement_Halo_Haloacid_dehydrogenase"
+					"value": "HAD_type_II",
+					"display": "Compound degradation - dehII",
+					"id": "EnvBioelement_Halo_HAD_type_II",
+					"ui-name": "EnvBioelement_Halo_HAD_type_II"
 				},
 				{
-					"value": "Reductive_dehalogenase",
-					"display": "Halogenated Compounds - Compound Degradation - Reductive_dehalogenase",
-					"id": "env-bioelement_Halo_Reductive_dehalogenase",
-					"ui-name": "env-bioelement_Halo_Reductive_dehalogenase"
+					"value": "RDH",
+					"display": "Compound degradation - RDH",
+					"id": "EnvBioelement_Halo_RDH",
+					"ui-name": "EnvBioelement_Halo_RDH"
 				},
 				{
 					"value": "pcrA",
-					"display": "Halogenated Compounds - Perchlorate reduction - pcrA",
-					"id": "env-bioelement_Halo_pcrA",
-					"ui-name": "env-bioelement_Halo_pcrA"
+					"display": "Perchlorate reduction - pcrA",
+					"id": "EnvBioelement_Halo_pcrA",
+					"ui-name": "EnvBioelement_Halo_pcrA"
 				},
 				{
 					"value": "pcrB",
-					"display": "Halogenated Compounds - Perchlorate reduction - pcrB",
-					"id": "env-bioelement_Halo_pcrB",
-					"ui-name": "env-bioelement_Halo_pcrB"
+					"display": "Perchlorate reduction - pcrB",
+					"id": "EnvBioelement_Halo_pcrB",
+					"ui-name": "EnvBioelement_Halo_pcrB"
 				}
                 ]
             }
         },
         {
-            "id": "input_env-bioelement_As_ids",
+            "id": "input_EnvBioelement_As_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_As_none",
-                                        "ui-name": "env-bioelement_As_none"
-                                },
+				{
+					"value": "NONE",
+					"display": "Arsenic - NONE",
+					"id": "EnvBioelement_As_NONE",
+					"ui-name": "EnvBioelement_As_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Arsenic - ALL",
+					"id": "EnvBioelement_As_ALL",
+					"ui-name": "EnvBioelement_As_ALL"
+				},
 				{
 					"value": "arsC",
-					"display": "Arsenic - Arsenate reduction - arsC",
-					"id": "env-bioelement_As_arsC",
-					"ui-name": "env-bioelement_As_arsC"
+					"display": "Arsenate reduction - arsC",
+					"id": "EnvBioelement_As_arsC",
+					"ui-name": "EnvBioelement_As_arsC"
 				},
 				{
-					"value": "glutathione-glutaredoxin_type",
-					"display": "Arsenic - Arsenate reduction - glutathione-glutaredoxin_type",
-					"id": "env-bioelement_As_glutathione-glutaredoxin_type",
-					"ui-name": "env-bioelement_As_glutathione-glutaredoxin_type"
+					"value": "ars_reduc_gluta",
+					"display": "Arsenate reduction - ars_reduc_gluta",
+					"id": "EnvBioelement_As_ars_reduc_gluta",
+					"ui-name": "EnvBioelement_As_ars_reduc_gluta"
 				},
 				{
-					"value": "thioredoxin",
-					"display": "Arsenic - Arsenate reduction - thioredoxin",
-					"id": "env-bioelement_As_thioredoxin",
-					"ui-name": "env-bioelement_As_thioredoxin"
+					"value": "arsC_pI258_fam",
+					"display": "Arsenate reduction - arsC_pI258",
+					"id": "EnvBioelement_As_arsC_pI258_fam",
+					"ui-name": "EnvBioelement_As_arsC_pI258_fam"
 				},
 				{
-					"value": "arsenite_oxidase_large",
-					"display": "Arsenic - Arsenite oxidation - arsenite_oxidase_large",
-					"id": "env-bioelement_As_arsenite_oxidase_large",
-					"ui-name": "env-bioelement_As_arsenite_oxidase_large"
+					"value": "arsenite_ox_L",
+					"display": "Arsenite oxidation - aioA",
+					"id": "EnvBioelement_As_arsenite_ox_L",
+					"ui-name": "EnvBioelement_As_arsenite_ox_L"
 				},
 				{
-					"value": "arsenite_oxidase_small",
-					"display": "Arsenic - Arsenite oxidation - arsenite_oxidase_small",
-					"id": "env-bioelement_As_arsenite_oxidase_small",
-					"ui-name": "env-bioelement_As_arsenite_oxidase_small"
+					"value": "arsenite_ox_S",
+					"display": "Arsenite oxidation - aoxA",
+					"id": "EnvBioelement_As_arsenite_ox_S",
+					"ui-name": "EnvBioelement_As_arsenite_ox_S"
 				}
                 ]
             }
         },
         {
-            "id": "input_env-bioelement_Se_ids",
+            "id": "input_EnvBioelement_Se_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_Se_none",
-                                        "ui-name": "env-bioelement_Se_none"
-                                },
 				{
-					"value": "molybdenum-binding_subunit",
-					"display": "Selenium - Selenate reduction - molybdenum-binding_subunit",
-					"id": "env-bioelement_Se_molybdenum-binding_subunit",
-					"ui-name": "env-bioelement_Se_molybdenum-binding_subunit"
+					"value": "NONE",
+					"display": "Selenium - NONE",
+					"id": "EnvBioelement_Se_NONE",
+					"ui-name": "EnvBioelement_Se_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Selenium - ALL",
+					"id": "EnvBioelement_Se_ALL",
+					"ui-name": "EnvBioelement_Se_ALL"
+				},
+				{
+					"value": "ygfN",
+					"display": "Selenate reduction - ygfN",
+					"id": "EnvBioelement_Se_ygfN",
+					"ui-name": "EnvBioelement_Se_ygfN"
 				},
 				{
 					"value": "ygfK",
-					"display": "Selenium - Selenate reduction - ygfK",
-					"id": "env-bioelement_Se_ygfK",
-					"ui-name": "env-bioelement_Se_ygfK"
+					"display": "Selenate reduction - ygfK",
+					"id": "EnvBioelement_Se_ygfK",
+					"ui-name": "EnvBioelement_Se_ygfK"
 				},
 				{
 					"value": "ygfM",
-					"display": "Selenium - Selenate reduction - ygfM",
-					"id": "env-bioelement_Se_ygfM",
-					"ui-name": "env-bioelement_Se_ygfM"
+					"display": "Selenate reduction - ygfM",
+					"id": "EnvBioelement_Se_ygfM",
+					"ui-name": "EnvBioelement_Se_ygfM"
 				}
                 ]
             }
         },
         {
-            "id": "input_env-bioelement_Ur_ids",
+            "id": "input_EnvBioelement_CH4N2O_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_Ur_none",
-                                        "ui-name": "env-bioelement_Ur_none"
-                                },
+				{
+					"value": "NONE",
+					"display": "Urea - NONE",
+					"id": "EnvBioelement_CH4N2O_NONE",
+					"ui-name": "EnvBioelement_CH4N2O_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Urea - ALL",
+					"id": "EnvBioelement_CH4N2O_ALL",
+					"ui-name": "EnvBioelement_CH4N2O_ALL"
+				},
 				{
 					"value": "ureA",
-					"display": "Urea - Urease - ureA",
-					"id": "env-bioelement_Ur_ureA",
-					"ui-name": "env-bioelement_Ur_ureA"
+					"display": "Urea hydrolysis - ureA",
+					"id": "EnvBioelement_CH4N2O_ureA",
+					"ui-name": "EnvBioelement_CH4N2O_ureA"
 				},
 				{
 					"value": "ureB",
-					"display": "Urea - Urease - ureB",
-					"id": "env-bioelement_Ur_ureB",
-					"ui-name": "env-bioelement_Ur_ureB"
+					"display": "Urea hydrolysis - ureB",
+					"id": "EnvBioelement_CH4N2O_ureB",
+					"ui-name": "EnvBioelement_CH4N2O_ureB"
 				},
 				{
 					"value": "ureC",
-					"display": "Urea - Urease - ureC",
-					"id": "env-bioelement_Ur_ureC",
-					"ui-name": "env-bioelement_Ur_ureC"
+					"display": "Urea hydrolysis - ureC",
+					"id": "EnvBioelement_CH4N2O_ureC",
+					"ui-name": "EnvBioelement_CH4N2O_ureC"
 				}
                 ]
             }
         },
         {
-            "id": "input_env-bioelement_Me_ids",
+            "id": "input_EnvBioelement_Metal_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_Me_none",
-                                        "ui-name": "env-bioelement_Me_none"
-                                },
+				{
+					"value": "NONE",
+					"display": "Metals - NONE",
+					"id": "EnvBioelement_Metal_NONE",
+					"ui-name": "EnvBioelement_Metal_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Metals - ALL",
+					"id": "EnvBioelement_Metal_ALL",
+					"ui-name": "EnvBioelement_Metal_ALL"
+				},
 				{
 					"value": "mtrA",
-					"display": "Metals - Metal (Iron/Manganese) oxidation - mtrA",
-					"id": "env-bioelement_Me_mtrA",
-					"ui-name": "env-bioelement_Me_mtrA"
+					"display": "Metal (Fe/Mn) oxidation - mtrA",
+					"id": "EnvBioelement_Metal_mtrA",
+					"ui-name": "EnvBioelement_Metal_mtrA"
 				},
 				{
 					"value": "mtrC",
-					"display": "Metals - Metal (Iron/Manganese) oxidation - mtrC",
-					"id": "env-bioelement_Me_mtrC",
-					"ui-name": "env-bioelement_Me_mtrC"
+					"display": "Metal (Fe/Mn) oxidation - mtrC",
+					"id": "EnvBioelement_Metal_mtrC",
+					"ui-name": "EnvBioelement_Metal_mtrC"
 				}
                 ]
             }
         },
         {
-            "id": "input_env-bioelement_CN_ids",
+            "id": "input_EnvBioelement_CN_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
-                                {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "env-bioelement_CN_none",
-                                        "ui-name": "env-bioelement_CN_none"
-                                },
+				{
+					"value": "NONE",
+					"display": "Nitriles - NONE",
+					"id": "EnvBioelement_CN_NONE",
+					"ui-name": "EnvBioelement_CN_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Nitriles - ALL",
+					"id": "EnvBioelement_CN_ALL",
+					"ui-name": "EnvBioelement_CN_ALL"
+				},
 				{
 					"value": "nthA",
-					"display": "Nitriles - Nitrile hydratase - nthA",
-					"id": "env-bioelement_CN_nthA",
-					"ui-name": "env-bioelement_CN_nthA"
+					"display": "Nitrile hydratase - nthA",
+					"id": "EnvBioelement_CN_nthA",
+					"ui-name": "EnvBioelement_CN_nthA"
 				},
 				{
 					"value": "nthB",
-					"display": "Nitriles - Nitrile hydratase - nthB",
-					"id": "env-bioelement_CN_nthB",
-					"ui-name": "env-bioelement_CN_nthB"
+					"display": "Nitrile hydratase - nthB",
+					"id": "EnvBioelement_CN_nthB",
+					"ui-name": "EnvBioelement_CN_nthB"
 				}
                 ]
             }
@@ -1015,7 +1105,53 @@
             "default_values": [ "" ],
             "field_type": "text",
             "text_options": {
-                "valid_ws_types": [ "KBaseCollections.FeatureSet","KBaseGenomes.Genome","KBaseSearch.GenomeSet" ]
+                "valid_ws_types": [ "KBaseCollections.FeatureSet",
+				    "KBaseGenomes.Genome",
+				    "KBaseSearch.GenomeSet",
+				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly"
+				  ]
+            }
+        },
+        {
+            "id": "genome_disp_name_config",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "obj_name" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "obj_name",
+                                        "display": "Object_Name",
+                                        "id": "genome_disp_name_config-obj_name",
+                                        "ui-name": "genome_disp_name_config-obj_name"
+                                },
+                                {
+                                        "value": "obj_name_ver",
+                                        "display": "Object_Name.version",
+                                        "id": "genome_disp_name_config-obj_name_ver",
+                                        "ui-name": "genome_disp_name_config-obj_name_ver"
+                                },
+                                {
+                                        "value": "sci_name",
+                                        "display": "Scientific Name",
+                                        "id": "genome_disp_name_config-sci_name",
+                                        "ui-name": "genome_disp_name_config-sci_name"
+                                },
+                                {
+                                        "value": "obj_name_sci_name",
+                                        "display": "Object_Name: Scientific Name",
+                                        "id": "genome_disp_name_config-obj_name_sci_name",
+                                        "ui-name": "genome_disp_name_config-obj_name_sci_name"
+                                },
+                                {
+                                        "value": "obj_name_ver_sci_name",
+                                        "display": "Object_Name.version: Scientific Name",
+                                        "id": "genome_disp_name_config-obj_name_ver_sci_name",
+                                        "ui-name": "genome_disp_name_config-obj_name_ver_sci_name"
+                                }
+                ]
             }
         },
         {
@@ -1031,25 +1167,25 @@
             }
         },
         {
-            "id": "coalesce_output",
-            "optional": false,
-            "advanced": false,
+            "id": "save_ALL_featureSets",
+            "optional": true,
+            "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "1" ],
+            "default_values": [ "0" ],
             "field_type": "dropdown",
 	    "dropdown_options": {
                 "options": [
                                 {
                                         "value": "0",
-                                        "display": "Separate objects for each Model (makes many data objects)",
-                                        "id": "sep",
-                                        "ui-name": "sep"
+                                    "display": "Save only hits to explicitly requested models",
+                                        "id": "save_explicit",
+                                        "ui-name": "save_explicit"
                                 },
                                 {
                                         "value": "1",
-                                        "display": "Merge hits within env-bioelement category (recommended)",
-                                        "id": "merge",
-                                        "ui-name": "merge"
+                                    "display": "Save hits to ALL requested models",
+                                        "id": "save_ALL",
+                                        "ui-name": "save_ALL"
                                 }
 			]
             }
@@ -1079,11 +1215,11 @@
             }
         },
         {
-            "id": "overlap_perc",
+            "id": "model_cov_perc",
             "optional": true,
             "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "50.0" ],
+            "default_values": [ "35.0" ],
             "field_type": "text",
             "text_options": {
                 "validate_as": "float",
@@ -1128,7 +1264,7 @@
             }
         },
         {
-            "id": "vertical",
+            "id": "low_val",
             "optional": false,
             "advanced": true,
             "allow_multiple": false,
@@ -1137,10 +1273,22 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "0.1",
+                                        "display": "fixed: 0.1",
+                                        "id": "fixed: 0.1",
+                                        "ui-name": "fixed: 0.1"
+                                },
+                                {
                                         "value": "1",
-                                        "display": "rows",
-                                        "id": "rows",
-                                        "ui-name": "rows"
+                                        "display": "fixed: 1",
+                                        "id": "fixed: 1",
+                                        "ui-name": "fixed: 1"
+                                },
+                                {
+                                        "value": "detect",
+                                        "display": "detect",
+                                        "id": "detect",
+                                        "ui-name": "detect"
                                 }
                 ]
             }
@@ -1181,73 +1329,81 @@
                     "target_property": "workspace_name"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_N_ids",
-                    "target_property": "input_env-bioelement_N_ids"
+                    "input_parameter": "input_EnvBioelement_N_ids",
+                    "target_property": "input_EnvBioelement_N_ids"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_S_ids",
-                    "target_property": "input_env-bioelement_S_ids"
+                    "input_parameter": "input_EnvBioelement_S_ids",
+                    "target_property": "input_EnvBioelement_S_ids"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_O_ids",
-                    "target_property": "input_env-bioelement_O_ids"
+                    "input_parameter": "input_EnvBioelement_O_ids",
+                    "target_property": "input_EnvBioelement_O_ids"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_CH4_ids",
-                    "target_property": "input_env-bioelement_CH4_ids"
+                    "input_parameter": "input_EnvBioelement_CH4_ids",
+                    "target_property": "input_EnvBioelement_CH4_ids"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_CFix_ids",
-                    "target_property": "input_env-bioelement_CFix_ids"
+                    "input_parameter": "input_EnvBioelement_CFix_ids",
+                    "target_property": "input_EnvBioelement_CFix_ids"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_CMono_ids",
-                    "target_property": "input_env-bioelement_CMono_ids"
+                    "input_parameter": "input_EnvBioelement_CO_ids",
+                    "target_property": "input_EnvBioelement_CO_ids"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_C1_ids",
-                    "target_property": "input_env-bioelement_C1_ids"
+                    "input_parameter": "input_EnvBioelement_C1_ids",
+                    "target_property": "input_EnvBioelement_C1_ids"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_H_ids",
-                    "target_property": "input_env-bioelement_H_ids"
+                    "input_parameter": "input_EnvBioelement_H_ids",
+                    "target_property": "input_EnvBioelement_H_ids"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_Halo_ids",
-                    "target_property": "input_env-bioelement_Halo_ids"
+                    "input_parameter": "input_EnvBioelement_Halo_ids",
+                    "target_property": "input_EnvBioelement_Halo_ids"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_As_ids",
-                    "target_property": "input_env-bioelement_As_ids"
+                    "input_parameter": "input_EnvBioelement_As_ids",
+                    "target_property": "input_EnvBioelement_As_ids"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_Se_ids",
-                    "target_property": "input_env-bioelement_Se_ids"
+                    "input_parameter": "input_EnvBioelement_Se_ids",
+                    "target_property": "input_EnvBioelement_Se_ids"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_Ur_ids",
-                    "target_property": "input_env-bioelement_Ur_ids"
+                    "input_parameter": "input_EnvBioelement_CH4N2O_ids",
+                    "target_property": "input_EnvBioelement_CH4N2O_ids"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_Me_ids",
-                    "target_property": "input_env-bioelement_Me_ids"
+                    "input_parameter": "input_EnvBioelement_Metal_ids",
+                    "target_property": "input_EnvBioelement_Metal_ids"
                 },
                 {
-                    "input_parameter": "input_env-bioelement_CN_ids",
-                    "target_property": "input_env-bioelement_CN_ids"
+                    "input_parameter": "input_EnvBioelement_CN_ids",
+                    "target_property": "input_EnvBioelement_CN_ids"
                 },
                 {
                     "input_parameter": "input_many_ref",
                     "target_property": "input_many_ref",
-		                  "target_type_transform": "resolved-ref"
+		    "target_type_transform": "resolved-ref"
+                },
+                {
+                    "input_parameter": "genome_disp_name_config",
+                    "target_property": "genome_disp_name_config"
                 },
                 {
                     "input_parameter": "output_filtered_name",
                     "target_property": "output_filtered_name"
                 },
                 {
-                    "input_parameter": "coalesce_output",
+                    "constant_value": "0",
                     "target_property": "coalesce_output"
+                },
+                {
+                    "input_parameter": "save_ALL_featureSets",
+                    "target_property": "save_ALL_featureSets"
                 },
                 {
                     "input_parameter": "e_value",
@@ -1258,8 +1414,8 @@
                     "target_property": "bitscore"
                 },
                 {
-                    "input_parameter": "overlap_perc",
-                    "target_property": "overlap_perc"
+                    "input_parameter": "model_cov_perc",
+                    "target_property": "model_cov_perc"
                 },
                 {
                     "input_parameter": "maxaccepts",
@@ -1270,7 +1426,11 @@
                     "target_property": "heatmap"
                 },
                 {
-                    "input_parameter": "vertical",
+                    "input_parameter": "low_val",
+                    "target_property": "low_val"
+                },
+                {
+                    "constant_value": "1",
                     "target_property": "vertical"
                 },
                 {

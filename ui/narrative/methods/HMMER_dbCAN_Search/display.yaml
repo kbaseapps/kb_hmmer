@@ -1,7 +1,7 @@
 #
 # define display information
 #
-name: Search with dbCAN HMMs of CAZy families - v6
+name: Search with dbCAN2 HMMs of CAZy families - v8
 tooltip: |
     Search for matches to dbCAN HMMs of CAZy carbohydrate active enzyme families using HMMER 3
 screenshots: []
@@ -27,56 +27,61 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
-    input_dbCAN_GH_ids:
-        ui-name : |
-            Glycoside Hydrolases - GH (default: ALL)
-        short-hint : |
-            Select HMMs for Glycoside Hydrolase Families, or will use ALL if left blank
-    input_dbCAN_GT_ids:
-        ui-name : |
-            GlycosylTransferases - GT (default: ALL)
-        short-hint : |
-            Select HMMs for GlycosylTransferase Families, or will use ALL if left blank
-    input_dbCAN_CE_ids:
-        ui-name : |
-            Carbohydrate Esterases - CE (default: ALL)
-        short-hint : |
-            Select HMMs for Carbohydrate Esterase Families, or will use ALL if left blank
-    input_dbCAN_PL_ids:
-        ui-name : |
-            Polysaccharide Lyases - PL (default: ALL)
-        short-hint : |
-            Select HMMs for Polysaccharide Lyase Families, or will use ALL if left blank
-    input_dbCAN_AA_ids:
-        ui-name : |
-            Auxiliary Activities Fams (default: ALL)
-        short-hint : |
-            Select HMMs for Auxiliary Activiies Families, or will use ALL if left blank
-    input_dbCAN_CBM_ids:
-        ui-name : |
-            Carbohydrate-Binding Modules - CBM (default: ALL)
-        short-hint : |
-            Select HMMs for Carbohydrate-Binding Module Families, or will use ALL if left blank
-    input_dbCAN_cellulosome_ids:
-        ui-name : |
-            Cellulosome Fams (default: ALL)
-        short-hint : |
-            Select HMMs for Cellulosome Families (dockerin, cohesin, S-Layer Homology), or will use ALL if left blank
     input_many_ref:
         ui-name : |
             Targets Object
         short-hint : |
-            PROTEIN Targets object to be searched.  Data types may be FeatureSet, Genome, or GenomeSet.
+            PROTEIN Targets object to be searched.  Data types may be FeatureSet, Genome, GenomeSet, or AnnotatedMetagenomeAssembly.
+    genome_disp_name_config:
+        ui-name : |
+            Display genome as
+        short-hint : |
+            Use the object name, object version, and/or scientific name of the Genome in the function profile report
     output_filtered_name:
         ui-name : |
-            Output Object
+            Output FeatureSet basename
         short-hint : |
-            Object containing matches.  Output will be will be FeatureSet.
-    coalesce_output:
+            FeatureSets containing hits with thresholds.  Object names will be HMM name attached to configured basename.
+    input_dbCAN_cellulosome_ids:
         ui-name : |
-            Coalesce output
+            Cellulosome Fams
         short-hint : |
-            Combine output for each CAZy category (GH, GT, CE, PL, AA, cellulosome) into one object instead of splitting into a separate object per HMM Search
+            Select HMMs for Cellulosome Families (dockerin, cohesin, S-Layer Homology), or will use ALL if left blank
+    input_dbCAN_GH_ids:
+        ui-name : |
+            Glycoside Hydrolases - GH
+        short-hint : |
+            Select HMMs for Glycoside Hydrolase Families, or will use ALL if left blank
+    input_dbCAN_GT_ids:
+        ui-name : |
+            Glycosyl Transferases - GT
+        short-hint : |
+            Select HMMs for Glycosyl Transferase Families, or will use ALL if left blank
+    input_dbCAN_CBM_ids:
+        ui-name : |
+            Carbohydrate-Binding Modules - CBM
+        short-hint : |
+            Select HMMs for Carbohydrate-Binding Module Families, or will use ALL if left blank
+    input_dbCAN_CE_ids:
+        ui-name : |
+            Carbohydrate Esterases - CE
+        short-hint : |
+            Select HMMs for Carbohydrate Esterase Families, or will use ALL if left blank
+    input_dbCAN_PL_ids:
+        ui-name : |
+            Polysaccharide Lyases - PL
+        short-hint : |
+            Select HMMs for Polysaccharide Lyase Families, or will use ALL if left blank
+    input_dbCAN_AA_ids:
+        ui-name : |
+            Auxiliary Activities - AA
+        short-hint : |
+            Select HMMs for Auxiliary Activities Families, or will use ALL if left blank
+    save_ALL_featureSets:
+        ui-name : |
+            Save ALL featureSets
+        short-hint : |
+            Rather than just creating featureSets for explictly requested models, save every model in a category (GH, GT, CE, PL, AA, cellulosome) for which 'ALL' models were used to search.
     e_value:
         ui-name : |
             E-value
@@ -87,11 +92,11 @@ parameters :
             Bit Score
         short-hint : |
             threshold for hits
-    overlap_perc:
+    model_cov_perc:
         ui-name : |
-            Alignment Overlap Threshold (%)
+            Model coverage minimum(%)
         short-hint : |
-            overlap threshold is with respect to hit sequence length
+            The minimum coverage of the model length for a given hit.
     maxaccepts:
         ui-name : |
             Max Accepts
@@ -104,13 +109,13 @@ parameters :
             Display as heatmap or numerical table (if input is GenomeSet)
         long-hint  : |
             Display as heatmap or numerical table (if input is GenomeSet)
-    vertical :
+    low_val :
         ui-name : |
-            View GenomeSet profile genomes as
+            Heatmap low value
         short-hint : |
-            Show table with genomes as rows
+            Use fixed value or lowest detected value as base of heatmap
         long-hint  : |
-            Show table with genomes as rows
+            Use fixed value or lowest detected value as base of heatmap
     show_blanks :
         ui-name : |
             Show GenomeSet profile empty categories
@@ -151,5 +156,5 @@ publications :
 
     -
         display-text: |
-            HMMER v3.1b2 source:
+            HMMER v3.3 source:
         link: http://HMMER.ORG

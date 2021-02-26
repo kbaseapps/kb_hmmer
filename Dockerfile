@@ -6,8 +6,11 @@ MAINTAINER KBase Developer
 # install line here, a git checkout to download code, or run any other
 # installation scripts.
 
-# Update certs
+# Update packages
 RUN apt-get update
+
+# add packages
+#RUN apt install -y build-essential
 
 # Here we install a python coverage tool and an
 # https library that is out of date in the base image.
@@ -27,22 +30,25 @@ RUN make all
 # Install HMMER
 #
 WORKDIR /kb/module
+# RUN curl http://eddylab.org/software/hmmer3/3.1b2/hmmer-3.1b2-linux-intel-x86_64.tar.gz > hmmer-3.1b2-linux-intel-x86_64.tar.gz && \
+RUN rm -f /usr/bin/hmm*
 RUN \
-  curl http://eddylab.org/software/hmmer3/3.1b2/hmmer-3.1b2-linux-intel-x86_64.tar.gz > hmmer-3.1b2-linux-intel-x86_64.tar.gz && \
-  tar xfz hmmer-3.1b2-linux-intel-x86_64.tar.gz && \
-  ln -s hmmer-3.1b2-linux-intel-x86_64 hmmer && \
-  rm -f hmmer-3.1b2-linux-intel-x86_64.tar.gz && \
-  cd hmmer && \
-  ./configure && \
-  make
+  curl http://eddylab.org/software/hmmer/hmmer-3.3.2.tar.gz > hmmer-3.3.2.tar.gz && \
+  tar xfz hmmer-3.3.2.tar.gz && \
+  ln -s hmmer-3.3.2 hmmer && \
+  rm -f hmmer-3.3.2.tar.gz
+WORKDIR /kb/module/hmmer
+RUN \
+  ./configure --prefix /kb/module/hmmer && \
+  make && \
+  make install
 
 
 # Install dbCAN HMM data
 #
 WORKDIR /kb/module
 RUN \
-  curl http://bcb.unl.edu/dbCAN2/download/Databases/dbCAN-old@UGA/dbCAN-fam-HMMs.txt.v6 > data/dbCAN/dbCAN-v6/dbCAN-fam-HMMs.txt.v6
-
+  curl http://bcb.unl.edu/dbCAN2/download/dbCAN-HMMdb-V8.txt > data/dbCAN/dbCAN-v8/dbCAN-fam-HMMs.txt.v8
 
 ENTRYPOINT [ "./scripts/entrypoint.sh" ]
 

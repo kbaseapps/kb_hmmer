@@ -1,9 +1,9 @@
 {
-    "ver": "1.2.0",
+    "ver": "1.6.0",
     "authors": [
         "dylan"
     ],
-    "contact": "http://kbase.us/contact-us/",
+    "contact": "http://www.kbase.us/support/",
     "visible": true,
     "categories": ["active","sequence"],
     "widgets": {
@@ -12,757 +12,100 @@
     },
     "parameters": [ 
         {
-            "id": "input_dbCAN_AA_ids",
-            "optional": true,
+            "id": "input_many_ref",
+            "optional": false,
             "advanced": false,
-            "allow_multiple": true,
-            "default_values": [ "none" ],
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "valid_ws_types": [ "KBaseCollections.FeatureSet",
+				    "KBaseGenomes.Genome",
+				    "KBaseSearch.GenomeSet",
+				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly"
+				  ]
+            }
+        },
+        {
+            "id": "genome_disp_name_config",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "obj_name" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
                                 {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "dbCAN_AA_none",
-                                        "ui-name": "dbCAN_AA_none"
+                                        "value": "obj_name",
+                                        "display": "Object_Name",
+                                        "id": "genome_disp_name_config-obj_name",
+                                        "ui-name": "genome_disp_name_config-obj_name"
                                 },
-				{
-					"value": "AA1",
-					"display": "auxiliary activity - AA1",
-					"id": "dbCAN_AA_AA1",
-					"ui-name": "dbCAN_AA_AA1"
-				},
-				{
-					"value": "AA1_1",
-					"display": "auxiliary activity - AA1_1",
-					"id": "dbCAN_AA_AA1_1",
-					"ui-name": "dbCAN_AA_AA1_1"
-				},
-				{
-					"value": "AA1_2",
-					"display": "auxiliary activity - AA1_2",
-					"id": "dbCAN_AA_AA1_2",
-					"ui-name": "dbCAN_AA_AA1_2"
-				},
-				{
-					"value": "AA1_3",
-					"display": "auxiliary activity - AA1_3",
-					"id": "dbCAN_AA_AA1_3",
-					"ui-name": "dbCAN_AA_AA1_3"
-				},
-				{
-					"value": "AA2",
-					"display": "auxiliary activity - AA2",
-					"id": "dbCAN_AA_AA2",
-					"ui-name": "dbCAN_AA_AA2"
-				},
-				{
-					"value": "AA3",
-					"display": "auxiliary activity - AA3",
-					"id": "dbCAN_AA_AA3",
-					"ui-name": "dbCAN_AA_AA3"
-				},
-				{
-					"value": "AA3_1",
-					"display": "auxiliary activity - AA3_1",
-					"id": "dbCAN_AA_AA3_1",
-					"ui-name": "dbCAN_AA_AA3_1"
-				},
-				{
-					"value": "AA3_2",
-					"display": "auxiliary activity - AA3_2",
-					"id": "dbCAN_AA_AA3_2",
-					"ui-name": "dbCAN_AA_AA3_2"
-				},
-				{
-					"value": "AA3_3",
-					"display": "auxiliary activity - AA3_3",
-					"id": "dbCAN_AA_AA3_3",
-					"ui-name": "dbCAN_AA_AA3_3"
-				},
-				{
-					"value": "AA3_4",
-					"display": "auxiliary activity - AA3_4",
-					"id": "dbCAN_AA_AA3_4",
-					"ui-name": "dbCAN_AA_AA3_4"
-				},
-				{
-					"value": "AA4",
-					"display": "auxiliary activity - AA4",
-					"id": "dbCAN_AA_AA4",
-					"ui-name": "dbCAN_AA_AA4"
-				},
-				{
-					"value": "AA5",
-					"display": "auxiliary activity - AA5",
-					"id": "dbCAN_AA_AA5",
-					"ui-name": "dbCAN_AA_AA5"
-				},
-				{
-					"value": "AA5_1",
-					"display": "auxiliary activity - AA5_1",
-					"id": "dbCAN_AA_AA5_1",
-					"ui-name": "dbCAN_AA_AA5_1"
-				},
-				{
-					"value": "AA5_2",
-					"display": "auxiliary activity - AA5_2",
-					"id": "dbCAN_AA_AA5_2",
-					"ui-name": "dbCAN_AA_AA5_2"
-				},
-				{
-					"value": "AA6",
-					"display": "auxiliary activity - AA6",
-					"id": "dbCAN_AA_AA6",
-					"ui-name": "dbCAN_AA_AA6"
-				},
-				{
-					"value": "AA7",
-					"display": "auxiliary activity - AA7",
-					"id": "dbCAN_AA_AA7",
-					"ui-name": "dbCAN_AA_AA7"
-				},
-				{
-					"value": "AA8",
-					"display": "auxiliary activity - AA8",
-					"id": "dbCAN_AA_AA8",
-					"ui-name": "dbCAN_AA_AA8"
-				},
-				{
-					"value": "AA9",
-					"display": "auxiliary activity - AA9",
-					"id": "dbCAN_AA_AA9",
-					"ui-name": "dbCAN_AA_AA9"
-				},
-				{
-					"value": "AA10",
-					"display": "auxiliary activity - AA10",
-					"id": "dbCAN_AA_AA10",
-					"ui-name": "dbCAN_AA_AA10"
-				},
-				{
-					"value": "AA11",
-					"display": "auxiliary activity - AA11",
-					"id": "dbCAN_AA_AA11",
-					"ui-name": "dbCAN_AA_AA11"
-				},
-				{
-					"value": "AA12",
-					"display": "auxiliary activity - AA12",
-					"id": "dbCAN_AA_AA12",
-					"ui-name": "dbCAN_AA_AA12"
-				},
-				{
-					"value": "AA13",
-					"display": "auxiliary activity - AA13",
-					"id": "dbCAN_AA_AA13",
-					"ui-name": "dbCAN_AA_AA13"
-				}
+                                {
+                                        "value": "obj_name_ver",
+                                        "display": "Object_Name.version",
+                                        "id": "genome_disp_name_config-obj_name_ver",
+                                        "ui-name": "genome_disp_name_config-obj_name_ver"
+                                },
+                                {
+                                        "value": "sci_name",
+                                        "display": "Scientific Name",
+                                        "id": "genome_disp_name_config-sci_name",
+                                        "ui-name": "genome_disp_name_config-sci_name"
+                                },
+                                {
+                                        "value": "obj_name_sci_name",
+                                        "display": "Object_Name: Scientific Name",
+                                        "id": "genome_disp_name_config-obj_name_sci_name",
+                                        "ui-name": "genome_disp_name_config-obj_name_sci_name"
+                                },
+                                {
+                                        "value": "obj_name_ver_sci_name",
+                                        "display": "Object_Name.version: Scientific Name",
+                                        "id": "genome_disp_name_config-obj_name_ver_sci_name",
+                                        "ui-name": "genome_disp_name_config-obj_name_ver_sci_name"
+                                }
                 ]
             }
         },
         {
-            "id": "input_dbCAN_CBM_ids",
+            "id": "input_dbCAN_cellulosome_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
                                 {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "dbCAN_CBM_none",
-                                        "ui-name": "dbCAN_CBM_none"
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "dbCAN_cellulosome_none",
+                                        "ui-name": "dbCAN_cellulosome_none"
                                 },
-				{
-					"value": "CBM1",
-					"display": "carbohydrate-binding module - CBM1",
-					"id": "dbCAN_CBM_CBM1",
-					"ui-name": "dbCAN_CBM_CBM1"
-				},
-				{
-					"value": "CBM2",
-					"display": "carbohydrate-binding module - CBM2",
-					"id": "dbCAN_CBM_CBM2",
-					"ui-name": "dbCAN_CBM_CBM2"
-				},
-				{
-					"value": "CBM3",
-					"display": "carbohydrate-binding module - CBM3",
-					"id": "dbCAN_CBM_CBM3",
-					"ui-name": "dbCAN_CBM_CBM3"
-				},
-				{
-					"value": "CBM4",
-					"display": "carbohydrate-binding module - CBM4",
-					"id": "dbCAN_CBM_CBM4",
-					"ui-name": "dbCAN_CBM_CBM4"
-				},
-				{
-					"value": "CBM5",
-					"display": "carbohydrate-binding module - CBM5",
-					"id": "dbCAN_CBM_CBM5",
-					"ui-name": "dbCAN_CBM_CBM5"
-				},
-				{
-					"value": "CBM6",
-					"display": "carbohydrate-binding module - CBM6",
-					"id": "dbCAN_CBM_CBM6",
-					"ui-name": "dbCAN_CBM_CBM6"
-				},
-				{
-					"value": "CBM8",
-					"display": "carbohydrate-binding module - CBM8",
-					"id": "dbCAN_CBM_CBM8",
-					"ui-name": "dbCAN_CBM_CBM8"
-				},
-				{
-					"value": "CBM9",
-					"display": "carbohydrate-binding module - CBM9",
-					"id": "dbCAN_CBM_CBM9",
-					"ui-name": "dbCAN_CBM_CBM9"
-				},
-				{
-					"value": "CBM10",
-					"display": "carbohydrate-binding module - CBM10",
-					"id": "dbCAN_CBM_CBM10",
-					"ui-name": "dbCAN_CBM_CBM10"
-				},
-				{
-					"value": "CBM11",
-					"display": "carbohydrate-binding module - CBM11",
-					"id": "dbCAN_CBM_CBM11",
-					"ui-name": "dbCAN_CBM_CBM11"
-				},
-				{
-					"value": "CBM12",
-					"display": "carbohydrate-binding module - CBM12",
-					"id": "dbCAN_CBM_CBM12",
-					"ui-name": "dbCAN_CBM_CBM12"
-				},
-				{
-					"value": "CBM13",
-					"display": "carbohydrate-binding module - CBM13",
-					"id": "dbCAN_CBM_CBM13",
-					"ui-name": "dbCAN_CBM_CBM13"
-				},
-				{
-					"value": "CBM14",
-					"display": "carbohydrate-binding module - CBM14",
-					"id": "dbCAN_CBM_CBM14",
-					"ui-name": "dbCAN_CBM_CBM14"
-				},
-				{
-					"value": "CBM15",
-					"display": "carbohydrate-binding module - CBM15",
-					"id": "dbCAN_CBM_CBM15",
-					"ui-name": "dbCAN_CBM_CBM15"
-				},
-				{
-					"value": "CBM16",
-					"display": "carbohydrate-binding module - CBM16",
-					"id": "dbCAN_CBM_CBM16",
-					"ui-name": "dbCAN_CBM_CBM16"
-				},
-				{
-					"value": "CBM17",
-					"display": "carbohydrate-binding module - CBM17",
-					"id": "dbCAN_CBM_CBM17",
-					"ui-name": "dbCAN_CBM_CBM17"
-				},
-				{
-					"value": "CBM18",
-					"display": "carbohydrate-binding module - CBM18",
-					"id": "dbCAN_CBM_CBM18",
-					"ui-name": "dbCAN_CBM_CBM18"
-				},
-				{
-					"value": "CBM19",
-					"display": "carbohydrate-binding module - CBM19",
-					"id": "dbCAN_CBM_CBM19",
-					"ui-name": "dbCAN_CBM_CBM19"
-				},
-				{
-					"value": "CBM20",
-					"display": "carbohydrate-binding module - CBM20",
-					"id": "dbCAN_CBM_CBM20",
-					"ui-name": "dbCAN_CBM_CBM20"
-				},
-				{
-					"value": "CBM21",
-					"display": "carbohydrate-binding module - CBM21",
-					"id": "dbCAN_CBM_CBM21",
-					"ui-name": "dbCAN_CBM_CBM21"
-				},
-				{
-					"value": "CBM22",
-					"display": "carbohydrate-binding module - CBM22",
-					"id": "dbCAN_CBM_CBM22",
-					"ui-name": "dbCAN_CBM_CBM22"
-				},
-				{
-					"value": "CBM23",
-					"display": "carbohydrate-binding module - CBM23",
-					"id": "dbCAN_CBM_CBM23",
-					"ui-name": "dbCAN_CBM_CBM23"
-				},
-				{
-					"value": "CBM24",
-					"display": "carbohydrate-binding module - CBM24",
-					"id": "dbCAN_CBM_CBM24",
-					"ui-name": "dbCAN_CBM_CBM24"
-				},
-				{
-					"value": "CBM25",
-					"display": "carbohydrate-binding module - CBM25",
-					"id": "dbCAN_CBM_CBM25",
-					"ui-name": "dbCAN_CBM_CBM25"
-				},
-				{
-					"value": "CBM26",
-					"display": "carbohydrate-binding module - CBM26",
-					"id": "dbCAN_CBM_CBM26",
-					"ui-name": "dbCAN_CBM_CBM26"
-				},
-				{
-					"value": "CBM27",
-					"display": "carbohydrate-binding module - CBM27",
-					"id": "dbCAN_CBM_CBM27",
-					"ui-name": "dbCAN_CBM_CBM27"
-				},
-				{
-					"value": "CBM28",
-					"display": "carbohydrate-binding module - CBM28",
-					"id": "dbCAN_CBM_CBM28",
-					"ui-name": "dbCAN_CBM_CBM28"
-				},
-				{
-					"value": "CBM29",
-					"display": "carbohydrate-binding module - CBM29",
-					"id": "dbCAN_CBM_CBM29",
-					"ui-name": "dbCAN_CBM_CBM29"
-				},
-				{
-					"value": "CBM30",
-					"display": "carbohydrate-binding module - CBM30",
-					"id": "dbCAN_CBM_CBM30",
-					"ui-name": "dbCAN_CBM_CBM30"
-				},
-				{
-					"value": "CBM31",
-					"display": "carbohydrate-binding module - CBM31",
-					"id": "dbCAN_CBM_CBM31",
-					"ui-name": "dbCAN_CBM_CBM31"
-				},
-				{
-					"value": "CBM32",
-					"display": "carbohydrate-binding module - CBM32",
-					"id": "dbCAN_CBM_CBM32",
-					"ui-name": "dbCAN_CBM_CBM32"
-				},
-				{
-					"value": "CBM34",
-					"display": "carbohydrate-binding module - CBM34",
-					"id": "dbCAN_CBM_CBM34",
-					"ui-name": "dbCAN_CBM_CBM34"
-				},
-				{
-					"value": "CBM35",
-					"display": "carbohydrate-binding module - CBM35",
-					"id": "dbCAN_CBM_CBM35",
-					"ui-name": "dbCAN_CBM_CBM35"
-				},
-				{
-					"value": "CBM36",
-					"display": "carbohydrate-binding module - CBM36",
-					"id": "dbCAN_CBM_CBM36",
-					"ui-name": "dbCAN_CBM_CBM36"
-				},
-				{
-					"value": "CBM37",
-					"display": "carbohydrate-binding module - CBM37",
-					"id": "dbCAN_CBM_CBM37",
-					"ui-name": "dbCAN_CBM_CBM37"
-				},
-				{
-					"value": "CBM38",
-					"display": "carbohydrate-binding module - CBM38",
-					"id": "dbCAN_CBM_CBM38",
-					"ui-name": "dbCAN_CBM_CBM38"
-				},
-				{
-					"value": "CBM39",
-					"display": "carbohydrate-binding module - CBM39",
-					"id": "dbCAN_CBM_CBM39",
-					"ui-name": "dbCAN_CBM_CBM39"
-				},
-				{
-					"value": "CBM40",
-					"display": "carbohydrate-binding module - CBM40",
-					"id": "dbCAN_CBM_CBM40",
-					"ui-name": "dbCAN_CBM_CBM40"
-				},
-				{
-					"value": "CBM41",
-					"display": "carbohydrate-binding module - CBM41",
-					"id": "dbCAN_CBM_CBM41",
-					"ui-name": "dbCAN_CBM_CBM41"
-				},
-				{
-					"value": "CBM42",
-					"display": "carbohydrate-binding module - CBM42",
-					"id": "dbCAN_CBM_CBM42",
-					"ui-name": "dbCAN_CBM_CBM42"
-				},
-				{
-					"value": "CBM43",
-					"display": "carbohydrate-binding module - CBM43",
-					"id": "dbCAN_CBM_CBM43",
-					"ui-name": "dbCAN_CBM_CBM43"
-				},
-				{
-					"value": "CBM44",
-					"display": "carbohydrate-binding module - CBM44",
-					"id": "dbCAN_CBM_CBM44",
-					"ui-name": "dbCAN_CBM_CBM44"
-				},
-				{
-					"value": "CBM45",
-					"display": "carbohydrate-binding module - CBM45",
-					"id": "dbCAN_CBM_CBM45",
-					"ui-name": "dbCAN_CBM_CBM45"
-				},
-				{
-					"value": "CBM46",
-					"display": "carbohydrate-binding module - CBM46",
-					"id": "dbCAN_CBM_CBM46",
-					"ui-name": "dbCAN_CBM_CBM46"
-				},
-				{
-					"value": "CBM47",
-					"display": "carbohydrate-binding module - CBM47",
-					"id": "dbCAN_CBM_CBM47",
-					"ui-name": "dbCAN_CBM_CBM47"
-				},
-				{
-					"value": "CBM48",
-					"display": "carbohydrate-binding module - CBM48",
-					"id": "dbCAN_CBM_CBM48",
-					"ui-name": "dbCAN_CBM_CBM48"
-				},
-				{
-					"value": "CBM49",
-					"display": "carbohydrate-binding module - CBM49",
-					"id": "dbCAN_CBM_CBM49",
-					"ui-name": "dbCAN_CBM_CBM49"
-				},
-				{
-					"value": "CBM50",
-					"display": "carbohydrate-binding module - CBM50",
-					"id": "dbCAN_CBM_CBM50",
-					"ui-name": "dbCAN_CBM_CBM50"
-				},
-				{
-					"value": "CBM51",
-					"display": "carbohydrate-binding module - CBM51",
-					"id": "dbCAN_CBM_CBM51",
-					"ui-name": "dbCAN_CBM_CBM51"
-				},
-				{
-					"value": "CBM52",
-					"display": "carbohydrate-binding module - CBM52",
-					"id": "dbCAN_CBM_CBM52",
-					"ui-name": "dbCAN_CBM_CBM52"
-				},
-				{
-					"value": "CBM53",
-					"display": "carbohydrate-binding module - CBM53",
-					"id": "dbCAN_CBM_CBM53",
-					"ui-name": "dbCAN_CBM_CBM53"
-				},
-				{
-					"value": "CBM54",
-					"display": "carbohydrate-binding module - CBM54",
-					"id": "dbCAN_CBM_CBM54",
-					"ui-name": "dbCAN_CBM_CBM54"
-				},
-				{
-					"value": "CBM55",
-					"display": "carbohydrate-binding module - CBM55",
-					"id": "dbCAN_CBM_CBM55",
-					"ui-name": "dbCAN_CBM_CBM55"
-				},
-				{
-					"value": "CBM56",
-					"display": "carbohydrate-binding module - CBM56",
-					"id": "dbCAN_CBM_CBM56",
-					"ui-name": "dbCAN_CBM_CBM56"
-				},
-				{
-					"value": "CBM57",
-					"display": "carbohydrate-binding module - CBM57",
-					"id": "dbCAN_CBM_CBM57",
-					"ui-name": "dbCAN_CBM_CBM57"
-				},
-				{
-					"value": "CBM58",
-					"display": "carbohydrate-binding module - CBM58",
-					"id": "dbCAN_CBM_CBM58",
-					"ui-name": "dbCAN_CBM_CBM58"
-				},
-				{
-					"value": "CBM59",
-					"display": "carbohydrate-binding module - CBM59",
-					"id": "dbCAN_CBM_CBM59",
-					"ui-name": "dbCAN_CBM_CBM59"
-				},
-				{
-					"value": "CBM60",
-					"display": "carbohydrate-binding module - CBM60",
-					"id": "dbCAN_CBM_CBM60",
-					"ui-name": "dbCAN_CBM_CBM60"
-				},
-				{
-					"value": "CBM61",
-					"display": "carbohydrate-binding module - CBM61",
-					"id": "dbCAN_CBM_CBM61",
-					"ui-name": "dbCAN_CBM_CBM61"
-				},
-				{
-					"value": "CBM62",
-					"display": "carbohydrate-binding module - CBM62",
-					"id": "dbCAN_CBM_CBM62",
-					"ui-name": "dbCAN_CBM_CBM62"
-				},
-				{
-					"value": "CBM63",
-					"display": "carbohydrate-binding module - CBM63",
-					"id": "dbCAN_CBM_CBM63",
-					"ui-name": "dbCAN_CBM_CBM63"
-				},
-				{
-					"value": "CBM64",
-					"display": "carbohydrate-binding module - CBM64",
-					"id": "dbCAN_CBM_CBM64",
-					"ui-name": "dbCAN_CBM_CBM64"
-				},
-				{
-					"value": "CBM65",
-					"display": "carbohydrate-binding module - CBM65",
-					"id": "dbCAN_CBM_CBM65",
-					"ui-name": "dbCAN_CBM_CBM65"
-				},
-				{
-					"value": "CBM66",
-					"display": "carbohydrate-binding module - CBM66",
-					"id": "dbCAN_CBM_CBM66",
-					"ui-name": "dbCAN_CBM_CBM66"
-				},
-				{
-					"value": "CBM67",
-					"display": "carbohydrate-binding module - CBM67",
-					"id": "dbCAN_CBM_CBM67",
-					"ui-name": "dbCAN_CBM_CBM67"
-				},
-				{
-					"value": "CBM68",
-					"display": "carbohydrate-binding module - CBM68",
-					"id": "dbCAN_CBM_CBM68",
-					"ui-name": "dbCAN_CBM_CBM68"
-				},
-				{
-					"value": "CBM69",
-					"display": "carbohydrate-binding module - CBM69",
-					"id": "dbCAN_CBM_CBM69",
-					"ui-name": "dbCAN_CBM_CBM69"
-				},
-				{
-					"value": "CBM70",
-					"display": "carbohydrate-binding module - CBM70",
-					"id": "dbCAN_CBM_CBM70",
-					"ui-name": "dbCAN_CBM_CBM70"
-				},
-				{
-					"value": "CBM71",
-					"display": "carbohydrate-binding module - CBM71",
-					"id": "dbCAN_CBM_CBM71",
-					"ui-name": "dbCAN_CBM_CBM71"
-				},
-				{
-					"value": "CBM72",
-					"display": "carbohydrate-binding module - CBM72",
-					"id": "dbCAN_CBM_CBM72",
-					"ui-name": "dbCAN_CBM_CBM72"
-				},
-				{
-					"value": "CBM73",
-					"display": "carbohydrate-binding module - CBM73",
-					"id": "dbCAN_CBM_CBM73",
-					"ui-name": "dbCAN_CBM_CBM73"
-				},
-				{
-					"value": "CBM74",
-					"display": "carbohydrate-binding module - CBM74",
-					"id": "dbCAN_CBM_CBM74",
-					"ui-name": "dbCAN_CBM_CBM74"
-				},
-				{
-					"value": "CBM75",
-					"display": "carbohydrate-binding module - CBM75",
-					"id": "dbCAN_CBM_CBM75",
-					"ui-name": "dbCAN_CBM_CBM75"
-				},
-				{
-					"value": "CBM76",
-					"display": "carbohydrate-binding module - CBM76",
-					"id": "dbCAN_CBM_CBM76",
-					"ui-name": "dbCAN_CBM_CBM76"
-				},
-				{
-					"value": "CBM77",
-					"display": "carbohydrate-binding module - CBM77",
-					"id": "dbCAN_CBM_CBM77",
-					"ui-name": "dbCAN_CBM_CBM77"
-				},
-				{
-					"value": "CBM78",
-					"display": "carbohydrate-binding module - CBM78",
-					"id": "dbCAN_CBM_CBM78",
-					"ui-name": "dbCAN_CBM_CBM78"
-				},
-				{
-					"value": "CBM79",
-					"display": "carbohydrate-binding module - CBM79",
-					"id": "dbCAN_CBM_CBM79",
-					"ui-name": "dbCAN_CBM_CBM79"
-				},
-				{
-					"value": "CBM80",
-					"display": "carbohydrate-binding module - CBM80",
-					"id": "dbCAN_CBM_CBM80",
-					"ui-name": "dbCAN_CBM_CBM80"
-				},
-				{
-					"value": "CBM81",
-					"display": "carbohydrate-binding module - CBM81",
-					"id": "dbCAN_CBM_CBM81",
-					"ui-name": "dbCAN_CBM_CBM81"
-				}
-                ]
-            }
-        },
-        {
-            "id": "input_dbCAN_CE_ids",
-            "optional": true,
-            "advanced": false,
-            "allow_multiple": true,
-            "default_values": [ "none" ],
-            "field_type": "dropdown",
-            "dropdown_options": {
-                "options": [
                                 {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "dbCAN_CE_none",
-                                        "ui-name": "dbCAN_CE_none"
+                                        "value": "ALL",
+                                        "display": "ALL",
+                                        "id": "dbCAN_cellulosome_all",
+                                        "ui-name": "dbCAN_cellulosome_all"
                                 },
 				{
-					"value": "CE1",
-					"display": "carbohydrate esterase - CE1",
-					"id": "dbCAN_CE_CE1",
-					"ui-name": "dbCAN_CE_CE1"
+					"value": "dockerin",
+					"display": "cellulosome - dockerin",
+					"id": "dbCAN_cellulosome_dockerin",
+					"ui-name": "dbCAN_cellulosome_dockerin"
 				},
 				{
-					"value": "CE2",
-					"display": "carbohydrate esterase - CE2",
-					"id": "dbCAN_CE_CE2",
-					"ui-name": "dbCAN_CE_CE2"
+					"value": "cohesin",
+					"display": "cellulosome - cohesin",
+					"id": "dbCAN_cellulosome_cohesin",
+					"ui-name": "dbCAN_cellulosome_cohesin"
 				},
 				{
-					"value": "CE3",
-					"display": "carbohydrate esterase - CE3",
-					"id": "dbCAN_CE_CE3",
-					"ui-name": "dbCAN_CE_CE3"
-				},
-				{
-					"value": "CE4",
-					"display": "carbohydrate esterase - CE4",
-					"id": "dbCAN_CE_CE4",
-					"ui-name": "dbCAN_CE_CE4"
-				},
-				{
-					"value": "CE5",
-					"display": "carbohydrate esterase - CE5",
-					"id": "dbCAN_CE_CE5",
-					"ui-name": "dbCAN_CE_CE5"
-				},
-				{
-					"value": "CE6",
-					"display": "carbohydrate esterase - CE6",
-					"id": "dbCAN_CE_CE6",
-					"ui-name": "dbCAN_CE_CE6"
-				},
-				{
-					"value": "CE7",
-					"display": "carbohydrate esterase - CE7",
-					"id": "dbCAN_CE_CE7",
-					"ui-name": "dbCAN_CE_CE7"
-				},
-				{
-					"value": "CE8",
-					"display": "carbohydrate esterase - CE8",
-					"id": "dbCAN_CE_CE8",
-					"ui-name": "dbCAN_CE_CE8"
-				},
-				{
-					"value": "CE9",
-					"display": "carbohydrate esterase - CE9",
-					"id": "dbCAN_CE_CE9",
-					"ui-name": "dbCAN_CE_CE9"
-				},
-				{
-					"value": "CE10",
-					"display": "carbohydrate esterase - CE10",
-					"id": "dbCAN_CE_CE10",
-					"ui-name": "dbCAN_CE_CE10"
-				},
-				{
-					"value": "CE11",
-					"display": "carbohydrate esterase - CE11",
-					"id": "dbCAN_CE_CE11",
-					"ui-name": "dbCAN_CE_CE11"
-				},
-				{
-					"value": "CE12",
-					"display": "carbohydrate esterase - CE12",
-					"id": "dbCAN_CE_CE12",
-					"ui-name": "dbCAN_CE_CE12"
-				},
-				{
-					"value": "CE13",
-					"display": "carbohydrate esterase - CE13",
-					"id": "dbCAN_CE_CE13",
-					"ui-name": "dbCAN_CE_CE13"
-				},
-				{
-					"value": "CE14",
-					"display": "carbohydrate esterase - CE14",
-					"id": "dbCAN_CE_CE14",
-					"ui-name": "dbCAN_CE_CE14"
-				},
-				{
-					"value": "CE15",
-					"display": "carbohydrate esterase - CE15",
-					"id": "dbCAN_CE_CE15",
-					"ui-name": "dbCAN_CE_CE15"
-				},
-				{
-					"value": "CE16",
-					"display": "carbohydrate esterase - CE16",
-					"id": "dbCAN_CE_CE16",
-					"ui-name": "dbCAN_CE_CE16"
+					"value": "SLH",
+					"display": "cellulosome - SLH",
+					"id": "dbCAN_cellulosome_SLH",
+					"ui-name": "dbCAN_cellulosome_SLH"
 				}
                 ]
             }
@@ -772,15 +115,21 @@
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
                                 {
-                                        "value": "none",
-                                        "display": "none",
+                                        "value": "NONE",
+                                        "display": "NONE",
                                         "id": "dbCAN_GH_none",
                                         "ui-name": "dbCAN_GH_none"
+                                },
+                                {
+                                        "value": "ALL",
+                                        "display": "ALL",
+                                        "id": "dbCAN_GH_all",
+                                        "ui-name": "dbCAN_GH_all"
                                 },
 				{
 					"value": "GH1",
@@ -1117,6 +466,24 @@
 					"display": "glycoside hydrolase - GH5_53",
 					"id": "dbCAN_GH_GH5_53",
 					"ui-name": "dbCAN_GH_GH5_53"
+				},
+				{
+					"value": "GH5_54",
+					"display": "glycoside hydrolase - GH5_54",
+					"id": "dbCAN_GH_GH5_54",
+					"ui-name": "dbCAN_GH_GH5_54"
+				},
+				{
+					"value": "GH5_55",
+					"display": "glycoside hydrolase - GH5_55",
+					"id": "dbCAN_GH_GH5_55",
+					"ui-name": "dbCAN_GH_GH5_55"
+				},
+				{
+					"value": "GH5_56",
+					"display": "glycoside hydrolase - GH5_56",
+					"id": "dbCAN_GH_GH5_56",
+					"ui-name": "dbCAN_GH_GH5_56"
 				},
 				{
 					"value": "GH6",
@@ -1561,6 +928,12 @@
 					"display": "glycoside hydrolase - GH30_8",
 					"id": "dbCAN_GH_GH30_8",
 					"ui-name": "dbCAN_GH_GH30_8"
+				},
+				{
+					"value": "GH30_9",
+					"display": "glycoside hydrolase - GH30_9",
+					"id": "dbCAN_GH_GH30_9",
+					"ui-name": "dbCAN_GH_GH30_9"
 				},
 				{
 					"value": "GH31",
@@ -2443,6 +1816,120 @@
 					"display": "glycoside hydrolase - GH145",
 					"id": "dbCAN_GH_GH145",
 					"ui-name": "dbCAN_GH_GH145"
+				},
+				{
+					"value": "GH146",
+					"display": "glycoside hydrolase - GH146",
+					"id": "dbCAN_GH_GH146",
+					"ui-name": "dbCAN_GH_GH146"
+				},
+				{
+					"value": "GH147",
+					"display": "glycoside hydrolase - GH147",
+					"id": "dbCAN_GH_GH147",
+					"ui-name": "dbCAN_GH_GH147"
+				},
+				{
+					"value": "GH148",
+					"display": "glycoside hydrolase - GH148",
+					"id": "dbCAN_GH_GH148",
+					"ui-name": "dbCAN_GH_GH148"
+				},
+				{
+					"value": "GH149",
+					"display": "glycoside hydrolase - GH149",
+					"id": "dbCAN_GH_GH149",
+					"ui-name": "dbCAN_GH_GH149"
+				},
+				{
+					"value": "GH150",
+					"display": "glycoside hydrolase - GH150",
+					"id": "dbCAN_GH_GH150",
+					"ui-name": "dbCAN_GH_GH150"
+				},
+				{
+					"value": "GH151",
+					"display": "glycoside hydrolase - GH151",
+					"id": "dbCAN_GH_GH151",
+					"ui-name": "dbCAN_GH_GH151"
+				},
+				{
+					"value": "GH152",
+					"display": "glycoside hydrolase - GH152",
+					"id": "dbCAN_GH_GH152",
+					"ui-name": "dbCAN_GH_GH152"
+				},
+				{
+					"value": "GH153",
+					"display": "glycoside hydrolase - GH153",
+					"id": "dbCAN_GH_GH153",
+					"ui-name": "dbCAN_GH_GH153"
+				},
+				{
+					"value": "GH154",
+					"display": "glycoside hydrolase - GH154",
+					"id": "dbCAN_GH_GH154",
+					"ui-name": "dbCAN_GH_GH154"
+				},
+				{
+					"value": "GH156",
+					"display": "glycoside hydrolase - GH156",
+					"id": "dbCAN_GH_GH156",
+					"ui-name": "dbCAN_GH_GH156"
+				},
+				{
+					"value": "GH157",
+					"display": "glycoside hydrolase - GH157",
+					"id": "dbCAN_GH_GH157",
+					"ui-name": "dbCAN_GH_GH157"
+				},
+				{
+					"value": "GH158",
+					"display": "glycoside hydrolase - GH158",
+					"id": "dbCAN_GH_GH158",
+					"ui-name": "dbCAN_GH_GH158"
+				},
+				{
+					"value": "GH159",
+					"display": "glycoside hydrolase - GH159",
+					"id": "dbCAN_GH_GH159",
+					"ui-name": "dbCAN_GH_GH159"
+				},
+				{
+					"value": "GH160",
+					"display": "glycoside hydrolase - GH160",
+					"id": "dbCAN_GH_GH160",
+					"ui-name": "dbCAN_GH_GH160"
+				},
+				{
+					"value": "GH161",
+					"display": "glycoside hydrolase - GH161",
+					"id": "dbCAN_GH_GH161",
+					"ui-name": "dbCAN_GH_GH161"
+				},
+				{
+					"value": "GH162",
+					"display": "glycoside hydrolase - GH162",
+					"id": "dbCAN_GH_GH162",
+					"ui-name": "dbCAN_GH_GH162"
+				},
+				{
+					"value": "GH163",
+					"display": "glycoside hydrolase - GH163",
+					"id": "dbCAN_GH_GH163",
+					"ui-name": "dbCAN_GH_GH163"
+				},
+				{
+					"value": "GH164",
+					"display": "glycoside hydrolase - GH164",
+					"id": "dbCAN_GH_GH164",
+					"ui-name": "dbCAN_GH_GH164"
+				},
+				{
+					"value": "GH165",
+					"display": "glycoside hydrolase - GH165",
+					"id": "dbCAN_GH_GH165",
+					"ui-name": "dbCAN_GH_GH165"
 				}
                 ]
             }
@@ -2452,15 +1939,21 @@
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
                                 {
-                                        "value": "none",
-                                        "display": "none",
+                                        "value": "NONE",
+                                        "display": "NONE",
                                         "id": "dbCAN_GT_none",
                                         "ui-name": "dbCAN_GT_none"
+                                },
+                                {
+                                        "value": "ALL",
+                                        "display": "ALL",
+                                        "id": "dbCAN_GT_all",
+                                        "ui-name": "dbCAN_GT_all"
                                 },
 				{
 					"value": "GT1",
@@ -2469,16 +1962,58 @@
 					"ui-name": "dbCAN_GT_GT1"
 				},
 				{
-					"value": "GT2",
-					"display": "glycosyl transferase - GT2",
-					"id": "dbCAN_GT_GT2",
-					"ui-name": "dbCAN_GT_GT2"
-				},
-				{
 					"value": "GT2_Cellulose_synt",
 					"display": "glycosyl transferase - GT2_Cellulose_synt",
 					"id": "dbCAN_GT_GT2_Cellulose_synt",
 					"ui-name": "dbCAN_GT_GT2_Cellulose_synt"
+				},
+				{
+					"value": "GT2_Chitin_synth_1",
+					"display": "glycosyl transferase - GT2_Chitin_synth_1",
+					"id": "dbCAN_GT_GT2_Chitin_synth_1",
+					"ui-name": "dbCAN_GT_GT2_Chitin_synth_1"
+				},
+				{
+					"value": "GT2_Chitin_synth_2",
+					"display": "glycosyl transferase - GT2_Chitin_synth_2",
+					"id": "dbCAN_GT_GT2_Chitin_synth_2",
+					"ui-name": "dbCAN_GT_GT2_Chitin_synth_2"
+				},
+				{
+					"value": "GT2_Glycos_transf_2",
+					"display": "glycosyl transferase - GT2_Glycos_transf_2",
+					"id": "dbCAN_GT_GT2_Glycos_transf_2",
+					"ui-name": "dbCAN_GT_GT2_Glycos_transf_2"
+				},
+				{
+					"value": "GT2_Glyco_tranf_2_2",
+					"display": "glycosyl transferase - GT2_Glyco_tranf_2_2",
+					"id": "dbCAN_GT_GT2_Glyco_tranf_2_2",
+					"ui-name": "dbCAN_GT_GT2_Glyco_tranf_2_2"
+				},
+				{
+					"value": "GT2_Glyco_tranf_2_3",
+					"display": "glycosyl transferase - GT2_Glyco_tranf_2_3",
+					"id": "dbCAN_GT_GT2_Glyco_tranf_2_3",
+					"ui-name": "dbCAN_GT_GT2_Glyco_tranf_2_3"
+				},
+				{
+					"value": "GT2_Glyco_tranf_2_4",
+					"display": "glycosyl transferase - GT2_Glyco_tranf_2_4",
+					"id": "dbCAN_GT_GT2_Glyco_tranf_2_4",
+					"ui-name": "dbCAN_GT_GT2_Glyco_tranf_2_4"
+				},
+				{
+					"value": "GT2_Glyco_tranf_2_5",
+					"display": "glycosyl transferase - GT2_Glyco_tranf_2_5",
+					"id": "dbCAN_GT_GT2_Glyco_tranf_2_5",
+					"ui-name": "dbCAN_GT_GT2_Glyco_tranf_2_5"
+				},
+				{
+					"value": "GT2_Glyco_trans_2_3",
+					"display": "glycosyl transferase - GT2_Glyco_trans_2_3",
+					"id": "dbCAN_GT_GT2_Glyco_trans_2_3",
+					"ui-name": "dbCAN_GT_GT2_Glyco_trans_2_3"
 				},
 				{
 					"value": "GT3",
@@ -3073,6 +2608,666 @@
 					"display": "glycosyl transferase - GT104",
 					"id": "dbCAN_GT_GT104",
 					"ui-name": "dbCAN_GT_GT104"
+				},
+				{
+					"value": "GT105",
+					"display": "glycosyl transferase - GT105",
+					"id": "dbCAN_GT_GT105",
+					"ui-name": "dbCAN_GT_GT105"
+				},
+				{
+					"value": "GT106",
+					"display": "glycosyl transferase - GT106",
+					"id": "dbCAN_GT_GT106",
+					"ui-name": "dbCAN_GT_GT106"
+				},
+				{
+					"value": "GT107",
+					"display": "glycosyl transferase - GT107",
+					"id": "dbCAN_GT_GT107",
+					"ui-name": "dbCAN_GT_GT107"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_dbCAN_CBM_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "ALL" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "dbCAN_CBM_none",
+                                        "ui-name": "dbCAN_CBM_none"
+                                },
+                                {
+                                        "value": "ALL",
+                                        "display": "ALL",
+                                        "id": "dbCAN_CBM_all",
+                                        "ui-name": "dbCAN_CBM_all"
+                                },
+				{
+					"value": "CBM1",
+					"display": "carbohydrate-binding module - CBM1",
+					"id": "dbCAN_CBM_CBM1",
+					"ui-name": "dbCAN_CBM_CBM1"
+				},
+				{
+					"value": "CBM2",
+					"display": "carbohydrate-binding module - CBM2",
+					"id": "dbCAN_CBM_CBM2",
+					"ui-name": "dbCAN_CBM_CBM2"
+				},
+				{
+					"value": "CBM3",
+					"display": "carbohydrate-binding module - CBM3",
+					"id": "dbCAN_CBM_CBM3",
+					"ui-name": "dbCAN_CBM_CBM3"
+				},
+				{
+					"value": "CBM4",
+					"display": "carbohydrate-binding module - CBM4",
+					"id": "dbCAN_CBM_CBM4",
+					"ui-name": "dbCAN_CBM_CBM4"
+				},
+				{
+					"value": "CBM5",
+					"display": "carbohydrate-binding module - CBM5",
+					"id": "dbCAN_CBM_CBM5",
+					"ui-name": "dbCAN_CBM_CBM5"
+				},
+				{
+					"value": "CBM6",
+					"display": "carbohydrate-binding module - CBM6",
+					"id": "dbCAN_CBM_CBM6",
+					"ui-name": "dbCAN_CBM_CBM6"
+				},
+				{
+					"value": "CBM8",
+					"display": "carbohydrate-binding module - CBM8",
+					"id": "dbCAN_CBM_CBM8",
+					"ui-name": "dbCAN_CBM_CBM8"
+				},
+				{
+					"value": "CBM9",
+					"display": "carbohydrate-binding module - CBM9",
+					"id": "dbCAN_CBM_CBM9",
+					"ui-name": "dbCAN_CBM_CBM9"
+				},
+				{
+					"value": "CBM10",
+					"display": "carbohydrate-binding module - CBM10",
+					"id": "dbCAN_CBM_CBM10",
+					"ui-name": "dbCAN_CBM_CBM10"
+				},
+				{
+					"value": "CBM11",
+					"display": "carbohydrate-binding module - CBM11",
+					"id": "dbCAN_CBM_CBM11",
+					"ui-name": "dbCAN_CBM_CBM11"
+				},
+				{
+					"value": "CBM12",
+					"display": "carbohydrate-binding module - CBM12",
+					"id": "dbCAN_CBM_CBM12",
+					"ui-name": "dbCAN_CBM_CBM12"
+				},
+				{
+					"value": "CBM13",
+					"display": "carbohydrate-binding module - CBM13",
+					"id": "dbCAN_CBM_CBM13",
+					"ui-name": "dbCAN_CBM_CBM13"
+				},
+				{
+					"value": "CBM14",
+					"display": "carbohydrate-binding module - CBM14",
+					"id": "dbCAN_CBM_CBM14",
+					"ui-name": "dbCAN_CBM_CBM14"
+				},
+				{
+					"value": "CBM15",
+					"display": "carbohydrate-binding module - CBM15",
+					"id": "dbCAN_CBM_CBM15",
+					"ui-name": "dbCAN_CBM_CBM15"
+				},
+				{
+					"value": "CBM16",
+					"display": "carbohydrate-binding module - CBM16",
+					"id": "dbCAN_CBM_CBM16",
+					"ui-name": "dbCAN_CBM_CBM16"
+				},
+				{
+					"value": "CBM17",
+					"display": "carbohydrate-binding module - CBM17",
+					"id": "dbCAN_CBM_CBM17",
+					"ui-name": "dbCAN_CBM_CBM17"
+				},
+				{
+					"value": "CBM18",
+					"display": "carbohydrate-binding module - CBM18",
+					"id": "dbCAN_CBM_CBM18",
+					"ui-name": "dbCAN_CBM_CBM18"
+				},
+				{
+					"value": "CBM19",
+					"display": "carbohydrate-binding module - CBM19",
+					"id": "dbCAN_CBM_CBM19",
+					"ui-name": "dbCAN_CBM_CBM19"
+				},
+				{
+					"value": "CBM20",
+					"display": "carbohydrate-binding module - CBM20",
+					"id": "dbCAN_CBM_CBM20",
+					"ui-name": "dbCAN_CBM_CBM20"
+				},
+				{
+					"value": "CBM21",
+					"display": "carbohydrate-binding module - CBM21",
+					"id": "dbCAN_CBM_CBM21",
+					"ui-name": "dbCAN_CBM_CBM21"
+				},
+				{
+					"value": "CBM22",
+					"display": "carbohydrate-binding module - CBM22",
+					"id": "dbCAN_CBM_CBM22",
+					"ui-name": "dbCAN_CBM_CBM22"
+				},
+				{
+					"value": "CBM23",
+					"display": "carbohydrate-binding module - CBM23",
+					"id": "dbCAN_CBM_CBM23",
+					"ui-name": "dbCAN_CBM_CBM23"
+				},
+				{
+					"value": "CBM24",
+					"display": "carbohydrate-binding module - CBM24",
+					"id": "dbCAN_CBM_CBM24",
+					"ui-name": "dbCAN_CBM_CBM24"
+				},
+				{
+					"value": "CBM25",
+					"display": "carbohydrate-binding module - CBM25",
+					"id": "dbCAN_CBM_CBM25",
+					"ui-name": "dbCAN_CBM_CBM25"
+				},
+				{
+					"value": "CBM26",
+					"display": "carbohydrate-binding module - CBM26",
+					"id": "dbCAN_CBM_CBM26",
+					"ui-name": "dbCAN_CBM_CBM26"
+				},
+				{
+					"value": "CBM27",
+					"display": "carbohydrate-binding module - CBM27",
+					"id": "dbCAN_CBM_CBM27",
+					"ui-name": "dbCAN_CBM_CBM27"
+				},
+				{
+					"value": "CBM28",
+					"display": "carbohydrate-binding module - CBM28",
+					"id": "dbCAN_CBM_CBM28",
+					"ui-name": "dbCAN_CBM_CBM28"
+				},
+				{
+					"value": "CBM29",
+					"display": "carbohydrate-binding module - CBM29",
+					"id": "dbCAN_CBM_CBM29",
+					"ui-name": "dbCAN_CBM_CBM29"
+				},
+				{
+					"value": "CBM30",
+					"display": "carbohydrate-binding module - CBM30",
+					"id": "dbCAN_CBM_CBM30",
+					"ui-name": "dbCAN_CBM_CBM30"
+				},
+				{
+					"value": "CBM31",
+					"display": "carbohydrate-binding module - CBM31",
+					"id": "dbCAN_CBM_CBM31",
+					"ui-name": "dbCAN_CBM_CBM31"
+				},
+				{
+					"value": "CBM32",
+					"display": "carbohydrate-binding module - CBM32",
+					"id": "dbCAN_CBM_CBM32",
+					"ui-name": "dbCAN_CBM_CBM32"
+				},
+				{
+					"value": "CBM34",
+					"display": "carbohydrate-binding module - CBM34",
+					"id": "dbCAN_CBM_CBM34",
+					"ui-name": "dbCAN_CBM_CBM34"
+				},
+				{
+					"value": "CBM35",
+					"display": "carbohydrate-binding module - CBM35",
+					"id": "dbCAN_CBM_CBM35",
+					"ui-name": "dbCAN_CBM_CBM35"
+				},
+				{
+					"value": "CBM36",
+					"display": "carbohydrate-binding module - CBM36",
+					"id": "dbCAN_CBM_CBM36",
+					"ui-name": "dbCAN_CBM_CBM36"
+				},
+				{
+					"value": "CBM37",
+					"display": "carbohydrate-binding module - CBM37",
+					"id": "dbCAN_CBM_CBM37",
+					"ui-name": "dbCAN_CBM_CBM37"
+				},
+				{
+					"value": "CBM38",
+					"display": "carbohydrate-binding module - CBM38",
+					"id": "dbCAN_CBM_CBM38",
+					"ui-name": "dbCAN_CBM_CBM38"
+				},
+				{
+					"value": "CBM39",
+					"display": "carbohydrate-binding module - CBM39",
+					"id": "dbCAN_CBM_CBM39",
+					"ui-name": "dbCAN_CBM_CBM39"
+				},
+				{
+					"value": "CBM40",
+					"display": "carbohydrate-binding module - CBM40",
+					"id": "dbCAN_CBM_CBM40",
+					"ui-name": "dbCAN_CBM_CBM40"
+				},
+				{
+					"value": "CBM41",
+					"display": "carbohydrate-binding module - CBM41",
+					"id": "dbCAN_CBM_CBM41",
+					"ui-name": "dbCAN_CBM_CBM41"
+				},
+				{
+					"value": "CBM42",
+					"display": "carbohydrate-binding module - CBM42",
+					"id": "dbCAN_CBM_CBM42",
+					"ui-name": "dbCAN_CBM_CBM42"
+				},
+				{
+					"value": "CBM43",
+					"display": "carbohydrate-binding module - CBM43",
+					"id": "dbCAN_CBM_CBM43",
+					"ui-name": "dbCAN_CBM_CBM43"
+				},
+				{
+					"value": "CBM44",
+					"display": "carbohydrate-binding module - CBM44",
+					"id": "dbCAN_CBM_CBM44",
+					"ui-name": "dbCAN_CBM_CBM44"
+				},
+				{
+					"value": "CBM45",
+					"display": "carbohydrate-binding module - CBM45",
+					"id": "dbCAN_CBM_CBM45",
+					"ui-name": "dbCAN_CBM_CBM45"
+				},
+				{
+					"value": "CBM46",
+					"display": "carbohydrate-binding module - CBM46",
+					"id": "dbCAN_CBM_CBM46",
+					"ui-name": "dbCAN_CBM_CBM46"
+				},
+				{
+					"value": "CBM47",
+					"display": "carbohydrate-binding module - CBM47",
+					"id": "dbCAN_CBM_CBM47",
+					"ui-name": "dbCAN_CBM_CBM47"
+				},
+				{
+					"value": "CBM48",
+					"display": "carbohydrate-binding module - CBM48",
+					"id": "dbCAN_CBM_CBM48",
+					"ui-name": "dbCAN_CBM_CBM48"
+				},
+				{
+					"value": "CBM49",
+					"display": "carbohydrate-binding module - CBM49",
+					"id": "dbCAN_CBM_CBM49",
+					"ui-name": "dbCAN_CBM_CBM49"
+				},
+				{
+					"value": "CBM50",
+					"display": "carbohydrate-binding module - CBM50",
+					"id": "dbCAN_CBM_CBM50",
+					"ui-name": "dbCAN_CBM_CBM50"
+				},
+				{
+					"value": "CBM51",
+					"display": "carbohydrate-binding module - CBM51",
+					"id": "dbCAN_CBM_CBM51",
+					"ui-name": "dbCAN_CBM_CBM51"
+				},
+				{
+					"value": "CBM52",
+					"display": "carbohydrate-binding module - CBM52",
+					"id": "dbCAN_CBM_CBM52",
+					"ui-name": "dbCAN_CBM_CBM52"
+				},
+				{
+					"value": "CBM53",
+					"display": "carbohydrate-binding module - CBM53",
+					"id": "dbCAN_CBM_CBM53",
+					"ui-name": "dbCAN_CBM_CBM53"
+				},
+				{
+					"value": "CBM54",
+					"display": "carbohydrate-binding module - CBM54",
+					"id": "dbCAN_CBM_CBM54",
+					"ui-name": "dbCAN_CBM_CBM54"
+				},
+				{
+					"value": "CBM55",
+					"display": "carbohydrate-binding module - CBM55",
+					"id": "dbCAN_CBM_CBM55",
+					"ui-name": "dbCAN_CBM_CBM55"
+				},
+				{
+					"value": "CBM56",
+					"display": "carbohydrate-binding module - CBM56",
+					"id": "dbCAN_CBM_CBM56",
+					"ui-name": "dbCAN_CBM_CBM56"
+				},
+				{
+					"value": "CBM57",
+					"display": "carbohydrate-binding module - CBM57",
+					"id": "dbCAN_CBM_CBM57",
+					"ui-name": "dbCAN_CBM_CBM57"
+				},
+				{
+					"value": "CBM58",
+					"display": "carbohydrate-binding module - CBM58",
+					"id": "dbCAN_CBM_CBM58",
+					"ui-name": "dbCAN_CBM_CBM58"
+				},
+				{
+					"value": "CBM59",
+					"display": "carbohydrate-binding module - CBM59",
+					"id": "dbCAN_CBM_CBM59",
+					"ui-name": "dbCAN_CBM_CBM59"
+				},
+				{
+					"value": "CBM60",
+					"display": "carbohydrate-binding module - CBM60",
+					"id": "dbCAN_CBM_CBM60",
+					"ui-name": "dbCAN_CBM_CBM60"
+				},
+				{
+					"value": "CBM61",
+					"display": "carbohydrate-binding module - CBM61",
+					"id": "dbCAN_CBM_CBM61",
+					"ui-name": "dbCAN_CBM_CBM61"
+				},
+				{
+					"value": "CBM62",
+					"display": "carbohydrate-binding module - CBM62",
+					"id": "dbCAN_CBM_CBM62",
+					"ui-name": "dbCAN_CBM_CBM62"
+				},
+				{
+					"value": "CBM63",
+					"display": "carbohydrate-binding module - CBM63",
+					"id": "dbCAN_CBM_CBM63",
+					"ui-name": "dbCAN_CBM_CBM63"
+				},
+				{
+					"value": "CBM64",
+					"display": "carbohydrate-binding module - CBM64",
+					"id": "dbCAN_CBM_CBM64",
+					"ui-name": "dbCAN_CBM_CBM64"
+				},
+				{
+					"value": "CBM65",
+					"display": "carbohydrate-binding module - CBM65",
+					"id": "dbCAN_CBM_CBM65",
+					"ui-name": "dbCAN_CBM_CBM65"
+				},
+				{
+					"value": "CBM66",
+					"display": "carbohydrate-binding module - CBM66",
+					"id": "dbCAN_CBM_CBM66",
+					"ui-name": "dbCAN_CBM_CBM66"
+				},
+				{
+					"value": "CBM67",
+					"display": "carbohydrate-binding module - CBM67",
+					"id": "dbCAN_CBM_CBM67",
+					"ui-name": "dbCAN_CBM_CBM67"
+				},
+				{
+					"value": "CBM68",
+					"display": "carbohydrate-binding module - CBM68",
+					"id": "dbCAN_CBM_CBM68",
+					"ui-name": "dbCAN_CBM_CBM68"
+				},
+				{
+					"value": "CBM69",
+					"display": "carbohydrate-binding module - CBM69",
+					"id": "dbCAN_CBM_CBM69",
+					"ui-name": "dbCAN_CBM_CBM69"
+				},
+				{
+					"value": "CBM70",
+					"display": "carbohydrate-binding module - CBM70",
+					"id": "dbCAN_CBM_CBM70",
+					"ui-name": "dbCAN_CBM_CBM70"
+				},
+				{
+					"value": "CBM71",
+					"display": "carbohydrate-binding module - CBM71",
+					"id": "dbCAN_CBM_CBM71",
+					"ui-name": "dbCAN_CBM_CBM71"
+				},
+				{
+					"value": "CBM72",
+					"display": "carbohydrate-binding module - CBM72",
+					"id": "dbCAN_CBM_CBM72",
+					"ui-name": "dbCAN_CBM_CBM72"
+				},
+				{
+					"value": "CBM73",
+					"display": "carbohydrate-binding module - CBM73",
+					"id": "dbCAN_CBM_CBM73",
+					"ui-name": "dbCAN_CBM_CBM73"
+				},
+				{
+					"value": "CBM74",
+					"display": "carbohydrate-binding module - CBM74",
+					"id": "dbCAN_CBM_CBM74",
+					"ui-name": "dbCAN_CBM_CBM74"
+				},
+				{
+					"value": "CBM75",
+					"display": "carbohydrate-binding module - CBM75",
+					"id": "dbCAN_CBM_CBM75",
+					"ui-name": "dbCAN_CBM_CBM75"
+				},
+				{
+					"value": "CBM76",
+					"display": "carbohydrate-binding module - CBM76",
+					"id": "dbCAN_CBM_CBM76",
+					"ui-name": "dbCAN_CBM_CBM76"
+				},
+				{
+					"value": "CBM77",
+					"display": "carbohydrate-binding module - CBM77",
+					"id": "dbCAN_CBM_CBM77",
+					"ui-name": "dbCAN_CBM_CBM77"
+				},
+				{
+					"value": "CBM78",
+					"display": "carbohydrate-binding module - CBM78",
+					"id": "dbCAN_CBM_CBM78",
+					"ui-name": "dbCAN_CBM_CBM78"
+				},
+				{
+					"value": "CBM79",
+					"display": "carbohydrate-binding module - CBM79",
+					"id": "dbCAN_CBM_CBM79",
+					"ui-name": "dbCAN_CBM_CBM79"
+				},
+				{
+					"value": "CBM80",
+					"display": "carbohydrate-binding module - CBM80",
+					"id": "dbCAN_CBM_CBM80",
+					"ui-name": "dbCAN_CBM_CBM80"
+				},
+				{
+					"value": "CBM81",
+					"display": "carbohydrate-binding module - CBM81",
+					"id": "dbCAN_CBM_CBM81",
+					"ui-name": "dbCAN_CBM_CBM81"
+				},
+				{
+					"value": "CBM82",
+					"display": "carbohydrate-binding module - CBM82",
+					"id": "dbCAN_CBM_CBM82",
+					"ui-name": "dbCAN_CBM_CBM82"
+				},
+				{
+					"value": "CBM83",
+					"display": "carbohydrate-binding module - CBM83",
+					"id": "dbCAN_CBM_CBM83",
+					"ui-name": "dbCAN_CBM_CBM83"
+				},
+				{
+					"value": "CBM84",
+					"display": "carbohydrate-binding module - CBM84",
+					"id": "dbCAN_CBM_CBM84",
+					"ui-name": "dbCAN_CBM_CBM84"
+				},
+				{
+					"value": "CBM85",
+					"display": "carbohydrate-binding module - CBM85",
+					"id": "dbCAN_CBM_CBM85",
+					"ui-name": "dbCAN_CBM_CBM85"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_dbCAN_CE_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "ALL" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+		                {
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "dbCAN_CE_none",
+                                        "ui-name": "dbCAN_CE_none"
+                                },
+		                {
+                                        "value": "ALL",
+                                        "display": "ALL",
+                                        "id": "dbCAN_CE_all",
+                                        "ui-name": "dbCAN_CE_all"
+                                },
+				{
+					"value": "CE1",
+					"display": "carbohydrate esterase - CE1",
+					"id": "dbCAN_CE_CE1",
+					"ui-name": "dbCAN_CE_CE1"
+				},
+				{
+					"value": "CE2",
+					"display": "carbohydrate esterase - CE2",
+					"id": "dbCAN_CE_CE2",
+					"ui-name": "dbCAN_CE_CE2"
+				},
+				{
+					"value": "CE3",
+					"display": "carbohydrate esterase - CE3",
+					"id": "dbCAN_CE_CE3",
+					"ui-name": "dbCAN_CE_CE3"
+				},
+				{
+					"value": "CE4",
+					"display": "carbohydrate esterase - CE4",
+					"id": "dbCAN_CE_CE4",
+					"ui-name": "dbCAN_CE_CE4"
+				},
+				{
+					"value": "CE5",
+					"display": "carbohydrate esterase - CE5",
+					"id": "dbCAN_CE_CE5",
+					"ui-name": "dbCAN_CE_CE5"
+				},
+				{
+					"value": "CE6",
+					"display": "carbohydrate esterase - CE6",
+					"id": "dbCAN_CE_CE6",
+					"ui-name": "dbCAN_CE_CE6"
+				},
+				{
+					"value": "CE7",
+					"display": "carbohydrate esterase - CE7",
+					"id": "dbCAN_CE_CE7",
+					"ui-name": "dbCAN_CE_CE7"
+				},
+				{
+					"value": "CE8",
+					"display": "carbohydrate esterase - CE8",
+					"id": "dbCAN_CE_CE8",
+					"ui-name": "dbCAN_CE_CE8"
+				},
+				{
+					"value": "CE9",
+					"display": "carbohydrate esterase - CE9",
+					"id": "dbCAN_CE_CE9",
+					"ui-name": "dbCAN_CE_CE9"
+				},
+				{
+					"value": "CE10",
+					"display": "carbohydrate esterase - CE10",
+					"id": "dbCAN_CE_CE10",
+					"ui-name": "dbCAN_CE_CE10"
+				},
+				{
+					"value": "CE11",
+					"display": "carbohydrate esterase - CE11",
+					"id": "dbCAN_CE_CE11",
+					"ui-name": "dbCAN_CE_CE11"
+				},
+				{
+					"value": "CE12",
+					"display": "carbohydrate esterase - CE12",
+					"id": "dbCAN_CE_CE12",
+					"ui-name": "dbCAN_CE_CE12"
+				},
+				{
+					"value": "CE13",
+					"display": "carbohydrate esterase - CE13",
+					"id": "dbCAN_CE_CE13",
+					"ui-name": "dbCAN_CE_CE13"
+				},
+				{
+					"value": "CE14",
+					"display": "carbohydrate esterase - CE14",
+					"id": "dbCAN_CE_CE14",
+					"ui-name": "dbCAN_CE_CE14"
+				},
+				{
+					"value": "CE15",
+					"display": "carbohydrate esterase - CE15",
+					"id": "dbCAN_CE_CE15",
+					"ui-name": "dbCAN_CE_CE15"
+				},
+				{
+					"value": "CE16",
+					"display": "carbohydrate esterase - CE16",
+					"id": "dbCAN_CE_CE16",
+					"ui-name": "dbCAN_CE_CE16"
 				}
                 ]
             }
@@ -3082,15 +3277,21 @@
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
                                 {
-                                        "value": "none",
-                                        "display": "none",
+                                        "value": "NONE",
+                                        "display": "NONE",
                                         "id": "dbCAN_PL_none",
                                         "ui-name": "dbCAN_PL_none"
+                                },
+                                {
+                                        "value": "ALL",
+                                        "display": "ALL",
+                                        "id": "dbCAN_PL_all",
+                                        "ui-name": "dbCAN_PL_all"
                                 },
 				{
 					"value": "PL1",
@@ -3169,6 +3370,12 @@
 					"display": "polysaccharide lyase - PL1_12",
 					"id": "dbCAN_PL_PL1_12",
 					"ui-name": "dbCAN_PL_PL1_12"
+				},
+				{
+					"value": "PL1_13",
+					"display": "polysaccharide lyase - PL1_13",
+					"id": "dbCAN_PL_PL1_13",
+					"ui-name": "dbCAN_PL_PL1_13"
 				},
 				{
 					"value": "PL2",
@@ -3355,6 +3562,12 @@
 					"display": "polysaccharide lyase - PL8_3",
 					"id": "dbCAN_PL_PL8_3",
 					"ui-name": "dbCAN_PL_PL8_3"
+				},
+				{
+					"value": "PL8_4",
+					"display": "polysaccharide lyase - PL8_4",
+					"id": "dbCAN_PL_PL8_4",
+					"ui-name": "dbCAN_PL_PL8_4"
 				},
 				{
 					"value": "PL9",
@@ -3607,55 +3820,266 @@
 					"display": "polysaccharide lyase - PL27",
 					"id": "dbCAN_PL_PL27",
 					"ui-name": "dbCAN_PL_PL27"
+				},
+				{
+					"value": "PL28",
+					"display": "polysaccharide lyase - PL28",
+					"id": "dbCAN_PL_PL28",
+					"ui-name": "dbCAN_PL_PL28"
+				},
+				{
+					"value": "PL29",
+					"display": "polysaccharide lyase - PL29",
+					"id": "dbCAN_PL_PL29",
+					"ui-name": "dbCAN_PL_PL29"
+				},
+				{
+					"value": "PL30",
+					"display": "polysaccharide lyase - PL30",
+					"id": "dbCAN_PL_PL30",
+					"ui-name": "dbCAN_PL_PL30"
+				},
+				{
+					"value": "PL31",
+					"display": "polysaccharide lyase - PL31",
+					"id": "dbCAN_PL_PL31",
+					"ui-name": "dbCAN_PL_PL31"
+				},
+				{
+					"value": "PL32",
+					"display": "polysaccharide lyase - PL32",
+					"id": "dbCAN_PL_PL32",
+					"ui-name": "dbCAN_PL_PL32"
+				},
+				{
+					"value": "PL33",
+					"display": "polysaccharide lyase - PL33",
+					"id": "dbCAN_PL_PL33",
+					"ui-name": "dbCAN_PL_PL33"
+				},
+				{
+					"value": "PL33_1",
+					"display": "polysaccharide lyase - PL33_1",
+					"id": "dbCAN_PL_PL33_1",
+					"ui-name": "dbCAN_PL_PL33_1"
+				},
+				{
+					"value": "PL33_2",
+					"display": "polysaccharide lyase - PL33_2",
+					"id": "dbCAN_PL_PL33_2",
+					"ui-name": "dbCAN_PL_PL33_2"
+				},
+				{
+					"value": "PL34",
+					"display": "polysaccharide lyase - PL34",
+					"id": "dbCAN_PL_PL34",
+					"ui-name": "dbCAN_PL_PL34"
+				},
+				{
+					"value": "PL35",
+					"display": "polysaccharide lyase - PL35",
+					"id": "dbCAN_PL_PL35",
+					"ui-name": "dbCAN_PL_PL35"
+				},
+				{
+					"value": "PL36",
+					"display": "polysaccharide lyase - PL36",
+					"id": "dbCAN_PL_PL36",
+					"ui-name": "dbCAN_PL_PL36"
+				},
+				{
+					"value": "PL36_1",
+					"display": "polysaccharide lyase - PL36_1",
+					"id": "dbCAN_PL_PL36_1",
+					"ui-name": "dbCAN_PL_PL36_1"
+				},
+				{
+					"value": "PL36_2",
+					"display": "polysaccharide lyase - PL36_2",
+					"id": "dbCAN_PL_PL36_2",
+					"ui-name": "dbCAN_PL_PL36_2"
+				},
+				{
+					"value": "PL37",
+					"display": "polysaccharide lyase - PL37",
+					"id": "dbCAN_PL_PL37",
+					"ui-name": "dbCAN_PL_PL37"
 				}
                 ]
             }
         },
         {
-            "id": "input_dbCAN_cellulosome_ids",
+            "id": "input_dbCAN_AA_ids",
             "optional": true,
             "advanced": false,
             "allow_multiple": true,
-            "default_values": [ "none" ],
+            "default_values": [ "ALL" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
                                 {
-                                        "value": "none",
-                                        "display": "none",
-                                        "id": "dbCAN_cellulosome_none",
-                                        "ui-name": "dbCAN_cellulosome_none"
+                                        "value": "NONE",
+                                        "display": "NONE",
+                                        "id": "dbCAN_AA_none",
+                                        "ui-name": "dbCAN_AA_none"
                                 },
                                 {
-                                        "value": "dockerin",
-                                        "display": "dockerin",
-                                        "id": "dbCAN_cellulosome_dockerin",
-                                        "ui-name": "dbCAN_cellulosome_dockerin"
+                                        "value": "ALL",
+                                        "display": "ALL",
+                                        "id": "dbCAN_AA_all",
+                                        "ui-name": "dbCAN_AA_all"
                                 },
-                                {
-                                        "value": "cohesin",
-                                        "display": "cohesin",
-                                        "id": "dbCAN_cellulosome_cohesin",
-                                        "ui-name": "dbCAN_cellulosome_cohesin"
-                                },
-                                {
-                                        "value": "SLH",
-                                        "display": "S-Layer Homology",
-                                        "id": "dbCAN_cellulosome_SLH",
-                                        "ui-name": "dbCAN_cellulosome_SLH"
-                                }
+				{
+					"value": "AA1",
+					"display": "auxiliary activity - AA1",
+					"id": "dbCAN_AA_AA1",
+					"ui-name": "dbCAN_AA_AA1"
+				},
+				{
+					"value": "AA1_1",
+					"display": "auxiliary activity - AA1_1",
+					"id": "dbCAN_AA_AA1_1",
+					"ui-name": "dbCAN_AA_AA1_1"
+				},
+				{
+					"value": "AA1_2",
+					"display": "auxiliary activity - AA1_2",
+					"id": "dbCAN_AA_AA1_2",
+					"ui-name": "dbCAN_AA_AA1_2"
+				},
+				{
+					"value": "AA1_3",
+					"display": "auxiliary activity - AA1_3",
+					"id": "dbCAN_AA_AA1_3",
+					"ui-name": "dbCAN_AA_AA1_3"
+				},
+				{
+					"value": "AA2",
+					"display": "auxiliary activity - AA2",
+					"id": "dbCAN_AA_AA2",
+					"ui-name": "dbCAN_AA_AA2"
+				},
+				{
+					"value": "AA3",
+					"display": "auxiliary activity - AA3",
+					"id": "dbCAN_AA_AA3",
+					"ui-name": "dbCAN_AA_AA3"
+				},
+				{
+					"value": "AA3_1",
+					"display": "auxiliary activity - AA3_1",
+					"id": "dbCAN_AA_AA3_1",
+					"ui-name": "dbCAN_AA_AA3_1"
+				},
+				{
+					"value": "AA3_2",
+					"display": "auxiliary activity - AA3_2",
+					"id": "dbCAN_AA_AA3_2",
+					"ui-name": "dbCAN_AA_AA3_2"
+				},
+				{
+					"value": "AA3_3",
+					"display": "auxiliary activity - AA3_3",
+					"id": "dbCAN_AA_AA3_3",
+					"ui-name": "dbCAN_AA_AA3_3"
+				},
+				{
+					"value": "AA3_4",
+					"display": "auxiliary activity - AA3_4",
+					"id": "dbCAN_AA_AA3_4",
+					"ui-name": "dbCAN_AA_AA3_4"
+				},
+				{
+					"value": "AA4",
+					"display": "auxiliary activity - AA4",
+					"id": "dbCAN_AA_AA4",
+					"ui-name": "dbCAN_AA_AA4"
+				},
+				{
+					"value": "AA5",
+					"display": "auxiliary activity - AA5",
+					"id": "dbCAN_AA_AA5",
+					"ui-name": "dbCAN_AA_AA5"
+				},
+				{
+					"value": "AA5_1",
+					"display": "auxiliary activity - AA5_1",
+					"id": "dbCAN_AA_AA5_1",
+					"ui-name": "dbCAN_AA_AA5_1"
+				},
+				{
+					"value": "AA5_2",
+					"display": "auxiliary activity - AA5_2",
+					"id": "dbCAN_AA_AA5_2",
+					"ui-name": "dbCAN_AA_AA5_2"
+				},
+				{
+					"value": "AA6",
+					"display": "auxiliary activity - AA6",
+					"id": "dbCAN_AA_AA6",
+					"ui-name": "dbCAN_AA_AA6"
+				},
+				{
+					"value": "AA7",
+					"display": "auxiliary activity - AA7",
+					"id": "dbCAN_AA_AA7",
+					"ui-name": "dbCAN_AA_AA7"
+				},
+				{
+					"value": "AA8",
+					"display": "auxiliary activity - AA8",
+					"id": "dbCAN_AA_AA8",
+					"ui-name": "dbCAN_AA_AA8"
+				},
+				{
+					"value": "AA9",
+					"display": "auxiliary activity - AA9",
+					"id": "dbCAN_AA_AA9",
+					"ui-name": "dbCAN_AA_AA9"
+				},
+				{
+					"value": "AA10",
+					"display": "auxiliary activity - AA10",
+					"id": "dbCAN_AA_AA10",
+					"ui-name": "dbCAN_AA_AA10"
+				},
+				{
+					"value": "AA11",
+					"display": "auxiliary activity - AA11",
+					"id": "dbCAN_AA_AA11",
+					"ui-name": "dbCAN_AA_AA11"
+				},
+				{
+					"value": "AA12",
+					"display": "auxiliary activity - AA12",
+					"id": "dbCAN_AA_AA12",
+					"ui-name": "dbCAN_AA_AA12"
+				},
+				{
+					"value": "AA13",
+					"display": "auxiliary activity - AA13",
+					"id": "dbCAN_AA_AA13",
+					"ui-name": "dbCAN_AA_AA13"
+				},
+				{
+					"value": "AA14",
+					"display": "auxiliary activity - AA14",
+					"id": "dbCAN_AA_AA14",
+					"ui-name": "dbCAN_AA_AA14"
+				},
+				{
+					"value": "AA15",
+					"display": "auxiliary activity - AA15",
+					"id": "dbCAN_AA_AA15",
+					"ui-name": "dbCAN_AA_AA15"
+				},
+				{
+					"value": "AA16",
+					"display": "auxiliary activity - AA16",
+					"id": "dbCAN_AA_AA16",
+					"ui-name": "dbCAN_AA_AA16"
+				}
                 ]
-            }
-        },
-        {
-            "id": "input_many_ref",
-            "optional": false,
-            "advanced": false,
-            "allow_multiple": false,
-            "default_values": [ "" ],
-            "field_type": "text",
-            "text_options": {
-                "valid_ws_types": [ "KBaseCollections.FeatureSet","KBaseGenomes.Genome","KBaseSearch.GenomeSet" ]
             }
         },
         {
@@ -3671,27 +4095,27 @@
             }
         },
         {
-            "id": "coalesce_output",
-            "optional": false,
-            "advanced": false,
+            "id": "save_ALL_featureSets",
+            "optional": true,
+            "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "1" ],
+            "default_values": [ "0" ],
             "field_type": "dropdown",
-	    "dropdown_options": {
+            "dropdown_options": {
                 "options": [
                                 {
-                                        "value": "0",
-                                        "display": "Separate objects for each Model (makes many data objects)",
-                                        "id": "sep",
-                                        "ui-name": "sep"
+                                    "value": "0",
+                                    "display": "Save only hits to explicitly requested models",
+                                    "id": "save_explicit",
+                                    "ui-name": "save_explicit"
                                 },
                                 {
-                                        "value": "1",
-                                        "display": "Merge hits within CAZy category (recommended)",
-                                        "id": "merge",
-                                        "ui-name": "merge"
+                                    "value": "1",
+                                    "display": "Save hits to ALL requested models",
+                                    "id": "save_ALL",
+                                    "ui-name": "save_ALL"
                                 }
-			]					    
+                        ]
             }
         },
         {
@@ -3699,11 +4123,12 @@
             "optional": false,
             "advanced": false,
             "allow_multiple": false,
-            "default_values": [ ".001" ],
+            "default_values": [ "1e-15" ],
             "field_type": "text",
             "text_options": {
                 "validate_as": "float",
-                "min_integer" : 0
+                "min_float" : "0.0",
+		"max_float" : "1.0"
             }
         },
         {
@@ -3719,11 +4144,11 @@
             }
         },
         {
-            "id": "overlap_perc",
+            "id": "model_cov_perc",
             "optional": true,
             "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "50.0" ],
+            "default_values": [ "35.0" ],
             "field_type": "text",
             "text_options": {
                 "validate_as": "float",
@@ -3768,7 +4193,7 @@
             }
         },
         {
-            "id": "vertical",
+            "id": "low_val",
             "optional": false,
             "advanced": true,
             "allow_multiple": false,
@@ -3777,10 +4202,22 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "0.1",
+                                        "display": "fixed: 0.1",
+                                        "id": "fixed: 0.1",
+                                        "ui-name": "fixed: 0.1"
+                                },
+                                {
                                         "value": "1",
-                                        "display": "rows",
-                                        "id": "rows",
-                                        "ui-name": "rows"
+                                        "display": "fixed: 1",
+                                        "id": "fixed: 1",
+                                        "ui-name": "fixed: 1"
+                                },
+                                {
+                                        "value": "detect",
+                                        "display": "detect",
+                                        "id": "detect",
+                                        "ui-name": "detect"
                                 }
                 ]
             }
@@ -3854,12 +4291,20 @@
 		    "target_type_transform": "resolved-ref"
                 },
                 {
+                    "input_parameter": "genome_disp_name_config",
+                    "target_property": "genome_disp_name_config"
+                },
+                {
                     "input_parameter": "output_filtered_name",
                     "target_property": "output_filtered_name"
                 },
                 {
-                    "input_parameter": "coalesce_output",
+                    "constant_value": "0",
                     "target_property": "coalesce_output"
+                },
+                {
+                    "input_parameter": "save_ALL_featureSets",
+                    "target_property": "save_ALL_featureSets"
                 },
                 {
                     "input_parameter": "e_value",
@@ -3870,8 +4315,8 @@
                     "target_property": "bitscore"
                 },
                 {
-                    "input_parameter": "overlap_perc",
-                    "target_property": "overlap_perc"
+                    "input_parameter": "model_cov_perc",
+                    "target_property": "model_cov_perc"
                 },
                 {
                     "input_parameter": "maxaccepts",
@@ -3882,7 +4327,11 @@
                     "target_property": "heatmap"
                 },		
                 {
-                    "input_parameter": "vertical",
+                    "input_parameter": "low_val",
+                    "target_property": "low_val"
+                },		
+                {
+                    "constant_value": "1",
                     "target_property": "vertical"
                 },		
                 {

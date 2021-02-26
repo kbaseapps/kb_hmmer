@@ -25,9 +25,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "input_many_ref",
     "input_msa_ref",
     "output_filtered_name",
+    "genome_disp_name_config",
     "e_value",
     "bitscore",
-    "overlap_perc",
+    "model_cov_perc",
     "maxaccepts"
 })
 public class HMMERParams {
@@ -40,12 +41,14 @@ public class HMMERParams {
     private String inputMsaRef;
     @JsonProperty("output_filtered_name")
     private String outputFilteredName;
+    @JsonProperty("genome_disp_name_config")
+    private String genomeDispNameConfig;
     @JsonProperty("e_value")
     private Double eValue;
     @JsonProperty("bitscore")
     private Double bitscore;
-    @JsonProperty("overlap_perc")
-    private Double overlapPerc;
+    @JsonProperty("model_cov_perc")
+    private Double modelCovPerc;
     @JsonProperty("maxaccepts")
     private Double maxaccepts;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -110,6 +113,21 @@ public class HMMERParams {
         return this;
     }
 
+    @JsonProperty("genome_disp_name_config")
+    public String getGenomeDispNameConfig() {
+        return genomeDispNameConfig;
+    }
+
+    @JsonProperty("genome_disp_name_config")
+    public void setGenomeDispNameConfig(String genomeDispNameConfig) {
+        this.genomeDispNameConfig = genomeDispNameConfig;
+    }
+
+    public HMMERParams withGenomeDispNameConfig(String genomeDispNameConfig) {
+        this.genomeDispNameConfig = genomeDispNameConfig;
+        return this;
+    }
+
     @JsonProperty("e_value")
     public Double getEValue() {
         return eValue;
@@ -140,18 +158,18 @@ public class HMMERParams {
         return this;
     }
 
-    @JsonProperty("overlap_perc")
-    public Double getOverlapPerc() {
-        return overlapPerc;
+    @JsonProperty("model_cov_perc")
+    public Double getModelCovPerc() {
+        return modelCovPerc;
     }
 
-    @JsonProperty("overlap_perc")
-    public void setOverlapPerc(Double overlapPerc) {
-        this.overlapPerc = overlapPerc;
+    @JsonProperty("model_cov_perc")
+    public void setModelCovPerc(Double modelCovPerc) {
+        this.modelCovPerc = modelCovPerc;
     }
 
-    public HMMERParams withOverlapPerc(Double overlapPerc) {
-        this.overlapPerc = overlapPerc;
+    public HMMERParams withModelCovPerc(Double modelCovPerc) {
+        this.modelCovPerc = modelCovPerc;
         return this;
     }
 
@@ -182,7 +200,7 @@ public class HMMERParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((("HMMERParams"+" [workspaceName=")+ workspaceName)+", inputManyRef=")+ inputManyRef)+", inputMsaRef=")+ inputMsaRef)+", outputFilteredName=")+ outputFilteredName)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", overlapPerc=")+ overlapPerc)+", maxaccepts=")+ maxaccepts)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((("HMMERParams"+" [workspaceName=")+ workspaceName)+", inputManyRef=")+ inputManyRef)+", inputMsaRef=")+ inputMsaRef)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", modelCovPerc=")+ modelCovPerc)+", maxaccepts=")+ maxaccepts)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

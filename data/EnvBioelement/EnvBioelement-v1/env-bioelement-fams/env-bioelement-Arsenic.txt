@@ -1,5 +1,0 @@
-arsC
-glutathione-glutaredoxin_type
-thioredoxin
-arsenite_oxidase_large
-arsenite_oxidase_small

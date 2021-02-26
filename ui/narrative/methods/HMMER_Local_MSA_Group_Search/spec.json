@@ -1,9 +1,9 @@
 {
-    "ver": "1.2.2",
+    "ver": "1.6.0",
     "authors": [
         "dylan"
     ],
-    "contact": "http://kbase.us/contact-us/",
+    "contact": "http://www.kbase.us/support/",
     "visible": true,
     "categories": ["active","sequence"],
     "widgets": {
@@ -30,7 +30,53 @@
             "default_values": [ "" ],
             "field_type": "text",
             "text_options": {
-                "valid_ws_types": [ "KBaseCollections.FeatureSet","KBaseGenomes.Genome","KBaseSearch.GenomeSet" ]
+                "valid_ws_types": [ "KBaseCollections.FeatureSet",
+				    "KBaseGenomes.Genome",
+				    "KBaseSearch.GenomeSet",
+				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly"
+				  ]
+            }
+        },
+        {
+            "id": "genome_disp_name_config",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "obj_name" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "obj_name",
+                                        "display": "Object_Name",
+                                        "id": "genome_disp_name_config-obj_name",
+                                        "ui-name": "genome_disp_name_config-obj_name"
+                                },
+                                {
+                                        "value": "obj_name_ver",
+                                        "display": "Object_Name.version",
+                                        "id": "genome_disp_name_config-obj_name_ver",
+                                        "ui-name": "genome_disp_name_config-obj_name_ver"
+                                },
+                                {
+                                        "value": "sci_name",
+                                        "display": "Scientific Name",
+                                        "id": "genome_disp_name_config-sci_name",
+                                        "ui-name": "genome_disp_name_config-sci_name"
+                                },
+                                {
+                                        "value": "obj_name_sci_name",
+                                        "display": "Object_Name: Scientific Name",
+                                        "id": "genome_disp_name_config-obj_name_sci_name",
+                                        "ui-name": "genome_disp_name_config-obj_name_sci_name"
+                                },
+                                {
+                                        "value": "obj_name_ver_sci_name",
+                                        "display": "Object_Name.version: Scientific Name",
+                                        "id": "genome_disp_name_config-obj_name_ver_sci_name",
+                                        "ui-name": "genome_disp_name_config-obj_name_ver_sci_name"
+                                }
+                ]
             }
         },
         {
@@ -43,30 +89,6 @@
             "text_options": {
                 "valid_ws_types": [ "KBaseCollections.FeatureSet" ],
 		"is_output_name": true		  
-            }
-        },
-        {
-            "id": "coalesce_output",
-            "optional": false,
-            "advanced": false,
-            "allow_multiple": false,
-            "default_values": [ "1" ],
-            "field_type": "dropdown",
-	    "dropdown_options": {
-                "options": [
-                                {
-                                        "value": "0",
-                                        "display": "Separate by HMM",
-                                        "id": "sep",
-                                        "ui-name": "sep"
-                                },
-                                {
-                                        "value": "1",
-                                        "display": "Merge all hits",
-                                        "id": "merge",
-                                        "ui-name": "merge"
-                                }
-			]					    
             }
         },
         {
@@ -94,7 +116,7 @@
             }
         },
         {
-            "id": "overlap_perc",
+            "id": "model_cov_perc",
             "optional": true,
             "advanced": true,
             "allow_multiple": false,
@@ -143,7 +165,7 @@
             }
         },
         {
-            "id": "vertical",
+            "id": "low_val",
             "optional": false,
             "advanced": true,
             "allow_multiple": false,
@@ -152,10 +174,22 @@
             "dropdown_options": {
                 "options": [
                                 {
+                                        "value": "0.1",
+                                        "display": "fixed: 0.1",
+                                        "id": "fixed: 0.1",
+                                        "ui-name": "fixed: 0.1"
+                                },
+                                {
                                         "value": "1",
-                                        "display": "rows",
-                                        "id": "rows",
-                                        "ui-name": "rows"
+                                        "display": "fixed: 1",
+                                        "id": "fixed: 1",
+                                        "ui-name": "fixed: 1"
+                                },
+                                {
+                                        "value": "detect",
+                                        "display": "detect",
+                                        "id": "detect",
+                                        "ui-name": "detect"
                                 }
                 ]
             }
@@ -165,7 +199,7 @@
             "optional": false,
             "advanced": true,
             "allow_multiple": false,
-            "default_values": [ "0" ],
+            "default_values": [ "1" ],
             "field_type": "dropdown",
             "dropdown_options": {
                 "options": [
@@ -206,12 +240,12 @@
 		    "target_type_transform": "resolved-ref"
                 },
                 {
-                    "input_parameter": "output_filtered_name",
-                    "target_property": "output_filtered_name"
+                    "input_parameter": "genome_disp_name_config",
+                    "target_property": "genome_disp_name_config"
                 },
                 {
-                    "input_parameter": "coalesce_output",
-                    "target_property": "coalesce_output"
+                    "input_parameter": "output_filtered_name",
+                    "target_property": "output_filtered_name"
                 },
                 {
                     "input_parameter": "e_value",
@@ -222,8 +256,8 @@
                     "target_property": "bitscore"
                 },
                 {
-                    "input_parameter": "overlap_perc",
-                    "target_property": "overlap_perc"
+                    "input_parameter": "model_cov_perc",
+                    "target_property": "model_cov_perc"
                 },
                 {
                     "input_parameter": "maxaccepts",
@@ -234,7 +268,11 @@
                     "target_property": "heatmap"
                 },		
                 {
-                    "input_parameter": "vertical",
+                    "input_parameter": "low_val",
+                    "target_property": "low_val"
+                },		
+                {
+                    "constant_value": "1",
                     "target_property": "vertical"
                 },		
                 {

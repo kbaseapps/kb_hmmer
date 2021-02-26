@@ -33,10 +33,11 @@ module kb_hmmer {
 	data_obj_ref   input_many_ref;
 	data_obj_ref   input_msa_ref;
         data_obj_name  output_filtered_name;
+        string         genome_disp_name_config;
 
 	float e_value;
 	float bitscore;
-	float overlap_perc;
+	float model_cov_perc;
 	float maxaccepts;
 
 /*	float ident_thresh;
@@ -62,7 +63,7 @@ module kb_hmmer {
     **
     **    overloading as follows:
     **        input_msa_ref: MSA
-    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SequenceSet deactivated)
     **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
     */
     funcdef HMMER_MSA_Search (HMMER_Params params)  returns (HMMER_Output) authentication required;
@@ -78,15 +79,17 @@ module kb_hmmer {
 	data_obj_ref   input_msa_refs;
 	data_obj_ref   input_many_ref;
         data_obj_name  output_filtered_name;
+        string         genome_disp_name_config;
 
 	bool  coalesce_output;
 	float e_value;
 	float bitscore;
-	float overlap_perc;
+	float model_cov_perc;
 	float maxaccepts;
 /*	float ident_thresh;
 */
         bool  heatmap;
+	bool  low_val;
 	bool  vertical;  /* only supports true for now */
 	bool  show_blanks;
     } HMMER_Local_MSA_Group_Params;
@@ -95,7 +98,7 @@ module kb_hmmer {
     /*  Method for HMMER search of a Local MSA Group (found automatically within workspace) against many sequences 
     **
     **    overloading as follows:
-    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SeqeuenceSet deactivated)
     **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
     */
     funcdef HMMER_Local_MSA_Group_Search (HMMER_Local_MSA_Group_Params params)  returns (HMMER_Output) authentication required;
@@ -105,9 +108,7 @@ module kb_hmmer {
     */
     typedef structure {
         workspace_name workspace_name;
-/*	sequence       input_one_sequence;
-	data_obj_ref   input_one_ref;
-*/
+
 	data_obj_ref   input_dbCAN_AA_ids;
 	data_obj_ref   input_dbCAN_CBM_ids;
 	data_obj_ref   input_dbCAN_CE_ids;
@@ -115,17 +116,20 @@ module kb_hmmer {
 	data_obj_ref   input_dbCAN_GT_ids;
 	data_obj_ref   input_dbCAN_PL_ids;
 	data_obj_ref   input_dbCAN_cellulosome_ids;
+
 	data_obj_ref   input_many_ref;
         data_obj_name  output_filtered_name;
+        string         genome_disp_name_config;
 
 	bool  coalesce_output;
+	bool  save_ALL_featureSets;
 	float e_value;
 	float bitscore;
-	float overlap_perc;
+	float model_cov_perc;
 	float maxaccepts;
-/*	float ident_thresh;
-*/
+
         bool  heatmap;
+	bool  low_val;
 	bool  vertical;  /* only supports true for now */
 	bool  show_blanks;
     } HMMER_dbCAN_Params;
@@ -134,7 +138,7 @@ module kb_hmmer {
     /*  Method for HMMER search of dbCAN Markov Models of CAZy families
     **
     **    overloading as follows:
-    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SequenceSet deactivated)
     **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
     */
     funcdef HMMER_dbCAN_Search (HMMER_dbCAN_Params params)  returns (HMMER_Output) authentication required;
@@ -144,43 +148,44 @@ module kb_hmmer {
     */
     typedef structure {
         workspace_name workspace_name;
-/*  sequence       input_one_sequence;
-    data_obj_ref   input_one_ref;
-*/
-    data_obj_ref   input_env-bioelement_N_ids;
-    data_obj_ref   input_env-bioelement_S_ids;
-    data_obj_ref   input_env-bioelement_O_ids;
-    data_obj_ref   input_env-bioelement_CH4_ids;
-    data_obj_ref   input_env-bioelement_CFix_ids;
-    data_obj_ref   input_env-bioelement_CMono_ids;
-    data_obj_ref   input_env-bioelement_C1_ids;
-    data_obj_ref   input_env-bioelement_H_ids;
-    data_obj_ref   input_env-bioelement_Halo_ids;
-    data_obj_ref   input_env-bioelement_As_ids;
-    data_obj_ref   input_env-bioelement_Se_ids;
-    data_obj_ref   input_env-bioelement_Ur_ids;
-    data_obj_ref   input_env-bioelement_Me_ids;
-    data_obj_ref   input_env-bioelement_CN_ids;
-    data_obj_ref   input_many_ref;
-        data_obj_name  output_filtered_name;
 
-    bool  coalesce_output;
-    float e_value;
-    float bitscore;
-    float overlap_perc;
-    float maxaccepts;
-/*  float ident_thresh;
-*/
-        bool  heatmap;
-    bool  vertical;  /* only supports true for now */
-    bool  show_blanks;
+	data_obj_ref   input_EnvBioelement_N_ids;
+	data_obj_ref   input_EnvBioelement_H_ids;
+	data_obj_ref   input_EnvBioelement_O_ids;
+	data_obj_ref   input_EnvBioelement_CFix_ids;
+	data_obj_ref   input_EnvBioelement_C1_ids;
+	data_obj_ref   input_EnvBioelement_CH4_ids;
+	data_obj_ref   input_EnvBioelement_CO_ids;
+	data_obj_ref   input_EnvBioelement_S_ids;
+	data_obj_ref   input_EnvBioelement_CN_ids;
+	data_obj_ref   input_EnvBioelement_CH4N2O_ids;
+	data_obj_ref   input_EnvBioelement_Se_ids;
+	data_obj_ref   input_EnvBioelement_Metal_ids;
+	data_obj_ref   input_EnvBioelement_As_ids;
+	data_obj_ref   input_EnvBioelement_Halo_ids;
+	
+	data_obj_ref   input_many_ref;
+        data_obj_name  output_filtered_name;
+        string         genome_disp_name_config;
+
+	bool  coalesce_output;
+	bool  save_ALL_featureSets;
+	float e_value;
+	float bitscore;
+	float model_cov_perc;
+	float maxaccepts;
+
+	bool  heatmap;
+	bool  low_val;
+	bool  vertical;  /* only supports true for now */
+	bool  show_blanks;
     } HMMER_EnvBioelement_Params;
 
 
     /*  Method for HMMER search of Markov Models of environmental bioelement families
     **
     **    overloading as follows:
-    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet
+    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SeqquenceSet deactivated)
     **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
     */
     funcdef HMMER_EnvBioelement_Search (HMMER_EnvBioelement_Params params)  returns (HMMER_Output) authentication required;

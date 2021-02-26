@@ -31,12 +31,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "input_dbCAN_cellulosome_ids",
     "input_many_ref",
     "output_filtered_name",
+    "genome_disp_name_config",
     "coalesce_output",
+    "save_ALL_featureSets",
     "e_value",
     "bitscore",
-    "overlap_perc",
+    "model_cov_perc",
     "maxaccepts",
     "heatmap",
+    "low_val",
     "vertical",
     "show_blanks"
 })
@@ -62,18 +65,24 @@ public class HMMERDbCANParams {
     private String inputManyRef;
     @JsonProperty("output_filtered_name")
     private String outputFilteredName;
+    @JsonProperty("genome_disp_name_config")
+    private String genomeDispNameConfig;
     @JsonProperty("coalesce_output")
     private Long coalesceOutput;
+    @JsonProperty("save_ALL_featureSets")
+    private Long saveALLFeatureSets;
     @JsonProperty("e_value")
     private Double eValue;
     @JsonProperty("bitscore")
     private Double bitscore;
-    @JsonProperty("overlap_perc")
-    private Double overlapPerc;
+    @JsonProperty("model_cov_perc")
+    private Double modelCovPerc;
     @JsonProperty("maxaccepts")
     private Double maxaccepts;
     @JsonProperty("heatmap")
     private Long heatmap;
+    @JsonProperty("low_val")
+    private Long lowVal;
     @JsonProperty("vertical")
     private Long vertical;
     @JsonProperty("show_blanks")
@@ -230,6 +239,21 @@ public class HMMERDbCANParams {
         return this;
     }
 
+    @JsonProperty("genome_disp_name_config")
+    public String getGenomeDispNameConfig() {
+        return genomeDispNameConfig;
+    }
+
+    @JsonProperty("genome_disp_name_config")
+    public void setGenomeDispNameConfig(String genomeDispNameConfig) {
+        this.genomeDispNameConfig = genomeDispNameConfig;
+    }
+
+    public HMMERDbCANParams withGenomeDispNameConfig(String genomeDispNameConfig) {
+        this.genomeDispNameConfig = genomeDispNameConfig;
+        return this;
+    }
+
     @JsonProperty("coalesce_output")
     public Long getCoalesceOutput() {
         return coalesceOutput;
@@ -242,6 +266,21 @@ public class HMMERDbCANParams {
 
     public HMMERDbCANParams withCoalesceOutput(Long coalesceOutput) {
         this.coalesceOutput = coalesceOutput;
+        return this;
+    }
+
+    @JsonProperty("save_ALL_featureSets")
+    public Long getSaveALLFeatureSets() {
+        return saveALLFeatureSets;
+    }
+
+    @JsonProperty("save_ALL_featureSets")
+    public void setSaveALLFeatureSets(Long saveALLFeatureSets) {
+        this.saveALLFeatureSets = saveALLFeatureSets;
+    }
+
+    public HMMERDbCANParams withSaveALLFeatureSets(Long saveALLFeatureSets) {
+        this.saveALLFeatureSets = saveALLFeatureSets;
         return this;
     }
 
@@ -275,18 +314,18 @@ public class HMMERDbCANParams {
         return this;
     }
 
-    @JsonProperty("overlap_perc")
-    public Double getOverlapPerc() {
-        return overlapPerc;
+    @JsonProperty("model_cov_perc")
+    public Double getModelCovPerc() {
+        return modelCovPerc;
     }
 
-    @JsonProperty("overlap_perc")
-    public void setOverlapPerc(Double overlapPerc) {
-        this.overlapPerc = overlapPerc;
+    @JsonProperty("model_cov_perc")
+    public void setModelCovPerc(Double modelCovPerc) {
+        this.modelCovPerc = modelCovPerc;
     }
 
-    public HMMERDbCANParams withOverlapPerc(Double overlapPerc) {
-        this.overlapPerc = overlapPerc;
+    public HMMERDbCANParams withModelCovPerc(Double modelCovPerc) {
+        this.modelCovPerc = modelCovPerc;
         return this;
     }
 
@@ -317,6 +356,21 @@ public class HMMERDbCANParams {
 
     public HMMERDbCANParams withHeatmap(Long heatmap) {
         this.heatmap = heatmap;
+        return this;
+    }
+
+    @JsonProperty("low_val")
+    public Long getLowVal() {
+        return lowVal;
+    }
+
+    @JsonProperty("low_val")
+    public void setLowVal(Long lowVal) {
+        this.lowVal = lowVal;
+    }
+
+    public HMMERDbCANParams withLowVal(Long lowVal) {
+        this.lowVal = lowVal;
         return this;
     }
 
@@ -362,7 +416,7 @@ public class HMMERDbCANParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((((((((((((((((((("HMMERDbCANParams"+" [workspaceName=")+ workspaceName)+", inputDbCANAAIds=")+ inputDbCANAAIds)+", inputDbCANCBMIds=")+ inputDbCANCBMIds)+", inputDbCANCEIds=")+ inputDbCANCEIds)+", inputDbCANGHIds=")+ inputDbCANGHIds)+", inputDbCANGTIds=")+ inputDbCANGTIds)+", inputDbCANPLIds=")+ inputDbCANPLIds)+", inputDbCANCellulosomeIds=")+ inputDbCANCellulosomeIds)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", coalesceOutput=")+ coalesceOutput)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", overlapPerc=")+ overlapPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((((((((((((((((((("HMMERDbCANParams"+" [workspaceName=")+ workspaceName)+", inputDbCANAAIds=")+ inputDbCANAAIds)+", inputDbCANCBMIds=")+ inputDbCANCBMIds)+", inputDbCANCEIds=")+ inputDbCANCEIds)+", inputDbCANGHIds=")+ inputDbCANGHIds)+", inputDbCANGTIds=")+ inputDbCANGTIds)+", inputDbCANPLIds=")+ inputDbCANPLIds)+", inputDbCANCellulosomeIds=")+ inputDbCANCellulosomeIds)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", coalesceOutput=")+ coalesceOutput)+", saveALLFeatureSets=")+ saveALLFeatureSets)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", modelCovPerc=")+ modelCovPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", lowVal=")+ lowVal)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
