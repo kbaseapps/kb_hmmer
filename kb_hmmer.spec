@@ -117,7 +117,7 @@ module kb_hmmer {
 	data_obj_ref   input_dbCAN_PL_ids;
 	data_obj_ref   input_dbCAN_cellulosome_ids;
 
-	data_obj_ref   input_many_ref;
+	data_obj_ref   input_many_refs;
         data_obj_name  output_filtered_name;
         string         genome_disp_name_config;
 
@@ -164,7 +164,7 @@ module kb_hmmer {
 	data_obj_ref   input_EnvBioelement_As_ids;
 	data_obj_ref   input_EnvBioelement_Halo_ids;
 	
-	data_obj_ref   input_many_ref;
+	data_obj_ref   input_many_refs;
         data_obj_name  output_filtered_name;
         string         genome_disp_name_config;
 

@@ -1,1 +1,1 @@
-dbCAN-fam-HMMs.txt.v8
+dbCAN-fam-HMMs-v8.txt

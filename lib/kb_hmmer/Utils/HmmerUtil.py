@@ -319,7 +319,6 @@ class HmmerUtil:
 #        report += "\n"+pformat(params)
         #appropriate_sequence_found_in_one_input = False
         #appropriate_sequence_found_in_MSA_input = False
-        appropriate_sequence_found_in_many_input = False
         genome_id_feature_id_delim = '.f:'
 
         #### do some basic checks
@@ -330,8 +329,8 @@ class HmmerUtil:
 #            raise ValueError('input_one_ref parameter is required')
 #        if 'input_msa_refs' not in params or len(params['input_msa_refs']) == 0:
 #            raise ValueError('input_msa_refs parameter is required if selecting local MSAs')
-#        if 'input_many_ref' not in params:
-#            raise ValueError('input_many_ref parameter is required')
+        if 'input_many_refs' not in params:
+            raise ValueError('input_many_refs parameter is required')
         if 'genome_disp_name_config' not in params:
             raise ValueError('genome_disp_name_config parameter is required')
         if 'output_filtered_name' not in params:
@@ -342,14 +341,15 @@ class HmmerUtil:
         # set local names and ids
 #        input_one_ref = params['input_one_ref']
         #input_msa_ref = params['input_msa_ref']
-        input_many_ref = params['input_many_ref']
-        ws_id = input_many_ref.split('/')[0]
+
+        input_many_refs = params['input_many_refs']
+        ws_id = input_many_refs[0].split('/')[0]
 
         # set provenance
         self.log(console, "SETTING PROVENANCE")  # DEBUG
         service = 'kb_hmmer'
         method = search_tool_name+'_Search'
-        input_obj_refs = [params['input_many_ref']]
+        input_obj_refs = params['input_many_refs']
         provenance = self._set_provenance (ctx, service, method, input_obj_refs)
         
         
@@ -374,239 +374,274 @@ class HmmerUtil:
             return self._create_error_report (params['workspace_name'], message, provenance)
 
 
-        #### Get the input_many object
+        #### Get the input_many objects
         ##
-        try:
-            #objects = ws.get_objects([{'ref': input_many_ref}])
-            objects = self.wsClient.get_objects2({'objects': [{'ref': input_many_ref}]})['data']
-            input_many_data = objects[0]['data']
-            info = objects[0]['info']
-            input_many_name = str(info[1])
-            many_type_name = info[2].split('.')[1].split('-')[0]
+        all_genome_refs = []
+        genome_refs = dict()
+        feature_ids = dict()
+        appropriate_sequence_found_in_many_inputs = dict()
+        input_many_names = dict()
+        many_type_names = dict()
+        input_many_objs = dict()
+        many_forward_reads_file_paths = dict()
+        many_forward_reads_file_handles = dict()
+        obj2file_retVal = dict()
+        
+        for input_many_ref in input_many_refs:
 
-        except Exception as e:
-            raise ValueError('Unable to fetch input_many_name object from workspace: ' + str(e))
-            #to get the full stack trace: traceback.format_exc()
+            appropriate_sequence_found_in_many_inputs[input_many_ref] = False
 
-        # Handle overloading (input_many can be SequenceSet, FeatureSet, Genome, or GenomeSet)
-        #
-        if many_type_name == 'SequenceSet':
             try:
-                input_many_sequenceSet = input_many_data
+                #objects = ws.get_objects([{'ref': input_many_ref}])
+                objects = self.wsClient.get_objects2({'objects': [{'ref': input_many_ref}]})['data']
+                input_many_data = objects[0]['data']
+                info = objects[0]['info']
+                input_many_name = str(info[1])
+                many_type_name = info[2].split('.')[1].split('-')[0]
+                input_many_names[input_many_ref] = input_many_name
+                many_type_names[input_many_ref] = many_type_name
+                
             except Exception as e:
-                print(traceback.format_exc())
-                raise ValueError('Unable to get SequenceSet: ' + str(e))
+                raise ValueError('Unable to fetch input_many_name object from workspace: ' + str(e))
+                #to get the full stack trace: traceback.format_exc()
 
-            header_id = input_many_sequenceSet['sequences'][0]['sequence_id']
-            many_forward_reads_file_path = os.path.join(self.output_dir, header_id + '.fasta')
-            many_forward_reads_file_handle = open(many_forward_reads_file_path, 'w', 0)
-            self.log(console, 'writing reads file: ' + str(many_forward_reads_file_path))
+            # Handle overloading (input_many can be SequenceSet, FeatureSet, Genome, or GenomeSet)
+            #
+            if many_type_name == 'SequenceSet':
+                try:
+                    input_many_sequenceSet = input_many_data
+                except Exception as e:
+                    print(traceback.format_exc())
+                    raise ValueError('Unable to get SequenceSet: ' + str(e))
 
-            for seq_obj in input_many_sequenceSet['sequences']:
-                header_id = seq_obj['sequence_id']
-                sequence_str = seq_obj['sequence']
+                header_id = input_many_sequenceSet['sequences'][0]['sequence_id']
+                many_forward_reads_file_paths[input_many_ref] = os.path.join(self.output_dir, header_id + '.fasta')
+                many_forward_reads_file_handle = open(many_forward_reads_file_path, 'w', 0)
+                self.log(console, 'writing reads file: ' + str(many_forward_reads_file_path))
 
-                PROT_pattern = re.compile("^[acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
-                DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
-                if DNA_pattern.match(sequence_str):
-                    self.log(invalid_msgs,
-                             "Require protein sequences for target. " +
-                             "BAD nucleotide record for sequence_id: " + header_id + "\n" + sequence_str + "\n")
-                    continue
-                elif not PROT_pattern.match(sequence_str):
-                    self.log(invalid_msgs, "BAD record for sequence_id: " + header_id + "\n" + sequence_str + "\n")
-                    continue
-                appropriate_sequence_found_in_many_input = True
-                many_forward_reads_file_handle.write('>' + header_id + "\n")
-                many_forward_reads_file_handle.write(sequence_str + "\n")
-            many_forward_reads_file_handle.close()
-            self.log(console, 'done')
+                for seq_obj in input_many_sequenceSet['sequences']:
+                    header_id = seq_obj['sequence_id']
+                    sequence_str = seq_obj['sequence']
+
+                    PROT_pattern = re.compile("^[acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWYxX ]+$")
+                    DNA_pattern = re.compile("^[acgtuACGTUnryNRY ]+$")
+                    if DNA_pattern.match(sequence_str):
+                        self.log(invalid_msgs,
+                                 "Require protein sequences for target. " +
+                                 "BAD nucleotide record for sequence_id: " + header_id + "\n" + sequence_str + "\n")
+                        continue
+                    elif not PROT_pattern.match(sequence_str):
+                        self.log(invalid_msgs, "BAD record for sequence_id: " + header_id + "\n" + sequence_str + "\n")
+                        continue
+                    appropriate_sequence_found_in_many_inputs[input_many_ref] = True
+                    many_forward_reads_file_handle.write('>' + header_id + "\n")
+                    many_forward_reads_file_handle.write(sequence_str + "\n")
+                many_forward_reads_file_handle.close()
+                self.log(console, 'done')
 
 
-        # we're going to profile genome refs for all target types, even if only one object.
-        #  note: we are calling it 'genome_refs' even if the object is an AMA
-        #
-        genome_refs = []
+            # we're going to profile genome refs for all target types, even if only one object.
+            #  note: we are calling it 'genome_refs' even if the object is an AMA
+            #
+            genome_refs[input_many_ref] = []
+
             
+            # FeatureSet
+            #
+            if many_type_name == 'FeatureSet':
+                # retrieve sequences for features
+                input_many_featureSet = input_many_data
+                input_many_objs[input_many_ref] = input_many_featureSet
+                many_forward_reads_file_dir = self.output_dir
+                many_forward_reads_file = input_many_names[input_many_ref] + ".fasta"
 
-        # FeatureSet
-        #
-        if many_type_name == 'FeatureSet':
-            # retrieve sequences for features
-            input_many_featureSet = input_many_data
-            many_forward_reads_file_dir = self.output_dir
-            many_forward_reads_file = input_many_name + ".fasta"
+                # DEBUG
+                #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+                FeatureSetToFASTA_params = {
+                    'featureSet_ref': input_many_ref,
+                    'file': many_forward_reads_file,
+                    'dir': many_forward_reads_file_dir,
+                    'console': console,
+                    'invalid_msgs': invalid_msgs,
+                    'residue_type': 'protein',
+                    'feature_type': 'CDS',
+                    'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
+                    'record_desc_pattern': '[%%genome_ref%%]',
+                    'case': 'upper',
+                    'linewrap': 50,
+                    'merge_fasta_files': 'TRUE'
+                }
 
-            # DEBUG
-            #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
-            FeatureSetToFASTA_params = {
-                'featureSet_ref': input_many_ref,
-                'file': many_forward_reads_file,
-                'dir': many_forward_reads_file_dir,
-                'console': console,
-                'invalid_msgs': invalid_msgs,
-                'residue_type': 'protein',
-                'feature_type': 'CDS',
-                'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
-                'record_desc_pattern': '[%%genome_ref%%]',
-                'case': 'upper',
-                'linewrap': 50,
-                'merge_fasta_files': 'TRUE'
-            }
+                #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
+                SERVICE_VER = 'release'
+                #SERVICE_VER = 'dev'
+                DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+                FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA(FeatureSetToFASTA_params)
+                obj2file_retVal[input_many_ref] = FeatureSetToFASTA_retVal
+                many_forward_reads_file_paths[input_many_ref] = FeatureSetToFASTA_retVal['fasta_file_path']
+                feature_ids[input_many_ref] = dict()
+                feature_ids[input_many_ref]['by_genome_ref'] = FeatureSetToFASTA_retVal['feature_ids_by_genome_ref']
+                if len(feature_ids[input_many_ref]['by_genome_ref'].keys()) > 0:
+                    appropriate_sequence_found_in_many_inputs[input_many_ref] = True
+                    these_genome_refs = sorted(feature_ids[input_many_ref]['by_genome_ref'].keys())
+                    genome_refs[input_many_ref] = these_genome_refs
+                    all_genome_refs.extend(these_genome_refs)
+                    
+                # DEBUG
+                #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+                #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
 
-            #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            #SERVICE_VER = 'release'
-            SERVICE_VER = 'dev'
-            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-            FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA(FeatureSetToFASTA_params)
-            many_forward_reads_file_path = FeatureSetToFASTA_retVal['fasta_file_path']
-            feature_ids_by_genome_ref = FeatureSetToFASTA_retVal['feature_ids_by_genome_ref']
-            if len(feature_ids_by_genome_ref.keys()) > 0:
-                appropriate_sequence_found_in_many_input = True
+            # Genome
+            #
+            elif many_type_name == 'Genome':
+                many_forward_reads_file_dir = self.output_dir
+                many_forward_reads_file = input_many_name + ".fasta"
 
-            genome_refs = sorted(feature_ids_by_genome_ref.keys())
+                # DEBUG
+                #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+                GenomeToFASTA_params = {
+                    'genome_ref': input_many_ref,
+                    'file': many_forward_reads_file,
+                    'dir': many_forward_reads_file_dir,
+                    'console': console,
+                    'invalid_msgs': invalid_msgs,
+                    'residue_type': 'protein',
+                    'feature_type': 'CDS',
+                    'record_id_pattern': '%%feature_id%%',
+                    'record_desc_pattern': '[%%genome_id%%]',
+                    'case': 'upper',
+                    'linewrap': 50
+                }
 
-            # DEBUG
-            #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
-            #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
+                #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
+                #SERVICE_VER = 'release'
+                SERVICE_VER = 'dev'
+                DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+                GenomeToFASTA_retVal = DOTFU.GenomeToFASTA(GenomeToFASTA_params)
+                obj2file_retVal[input_many_ref] = GenomeToFASTA_retVal
+                many_forward_reads_file_paths[input_many_ref] = GenomeToFASTA_retVal['fasta_file_path']
+                feature_ids[input_many_ref] = dict()
+                feature_ids[input_many_ref]['basic'] = GenomeToFASTA_retVal['feature_ids']
+                if len(feature_ids[input_many_ref]['basic']) > 0:
+                    appropriate_sequence_found_in_many_inputs[input_many_ref] = True
+                    genome_refs[input_many_ref] = [input_many_ref]
+                    all_genome_refs.append(input_many_ref)
+                    
+                # DEBUG
+                #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+                #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
 
-        # Genome
-        #
-        elif many_type_name == 'Genome':
-            many_forward_reads_file_dir = self.output_dir
-            many_forward_reads_file = input_many_name + ".fasta"
+                
+            # GenomeSet
+            #
+            elif many_type_name == 'GenomeSet':
+                input_many_genomeSet = input_many_data
+                input_many_objs[input_many_ref] = input_many_genomeSet
+                many_forward_reads_file_dir = self.output_dir
+                many_forward_reads_file = input_many_name + ".fasta"
 
-            # DEBUG
-            #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
-            GenomeToFASTA_params = {
-                'genome_ref': input_many_ref,
-                'file': many_forward_reads_file,
-                'dir': many_forward_reads_file_dir,
-                'console': console,
-                'invalid_msgs': invalid_msgs,
-                'residue_type': 'protein',
-                'feature_type': 'CDS',
-                'record_id_pattern': '%%feature_id%%',
-                'record_desc_pattern': '[%%genome_id%%]',
-                'case': 'upper',
-                'linewrap': 50
-            }
+                for genome_id in input_many_genomeSet['elements']:
+                    genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
+                    if genome_ref not in genome_refs:
+                        genome_refs[input_many_ref].append(genome_ref)
+                        all_genome_refs.append(genome_ref)
+                        
+                        # DEBUG
+                #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+                GenomeSetToFASTA_params = {
+                    'genomeSet_ref': input_many_ref,
+                    'file': many_forward_reads_file,
+                    'dir': many_forward_reads_file_dir,
+                    'console': console,
+                    'invalid_msgs': invalid_msgs,
+                    'residue_type': 'protein',
+                    'feature_type': 'CDS',
+                    'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
+                    'record_desc_pattern': '[%%genome_ref%%]',
+                    'case': 'upper',
+                    'linewrap': 50,
+                    'merge_fasta_files': 'TRUE'
+                }
 
-            #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            #SERVICE_VER = 'release'
-            SERVICE_VER = 'dev'
-            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-            GenomeToFASTA_retVal = DOTFU.GenomeToFASTA(GenomeToFASTA_params)
-            many_forward_reads_file_path = GenomeToFASTA_retVal['fasta_file_path']
-            feature_ids = GenomeToFASTA_retVal['feature_ids']
-            if len(feature_ids) > 0:
-                appropriate_sequence_found_in_many_input = True
+                #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
+                #SERVICE_VER = 'release'
+                SERVICE_VER = 'dev'
+                DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+                GenomeSetToFASTA_retVal = DOTFU.GenomeSetToFASTA(GenomeSetToFASTA_params)
+                obj2file_retVal[input_many_ref] = GenomeSetToFASTA_retVal
+                many_forward_reads_file_paths[input_many_ref] = GenomeSetToFASTA_retVal['fasta_file_path_list'][0]
+                feature_ids[input_many_ref] = dict()
+                feature_ids[input_many_ref]['by_genome_id'] = GenomeSetToFASTA_retVal['feature_ids_by_genome_id']
+                if len(feature_ids[input_many_ref]['by_genome_id'].keys()) > 0:
+                    appropriate_sequence_found_in_many_inputs[input_many_ref] = True
 
-            genome_refs = [input_many_ref]
+                # DEBUG
+                #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+                #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
 
-            # DEBUG
-            #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
-            #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
+                
+            # AnnotatedMetagenomeAssembly
+            #
+            elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                many_forward_reads_file_dir = self.output_dir
+                many_forward_reads_file = input_many_name + ".fasta"
 
-        # GenomeSet
-        #
-        elif many_type_name == 'GenomeSet':
-            input_many_genomeSet = input_many_data
-            many_forward_reads_file_dir = self.output_dir
-            many_forward_reads_file = input_many_name + ".fasta"
+                # DEBUG
+                #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+                AnnotatedMetagenomeAssemblyToFASTA_params = {
+                    'ama_ref': input_many_ref,
+                    'file': many_forward_reads_file,
+                    'dir': many_forward_reads_file_dir,
+                    'console': console,
+                    'invalid_msgs': invalid_msgs,
+                    'residue_type': 'protein',
+                    'feature_type': 'CDS',
+                    'record_id_pattern': '%%feature_id%%',
+                    'record_desc_pattern': '[%%genome_id%%]',
+                    'case': 'upper',
+                    'linewrap': 50
+                }
 
-            for genome_id in input_many_genomeSet['elements']:
-                genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
-                if genome_ref not in genome_refs:
-                    genome_refs.append(genome_ref)
+                #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
+                #SERVICE_VER = 'release'
+                SERVICE_VER = 'beta'
+                DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+                AnnotatedMetagenomeAssemblyToFASTA_retVal = DOTFU.AnnotatedMetagenomeAssemblyToFASTA (AnnotatedMetagenomeAssemblyToFASTA_params)
+                obj2file_retVal[input_many_ref] = AnnotatedMetagenomeAssemblyToFASTA_retVal
+                many_forward_reads_file_paths[input_many_ref] = AnnotatedMetagenomeAssemblyToFASTA_retVal['fasta_file_path']
+                feature_ids[input_many_ref] = dict()
+                feature_ids[input_many_ref]['basic'] = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_ids']
+                if len(feature_ids) > 0:
+                    appropriate_sequence_found_in_many_inputs[input_many_ref] = True
 
-            # DEBUG
-            #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
-            GenomeSetToFASTA_params = {
-                'genomeSet_ref': input_many_ref,
-                'file': many_forward_reads_file,
-                'dir': many_forward_reads_file_dir,
-                'console': console,
-                'invalid_msgs': invalid_msgs,
-                'residue_type': 'protein',
-                'feature_type': 'CDS',
-                'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
-                'record_desc_pattern': '[%%genome_ref%%]',
-                'case': 'upper',
-                'linewrap': 50,
-                'merge_fasta_files': 'TRUE'
-            }
+                genome_refs[input_many_ref] = [input_many_ref]
+                all_genome_refs.append(input_many_ref)
+                
+                # DEBUG
+                #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+                #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
 
-            #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            #SERVICE_VER = 'release'
-            SERVICE_VER = 'dev'
-            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-            GenomeSetToFASTA_retVal = DOTFU.GenomeSetToFASTA(GenomeSetToFASTA_params)
-            many_forward_reads_file_path = GenomeSetToFASTA_retVal['fasta_file_path_list'][0]
-            feature_ids_by_genome_id = GenomeSetToFASTA_retVal['feature_ids_by_genome_id']
-            if len(feature_ids_by_genome_id.keys()) > 0:
-                appropriate_sequence_found_in_many_input = True
-
-            # DEBUG
-            #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
-            #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
-
-        # AnnotatedMetagenomeAssembly
-        #
-        elif many_type_name == 'AnnotatedMetagenomeAssembly':
-            many_forward_reads_file_dir = self.output_dir
-            many_forward_reads_file = input_many_name + ".fasta"
-
-            # DEBUG
-            #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
-            AnnotatedMetagenomeAssemblyToFASTA_params = {
-                'ama_ref': input_many_ref,
-                'file': many_forward_reads_file,
-                'dir': many_forward_reads_file_dir,
-                'console': console,
-                'invalid_msgs': invalid_msgs,
-                'residue_type': 'protein',
-                'feature_type': 'CDS',
-                'record_id_pattern': '%%feature_id%%',
-                'record_desc_pattern': '[%%genome_id%%]',
-                'case': 'upper',
-                'linewrap': 50
-            }
-
-            #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            #SERVICE_VER = 'release'
-            SERVICE_VER = 'beta'
-            DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-            AnnotatedMetagenomeAssemblyToFASTA_retVal = DOTFU.AnnotatedMetagenomeAssemblyToFASTA (AnnotatedMetagenomeAssemblyToFASTA_params)
-            many_forward_reads_file_path = AnnotatedMetagenomeAssemblyToFASTA_retVal['fasta_file_path']
-            feature_ids = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_ids']
-            if len(feature_ids) > 0:
-                appropriate_sequence_found_in_many_input = True
-
-            genome_refs = [input_many_ref]
-
-            # DEBUG
-            #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
-            #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
-
-        # Missing proper input_many_type
-        #
-        else:
-            raise ValueError('Cannot yet handle input_many type of: ' + many_type_name)
+            # Missing proper input_many_type
+            #
+            else:
+                raise ValueError('Cannot yet handle input_many type of: ' + many_type_name)
 
         # Get total number of sequences in input_many search db
         #
         seq_total = 0
-        if many_type_name == 'SequenceSet':
-            seq_total = len(input_many_sequenceSet['sequences'])
-        elif many_type_name == 'FeatureSet':
-            seq_total = len(input_many_featureSet['elements'].keys())
-        elif many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
-            seq_total = len(feature_ids)
-        elif many_type_name == 'GenomeSet':
-            for genome_id in feature_ids_by_genome_id.keys():
-                seq_total += len(feature_ids_by_genome_id[genome_id])
+        for input_many_ref in input_many_refs:
+            if many_type_names[input_many_ref] == 'SequenceSet':
+                seq_total = len(input_many_sequenceSet['sequences'])
+            elif many_type_names[input_many_ref] == 'FeatureSet':
+                seq_total = len(input_many_featureSet['elements'].keys())
+            elif many_type_names[input_many_ref] == 'Genome' \
+                 or many_type_names[input_many_ref] == 'AnnotatedMetagenomeAssembly':
+                seq_total = len(feature_ids[input_many_ref]['basic'])
+            elif many_type_names[input_many_ref] == 'GenomeSet':
+                for genome_id in feature_ids[input_many_ref]['by_genome_id'].keys():
+                    seq_total += len(feature_ids[input_many_ref]['by_genome_id'][genome_id])
 
+                
         #### Extract the HMMs into buf
         ##
         HMM_bufs = dict()
@@ -629,6 +664,7 @@ class HmmerUtil:
                     this_id = hmm_line.split()[1].replace('.hmm', '')
                 this_buf.append(hmm_line)
 
+                
         #### Get all the HMM cats and ids
         ##
         all_HMM_groups_order = []
@@ -640,7 +676,7 @@ class HmmerUtil:
         HMM_fam_config_dir = os.path.join(model_group_config['HMMS_DIR'], params['model_group']+'-fams')
         HMM_fam_input_dir = os.path.join(self.output_dir, 'HMMs')
 
-        # HERE
+        # get connections between hmms and groups
         with open(hmm_group_config_path, 'r', 0) as hmm_group_config_handle:
             for hmm_group_config_line in hmm_group_config_handle.readlines():
                 hmm_group_config_line = hmm_group_config_line.rstrip()
@@ -692,13 +728,13 @@ class HmmerUtil:
 
         # check for failed input file creation
         #
-        if not appropriate_sequence_found_in_many_input:
-            self.log(invalid_msgs, "no protein sequences found in '" + input_many_name + "'")
+        for input_many_ref in input_many_refs:
+            if not appropriate_sequence_found_in_many_inputs[input_many_ref]:
+                self.log(invalid_msgs, "no protein sequences found in '" + input_many_names[input_many_ref] + "'")
 
         # input data failed validation.  Need to return
         #
         if len(invalid_msgs) > 0:
-
             message = "\n".join(invalid_msgs)
             return self._create_error_report (params['workspace_name'], message, provenance)
 
@@ -788,127 +824,134 @@ class HmmerUtil:
                     raise ValueError ("No length found in HMM file for model "+hmm_id)
                 
 
-                ### Construct the HMMER_SEARCH command
+                ### Construct the HMMER_SEARCH command for each target
                 #
                 # SYNTAX (from http://eddylab.org/software/hmmer3/3.1b2/Userguide.pdf)
                 #
                 # hmmsearch --domtblout <TAB_out> -A <MSA_out> --noali --notextw -E <e_value> -T <bit_score> <hmmfile> <seqdb>
                 #
-                hmmer_search_bin = self.HMMER_SEARCH
-                hmmer_search_cmd = [hmmer_search_bin]
+                for input_many_ref in input_many_refs:
+                    hmmer_search_bin = self.HMMER_SEARCH
+                    hmmer_search_cmd = [hmmer_search_bin]
 
-                # check for necessary files
-                if not os.path.isfile(hmmer_search_bin):
-                    raise ValueError("no such file '" + hmmer_search_bin + "'")
-                if not os.path.isfile(HMM_file_path):
-                    raise ValueError("no such file '" + HMM_file_path + "'")
-                elif not os.path.getsize(HMM_file_path):
-                    raise ValueError("empty file '" + HMM_file_path + "'")
-                if not os.path.isfile(many_forward_reads_file_path):
-                    raise ValueError("no such file '" + many_forward_reads_file_path + "'")
-                elif not os.path.getsize(many_forward_reads_file_path):
-                    raise ValueError("empty file '" + many_forward_reads_file_path + "'")
+                    # check for necessary files
+                    if not os.path.isfile(hmmer_search_bin):
+                        raise ValueError("no such file '" + hmmer_search_bin + "'")
+                    if not os.path.isfile(HMM_file_path):
+                        raise ValueError("no such file '" + HMM_file_path + "'")
+                    elif not os.path.getsize(HMM_file_path):
+                        raise ValueError("empty file '" + HMM_file_path + "'")
+                    if not os.path.isfile(many_forward_reads_file_paths[input_many_ref]):
+                        raise ValueError("no such file '" + many_forward_reads_file_paths[input_many_ref] + "'")
+                    elif not os.path.getsize(many_forward_reads_file_paths[input_many_ref]):
+                        raise ValueError("empty file '" + many_forward_reads_file_paths[input_many_ref] + "'")
 
-                output_hit_TAB_file_path = os.path.join(hmmer_dir, hmm_id + '.hitout.txt')
-                #output_hit_MSA_file_path = os.path.join(hmmer_dir, hmm_id + '.msaout.txt')
-                output_filtered_fasta_file_path = os.path.join(hmmer_dir, hmm_id + '.output_filtered.fasta')
-                output_hit_TAB_file_paths[hmm_id] = output_hit_TAB_file_path
-                #output_hit_MSA_file_paths[hmm_id] = output_hit_MSA_file_path
-                output_filtered_fasta_file_paths.append(output_filtered_fasta_file_path)
+                    output_hit_TAB_file_path = os.path.join(hmmer_dir, hmm_id +'-'+ input_many_names[input_many_ref] + '.hitout.txt')
+                    #output_hit_MSA_file_path = os.path.join(hmmer_dir, hmm_id + '.msaout.txt')
+                    #output_filtered_fasta_file_path = os.path.join(hmmer_dir, hmm_id + '.output_filtered.fasta')
+                    if hmm_id not in output_hit_TAB_file_paths:
+                        output_hit_TAB_file_paths[hmm_id] = dict()
+                    output_hit_TAB_file_paths[hmm_id][input_many_ref] = output_hit_TAB_file_path
+                    #output_hit_MSA_file_paths[hmm_id] = output_hit_MSA_file_path
+                    #output_filtered_fasta_file_paths.append(output_filtered_fasta_file_path)
 
-                # this is command for basic search mode
-                hmmer_search_cmd.append('--domtblout')
-                hmmer_search_cmd.append(output_hit_TAB_file_path)
-                #hmmer_search_cmd.append('-A')
-                #hmmer_search_cmd.append(output_hit_MSA_file_path)
-                hmmer_search_cmd.append('--noali')
-                hmmer_search_cmd.append('--notextw')
-                hmmer_search_cmd.append('-E')  # can't use -T with -E, so we'll use -E
-                hmmer_search_cmd.append(str(params['e_value']))
-                hmmer_search_cmd.append(HMM_file_path)
-                hmmer_search_cmd.append(many_forward_reads_file_path)
+                    # this is command for basic search mode
+                    hmmer_search_cmd.append('--domtblout')
+                    hmmer_search_cmd.append(output_hit_TAB_file_path)
+                    #hmmer_search_cmd.append('-A')
+                    #hmmer_search_cmd.append(output_hit_MSA_file_path)
+                    hmmer_search_cmd.append('--noali')
+                    hmmer_search_cmd.append('--notextw')
+                    hmmer_search_cmd.append('-E')  # can't use -T with -E, so we'll use -E
+                    hmmer_search_cmd.append(str(params['e_value']))
+                    hmmer_search_cmd.append(HMM_file_path)
+                    hmmer_search_cmd.append(many_forward_reads_file_paths[input_many_ref])
 
-                # options
-                #if 'maxaccepts' in params:
-                #    if params['maxaccepts']:
-                #        hmmer_search_cmd.append('-max_target_seqs')
-                #        hmmer_search_cmd.append(str(params['maxaccepts']))
+                    # options
+                    #if 'maxaccepts' in params:
+                    #    if params['maxaccepts']:
+                    #        hmmer_search_cmd.append('-max_target_seqs')
+                    #        hmmer_search_cmd.append(str(params['maxaccepts']))
+                    
+                    # Run HMMER, capture output as it happens
+                    #
+                    #self.log(console, 'RUNNING HMMER_SEARCH:')
+                    #self.log(console, '    '+' '.join(hmmer_search_cmd))
+                    #report += "\n"+'running HMMER_SEARCH:'+"\n"
+                    #report += '    '+' '.join(hmmer_search_cmd)+"\n"
+                    
+                    self.log (console, "RUNNING HMMER against target "+input_many_names[input_many_ref]) # DEBUG
 
-                # Run HMMER, capture output as it happens
-                #
-                #self.log(console, 'RUNNING HMMER_SEARCH:')
-                #self.log(console, '    '+' '.join(hmmer_search_cmd))
-                #report += "\n"+'running HMMER_SEARCH:'+"\n"
-                #report += '    '+' '.join(hmmer_search_cmd)+"\n"
+                    # DEBUG
+                    #self.log(console, "\n".join(hmmer_search_cmd))
+                    
+                    p = subprocess.Popen(hmmer_search_cmd,
+                                         cwd=self.output_dir,
+                                         stdout=subprocess.PIPE,
+                                         stderr=subprocess.STDOUT,
+                                         shell=False)
+                    
+                    while True:
+                        line = p.stdout.readline()
+                        if not line:
+                            break
+                        #self.log(console, line.replace('\n', ''))  # DEBUG
 
-                self.log (console, "RUNNING HMMER") # DEBUG
-                
-                p = subprocess.Popen(hmmer_search_cmd,
-                                     cwd=self.output_dir,
-                                     stdout=subprocess.PIPE,
-                                     stderr=subprocess.STDOUT,
-                                     shell=False)
+                    p.stdout.close()
+                    p.wait()
+                    #self.log(console, 'return code: ' + str(p.returncode))
+                    if p.returncode != 0:
+                        raise ValueError('Error running HMMER_SEARCH, return code: ' + str(p.returncode) +
+                                         '\n\n' + '\n'.join(console))
 
-                while True:
-                    line = p.stdout.readline()
-                    if not line:
-                        break
-                    #self.log(console, line.replace('\n', ''))  # DEBUG
+                    #self.log (console, "RAN HMMER") # DEBUG
 
-                p.stdout.close()
-                p.wait()
-                #self.log(console, 'return code: ' + str(p.returncode))
-                if p.returncode != 0:
-                    raise ValueError('Error running HMMER_SEARCH, return code: ' + str(p.returncode) +
-                                     '\n\n' + '\n'.join(console))
-
-                #self.log (console, "RAN HMMER") # DEBUG
-
-                # Check for output
-                if not os.path.isfile(output_hit_TAB_file_path):
-                    raise ValueError("HMMER_SEARCH failed to create TAB file '" + output_hit_TAB_file_path + "'")
-                elif not os.path.getsize(output_hit_TAB_file_path) > 0:
-                    raise ValueError("HMMER_SEARCH created empty TAB file '" + output_hit_TAB_file_path + "'")
-                """
-                if not os.path.isfile(output_hit_MSA_file_path):
+                    # Check for output
+                    if not os.path.isfile(output_hit_TAB_file_path):
+                        raise ValueError("HMMER_SEARCH failed to create TAB file '" + output_hit_TAB_file_path + "'")
+                    elif not os.path.getsize(output_hit_TAB_file_path) > 0:
+                        raise ValueError("HMMER_SEARCH created empty TAB file '" + output_hit_TAB_file_path + "'")
+                    """
+                    if not os.path.isfile(output_hit_MSA_file_path):
                     raise ValueError("HMMER_SEARCH failed to create MSA file '" + output_hit_MSA_file_path + "'")
-                elif not os.path.getsize(output_hit_MSA_file_path) > 0:
+                    elif not os.path.getsize(output_hit_MSA_file_path) > 0:
                     #raise ValueError("HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
                     #self.log(console,"HMMER_SEARCH created empty MSA file '"+output_hit_MSA_file_path+"'")
                     self.log(console, "\tHMMER_SEARCH: No hits")
                     continue
-                """
+                    """
                 
-                # DEBUG
-                #self.log(console, "DEBUG: output_hit_TAB_file_path: '"+str(output_hit_TAB_file_path))
-                #self.log(console, "DEBUG: output_hit_MSA_file_path: '"+str(output_hit_MSA_file_path))
-                # DEBUG
-                """
-                report = "MODEL ID:"+hmm_id+"\n"
-                report = "TAB:\n\n"
-                with open (output_hit_TAB_file_path, 'r') as output_handle:
+                    # DEBUG
+                    #self.log(console, "DEBUG: output_hit_TAB_file_path: '"+str(output_hit_TAB_file_path))
+                    #self.log(console, "DEBUG: output_hit_MSA_file_path: '"+str(output_hit_MSA_file_path))
+                    # DEBUG
+                    """
+                    report = "MODEL ID:"+hmm_id+"\n"
+                    report = "TAB:\n\n"
+                    with open (output_hit_TAB_file_path, 'r') as output_handle:
                     for line in output_handle:
-                        report += line+"\n"
-                report += "\n\nMSA:\n\n"
-                with open (output_hit_MSA_file_path, 'r') as output_handle:
+                    report += line+"\n"
+                    report += "\n\nMSA:\n\n"
+                    with open (output_hit_MSA_file_path, 'r') as output_handle:
                     for line in output_handle:
-                        report += line+"\n"
-                self.log(console, report)
-                """
-                
+                    report += line+"\n"
+                    self.log(console, report)
+                    """
+
                 ### Parse the HMMER tabular output and store ids to filter many set to make filtered object to save back to KBase
                 #
                 #self.log(console, 'PARSING HMMER SEARCH TAB OUTPUT')
-                with open(output_hit_TAB_file_path, "r") as output_hit_TAB_file_handle:
-                    output_aln_buf = output_hit_TAB_file_handle.readlines()
-
-                # check for hits
                 hits_found = False
-                for line in output_aln_buf:
-                    if line.startswith('#'):
-                        continue
-                    hits_found = True
-                    break
+                for input_many_ref in input_many_refs:
+                    with open(output_hit_TAB_file_paths[hmm_id][input_many_ref], "r") as output_hit_TAB_file_handle:
+                        output_aln_buf = output_hit_TAB_file_handle.readlines()
+
+                    # check for hits
+                    for line in output_aln_buf:
+                        if line.startswith('#'):
+                            continue
+                        hits_found = True
+                        break
 
                 if not hits_found:
                     self.log(console, "\tHMMER_SEARCH: No hits")
@@ -923,138 +966,148 @@ class HmmerUtil:
                 filtering_fields = dict()
                 hit_order = []
                 hit_buf = dict()
+                hit_source_ref  = dict()
+                hit_source_type = dict()
+                
+                for input_many_ref in input_many_refs:
+                    many_type_name = many_type_names[input_many_ref]
+                    with open(output_hit_TAB_file_paths[hmm_id][input_many_ref], "r") as output_hit_TAB_file_handle:
+                        output_aln_buf = output_hit_TAB_file_handle.readlines()
 
-                for line in output_aln_buf:
-                    if line.startswith('#'):
-                        #if not header_done:
-                        #    hit_buf.append(line)
-                        continue
-                    #header_done = True
-                    #self.log(console,'HIT LINE: '+line)  # DEBUG
-                    """ format for -tblout.  we're now using -domtblout" 
-                    hit_info = re.split('\s+', line)
-                    hit_seq_id = hit_info[0]
-                    hit_accession = hit_info[1]
-                    query_name = hit_info[2]
-                    query_accession = hit_info[3]
-                    hit_e_value = float(hit_info[4])
-                    hit_bitscore = float(hit_info[5])
-                    hit_bias = float(hit_info[6])
-                    hit_e_value_best_dom = float(hit_info[7])
-                    hit_bitscore_best_dom = float(hit_info[8])
-                    hit_bias_best_dom = float(hit_info[9])
-                    hit_expected_dom_n = float(hit_info[10])
-                    hit_regions = float(hit_info[11])
-                    hit_regions_multidom = float(hit_info[12])
-                    hit_overlaps = float(hit_info[13])
-                    hit_envelopes = float(hit_info[14])
-                    hit_dom_n = float(hit_info[15])
-                    hit_doms_within_rep_thresh = float(hit_info[16])
-                    hit_doms_within_inc_thresh = float(hit_info[17])
-                    hit_desc = hit_info[18]
-                    """
-                    # format for -domtblout http://eddylab.org/software/hmmer3/3.1b2/Userguide.pdf
-                    hit_info = re.split('\s+', line)
-                    hit_seq_id = hit_info[0]
-                    hit_accession = hit_info[1]
-                    hit_seq_len = int(hit_info[2])  # diff from -tblout format
-                    query_name = hit_info[3]
-                    query_accession = hit_info[4]
-                    query_model_len = int(hit_info[5])  # diff from -tblout format
-                    hit_e_value_alldoms = float(hit_info[6])
-                    hit_bitscore_alldoms = float(hit_info[7])
-                    hit_bias_alldoms = float(hit_info[8])
-                    hit_dom_n = int(hit_info[9])  # diff from -tblout format
-                    hit_dom_total = int(hit_info[10])  # diff from -tblout format
-                    hit_c_e_value_this_dom = float(hit_info[11])  # diff from -tblout format
-                    hit_i_e_value_this_dom = float(hit_info[12])  # diff from -tblout format
-                    hit_bitscore_this_dom = float(hit_info[13])  # diff from -tblout format
-                    hit_bias_this_dom = float(hit_info[14])  # diff from -tblout format
-                    query_beg_pos = int(hit_info[15])  # diff from -tblout format
-                    query_end_pos = int(hit_info[16])  # diff from -tblout format
-                    hit_beg_pos = int(hit_info[17])  # diff from -tblout format
-                    hit_end_pos = int(hit_info[18])  # diff from -tblout format
-                    envelope_beg_pos = int(hit_info[19])  # diff from -tblout format
-                    envelope_end_pos = int(hit_info[20])  # diff from -tblout format
-                    hit_acc_posterior_prob = float(hit_info[21])  # diff from -tblout format
-                    hit_desc = hit_info[22]
+                    for line in output_aln_buf:
+                        if line.startswith('#'):
+                            #if not header_done:
+                            #    hit_buf.append(line)
+                            continue
+                        #header_done = True
+                        #self.log(console,'HIT LINE: '+line)  # DEBUG
+                        """ format for -tblout.  we're now using -domtblout" 
+                        hit_info = re.split('\s+', line)
+                        hit_seq_id = hit_info[0]
+                        hit_accession = hit_info[1]
+                        query_name = hit_info[2]
+                        query_accession = hit_info[3]
+                        hit_e_value = float(hit_info[4])
+                        hit_bitscore = float(hit_info[5])
+                        hit_bias = float(hit_info[6])
+                        hit_e_value_best_dom = float(hit_info[7])
+                        hit_bitscore_best_dom = float(hit_info[8])
+                        hit_bias_best_dom = float(hit_info[9])
+                        hit_expected_dom_n = float(hit_info[10])
+                        hit_regions = float(hit_info[11])
+                        hit_regions_multidom = float(hit_info[12])
+                        hit_overlaps = float(hit_info[13])
+                        hit_envelopes = float(hit_info[14])
+                        hit_dom_n = float(hit_info[15])
+                        hit_doms_within_rep_thresh = float(hit_info[16])
+                        hit_doms_within_inc_thresh = float(hit_info[17])
+                        hit_desc = hit_info[18]
+                        """
+                        # format for -domtblout http://eddylab.org/software/hmmer3/3.1b2/Userguide.pdf
+                        hit_info = re.split('\s+', line)
+                        hit_seq_id = hit_info[0]
+                        hit_accession = hit_info[1]
+                        hit_seq_len = int(hit_info[2])  # diff from -tblout format
+                        query_name = hit_info[3]
+                        query_accession = hit_info[4]
+                        query_model_len = int(hit_info[5])  # diff from -tblout format
+                        hit_e_value_alldoms = float(hit_info[6])
+                        hit_bitscore_alldoms = float(hit_info[7])
+                        hit_bias_alldoms = float(hit_info[8])
+                        hit_dom_n = int(hit_info[9])  # diff from -tblout format
+                        hit_dom_total = int(hit_info[10])  # diff from -tblout format
+                        hit_c_e_value_this_dom = float(hit_info[11])  # diff from -tblout format
+                        hit_i_e_value_this_dom = float(hit_info[12])  # diff from -tblout format
+                        hit_bitscore_this_dom = float(hit_info[13])  # diff from -tblout format
+                        hit_bias_this_dom = float(hit_info[14])  # diff from -tblout format
+                        query_beg_pos = int(hit_info[15])  # diff from -tblout format
+                        query_end_pos = int(hit_info[16])  # diff from -tblout format
+                        hit_beg_pos = int(hit_info[17])  # diff from -tblout format
+                        hit_end_pos = int(hit_info[18])  # diff from -tblout format
+                        envelope_beg_pos = int(hit_info[19])  # diff from -tblout format
+                        envelope_end_pos = int(hit_info[20])  # diff from -tblout format
+                        hit_acc_posterior_prob = float(hit_info[21])  # diff from -tblout format
+                        hit_desc = hit_info[22]
 
-                    if hit_seq_id not in hit_seq_ids:
-                        hit_seq_ids[hit_seq_id] = True
-                        hit_order.append(hit_seq_id)
-                        hit_buf[hit_seq_id] = []
-                        filtering_fields[hit_seq_id] = []
-                        
-                    # store all non-filtered domain hits for domainAnnotation
-                    #hit_info_by_genome_feature_and_hmm = dict()
-                    [hit_genome_ref, hit_feature_id] = self._parse_genome_and_feature_id_from_hit_id (hit_seq_id, many_type_name, input_many_ref, genome_id_feature_id_delim)
-                    hit_alnlen = query_end_pos - query_beg_pos + 1
+                        if hit_seq_id not in hit_seq_ids:
+                            hit_seq_ids[hit_seq_id] = True
+                            hit_order.append(hit_seq_id)
+                            hit_buf[hit_seq_id] = []
+                            hit_source_ref[hit_seq_id] = input_many_ref
+                            hit_source_type[hit_seq_id] = many_type_name
+                            filtering_fields[hit_seq_id] = []
 
-                    if hit_genome_ref not in hit_info_by_genome_feature_and_hmm:
-                        hit_info_by_genome_feature_and_hmm[hit_genome_ref] = dict()
-                    if hit_feature_id not in hit_info_by_genome_feature_and_hmm[hit_genome_ref]:
-                        hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id] = dict()
-                    if hmm_id not in hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id]:
-                        hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id][hmm_id] = list()
+                        # store all non-filtered domain hits for domainAnnotation
+                        #hit_info_by_genome_feature_and_hmm = dict()
+                        [hit_genome_ref, hit_feature_id] = self._parse_genome_and_feature_id_from_hit_id (hit_seq_id, many_type_names[input_many_ref], input_many_ref, genome_id_feature_id_delim)
+                        hit_alnlen = query_end_pos - query_beg_pos + 1
 
-                    filter = False
-                    this_filter_fields = dict()
-                    #self.log(console,"HIT_SEQ_ID: '"+hit_seq_id+"'")
-                    #if 'ident_thresh' in params and float(params['ident_thresh']) > float(high_bitscore_ident[hit_seq_id]):
-                    #    continue
-                    if 'bitscore' in params and float(params['bitscore']) > float(hit_bitscore_this_dom):
-                        self.log(console, "model "+hmm_id+" filtering "+hit_seq_id+" with bitscore "+str(hit_bitscore_this_dom))  # DEBUG
-                        filter = True
-                        this_filter_fields['bitscore'] = True
-                    if 'model_cov_perc' in params and float(params['model_cov_perc']) > 100.0 * float(hit_alnlen) / float(model_len[hmm_id]):
-                        self.log(console, "model "+hmm_id+" filtering "+hit_seq_id+" with model_cov "+str(hit_alnlen))  # DEBUG
-                        filter = True
-                        this_filter_fields['model_cov_perc'] = True
-                    if 'maxaccepts' in params and params['maxaccepts'] != None and accepted_hit_cnt >= int(params['maxaccepts']):
-                        self.log(console, "model "+hmm_id+" filtering "+hit_seq_id+" with maxaccepts "+str(accepted_hit_cnt))  # DEBUG
-                        filter = True
-                        this_filter_fields['maxaccepts'] = True
+                        if hit_genome_ref not in hit_info_by_genome_feature_and_hmm:
+                            hit_info_by_genome_feature_and_hmm[hit_genome_ref] = dict()
+                        if hit_feature_id not in hit_info_by_genome_feature_and_hmm[hit_genome_ref]:
+                            hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id] = dict()
+                        if hmm_id not in hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id]:
+                            hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id][hmm_id] = list()
 
-                    filtering_fields[hit_seq_id].append(this_filter_fields)
-                    if filter:
-                        continue
+                        filter = False
+                        this_filter_fields = dict()
+                        #self.log(console,"HIT_SEQ_ID: '"+hit_seq_id+"'")
+                        #if 'ident_thresh' in params and float(params['ident_thresh']) > float(high_bitscore_ident[hit_seq_id]):
+                        #    continue
+                        if 'bitscore' in params and float(params['bitscore']) > float(hit_bitscore_this_dom):
+                            self.log(console, "model "+hmm_id+" filtering "+hit_seq_id+" with bitscore "+str(hit_bitscore_this_dom))  # DEBUG
+                            filter = True
+                            this_filter_fields['bitscore'] = True
+                        if 'model_cov_perc' in params and float(params['model_cov_perc']) > 100.0 * float(hit_alnlen) / float(model_len[hmm_id]):
+                            self.log(console, "model "+hmm_id+" filtering "+hit_seq_id+" with model_cov "+str(hit_alnlen))  # DEBUG
+                            filter = True
+                            this_filter_fields['model_cov_perc'] = True
+                        if 'maxaccepts' in params and params['maxaccepts'] != None and accepted_hit_cnt >= int(params['maxaccepts']):
+                            self.log(console, "model "+hmm_id+" filtering "+hit_seq_id+" with maxaccepts "+str(accepted_hit_cnt))  # DEBUG
+                            filter = True
+                            this_filter_fields['maxaccepts'] = True
 
-                    # store hit
-                    accepted_hit_cnt += 1
-                    accepted_hit_seq_ids[hit_seq_id] = True
-                    hit_buf[hit_seq_id].append(line)
-                    hit_accept_something[hmm_group] = True
-                    #self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
+                        filtering_fields[hit_seq_id].append(this_filter_fields)
+                        if filter:
+                            continue
 
-                    # capture accepted hit count by genome_ref and model
-                    if many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
-                        genome_ref = input_many_ref
-                        gene_id = hit_seq_id
-                    else:
-                        [genome_ref, gene_id] = hit_seq_id.split(genome_id_feature_id_delim)
-                    #self.log(console, "DEBUG: genome_ref: '"+str(genome_ref)+"'")
-                    #self.log(console, "DEBUG: input_hmm_name: '"+str(hmm_id)+"'")
-                    if genome_ref not in hit_cnt_by_genome_and_model:
-                        hit_cnt_by_genome_and_model[genome_ref] = dict()
-                        hit_genes_by_genome_and_model[genome_ref] = dict()
-                    if hmm_id not in hit_cnt_by_genome_and_model[genome_ref]:
-                        hit_cnt_by_genome_and_model[genome_ref][hmm_id] = 0
-                        hit_genes_by_genome_and_model[genome_ref][hmm_id] = []
-                    hit_cnt_by_genome_and_model[genome_ref][hmm_id] += 1
-                    hit_genes_by_genome_and_model[genome_ref][hmm_id].append(gene_id)
+                        # store hit
+                        accepted_hit_cnt += 1
+                        accepted_hit_seq_ids[hit_seq_id] = True
+                        hit_buf[hit_seq_id].append(line)
+                        hit_accept_something[hmm_group] = True
+                        #self.log(console, "HIT: '"+hit_seq_id+"'")  # DEBUG
+
+                        # capture accepted hit count by genome_ref and model
+                        if many_type_names[input_many_ref] == 'Genome' \
+                           or many_type_names[input_many_ref] == 'AnnotatedMetagenomeAssembly':
+                            genome_ref = input_many_ref
+                            gene_id = hit_seq_id
+                        else:
+                            [genome_ref, gene_id] = hit_seq_id.split(genome_id_feature_id_delim)
+                        #self.log(console, "DEBUG: genome_ref: '"+str(genome_ref)+"'")
+                        #self.log(console, "DEBUG: input_hmm_name: '"+str(hmm_id)+"'")
+                        if genome_ref not in hit_cnt_by_genome_and_model:
+                            hit_cnt_by_genome_and_model[genome_ref] = dict()
+                            hit_genes_by_genome_and_model[genome_ref] = dict()
+                        if hmm_id not in hit_cnt_by_genome_and_model[genome_ref]:
+                            hit_cnt_by_genome_and_model[genome_ref][hmm_id] = 0
+                            hit_genes_by_genome_and_model[genome_ref][hmm_id] = []
+                        hit_cnt_by_genome_and_model[genome_ref][hmm_id] += 1
+                        hit_genes_by_genome_and_model[genome_ref][hmm_id].append(gene_id)
 
                     
-                    # prep for storing DomainAnnotation
-                    # domain_place: tuple<int start_in_feature,int stop_in_feature,float evalue, float bitscore,float domain_coverage>).
-                    this_hit = {'start_in_feature': hit_beg_pos,
-                                'stop_in_feature': hit_end_pos,
-                                'evalue': hit_i_e_value_this_dom,
-                                'bitscore': hit_bitscore_this_dom,
-                                'domain_coverage': round (hit_alnlen / model_len[hmm_id],2)
+                        # prep for storing DomainAnnotation
+                        # domain_place: tuple<int start_in_feature,int stop_in_feature,float evalue, float bitscore,float domain_coverage>).
+                        this_hit = {'start_in_feature': hit_beg_pos,
+                                    'stop_in_feature': hit_end_pos,
+                                    'evalue': hit_i_e_value_this_dom,
+                                    'bitscore': hit_bitscore_this_dom,
+                                    'domain_coverage': round (hit_alnlen / model_len[hmm_id],2)
                                 
-                    }
-                    hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id][hmm_id].append(this_hit)
-
+                        }
+                        hit_info_by_genome_feature_and_hmm[hit_genome_ref][hit_feature_id][hmm_id].append(this_hit)
+                        
                     
                 ### Create output objects
                 #
@@ -1069,149 +1122,132 @@ class HmmerUtil:
                 else:
                     self.log(console, "\tEXTRACTING ACCEPTED HITS FROM INPUT for model "+hmm_id)
                     ##self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
+                    output_featureSet = dict()
+                    output_featureSet['description'] = search_tool_name + "_Search filtered"
+                    output_featureSet['element_ordering'] = []
+                    output_featureSet['elements'] = dict()
 
-                    # SequenceSet input -> SequenceSet output
-                    #
-                    if many_type_name == 'SequenceSet':
-                        output_sequenceSet = dict()
+                    # go through input targets
+                    for input_many_ref in input_many_refs:
 
-                        if 'sequence_set_id' in input_many_sequenceSet and input_many_sequenceSet['sequence_set_id'] != None:
-                            output_sequenceSet['sequence_set_id'] = input_many_sequenceSet['sequence_set_id'] + \
-                                "." + search_tool_name + "_Search_filtered"
-                        else:
-                            output_sequenceSet['sequence_set_id'] = search_tool_name + "_Search_filtered"
-                        if 'description' in input_many_sequenceSet and input_many_sequenceSet['description'] != None:
-                            output_sequenceSet['description'] = input_many_sequenceSet['description'] + \
-                                " - " + search_tool_name + "_Search filtered"
-                        else:
-                            output_sequenceSet['description'] = search_tool_anme + "_Search filtered"
+                        many_type_name = many_type_names[input_many_ref]
+                        
+                        # SequenceSet input -> SequenceSet output
+                        #
+                        if many_type_name == 'SequenceSet':
+                            output_sequenceSet = dict()
 
-                        #self.log(console,"ADDING SEQUENCES TO SEQUENCESET")
-                        output_sequenceSet['sequences'] = []
+                            if 'sequence_set_id' in input_many_sequenceSet and input_many_sequenceSet['sequence_set_id'] != None:
+                                output_sequenceSet['sequence_set_id'] = input_many_sequenceSet['sequence_set_id'] + \
+                                                                        "." + search_tool_name + "_Search_filtered"
+                            else:
+                                output_sequenceSet['sequence_set_id'] = search_tool_name + "_Search_filtered"
+                            if 'description' in input_many_sequenceSet and input_many_sequenceSet['description'] != None:
+                                output_sequenceSet['description'] = input_many_sequenceSet['description'] + \
+                                                                    " - " + search_tool_name + "_Search filtered"
+                            else:
+                                output_sequenceSet['description'] = search_tool_anme + "_Search filtered"
 
-                        for seq_obj in input_many_sequenceSet['sequences']:
-                            header_id = seq_obj['sequence_id']
-                            #header_desc = seq_obj['description']
-                            #sequence_str = seq_obj['sequence']
+                            #self.log(console,"ADDING SEQUENCES TO SEQUENCESET")
+                            output_sequenceSet['sequences'] = []
 
-                            id_untrans = header_id
-                            id_trans = re.sub('\|', ':', id_untrans)
-                            if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
-                                #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
-                                accept_fids[id_untrans] = True
-                                output_sequenceSet['sequences'].append(seq_obj)
+                            for seq_obj in input_many_sequenceSet['sequences']:
+                                header_id = seq_obj['sequence_id']
+                                #header_desc = seq_obj['description']
+                                #sequence_str = seq_obj['sequence']
 
-                    # FeatureSet input -> FeatureSet output
-                    #
-                    elif many_type_name == 'FeatureSet':
-                        output_featureSet = dict()
-                        if 'description' in input_many_featureSet and input_many_featureSet['description'] != None:
-                            output_featureSet['description'] = input_many_featureSet['description'] + \
-                                " - " + search_tool_name + "_Search filtered"
-                        else:
-                            output_featureSet['description'] = search_tool_name + "_Search filtered"
-                        output_featureSet['element_ordering'] = []
-                        output_featureSet['elements'] = dict()
-
-                        fId_list = input_many_featureSet['elements'].keys()
-                        #self.log(console,"ADDING FEATURES TO FEATURESET")
-                        for fId in sorted(fId_list):
-                            for genome_ref in input_many_featureSet['elements'][fId]:
-                                id_untrans = genome_ref + genome_id_feature_id_delim + fId
+                                id_untrans = header_id
                                 id_trans = re.sub('\|', ':', id_untrans)
                                 if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
-                                    #self.log(console, 'FOUND HIT '+fId)  # DEBUG
+                                    #self.log(console, 'FOUND HIT '+header_id)  # DEBUG
                                     accept_fids[id_untrans] = True
-                                    #fId = id_untrans  # don't change fId for output FeatureSet
-                                    try:
-                                        this_genome_ref_list = output_featureSet['elements'][fId]
-                                    except:
-                                        output_featureSet['elements'][fId] = []
-                                        output_featureSet['element_ordering'].append(fId)
-                                    output_featureSet['elements'][fId].append(genome_ref)
+                                    output_sequenceSet['sequences'].append(seq_obj)
 
-                    # Parse Genome hits into FeatureSet
-                    #
-                    elif many_type_name == 'Genome':
-                        output_featureSet = dict()
-                        #            if 'scientific_name' in input_many_genome and input_many_genome['scientific_name'] != None:
-                        #                output_featureSet['description'] = input_many_genome['scientific_name'] + " - "+search_tool_name+"_Search filtered"
-                        #            else:
-                        #                output_featureSet['description'] = search_tool_name+"_Search filtered"
-                        output_featureSet['description'] = search_tool_name + "_Search filtered"
-                        output_featureSet['element_ordering'] = []
-                        output_featureSet['elements'] = dict()
-                        for fid in feature_ids:
-                            id_untrans = fid
-                            id_trans = re.sub('\|', ':', id_untrans)
-                            if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
-                                #self.log(console, 'FOUND HIT '+fid)  # DEBUG
-                                #output_featureSet['element_ordering'].append(fid)
-                                accept_fids[id_untrans] = True
-                                #fid = input_many_ref+genome_id_feature_id_delim+id_untrans  # don't change fId for output FeatureSet
-                                output_featureSet['element_ordering'].append(fid)
-                                output_featureSet['elements'][fid] = [input_many_ref]
+                        # FeatureSet input -> FeatureSet output
+                        #
+                        elif many_type_name == 'FeatureSet':
+                            input_many_featureSet = input_many_objs[input_many_ref]
+                            fId_list = input_many_featureSet['elements'].keys()
+                            #self.log(console,"ADDING FEATURES TO FEATURESET")
+                            for fId in sorted(fId_list):
+                                for genome_ref in input_many_featureSet['elements'][fId]:
+                                    id_untrans = genome_ref + genome_id_feature_id_delim + fId
+                                    id_trans = re.sub('\|', ':', id_untrans)
+                                    if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
+                                        #self.log(console, 'FOUND HIT '+fId)  # DEBUG
+                                        accept_fids[id_untrans] = True
+                                        #fId = id_untrans  # don't change fId for output FeatureSet
+                                        if fid not in output_featureSet['elements']:
+                                            output_featureSet['elements'][fId] = []
+                                            output_featureSet['element_ordering'].append(fId)
+                                        if genome_ref not in output_featureSet['elements'][fId]:
+                                            output_featureSet['elements'][fId].append(genome_ref)
 
-                    # Parse GenomeSet hits into FeatureSet
-                    #
-                    elif many_type_name == 'GenomeSet':
-                        output_featureSet = dict()
-                        if 'description' in input_many_genomeSet and input_many_genomeSet['description'] != None:
-                            output_featureSet['description'] = input_many_genomeSet['description'] + \
-                                " - " + search_tool_name + "_Search filtered"
-                        else:
-                            output_featureSet['description'] = search_tool_name + "_Search filtered"
-                        output_featureSet['element_ordering'] = []
-                        output_featureSet['elements'] = dict()
-
-                        #self.log(console,"READING HITS FOR GENOMES")  # DEBUG
-                        for genome_id in feature_ids_by_genome_id.keys():
-                            #self.log(console,"READING HITS FOR GENOME "+genome_id)  # DEBUG
-                            genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
-                            for feature_id in feature_ids_by_genome_id[genome_id]:
-                                id_untrans = genome_ref + genome_id_feature_id_delim + feature_id
+                        # Parse Genome hits into FeatureSet
+                        #
+                        elif many_type_name == 'Genome':
+                            genome_ref = input_many_ref
+                            for fid in feature_ids[input_many_ref]['basic']:
+                                id_untrans = fid
                                 id_trans = re.sub('\|', ':', id_untrans)
                                 if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
-                                    #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
-                                    #output_featureSet['element_ordering'].append(feature['id'])
+                                    #self.log(console, 'FOUND HIT '+fid)  # DEBUG
+                                    #output_featureSet['element_ordering'].append(fid)
                                     accept_fids[id_untrans] = True
-                                    #feature_id = id_untrans  # don't change fId for output FeatureSet
-                                    try:
-                                        this_genome_ref_list = output_featureSet['elements'][feature_id]
-                                    except:
-                                        output_featureSet['elements'][feature_id] = []
-                                        output_featureSet['element_ordering'].append(feature_id)
-                                    output_featureSet['elements'][feature_id].append(genome_ref)
+                                    #fid = input_many_ref+genome_id_feature_id_delim+id_untrans  # don't change fId for output FeatureSet
+                                    if fid not in output_featureSet['elements']:
+                                        output_featureSet['element_ordering'].append(fid)
+                                        output_featureSet['elements'][fid] = []
+                                    if genome_ref not in output_featureSet['elements'][fid]:
+                                        output_featureSet['elements'][fid].append(genome_ref)
 
-                    # Parse AnnotatedMetagenomeAssembly hits into FeatureSet
-                    #
-                    elif many_type_name == 'AnnotatedMetagenomeAssembly':
-                        seq_total = 0
-                        output_featureSet = dict()
-#                        if 'scientific_name' in input_many_genome and input_many_genome['scientific_name'] != None:
-#                            output_featureSet['description'] = input_many_genome['scientific_name'] + " - "+search_tool_name+"_Search filtered"
-#                        else:
-#                            output_featureSet['description'] = search_tool_name+"_Search filtered"
-                        output_featureSet['description'] = search_tool_name+"_Search filtered"
-                        output_featureSet['element_ordering'] = []
-                        output_featureSet['elements'] = dict()
-                        for fid in feature_ids:
-                            #if fid == 'AWN69_RS07145' or fid == 'AWN69_RS13375':
-                            #    self.log(console, 'CHECKING FID '+fid)  # DEBUG
-                            seq_total += 1
-                            id_untrans = fid
-                            id_trans = re.sub ('\|',':',id_untrans)
-                            #print ("TESTING FEATURES: ID_UNTRANS: '"+id_untrans+"'")  # DEBUG
-                            #print ("TESTING FEATURES: ID_TRANS: '"+id_trans+"'")  # DEBUG
-                            if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
-                                self.log(console, 'FOUND HIT '+fid)  # DEBUG
-                                #output_featureSet['element_ordering'].append(fid)
-                                accept_fids[id_untrans] = True
-                                #fid = input_many_ref+self.genome_id_feature_id_delim+id_untrans  # don't change fId for output FeatureSet
-                                ama_ref = params['input_many_ref']
-                                output_featureSet['element_ordering'].append(fid)
-                                output_featureSet['elements'][fid] = [ama_ref]
+                        # Parse GenomeSet hits into FeatureSet
+                        #
+                        elif many_type_name == 'GenomeSet':
+                            #self.log(console,"READING HITS FOR GENOMES")  # DEBUG
+                            input_many_genomeSet = input_many_objs[input_many_ref]
+                            for genome_id in feature_ids[input_many_ref]['by_genome_id'].keys():
+                                #self.log(console,"READING HITS FOR GENOME "+genome_id)  # DEBUG
+                                genome_ref = input_many_genomeSet['elements'][genome_id]['ref']
+                                for feature_id in feature_ids[input_many_ref]['by_genome_id'][genome_id]:
+                                    id_untrans = genome_ref + genome_id_feature_id_delim + feature_id
+                                    id_trans = re.sub('\|', ':', id_untrans)
+                                    if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
+                                        #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
+                                        #output_featureSet['element_ordering'].append(feature['id'])
+                                        accept_fids[id_untrans] = True
+                                        #feature_id = id_untrans  # don't change fId for output FeatureSet
+                                        if feature_id not in output_featureSet['elements']:
+                                            output_featureSet['elements'][feature_id] = []
+                                            output_featureSet['element_ordering'].append(feature_id)
+                                        if genome_ref not in output_featureSet['elements'][feature_id]:
+                                            output_featureSet['elements'][feature_id].append(genome_ref)
 
+                        # Parse AnnotatedMetagenomeAssembly hits into FeatureSet
+                        #
+                        elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                            #seq_total = 0
+                            for fid in feature_ids[input_many_ref]['basic']:
+                                #if fid == 'AWN69_RS07145' or fid == 'AWN69_RS13375':
+                                #    self.log(console, 'CHECKING FID '+fid)  # DEBUG
+                                #seq_total += 1
+                                id_untrans = fid
+                                id_trans = re.sub ('\|',':',id_untrans)
+                                #print ("TESTING FEATURES: ID_UNTRANS: '"+id_untrans+"'")  # DEBUG
+                                #print ("TESTING FEATURES: ID_TRANS: '"+id_trans+"'")  # DEBUG
+                                if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
+                                    self.log(console, 'FOUND HIT '+fid)  # DEBUG
+                                    #output_featureSet['element_ordering'].append(fid)
+                                    accept_fids[id_untrans] = True
+                                    #fid = input_many_ref+self.genome_id_feature_id_delim+id_untrans  # don't change fId for output FeatureSet
+                                    ama_ref = input_many_ref
+                                    if fid not in output_featureSet['elements']:
+                                        output_featureSet['element_ordering'].append(fid)
+                                        output_featureSet['elements'][fid] = []
+                                    if ama_ref not in output_featureSet['elements'][fid]:
+                                        output_featureSet['elements'][fid] = [ama_ref]
+
+                                    
                     ### Create output object
                     #
                     if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
@@ -1222,16 +1258,16 @@ class HmmerUtil:
 
                             # accumulate hits into coalesce object
                             #
-                            if many_type_name == 'SequenceSet':  # input many SequenceSet -> save SequenceSet
-                                for seq_obj in output_sequenceSet['sequences']:
-                                    coalesced_sequenceObjs.append(seq_obj)
-
-                            else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
-                                for fId in output_featureSet['element_ordering']:
-                                    coalesce_featureIds_element_ordering.append(fId)
-                                    #coalesce_featureIds_genome_ordering.append(output_featureSet['elements'][fId][0])
-                                    for this_genome_ref in output_featureSet['elements'][fId]:
-                                        coalesce_featureIds_genome_ordering.append(this_genome_ref)
+                            #if many_type_name == 'SequenceSet':  # input many SequenceSet -> save SequenceSet
+                            #    for seq_obj in output_sequenceSet['sequences']:
+                            #        coalesced_sequenceObjs.append(seq_obj)
+                            #
+                            #else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+                            for fId in output_featureSet['element_ordering']:
+                                coalesce_featureIds_element_ordering.append(fId)
+                                #coalesce_featureIds_genome_ordering.append(output_featureSet['elements'][fId][0])
+                                for this_genome_ref in output_featureSet['elements'][fId]:
+                                    coalesce_featureIds_genome_ordering.append(this_genome_ref)
 
                     else:  # keep output separate  Upload results if coalesce_output is 0
                         output_name = hmm_id + '-' + params['output_filtered_name']
@@ -1245,6 +1281,7 @@ class HmmerUtil:
 
                             # input many SequenceSet -> save SequenceSet
                             #
+                            '''
                             if many_type_name == 'SequenceSet':
                                 new_obj_info = self.wsClient.save_objects({
                                     'workspace': params['workspace_name'],
@@ -1256,18 +1293,18 @@ class HmmerUtil:
                                         'provenance': provenance
                                     }]
                                 })[0]
-
-                            else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
-                                new_obj_info = self.wsClient.save_objects({
-                                    'workspace': params['workspace_name'],
-                                    'objects': [{
-                                        'type': 'KBaseCollections.FeatureSet',
-                                        'data': output_featureSet,
-                                        'name': output_name,
-                                        'meta': {},
-                                        'provenance': provenance
-                                    }]
-                                })[0]
+                            '''
+                            #else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+                            new_obj_info = self.wsClient.save_objects({
+                                'workspace': params['workspace_name'],
+                                'objects': [{
+                                    'type': 'KBaseCollections.FeatureSet',
+                                    'data': output_featureSet,
+                                    'name': output_name,
+                                    'meta': {},
+                                    'provenance': provenance
+                                }]
+                            })[0]
 
                             [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I,
                                 WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
@@ -1291,21 +1328,25 @@ class HmmerUtil:
                     #self.log (console, report)
 
                     # build html report chunk
-                    if many_type_name == 'Genome':
-                        feature_id_to_function = GenomeToFASTA_retVal['feature_id_to_function']
-                        genome_ref_to_obj_name = GenomeToFASTA_retVal['genome_ref_to_obj_name']
-                        genome_ref_to_sci_name = GenomeToFASTA_retVal['genome_ref_to_sci_name']
-                    elif many_type_name == 'GenomeSet':
-                        feature_id_to_function = GenomeSetToFASTA_retVal['feature_id_to_function']
-                        genome_ref_to_obj_name = GenomeSetToFASTA_retVal['genome_ref_to_obj_name']
-                        genome_ref_to_sci_name = GenomeSetToFASTA_retVal['genome_ref_to_sci_name']
-                    elif many_type_name == 'FeatureSet':
-                        feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
-                        genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
-                        genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
-                    elif many_type_name == 'AnnotatedMetagenomeAssembly':
-                        feature_id_to_function = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_id_to_function']
-                        ama_ref_to_obj_name = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name']
+                    feature_id_to_function = dict()
+                    genome_ref_to_obj_name = dict()
+                    ama_ref_to_obj_name    = dict()
+                    genome_ref_to_sci_name = dict()
+                    for input_many_ref in input_many_refs:
+                        many_type_name = many_type_names[input_many_ref]
+
+                        for genome_ref in obj2file_retVal[input_many_ref]['feature_id_to_function'].keys():
+                            if genome_ref not in feature_id_to_function:
+                                feature_id_to_function[genome_ref] = dict()
+                            for fid in  obj2file_retVal[input_many_ref]['feature_id_to_function'][genome_ref].keys():
+                                feature_id_to_function[genome_ref][fid] = obj2file_retVal[input_many_ref]['feature_id_to_function'][genome_ref][fid]
+                        if many_type_name == 'Genome' or many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
+                            for genome_ref in obj2file_retVal[input_many_ref]['genome_ref_to_obj_name'].keys():
+                                genome_ref_to_obj_name[genome_ref] = obj2file_retVal[input_many_ref]['genome_ref_to_obj_name'][genome_ref]
+                                genome_ref_to_sci_name[genome_ref] = obj2file_retVal[input_many_ref]['genome_ref_to_sci_name'][genome_ref]
+                        elif many_type_name == 'AnnotatedMetagenomeAssembly':
+                            for ama_ref in obj2file_retVal[input_many_ref]['ama_ref_to_obj_name'].keys():
+                                ama_ref_to_obj_name[ama_ref] = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name'][ama_ref]
 
                     head_color = "#eeeeff"
                     border_head_color = "#ffccff"
@@ -1329,6 +1370,10 @@ class HmmerUtil:
                     html_report_chunk = []
 
                     for hit_seq_id in hit_order:
+
+                        input_many_ref = hit_source_ref[hit_seq_id]
+                        many_type_name = hit_source_type[hit_seq_id]
+
                         for hit_i,line in enumerate(hit_buf[hit_seq_id]):
                             line = line.strip()
                             if line == '' or line.startswith('#'):
@@ -1379,6 +1424,7 @@ class HmmerUtil:
                             q_end = int(query_end_pos)
                             aln_len = abs(q_end - q_beg) + 1
                             aln_len_perc = round(100.0 * float(aln_len) / float(q_len), 1)
+
 
                             #if many_type_name == 'SingleEndLibrary':
                             #    pass
@@ -1539,8 +1585,8 @@ class HmmerUtil:
                     html_report_chunks[hmm_i] = html_report_chunk_str
                     #self.log(console, "HTML_REPORT_CHUNK: '"+str(html_report_chunk_str)+"'")  # DEBUG
 
-# HERE                    
-            #### Create and Upload output objects if coalesce_output is true
+
+            #### Create and Upload output object for hmm_group if coalesce_output is true
             ##
             if 'coalesce_output' in params and int(params['coalesce_output']) == 1:
                 output_name = hmm_group + '-' + params['output_filtered_name']
@@ -1590,6 +1636,7 @@ class HmmerUtil:
                         objects_created_refs_coalesce[hmm_group] = str(
                             new_obj_info[WSID_I]) + '/' + str(new_obj_info[OBJID_I])
 
+                        
             #### Set paths for output HTML
             ##
             html_output_dir = os.path.join(self.output_dir, 'html_output')
@@ -1606,22 +1653,6 @@ class HmmerUtil:
             if len(invalid_msgs) == 0:
 
                 # build html report
-                if many_type_name == 'Genome':
-                    feature_id_to_function = GenomeToFASTA_retVal['feature_id_to_function']
-                    genome_ref_to_obj_name = GenomeToFASTA_retVal['genome_ref_to_obj_name']
-                    genome_ref_to_sci_name = GenomeToFASTA_retVal['genome_ref_to_sci_name']
-                elif many_type_name == 'GenomeSet':
-                    feature_id_to_function = GenomeSetToFASTA_retVal['feature_id_to_function']
-                    genome_ref_to_obj_name = GenomeSetToFASTA_retVal['genome_ref_to_obj_name']
-                    genome_ref_to_sci_name = GenomeSetToFASTA_retVal['genome_ref_to_sci_name']
-                elif many_type_name == 'FeatureSet':
-                    feature_id_to_function = FeatureSetToFASTA_retVal['feature_id_to_function']
-                    genome_ref_to_obj_name = FeatureSetToFASTA_retVal['genome_ref_to_obj_name']
-                    genome_ref_to_sci_name = FeatureSetToFASTA_retVal['genome_ref_to_sci_name']
-                elif many_type_name == 'AnnotatedMetagenomeAssembly':
-                    feature_id_to_function = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_id_to_function']
-                    ama_ref_to_obj_name = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name']
-
                 sp = '&nbsp;'
                 head_color = "#eeeeff"
                 border_head_color = "#ffccff"
@@ -1740,7 +1771,7 @@ class HmmerUtil:
                 cat_seen[cat] = False
 
             # count raw
-            for genome_ref in genome_refs:
+            for genome_ref in all_genome_refs:
                 if genome_ref not in table_data:
                     table_data[genome_ref] = dict()
                     table_genes[genome_ref] = dict()
@@ -1759,7 +1790,7 @@ class HmmerUtil:
                         cat_seen[cat] = True
 
             # determine high and low val
-            for genome_ref in genome_refs:
+            for genome_ref in all_genome_refs:
                 for cat in cats:
                     val = table_data[genome_ref][cat]
                     if val == 0:
@@ -1808,7 +1839,7 @@ class HmmerUtil:
             cell_height = '18'
             #corner_radius = str(int(0.2*int(cell_width)+0.5))
             corner_radius = '5'
-            if len(genome_refs) > 20:
+            if len(all_genome_refs) > 20:
                 graph_gen_fontsize = "1"
 #            elif len(genome_refs) > 10:
 #                graph_gen_fontsize = "2"
@@ -1832,7 +1863,9 @@ class HmmerUtil:
             #border = "1"
             border = "0"
             #row_spacing = "-2"
-            num_rows = len(genome_refs)
+            num_rows = len(all_genome_refs)
+            if len(input_many_refs) > 1:
+                num_rows += len(input_many_refs)
             show_groups = False
             show_blanks = False
             if 'show_blanks' in params and int(params['show_blanks']) == 1:
@@ -1939,59 +1972,70 @@ class HmmerUtil:
                     html_report_lines += ['</td>']
                 html_report_lines += ['</tr>']
 
+
                 # rest of rows
-                for genome_ref in genome_refs:
-                    # set genome_disp_name
-                    if many_type_name == 'AnnotatedMetagenomeAssembly':
-                        genome_disp_name = ama_ref_to_obj_name[genome_ref]
-                    else:
-                        genome_obj_name = genome_ref_to_obj_name[genome_ref]
-                        genome_sci_name = genome_ref_to_sci_name[genome_ref]
-                        [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
-                        genome_disp_name = ''
-                        if 'obj_name' in params['genome_disp_name_config']:
-                            genome_disp_name += genome_obj_name
-                        if 'ver' in params['genome_disp_name_config']:
-                            genome_disp_name += '.v'+str(genome_obj_version)
-                        if 'sci_name' in params['genome_disp_name_config']:
-                            genome_disp_name += ': '+genome_sci_name
+                for input_many_ref in input_many_refs:
+                    many_type_name = many_type_names[input_many_ref]
 
-                    # build html report table line
-                    html_report_lines += ['<tr>']
-                    html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +
-                                          graph_gen_fontsize + '><b><nobr>' + genome_disp_name + sp + '</nobr></b></font></div></td>']
-                    for cat in cats:
-                        if not cat_seen.get(cat) and not show_blanks:
-                            continue
-                        val = table_data[genome_ref][cat]
-                        if not cat_seen.get(cat) or val == 0:
-                            html_report_lines += ['<td bgcolor=white></td>']
-                            continue
-                        elif overall_high_val == overall_low_val:
-                            cell_color_i = 0
+                    if len(input_many_refs) > 1:
+                        input_obj_disp_name = input_many_names[input_many_ref]
+                        html_report_lines += ['<tr>']
+                        html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +
+                                          graph_gen_fontsize + '><b><nobr>' + input_obj_disp_name + sp + '</nobr></b></font></div></td>']
+                        html_report_lines += ['</tr>']
+                    
+                    for genome_ref in genome_refs[input_many_ref]:
+                        # set genome_disp_name
+                        if many_type_name == 'AnnotatedMetagenomeAssembly':
+                            genome_disp_name = ama_ref_to_obj_name[genome_ref]
                         else:
-                            cell_color_i = max_color - \
-                                int(round(max_color * (val - overall_low_val) / float(overall_high_val - overall_low_val)))
+                            genome_obj_name = genome_ref_to_obj_name[genome_ref]
+                            genome_sci_name = genome_ref_to_sci_name[genome_ref]
+                            [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
+                            genome_disp_name = ''
+                            if 'obj_name' in params['genome_disp_name_config']:
+                                genome_disp_name += genome_obj_name
+                            if 'ver' in params['genome_disp_name_config']:
+                                genome_disp_name += '.v'+str(genome_obj_version)
+                            if 'sci_name' in params['genome_disp_name_config']:
+                                genome_disp_name += ': '+genome_sci_name
 
-                        cell_val = str(table_data[genome_ref][cat])  # the key line
+                        # build html report table line
+                        html_report_lines += ['<tr>']
+                        html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +
+                                              graph_gen_fontsize + '><b><nobr>' + genome_disp_name + sp + '</nobr></b></font></div></td>']
+                        for cat in cats:
+                            if not cat_seen.get(cat) and not show_blanks:
+                                continue
+                            val = table_data[genome_ref][cat]
+                            if not cat_seen.get(cat) or val == 0:
+                                html_report_lines += ['<td bgcolor=white></td>']
+                                continue
+                            elif overall_high_val == overall_low_val:
+                                cell_color_i = 0
+                            else:
+                                cell_color_i = max_color - \
+                                               int(round(max_color * (val - overall_low_val) / float(overall_high_val - overall_low_val)))
 
-                        if 'heatmap' in params and params['heatmap'] == '1':
-                            s = 's'
-                            if cell_val == '1': s = ''
-                            cell_title = cell_val+' hit'+s+"\n"+"\n".join(sorted(table_genes[genome_ref][cat]))
-	                    hmm_group = hmm_id_to_hmm_group_name[cat]
-                            hmm_group_i = hmm_id_to_hmm_group_index[cat]
-                            group_html_search_file = search_tool_name + '_Search-' + \
-                                                    str(hmm_group_i) + '-' + str(hmm_group) + '.html'
-                            html_report_lines += ['<td title="'+cell_title+'" align=center valign=middle bgcolor=white>' +
-                                                  '<a href="'+group_html_search_file+'#'+cat+'">' +
-                                                  '<div class="heatmap_cell-'+str(cell_color_i)+'"></div>' +
-                                                  '</a></td>']
-                        else:
-                            html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
-                                                  '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
+                            cell_val = str(table_data[genome_ref][cat])  # the key line
+
+                            if 'heatmap' in params and params['heatmap'] == '1':
+                                s = 's'
+                                if cell_val == '1': s = ''
+                                cell_title = cell_val+' hit'+s+"\n"+"\n".join(sorted(table_genes[genome_ref][cat]))
+	                        hmm_group = hmm_id_to_hmm_group_name[cat]
+                                hmm_group_i = hmm_id_to_hmm_group_index[cat]
+                                group_html_search_file = search_tool_name + '_Search-' + \
+                                                         str(hmm_group_i) + '-' + str(hmm_group) + '.html'
+                                html_report_lines += ['<td title="'+cell_title+'" align=center valign=middle bgcolor=white>' +
+                                                      '<a href="'+group_html_search_file+'#'+cat+'">' +
+                                                      '<div class="heatmap_cell-'+str(cell_color_i)+'"></div>' +
+                                                      '</a></td>']
+                            else:
+                                html_report_lines += ['<td align=center valign=middle style="' + cell_width + 'px; border-right:solid 2px ' + border_color +
+                                                      '; border-bottom:solid 2px ' + border_color + '"><font color="' + text_color + '" size=' + cell_fontsize + '>' + cell_val + '</font></td>']
                         
-                    html_report_lines += ['</tr>']
+                        html_report_lines += ['</tr>']
                 html_report_lines += ['</table>']
 
             # genomes as columns
@@ -2088,11 +2132,13 @@ class HmmerUtil:
                     continue
                 else:
                     self.log(console, 'PREPPING UPLOAD OF HMMER OUTPUT FOR HMM ' + hmm_id)
-                new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, hmm_id + '.hitout.txt')
-                #new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, hmm_id + '.msaout.txt')
+                for input_many_ref in input_many_refs:
+                    input_many_name = input_many_names[input_many_ref]
+                    new_hit_TAB_file_path = os.path.join(output_hit_TAB_dir, hmm_id +'-'+ input_many_name + '.hitout.txt')
+                    #new_hit_MSA_file_path = os.path.join(output_hit_MSA_dir, hmm_id + '.msaout.txt')
 
-                shutil.copy(output_hit_TAB_file_paths[hmm_id], new_hit_TAB_file_path)
-                #shutil.copy(output_hit_MSA_file_paths[hmm_id], new_hit_MSA_file_path)
+                    shutil.copy(output_hit_TAB_file_paths[hmm_id][input_many_ref], new_hit_TAB_file_path)
+                    #shutil.copy(output_hit_MSA_file_paths[hmm_id], new_hit_MSA_file_path)
 
             # Upload output dirs
             TAB_upload_ret = None

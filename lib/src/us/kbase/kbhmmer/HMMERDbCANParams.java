@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "input_dbCAN_GT_ids",
     "input_dbCAN_PL_ids",
     "input_dbCAN_cellulosome_ids",
-    "input_many_ref",
+    "input_many_refs",
     "output_filtered_name",
     "genome_disp_name_config",
     "coalesce_output",
@@ -61,8 +61,8 @@ public class HMMERDbCANParams {
     private String inputDbCANPLIds;
     @JsonProperty("input_dbCAN_cellulosome_ids")
     private String inputDbCANCellulosomeIds;
-    @JsonProperty("input_many_ref")
-    private String inputManyRef;
+    @JsonProperty("input_many_refs")
+    private String inputManyRefs;
     @JsonProperty("output_filtered_name")
     private String outputFilteredName;
     @JsonProperty("genome_disp_name_config")
@@ -209,18 +209,18 @@ public class HMMERDbCANParams {
         return this;
     }
 
-    @JsonProperty("input_many_ref")
-    public String getInputManyRef() {
-        return inputManyRef;
+    @JsonProperty("input_many_refs")
+    public String getInputManyRefs() {
+        return inputManyRefs;
     }
 
-    @JsonProperty("input_many_ref")
-    public void setInputManyRef(String inputManyRef) {
-        this.inputManyRef = inputManyRef;
+    @JsonProperty("input_many_refs")
+    public void setInputManyRefs(String inputManyRefs) {
+        this.inputManyRefs = inputManyRefs;
     }
 
-    public HMMERDbCANParams withInputManyRef(String inputManyRef) {
-        this.inputManyRef = inputManyRef;
+    public HMMERDbCANParams withInputManyRefs(String inputManyRefs) {
+        this.inputManyRefs = inputManyRefs;
         return this;
     }
 
@@ -416,7 +416,7 @@ public class HMMERDbCANParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((((((((((((((((((((((((("HMMERDbCANParams"+" [workspaceName=")+ workspaceName)+", inputDbCANAAIds=")+ inputDbCANAAIds)+", inputDbCANCBMIds=")+ inputDbCANCBMIds)+", inputDbCANCEIds=")+ inputDbCANCEIds)+", inputDbCANGHIds=")+ inputDbCANGHIds)+", inputDbCANGTIds=")+ inputDbCANGTIds)+", inputDbCANPLIds=")+ inputDbCANPLIds)+", inputDbCANCellulosomeIds=")+ inputDbCANCellulosomeIds)+", inputManyRef=")+ inputManyRef)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", coalesceOutput=")+ coalesceOutput)+", saveALLFeatureSets=")+ saveALLFeatureSets)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", modelCovPerc=")+ modelCovPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", lowVal=")+ lowVal)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((((((((((((((((((("HMMERDbCANParams"+" [workspaceName=")+ workspaceName)+", inputDbCANAAIds=")+ inputDbCANAAIds)+", inputDbCANCBMIds=")+ inputDbCANCBMIds)+", inputDbCANCEIds=")+ inputDbCANCEIds)+", inputDbCANGHIds=")+ inputDbCANGHIds)+", inputDbCANGTIds=")+ inputDbCANGTIds)+", inputDbCANPLIds=")+ inputDbCANPLIds)+", inputDbCANCellulosomeIds=")+ inputDbCANCellulosomeIds)+", inputManyRefs=")+ inputManyRefs)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", coalesceOutput=")+ coalesceOutput)+", saveALLFeatureSets=")+ saveALLFeatureSets)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", modelCovPerc=")+ modelCovPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", lowVal=")+ lowVal)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

@@ -118,7 +118,7 @@ class kb_hmmer(object):
            "input_dbCAN_GT_ids" of type "data_obj_ref", parameter
            "input_dbCAN_PL_ids" of type "data_obj_ref", parameter
            "input_dbCAN_cellulosome_ids" of type "data_obj_ref", parameter
-           "input_many_ref" of type "data_obj_ref", parameter
+           "input_many_refs" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "genome_disp_name_config" of String, parameter "coalesce_output"
            of type "bool", parameter "save_ALL_featureSets" of type "bool",
@@ -164,7 +164,7 @@ class kb_hmmer(object):
            parameter "input_EnvBioelement_Metal_ids" of type "data_obj_ref",
            parameter "input_EnvBioelement_As_ids" of type "data_obj_ref",
            parameter "input_EnvBioelement_Halo_ids" of type "data_obj_ref",
-           parameter "input_many_ref" of type "data_obj_ref", parameter
+           parameter "input_many_refs" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
            "genome_disp_name_config" of String, parameter "coalesce_output"
            of type "bool", parameter "save_ALL_featureSets" of type "bool",
