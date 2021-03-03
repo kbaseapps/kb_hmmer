@@ -1,0 +1,1858 @@
+{
+    "ver": "1.7.0",
+    "authors": [
+        "dylan"
+    ],
+    "contact": "http://www.kbase.us/support/",
+    "visible": true,
+    "categories": ["active","sequence"],
+    "widgets": {
+        "input": null,
+        "output": "no-display"
+    },
+    "parameters": [
+        {
+            "id": "input_PhyloMarkers_Univ_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "ALL" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+				{
+					"value": "NONE",
+					"display": "Bacteria + Archaea - NONE",
+					"id": "PhyloMarkers_Univ_NONE",
+					"ui-name": "PhyloMarkers_Univ_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Bacteria + Archaea - ALL",
+					"id": "PhyloMarkers_Univ_ALL",
+					"ui-name": "PhyloMarkers_Univ_ALL"
+				},
+				{
+					"value": "Ribosomal_S8",
+					"display": "Ribosomal_S8",
+					"id": "PhyloMarkers_Univ_Ribosomal_S8",
+					"ui-name": "PhyloMarkers_Univ_Ribosomal_S8"
+				},
+				{
+					"value": "Ribosomal_L10",
+					"display": "Ribosomal_L10",
+					"id": "PhyloMarkers_Univ_Ribosomal_L10",
+					"ui-name": "PhyloMarkers_Univ_Ribosomal_L10"
+				},
+				{
+					"value": "ftsY",
+					"display": "ftsY",
+					"id": "PhyloMarkers_Univ_ftsY",
+					"ui-name": "PhyloMarkers_Univ_ftsY"
+				},
+				{
+					"value": "PyrG",
+					"display": "PyrG",
+					"id": "PhyloMarkers_Univ_PyrG",
+					"ui-name": "PhyloMarkers_Univ_PyrG"
+				},
+				{
+					"value": "ileS",
+					"display": "ileS",
+					"id": "PhyloMarkers_Univ_ileS",
+					"ui-name": "PhyloMarkers_Univ_ileS"
+				},
+				{
+					"value": "metG",
+					"display": "metG",
+					"id": "PhyloMarkers_Univ_metG",
+					"ui-name": "PhyloMarkers_Univ_metG"
+				},
+				{
+					"value": "hisS",
+					"display": "hisS",
+					"id": "PhyloMarkers_Univ_hisS",
+					"ui-name": "PhyloMarkers_Univ_hisS"
+				},
+				{
+					"value": "argS",
+					"display": "argS",
+					"id": "PhyloMarkers_Univ_argS",
+					"ui-name": "PhyloMarkers_Univ_argS"
+				},
+				{
+					"value": "pheS",
+					"display": "pheS",
+					"id": "PhyloMarkers_Univ_pheS",
+					"ui-name": "PhyloMarkers_Univ_pheS"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_PhyloMarkers_B_ribo_pol_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "ALL" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+				{
+					"value": "NONE",
+					"display": "Bacteria Ribosomal + Polymerases - NONE",
+					"id": "PhyloMarkers_B_ribo_pol_NONE",
+					"ui-name": "PhyloMarkers_B_ribo_pol_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Bacteria Ribosomal + Polymerases - ALL",
+					"id": "PhyloMarkers_B_ribo_pol_ALL",
+					"ui-name": "PhyloMarkers_B_ribo_pol_ALL"
+				},
+				{
+					"value": "rpsA",
+					"display": "rpsA",
+					"id": "PhyloMarkers_B_ribo_pol_rpsA",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rpsA"
+				},
+				{
+					"value": "rpsB_bact",
+					"display": "rpsB_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rpsB_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rpsB_bact"
+				},
+				{
+					"value": "rpsC_bact",
+					"display": "rpsC_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rpsC_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rpsC_bact"
+				},
+				{
+					"value": "rpsD_bact",
+					"display": "rpsD_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rpsD_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rpsD_bact"
+				},
+				{
+					"value": "rpsE_bact",
+					"display": "rpsE_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rpsE_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rpsE_bact"
+				},
+				{
+					"value": "S6",
+					"display": "S6",
+					"id": "PhyloMarkers_B_ribo_pol_S6",
+					"ui-name": "PhyloMarkers_B_ribo_pol_S6"
+				},
+				{
+					"value": "rpsG_bact",
+					"display": "rpsG_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rpsG_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rpsG_bact"
+				},
+				{
+					"value": "Ribosomal_S9",
+					"display": "Ribosomal_S9",
+					"id": "PhyloMarkers_B_ribo_pol_Ribosomal_S9",
+					"ui-name": "PhyloMarkers_B_ribo_pol_Ribosomal_S9"
+				},
+				{
+					"value": "uS11_bact",
+					"display": "uS11_bact",
+					"id": "PhyloMarkers_B_ribo_pol_uS11_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_uS11_bact"
+				},
+				{
+					"value": "S20",
+					"display": "S20",
+					"id": "PhyloMarkers_B_ribo_pol_S20",
+					"ui-name": "PhyloMarkers_B_ribo_pol_S20"
+				},
+				{
+					"value": "rplA_bact",
+					"display": "rplA_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rplA_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rplA_bact"
+				},
+				{
+					"value": "rplB_bact",
+					"display": "rplB_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rplB_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rplB_bact"
+				},
+				{
+					"value": "L3_bact",
+					"display": "L3_bact",
+					"id": "PhyloMarkers_B_ribo_pol_L3_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_L3_bact"
+				},
+				{
+					"value": "rplD_bact",
+					"display": "rplD_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rplD_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rplD_bact"
+				},
+				{
+					"value": "L6_bact",
+					"display": "L6_bact",
+					"id": "PhyloMarkers_B_ribo_pol_L6_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_L6_bact"
+				},
+				{
+					"value": "L9",
+					"display": "L9",
+					"id": "PhyloMarkers_B_ribo_pol_L9",
+					"ui-name": "PhyloMarkers_B_ribo_pol_L9"
+				},
+				{
+					"value": "L11_bact",
+					"display": "L11_bact",
+					"id": "PhyloMarkers_B_ribo_pol_L11_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_L11_bact"
+				},
+				{
+					"value": "rplM_bact",
+					"display": "rplM_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rplM_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rplM_bact"
+				},
+				{
+					"value": "rplO_bact",
+					"display": "rplO_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rplO_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rplO_bact"
+				},
+				{
+					"value": "rplP_bact",
+					"display": "rplP_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rplP_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rplP_bact"
+				},
+				{
+					"value": "L17",
+					"display": "L17",
+					"id": "PhyloMarkers_B_ribo_pol_L17",
+					"ui-name": "PhyloMarkers_B_ribo_pol_L17"
+				},
+				{
+					"value": "rplT_bact",
+					"display": "rplT_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rplT_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rplT_bact"
+				},
+				{
+					"value": "L21",
+					"display": "L21",
+					"id": "PhyloMarkers_B_ribo_pol_L21",
+					"ui-name": "PhyloMarkers_B_ribo_pol_L21"
+				},
+				{
+					"value": "rplV_bact",
+					"display": "rplV_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rplV_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rplV_bact"
+				},
+				{
+					"value": "rplX_bact",
+					"display": "rplX_bact",
+					"id": "PhyloMarkers_B_ribo_pol_rplX_bact",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rplX_bact"
+				},
+				{
+					"value": "pola",
+					"display": "pola",
+					"id": "PhyloMarkers_B_ribo_pol_pola",
+					"ui-name": "PhyloMarkers_B_ribo_pol_pola"
+				},
+				{
+					"value": "dnan",
+					"display": "dnan",
+					"id": "PhyloMarkers_B_ribo_pol_dnan",
+					"ui-name": "PhyloMarkers_B_ribo_pol_dnan"
+				},
+				{
+					"value": "dnaX_nterm",
+					"display": "dnaX_nterm",
+					"id": "PhyloMarkers_B_ribo_pol_dnaX_nterm",
+					"ui-name": "PhyloMarkers_B_ribo_pol_dnaX_nterm"
+				},
+				{
+					"value": "holA",
+					"display": "holA",
+					"id": "PhyloMarkers_B_ribo_pol_holA",
+					"ui-name": "PhyloMarkers_B_ribo_pol_holA"
+				},
+				{
+					"value": "rpoA",
+					"display": "rpoA",
+					"id": "PhyloMarkers_B_ribo_pol_rpoA",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rpoA"
+				},
+				{
+					"value": "rpoB",
+					"display": "rpoB",
+					"id": "PhyloMarkers_B_ribo_pol_rpoB",
+					"ui-name": "PhyloMarkers_B_ribo_pol_rpoB"
+				},
+				{
+					"value": "RNA_pol_rpoC",
+					"display": "RNA_pol_rpoC",
+					"id": "PhyloMarkers_B_ribo_pol_RNA_pol_rpoC",
+					"ui-name": "PhyloMarkers_B_ribo_pol_RNA_pol_rpoC"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_PhyloMarkers_B_other_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "ALL" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+				{
+					"value": "NONE",
+					"display": "Bacteria Other - NONE",
+					"id": "PhyloMarkers_B_other_NONE",
+					"ui-name": "PhyloMarkers_B_other_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Bacteria Other - ALL",
+					"id": "PhyloMarkers_B_other_ALL",
+					"ui-name": "PhyloMarkers_B_other_ALL"
+				},
+				{
+					"value": "alaS",
+					"display": "alaS",
+					"id": "PhyloMarkers_B_other_alaS",
+					"ui-name": "PhyloMarkers_B_other_alaS"
+				},
+				{
+					"value": "leuS_bact",
+					"display": "leuS_bact",
+					"id": "PhyloMarkers_B_other_leuS_bact",
+					"ui-name": "PhyloMarkers_B_other_leuS_bact"
+				},
+				{
+					"value": "serS",
+					"display": "serS",
+					"id": "PhyloMarkers_B_other_serS",
+					"ui-name": "PhyloMarkers_B_other_serS"
+				},
+				{
+					"value": "cysS",
+					"display": "cysS",
+					"id": "PhyloMarkers_B_other_cysS",
+					"ui-name": "PhyloMarkers_B_other_cysS"
+				},
+				{
+					"value": "aspS_bact",
+					"display": "aspS_bact",
+					"id": "PhyloMarkers_B_other_aspS_bact",
+					"ui-name": "PhyloMarkers_B_other_aspS_bact"
+				},
+				{
+					"value": "pheT_bact",
+					"display": "pheT_bact",
+					"id": "PhyloMarkers_B_other_pheT_bact",
+					"ui-name": "PhyloMarkers_B_other_pheT_bact"
+				},
+				{
+					"value": "murC",
+					"display": "murC",
+					"id": "PhyloMarkers_B_other_murC",
+					"ui-name": "PhyloMarkers_B_other_murC"
+				},
+				{
+					"value": "murD",
+					"display": "murD",
+					"id": "PhyloMarkers_B_other_murD",
+					"ui-name": "PhyloMarkers_B_other_murD"
+				},
+				{
+					"value": "trmD",
+					"display": "trmD",
+					"id": "PhyloMarkers_B_other_trmD",
+					"ui-name": "PhyloMarkers_B_other_trmD"
+				},
+				{
+					"value": "trmU",
+					"display": "trmU",
+					"id": "PhyloMarkers_B_other_trmU",
+					"ui-name": "PhyloMarkers_B_other_trmU"
+				},
+				{
+					"value": "TruB",
+					"display": "TruB",
+					"id": "PhyloMarkers_B_other_TruB",
+					"ui-name": "PhyloMarkers_B_other_TruB"
+				},
+				{
+					"value": "fmt",
+					"display": "fmt",
+					"id": "PhyloMarkers_B_other_fmt",
+					"ui-name": "PhyloMarkers_B_other_fmt"
+				},
+				{
+					"value": "lysidine_TilS_N",
+					"display": "lysidine_TilS_N",
+					"id": "PhyloMarkers_B_other_lysidine_TilS_N",
+					"ui-name": "PhyloMarkers_B_other_lysidine_TilS_N"
+				},
+				{
+					"value": "T6A_TsaD_YgjD",
+					"display": "T6A_TsaD_YgjD",
+					"id": "PhyloMarkers_B_other_T6A_TsaD_YgjD",
+					"ui-name": "PhyloMarkers_B_other_T6A_TsaD_YgjD"
+				},
+				{
+					"value": "T6A_YeaZ",
+					"display": "T6A_YeaZ",
+					"id": "PhyloMarkers_B_other_T6A_YeaZ",
+					"ui-name": "PhyloMarkers_B_other_T6A_YeaZ"
+				},
+				{
+					"value": "ftsZ",
+					"display": "ftsZ",
+					"id": "PhyloMarkers_B_other_ftsZ",
+					"ui-name": "PhyloMarkers_B_other_ftsZ"
+				},
+				{
+					"value": "DnaA",
+					"display": "DnaA",
+					"id": "PhyloMarkers_B_other_DnaA",
+					"ui-name": "PhyloMarkers_B_other_DnaA"
+				},
+				{
+					"value": "ruvA",
+					"display": "ruvA",
+					"id": "PhyloMarkers_B_other_ruvA",
+					"ui-name": "PhyloMarkers_B_other_ruvA"
+				},
+				{
+					"value": "ruvB",
+					"display": "ruvB",
+					"id": "PhyloMarkers_B_other_ruvB",
+					"ui-name": "PhyloMarkers_B_other_ruvB"
+				},
+				{
+					"value": "tigrfam_recA",
+					"display": "tigrfam_recA",
+					"id": "PhyloMarkers_B_other_tigrfam_recA",
+					"ui-name": "PhyloMarkers_B_other_tigrfam_recA"
+				},
+				{
+					"value": "recG",
+					"display": "recG",
+					"id": "PhyloMarkers_B_other_recG",
+					"ui-name": "PhyloMarkers_B_other_recG"
+				},
+				{
+					"value": "recN",
+					"display": "recN",
+					"id": "PhyloMarkers_B_other_recN",
+					"ui-name": "PhyloMarkers_B_other_recN"
+				},
+				{
+					"value": "recR",
+					"display": "recR",
+					"id": "PhyloMarkers_B_other_recR",
+					"ui-name": "PhyloMarkers_B_other_recR"
+				},
+				{
+					"value": "uvrb",
+					"display": "uvrb",
+					"id": "PhyloMarkers_B_other_uvrb",
+					"ui-name": "PhyloMarkers_B_other_uvrb"
+				},
+				{
+					"value": "uvrC",
+					"display": "uvrC",
+					"id": "PhyloMarkers_B_other_uvrC",
+					"ui-name": "PhyloMarkers_B_other_uvrC"
+				},
+				{
+					"value": "GrpE",
+					"display": "GrpE",
+					"id": "PhyloMarkers_B_other_GrpE",
+					"ui-name": "PhyloMarkers_B_other_GrpE"
+				},
+				{
+					"value": "DUF150",
+					"display": "DUF150",
+					"id": "PhyloMarkers_B_other_DUF150",
+					"ui-name": "PhyloMarkers_B_other_DUF150"
+				},
+				{
+					"value": "PNPase",
+					"display": "PNPase",
+					"id": "PhyloMarkers_B_other_PNPase",
+					"ui-name": "PhyloMarkers_B_other_PNPase"
+				},
+				{
+					"value": "prfA",
+					"display": "prfA",
+					"id": "PhyloMarkers_B_other_prfA",
+					"ui-name": "PhyloMarkers_B_other_prfA"
+				},
+				{
+					"value": "prfB",
+					"display": "prfB",
+					"id": "PhyloMarkers_B_other_prfB",
+					"ui-name": "PhyloMarkers_B_other_prfB"
+				},
+				{
+					"value": "ybeY",
+					"display": "ybeY",
+					"id": "PhyloMarkers_B_other_ybeY",
+					"ui-name": "PhyloMarkers_B_other_ybeY"
+				},
+				{
+					"value": "rseP",
+					"display": "rseP",
+					"id": "PhyloMarkers_B_other_rseP",
+					"ui-name": "PhyloMarkers_B_other_rseP"
+				},
+				{
+					"value": "rbfA",
+					"display": "rbfA",
+					"id": "PhyloMarkers_B_other_rbfA",
+					"ui-name": "PhyloMarkers_B_other_rbfA"
+				},
+				{
+					"value": "ribF",
+					"display": "ribF",
+					"id": "PhyloMarkers_B_other_ribF",
+					"ui-name": "PhyloMarkers_B_other_ribF"
+				},
+				{
+					"value": "smpB",
+					"display": "smpB",
+					"id": "PhyloMarkers_B_other_smpB",
+					"ui-name": "PhyloMarkers_B_other_smpB"
+				},
+				{
+					"value": "rsfS_iojap_ybeB",
+					"display": "rsfS_iojap_ybeB",
+					"id": "PhyloMarkers_B_other_rsfS_iojap_ybeB",
+					"ui-name": "PhyloMarkers_B_other_rsfS_iojap_ybeB"
+				},
+				{
+					"value": "ychF",
+					"display": "ychF",
+					"id": "PhyloMarkers_B_other_ychF",
+					"ui-name": "PhyloMarkers_B_other_ychF"
+				},
+				{
+					"value": "tig",
+					"display": "tig",
+					"id": "PhyloMarkers_B_other_tig",
+					"ui-name": "PhyloMarkers_B_other_tig"
+				},
+				{
+					"value": "tsf",
+					"display": "tsf",
+					"id": "PhyloMarkers_B_other_tsf",
+					"ui-name": "PhyloMarkers_B_other_tsf"
+				},
+				{
+					"value": "rsmD",
+					"display": "rsmD",
+					"id": "PhyloMarkers_B_other_rsmD",
+					"ui-name": "PhyloMarkers_B_other_rsmD"
+				},
+				{
+					"value": "rsmG_gidB",
+					"display": "rsmG_gidB",
+					"id": "PhyloMarkers_B_other_rsmG_gidB",
+					"ui-name": "PhyloMarkers_B_other_rsmG_gidB"
+				},
+				{
+					"value": "rsmH",
+					"display": "rsmH",
+					"id": "PhyloMarkers_B_other_rsmH",
+					"ui-name": "PhyloMarkers_B_other_rsmH"
+				},
+				{
+					"value": "IF-2",
+					"display": "IF-2",
+					"id": "PhyloMarkers_B_other_IF-2",
+					"ui-name": "PhyloMarkers_B_other_IF-2"
+				},
+				{
+					"value": "infC",
+					"display": "infC",
+					"id": "PhyloMarkers_B_other_infC",
+					"ui-name": "PhyloMarkers_B_other_infC"
+				},
+				{
+					"value": "rRNA_methyl_3",
+					"display": "rRNA_methyl_3",
+					"id": "PhyloMarkers_B_other_rRNA_methyl_3",
+					"ui-name": "PhyloMarkers_B_other_rRNA_methyl_3"
+				},
+				{
+					"value": "RNAse_H_YqgF",
+					"display": "RNAse_H_YqgF",
+					"id": "PhyloMarkers_B_other_RNAse_H_YqgF",
+					"ui-name": "PhyloMarkers_B_other_RNAse_H_YqgF"
+				},
+				{
+					"value": "clpX",
+					"display": "clpX",
+					"id": "PhyloMarkers_B_other_clpX",
+					"ui-name": "PhyloMarkers_B_other_clpX"
+				},
+				{
+					"value": "sms",
+					"display": "sms",
+					"id": "PhyloMarkers_B_other_sms",
+					"ui-name": "PhyloMarkers_B_other_sms"
+				},
+				{
+					"value": "era",
+					"display": "era",
+					"id": "PhyloMarkers_B_other_era",
+					"ui-name": "PhyloMarkers_B_other_era"
+				},
+				{
+					"value": "mraY",
+					"display": "mraY",
+					"id": "PhyloMarkers_B_other_mraY",
+					"ui-name": "PhyloMarkers_B_other_mraY"
+				},
+				{
+					"value": "frr",
+					"display": "frr",
+					"id": "PhyloMarkers_B_other_frr",
+					"ui-name": "PhyloMarkers_B_other_frr"
+				},
+				{
+					"value": "hemN_rel",
+					"display": "hemN_rel",
+					"id": "PhyloMarkers_B_other_hemN_rel",
+					"ui-name": "PhyloMarkers_B_other_hemN_rel"
+				},
+				{
+					"value": "mfd",
+					"display": "mfd",
+					"id": "PhyloMarkers_B_other_mfd",
+					"ui-name": "PhyloMarkers_B_other_mfd"
+				},
+				{
+					"value": "ksgA",
+					"display": "ksgA",
+					"id": "PhyloMarkers_B_other_ksgA",
+					"ui-name": "PhyloMarkers_B_other_ksgA"
+				},
+				{
+					"value": "nusG",
+					"display": "nusG",
+					"id": "PhyloMarkers_B_other_nusG",
+					"ui-name": "PhyloMarkers_B_other_nusG"
+				},
+				{
+					"value": "purB",
+					"display": "purB",
+					"id": "PhyloMarkers_B_other_purB",
+					"ui-name": "PhyloMarkers_B_other_purB"
+				},
+				{
+					"value": "ffh",
+					"display": "ffh",
+					"id": "PhyloMarkers_B_other_ffh",
+					"ui-name": "PhyloMarkers_B_other_ffh"
+				},
+				{
+					"value": "secA",
+					"display": "secA",
+					"id": "PhyloMarkers_B_other_secA",
+					"ui-name": "PhyloMarkers_B_other_secA"
+				},
+				{
+					"value": "secE_bact",
+					"display": "secE_bact",
+					"id": "PhyloMarkers_B_other_secE_bact",
+					"ui-name": "PhyloMarkers_B_other_secE_bact"
+				},
+				{
+					"value": "secG",
+					"display": "secG",
+					"id": "PhyloMarkers_B_other_secG",
+					"ui-name": "PhyloMarkers_B_other_secG"
+				},
+				{
+					"value": "secY",
+					"display": "secY",
+					"id": "PhyloMarkers_B_other_secY",
+					"ui-name": "PhyloMarkers_B_other_secY"
+				},
+				{
+					"value": "gyrA",
+					"display": "gyrA",
+					"id": "PhyloMarkers_B_other_gyrA",
+					"ui-name": "PhyloMarkers_B_other_gyrA"
+				},
+				{
+					"value": "gyrB",
+					"display": "gyrB",
+					"id": "PhyloMarkers_B_other_gyrB",
+					"ui-name": "PhyloMarkers_B_other_gyrB"
+				},
+				{
+					"value": "atpD",
+					"display": "atpD",
+					"id": "PhyloMarkers_B_other_atpD",
+					"ui-name": "PhyloMarkers_B_other_atpD"
+				},
+				{
+					"value": "ATPsyn_F1gamma",
+					"display": "ATPsyn_F1gamma",
+					"id": "PhyloMarkers_B_other_ATPsyn_F1gamma",
+					"ui-name": "PhyloMarkers_B_other_ATPsyn_F1gamma"
+				},
+				{
+					"value": "IMP_dehydrog",
+					"display": "IMP_dehydrog",
+					"id": "PhyloMarkers_B_other_IMP_dehydrog",
+					"ui-name": "PhyloMarkers_B_other_IMP_dehydrog"
+				},
+				{
+					"value": "dnaG",
+					"display": "dnaG",
+					"id": "PhyloMarkers_B_other_dnaG",
+					"ui-name": "PhyloMarkers_B_other_dnaG"
+				},
+				{
+					"value": "lepA",
+					"display": "lepA",
+					"id": "PhyloMarkers_B_other_lepA",
+					"ui-name": "PhyloMarkers_B_other_lepA"
+				},
+				{
+					"value": "TypA_BipA",
+					"display": "TypA_BipA",
+					"id": "PhyloMarkers_B_other_TypA_BipA",
+					"ui-name": "PhyloMarkers_B_other_TypA_BipA"
+				},
+				{
+					"value": "coaD_prev_kdtB",
+					"display": "coaD_prev_kdtB",
+					"id": "PhyloMarkers_B_other_coaD_prev_kdtB",
+					"ui-name": "PhyloMarkers_B_other_coaD_prev_kdtB"
+				},
+				{
+					"value": "NusA",
+					"display": "NusA",
+					"id": "PhyloMarkers_B_other_NusA",
+					"ui-name": "PhyloMarkers_B_other_NusA"
+				},
+				{
+					"value": "nusB",
+					"display": "nusB",
+					"id": "PhyloMarkers_B_other_nusB",
+					"ui-name": "PhyloMarkers_B_other_nusB"
+				},
+				{
+					"value": "pyrH_bact",
+					"display": "pyrH_bact",
+					"id": "PhyloMarkers_B_other_pyrH_bact",
+					"ui-name": "PhyloMarkers_B_other_pyrH_bact"
+				},
+				{
+					"value": "RNaseIII",
+					"display": "RNaseIII",
+					"id": "PhyloMarkers_B_other_RNaseIII",
+					"ui-name": "PhyloMarkers_B_other_RNaseIII"
+				},
+				{
+					"value": "16S_RimM",
+					"display": "16S_RimM",
+					"id": "PhyloMarkers_B_other_16S_RimM",
+					"ui-name": "PhyloMarkers_B_other_16S_RimM"
+				},
+				{
+					"value": "prok_dnaK",
+					"display": "prok_dnaK",
+					"id": "PhyloMarkers_B_other_prok_dnaK",
+					"ui-name": "PhyloMarkers_B_other_prok_dnaK"
+				},
+				{
+					"value": "Obg_CgtA",
+					"display": "Obg_CgtA",
+					"id": "PhyloMarkers_B_other_Obg_CgtA",
+					"ui-name": "PhyloMarkers_B_other_Obg_CgtA"
+				},
+				{
+					"value": "guanyl_kin",
+					"display": "guanyl_kin",
+					"id": "PhyloMarkers_B_other_guanyl_kin",
+					"ui-name": "PhyloMarkers_B_other_guanyl_kin"
+				},
+				{
+					"value": "GTPase_EngA",
+					"display": "GTPase_EngA",
+					"id": "PhyloMarkers_B_other_GTPase_EngA",
+					"ui-name": "PhyloMarkers_B_other_GTPase_EngA"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_PhyloMarkers_A_ribo_pol_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "ALL" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+				{
+					"value": "NONE",
+					"display": "Archaea Ribosomal + Polymerases - NONE",
+					"id": "PhyloMarkers_A_ribo_pol_NONE",
+					"ui-name": "PhyloMarkers_A_ribo_pol_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Archaea Ribosomal + Polymerases - ALL",
+					"id": "PhyloMarkers_A_ribo_pol_ALL",
+					"ui-name": "PhyloMarkers_A_ribo_pol_ALL"
+				},
+				{
+					"value": "uS2_euk_arch",
+					"display": "uS2_euk_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uS2_euk_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uS2_euk_arch"
+				},
+				{
+					"value": "uS3_euk_arch",
+					"display": "uS3_euk_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uS3_euk_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uS3_euk_arch"
+				},
+				{
+					"value": "Ribosomal_S3Ae",
+					"display": "Ribosomal_S3Ae",
+					"id": "PhyloMarkers_A_ribo_pol_Ribosomal_S3Ae",
+					"ui-name": "PhyloMarkers_A_ribo_pol_Ribosomal_S3Ae"
+				},
+				{
+					"value": "uS4_arch",
+					"display": "uS4_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uS4_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uS4_arch"
+				},
+				{
+					"value": "Ribosomal_S4e",
+					"display": "Ribosomal_S4e",
+					"id": "PhyloMarkers_A_ribo_pol_Ribosomal_S4e",
+					"ui-name": "PhyloMarkers_A_ribo_pol_Ribosomal_S4e"
+				},
+				{
+					"value": "uS5_euk_arch",
+					"display": "uS5_euk_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uS5_euk_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uS5_euk_arch"
+				},
+				{
+					"value": "Ribosomal_S6e",
+					"display": "Ribosomal_S6e",
+					"id": "PhyloMarkers_A_ribo_pol_Ribosomal_S6e",
+					"ui-name": "PhyloMarkers_A_ribo_pol_Ribosomal_S6e"
+				},
+				{
+					"value": "uS7_euk_arch",
+					"display": "uS7_euk_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uS7_euk_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uS7_euk_arch"
+				},
+				{
+					"value": "eS8",
+					"display": "eS8",
+					"id": "PhyloMarkers_A_ribo_pol_eS8",
+					"ui-name": "PhyloMarkers_A_ribo_pol_eS8"
+				},
+				{
+					"value": "uS9_arch",
+					"display": "uS9_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uS9_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uS9_arch"
+				},
+				{
+					"value": "uS10_euk_arch",
+					"display": "uS10_euk_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uS10_euk_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uS10_euk_arch"
+				},
+				{
+					"value": "arch_S11P",
+					"display": "arch_S11P",
+					"id": "PhyloMarkers_A_ribo_pol_arch_S11P",
+					"ui-name": "PhyloMarkers_A_ribo_pol_arch_S11P"
+				},
+				{
+					"value": "uS12_E_A",
+					"display": "uS12_E_A",
+					"id": "PhyloMarkers_A_ribo_pol_uS12_E_A",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uS12_E_A"
+				},
+				{
+					"value": "uS13_arch",
+					"display": "uS13_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uS13_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uS13_arch"
+				},
+				{
+					"value": "uS19_arch",
+					"display": "uS19_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uS19_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uS19_arch"
+				},
+				{
+					"value": "Ribosomal_S19e",
+					"display": "Ribosomal_S19e",
+					"id": "PhyloMarkers_A_ribo_pol_Ribosomal_S19e",
+					"ui-name": "PhyloMarkers_A_ribo_pol_Ribosomal_S19e"
+				},
+				{
+					"value": "Ribosomal_S24e",
+					"display": "Ribosomal_S24e",
+					"id": "PhyloMarkers_A_ribo_pol_Ribosomal_S24e",
+					"ui-name": "PhyloMarkers_A_ribo_pol_Ribosomal_S24e"
+				},
+				{
+					"value": "Ribosomal_S28e",
+					"display": "Ribosomal_S28e",
+					"id": "PhyloMarkers_A_ribo_pol_Ribosomal_S28e",
+					"ui-name": "PhyloMarkers_A_ribo_pol_Ribosomal_S28e"
+				},
+				{
+					"value": "L3_arch",
+					"display": "L3_arch",
+					"id": "PhyloMarkers_A_ribo_pol_L3_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_L3_arch"
+				},
+				{
+					"value": "rpl4p_arch",
+					"display": "rpl4p_arch",
+					"id": "PhyloMarkers_A_ribo_pol_rpl4p_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_rpl4p_arch"
+				},
+				{
+					"value": "uL6_arch",
+					"display": "uL6_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uL6_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uL6_arch"
+				},
+				{
+					"value": "eL8_ribo",
+					"display": "eL8_ribo",
+					"id": "PhyloMarkers_A_ribo_pol_eL8_ribo",
+					"ui-name": "PhyloMarkers_A_ribo_pol_eL8_ribo"
+				},
+				{
+					"value": "Ribosomal_L1",
+					"display": "Ribosomal_L1",
+					"id": "PhyloMarkers_A_ribo_pol_Ribosomal_L1",
+					"ui-name": "PhyloMarkers_A_ribo_pol_Ribosomal_L1"
+				},
+				{
+					"value": "L13_A_E",
+					"display": "L13_A_E",
+					"id": "PhyloMarkers_A_ribo_pol_L13_A_E",
+					"ui-name": "PhyloMarkers_A_ribo_pol_L13_A_E"
+				},
+				{
+					"value": "uL14_arch",
+					"display": "uL14_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uL14_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uL14_arch"
+				},
+				{
+					"value": "Ribosomal_L15e",
+					"display": "Ribosomal_L15e",
+					"id": "PhyloMarkers_A_ribo_pol_Ribosomal_L15e",
+					"ui-name": "PhyloMarkers_A_ribo_pol_Ribosomal_L15e"
+				},
+				{
+					"value": "uL16_euk_arch",
+					"display": "uL16_euk_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uL16_euk_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uL16_euk_arch"
+				},
+				{
+					"value": "Ribosomal_L19e",
+					"display": "Ribosomal_L19e",
+					"id": "PhyloMarkers_A_ribo_pol_Ribosomal_L19e",
+					"ui-name": "PhyloMarkers_A_ribo_pol_Ribosomal_L19e"
+				},
+				{
+					"value": "Ribosomal_L21e",
+					"display": "Ribosomal_L21e",
+					"id": "PhyloMarkers_A_ribo_pol_Ribosomal_L21e",
+					"ui-name": "PhyloMarkers_A_ribo_pol_Ribosomal_L21e"
+				},
+				{
+					"value": "uL22_arch_euk",
+					"display": "uL22_arch_euk",
+					"id": "PhyloMarkers_A_ribo_pol_uL22_arch_euk",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uL22_arch_euk"
+				},
+				{
+					"value": "uL23_arch",
+					"display": "uL23_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uL23_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uL23_arch"
+				},
+				{
+					"value": "rplX_A_E",
+					"display": "rplX_A_E",
+					"id": "PhyloMarkers_A_ribo_pol_rplX_A_E",
+					"ui-name": "PhyloMarkers_A_ribo_pol_rplX_A_E"
+				},
+				{
+					"value": "uL30_arch",
+					"display": "uL30_arch",
+					"id": "PhyloMarkers_A_ribo_pol_uL30_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_uL30_arch"
+				},
+				{
+					"value": "Ribosomal_L31e",
+					"display": "Ribosomal_L31e",
+					"id": "PhyloMarkers_A_ribo_pol_Ribosomal_L31e",
+					"ui-name": "PhyloMarkers_A_ribo_pol_Ribosomal_L31e"
+				},
+				{
+					"value": "Ribosomal_L32e",
+					"display": "Ribosomal_L32e",
+					"id": "PhyloMarkers_A_ribo_pol_Ribosomal_L32e",
+					"ui-name": "PhyloMarkers_A_ribo_pol_Ribosomal_L32e"
+				},
+				{
+					"value": "RNA_pol_rpoA1",
+					"display": "RNA_pol_rpoA1",
+					"id": "PhyloMarkers_A_ribo_pol_RNA_pol_rpoA1",
+					"ui-name": "PhyloMarkers_A_ribo_pol_RNA_pol_rpoA1"
+				},
+				{
+					"value": "RNA_pol_rpoA2",
+					"display": "RNA_pol_rpoA2",
+					"id": "PhyloMarkers_A_ribo_pol_RNA_pol_rpoA2",
+					"ui-name": "PhyloMarkers_A_ribo_pol_RNA_pol_rpoA2"
+				},
+				{
+					"value": "rpoB_arch",
+					"display": "rpoB_arch",
+					"id": "PhyloMarkers_A_ribo_pol_rpoB_arch",
+					"ui-name": "PhyloMarkers_A_ribo_pol_rpoB_arch"
+				},
+				{
+					"value": "rpoE",
+					"display": "rpoE",
+					"id": "PhyloMarkers_A_ribo_pol_rpoE",
+					"ui-name": "PhyloMarkers_A_ribo_pol_rpoE"
+				},
+				{
+					"value": "RNA_pol_A_bac",
+					"display": "RNA_pol_A_bac",
+					"id": "PhyloMarkers_A_ribo_pol_RNA_pol_A_bac",
+					"ui-name": "PhyloMarkers_A_ribo_pol_RNA_pol_A_bac"
+				},
+				{
+					"value": "RNA_pol_N",
+					"display": "RNA_pol_N",
+					"id": "PhyloMarkers_A_ribo_pol_RNA_pol_N",
+					"ui-name": "PhyloMarkers_A_ribo_pol_RNA_pol_N"
+				},
+				{
+					"value": "RNA_pol_L_2",
+					"display": "RNA_pol_L_2",
+					"id": "PhyloMarkers_A_ribo_pol_RNA_pol_L_2",
+					"ui-name": "PhyloMarkers_A_ribo_pol_RNA_pol_L_2"
+				},
+				{
+					"value": "RNA_pol_Rpb4",
+					"display": "RNA_pol_Rpb4",
+					"id": "PhyloMarkers_A_ribo_pol_RNA_pol_Rpb4",
+					"ui-name": "PhyloMarkers_A_ribo_pol_RNA_pol_Rpb4"
+				},
+				{
+					"value": "RNA_pol_Rpb5_C",
+					"display": "RNA_pol_Rpb5_C",
+					"id": "PhyloMarkers_A_ribo_pol_RNA_pol_Rpb5_C",
+					"ui-name": "PhyloMarkers_A_ribo_pol_RNA_pol_Rpb5_C"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_PhyloMarkers_A_other_ids",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "ALL" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+				{
+					"value": "NONE",
+					"display": "Archaea Other - NONE",
+					"id": "PhyloMarkers_A_other_NONE",
+					"ui-name": "PhyloMarkers_A_other_NONE"
+				},
+				{
+					"value": "ALL",
+					"display": "Archaea Other - ALL",
+					"id": "PhyloMarkers_A_other_ALL",
+					"ui-name": "PhyloMarkers_A_other_ALL"
+				},
+				{
+					"value": "A-tRNA_syn_arch",
+					"display": "A-tRNA_syn_arch",
+					"id": "PhyloMarkers_A_other_A-tRNA_syn_arch",
+					"ui-name": "PhyloMarkers_A_other_A-tRNA_syn_arch"
+				},
+				{
+					"value": "glyS_dimeric",
+					"display": "glyS_dimeric",
+					"id": "PhyloMarkers_A_other_glyS_dimeric",
+					"ui-name": "PhyloMarkers_A_other_glyS_dimeric"
+				},
+				{
+					"value": "proS_fam_I",
+					"display": "proS_fam_I",
+					"id": "PhyloMarkers_A_other_proS_fam_I",
+					"ui-name": "PhyloMarkers_A_other_proS_fam_I"
+				},
+				{
+					"value": "valS",
+					"display": "valS",
+					"id": "PhyloMarkers_A_other_valS",
+					"ui-name": "PhyloMarkers_A_other_valS"
+				},
+				{
+					"value": "aspS_nondisc",
+					"display": "aspS_nondisc",
+					"id": "PhyloMarkers_A_other_aspS_nondisc",
+					"ui-name": "PhyloMarkers_A_other_aspS_nondisc"
+				},
+				{
+					"value": "gltX_arch",
+					"display": "gltX_arch",
+					"id": "PhyloMarkers_A_other_gltX_arch",
+					"ui-name": "PhyloMarkers_A_other_gltX_arch"
+				},
+				{
+					"value": "pheT_arch",
+					"display": "pheT_arch",
+					"id": "PhyloMarkers_A_other_pheT_arch",
+					"ui-name": "PhyloMarkers_A_other_pheT_arch"
+				},
+				{
+					"value": "gatE_arch",
+					"display": "gatE_arch",
+					"id": "PhyloMarkers_A_other_gatE_arch",
+					"ui-name": "PhyloMarkers_A_other_gatE_arch"
+				},
+				{
+					"value": "arch_pth2",
+					"display": "arch_pth2",
+					"id": "PhyloMarkers_A_other_arch_pth2",
+					"ui-name": "PhyloMarkers_A_other_arch_pth2"
+				},
+				{
+					"value": "TRM1",
+					"display": "TRM1",
+					"id": "PhyloMarkers_A_other_TRM1",
+					"ui-name": "PhyloMarkers_A_other_TRM1"
+				},
+				{
+					"value": "endA",
+					"display": "endA",
+					"id": "PhyloMarkers_A_other_endA",
+					"ui-name": "PhyloMarkers_A_other_endA"
+				},
+				{
+					"value": "arcsn_tRNA_tgt",
+					"display": "arcsn_tRNA_tgt",
+					"id": "PhyloMarkers_A_other_arcsn_tRNA_tgt",
+					"ui-name": "PhyloMarkers_A_other_arcsn_tRNA_tgt"
+				},
+				{
+					"value": "pseudo_Pus10arc",
+					"display": "pseudo_Pus10arc",
+					"id": "PhyloMarkers_A_other_pseudo_Pus10arc",
+					"ui-name": "PhyloMarkers_A_other_pseudo_Pus10arc"
+				},
+				{
+					"value": "gatD_arch",
+					"display": "gatD_arch",
+					"id": "PhyloMarkers_A_other_gatD_arch",
+					"ui-name": "PhyloMarkers_A_other_gatD_arch"
+				},
+				{
+					"value": "HMG-CoA_red",
+					"display": "HMG-CoA_red",
+					"id": "PhyloMarkers_A_other_HMG-CoA_red",
+					"ui-name": "PhyloMarkers_A_other_HMG-CoA_red"
+				},
+				{
+					"value": "Fibrillarin",
+					"display": "Fibrillarin",
+					"id": "PhyloMarkers_A_other_Fibrillarin",
+					"ui-name": "PhyloMarkers_A_other_Fibrillarin"
+				},
+				{
+					"value": "V_ATPase_I",
+					"display": "V_ATPase_I",
+					"id": "PhyloMarkers_A_other_V_ATPase_I",
+					"ui-name": "PhyloMarkers_A_other_V_ATPase_I"
+				},
+				{
+					"value": "Nop",
+					"display": "Nop",
+					"id": "PhyloMarkers_A_other_Nop",
+					"ui-name": "PhyloMarkers_A_other_Nop"
+				},
+				{
+					"value": "CarS-like",
+					"display": "CarS-like",
+					"id": "PhyloMarkers_A_other_CarS-like",
+					"ui-name": "PhyloMarkers_A_other_CarS-like"
+				},
+				{
+					"value": "Diphthamide_syn",
+					"display": "Diphthamide_syn",
+					"id": "PhyloMarkers_A_other_Diphthamide_syn",
+					"ui-name": "PhyloMarkers_A_other_Diphthamide_syn"
+				},
+				{
+					"value": "UPF0086",
+					"display": "UPF0086",
+					"id": "PhyloMarkers_A_other_UPF0086",
+					"ui-name": "PhyloMarkers_A_other_UPF0086"
+				},
+				{
+					"value": "dsDNA_bind",
+					"display": "dsDNA_bind",
+					"id": "PhyloMarkers_A_other_dsDNA_bind",
+					"ui-name": "PhyloMarkers_A_other_dsDNA_bind"
+				},
+				{
+					"value": "ATP-synt_F",
+					"display": "ATP-synt_F",
+					"id": "PhyloMarkers_A_other_ATP-synt_F",
+					"ui-name": "PhyloMarkers_A_other_ATP-synt_F"
+				},
+				{
+					"value": "PPS_PS",
+					"display": "PPS_PS",
+					"id": "PhyloMarkers_A_other_PPS_PS",
+					"ui-name": "PhyloMarkers_A_other_PPS_PS"
+				},
+				{
+					"value": "SRP_SPB",
+					"display": "SRP_SPB",
+					"id": "PhyloMarkers_A_other_SRP_SPB",
+					"ui-name": "PhyloMarkers_A_other_SRP_SPB"
+				},
+				{
+					"value": "DUF359",
+					"display": "DUF359",
+					"id": "PhyloMarkers_A_other_DUF359",
+					"ui-name": "PhyloMarkers_A_other_DUF359"
+				},
+				{
+					"value": "primase_sml",
+					"display": "primase_sml",
+					"id": "PhyloMarkers_A_other_primase_sml",
+					"ui-name": "PhyloMarkers_A_other_primase_sml"
+				},
+				{
+					"value": "DNA_primase_lrg",
+					"display": "DNA_primase_lrg",
+					"id": "PhyloMarkers_A_other_DNA_primase_lrg",
+					"ui-name": "PhyloMarkers_A_other_DNA_primase_lrg"
+				},
+				{
+					"value": "DUF655",
+					"display": "DUF655",
+					"id": "PhyloMarkers_A_other_DUF655",
+					"ui-name": "PhyloMarkers_A_other_DUF655"
+				},
+				{
+					"value": "Fe-ADH_2",
+					"display": "Fe-ADH_2",
+					"id": "PhyloMarkers_A_other_Fe-ADH_2",
+					"ui-name": "PhyloMarkers_A_other_Fe-ADH_2"
+				},
+				{
+					"value": "rpiA",
+					"display": "rpiA",
+					"id": "PhyloMarkers_A_other_rpiA",
+					"ui-name": "PhyloMarkers_A_other_rpiA"
+				},
+				{
+					"value": "rdgB",
+					"display": "rdgB",
+					"id": "PhyloMarkers_A_other_rdgB",
+					"ui-name": "PhyloMarkers_A_other_rdgB"
+				},
+				{
+					"value": "pelota",
+					"display": "pelota",
+					"id": "PhyloMarkers_A_other_pelota",
+					"ui-name": "PhyloMarkers_A_other_pelota"
+				},
+				{
+					"value": "ATCase_reg",
+					"display": "ATCase_reg",
+					"id": "PhyloMarkers_A_other_ATCase_reg",
+					"ui-name": "PhyloMarkers_A_other_ATCase_reg"
+				},
+				{
+					"value": "alpha-NAC_hom",
+					"display": "alpha-NAC_hom",
+					"id": "PhyloMarkers_A_other_alpha-NAC_hom",
+					"ui-name": "PhyloMarkers_A_other_alpha-NAC_hom"
+				},
+				{
+					"value": "MBF1",
+					"display": "MBF1",
+					"id": "PhyloMarkers_A_other_MBF1",
+					"ui-name": "PhyloMarkers_A_other_MBF1"
+				},
+				{
+					"value": "RNA_SBDS",
+					"display": "RNA_SBDS",
+					"id": "PhyloMarkers_A_other_RNA_SBDS",
+					"ui-name": "PhyloMarkers_A_other_RNA_SBDS"
+				},
+				{
+					"value": "pyrE",
+					"display": "pyrE",
+					"id": "PhyloMarkers_A_other_pyrE",
+					"ui-name": "PhyloMarkers_A_other_pyrE"
+				},
+				{
+					"value": "CBF5",
+					"display": "CBF5",
+					"id": "PhyloMarkers_A_other_CBF5",
+					"ui-name": "PhyloMarkers_A_other_CBF5"
+				},
+				{
+					"value": "TFE_alpha",
+					"display": "TFE_alpha",
+					"id": "PhyloMarkers_A_other_TFE_alpha",
+					"ui-name": "PhyloMarkers_A_other_TFE_alpha"
+				},
+				{
+					"value": "KOW_elon_Spt5",
+					"display": "KOW_elon_Spt5",
+					"id": "PhyloMarkers_A_other_KOW_elon_Spt5",
+					"ui-name": "PhyloMarkers_A_other_KOW_elon_Spt5"
+				},
+				{
+					"value": "aIF-2",
+					"display": "aIF-2",
+					"id": "PhyloMarkers_A_other_aIF-2",
+					"ui-name": "PhyloMarkers_A_other_aIF-2"
+				},
+				{
+					"value": "EIF_2_alpha",
+					"display": "EIF_2_alpha",
+					"id": "PhyloMarkers_A_other_EIF_2_alpha",
+					"ui-name": "PhyloMarkers_A_other_EIF_2_alpha"
+				},
+				{
+					"value": "eif2g_arch",
+					"display": "eif2g_arch",
+					"id": "PhyloMarkers_A_other_eif2g_arch",
+					"ui-name": "PhyloMarkers_A_other_eif2g_arch"
+				},
+				{
+					"value": "eIF-6",
+					"display": "eIF-6",
+					"id": "PhyloMarkers_A_other_eIF-6",
+					"ui-name": "PhyloMarkers_A_other_eIF-6"
+				},
+				{
+					"value": "aEF-2",
+					"display": "aEF-2",
+					"id": "PhyloMarkers_A_other_aEF-2",
+					"ui-name": "PhyloMarkers_A_other_aEF-2"
+				},
+				{
+					"value": "eIF_5A",
+					"display": "eIF_5A",
+					"id": "PhyloMarkers_A_other_eIF_5A",
+					"ui-name": "PhyloMarkers_A_other_eIF_5A"
+				},
+				{
+					"value": "met_pdase_II",
+					"display": "met_pdase_II",
+					"id": "PhyloMarkers_A_other_met_pdase_II",
+					"ui-name": "PhyloMarkers_A_other_met_pdase_II"
+				},
+				{
+					"value": "coaBC_dfp",
+					"display": "coaBC_dfp",
+					"id": "PhyloMarkers_A_other_coaBC_dfp",
+					"ui-name": "PhyloMarkers_A_other_coaBC_dfp"
+				},
+				{
+					"value": "dph5",
+					"display": "dph5",
+					"id": "PhyloMarkers_A_other_dph5",
+					"ui-name": "PhyloMarkers_A_other_dph5"
+				},
+				{
+					"value": "mevalon_kin",
+					"display": "mevalon_kin",
+					"id": "PhyloMarkers_A_other_mevalon_kin",
+					"ui-name": "PhyloMarkers_A_other_mevalon_kin"
+				},
+				{
+					"value": "orni_carb_tr",
+					"display": "orni_carb_tr",
+					"id": "PhyloMarkers_A_other_orni_carb_tr",
+					"ui-name": "PhyloMarkers_A_other_orni_carb_tr"
+				},
+				{
+					"value": "asp_carb_tr",
+					"display": "asp_carb_tr",
+					"id": "PhyloMarkers_A_other_asp_carb_tr",
+					"ui-name": "PhyloMarkers_A_other_asp_carb_tr"
+				},
+				{
+					"value": "RNase_HII",
+					"display": "RNase_HII",
+					"id": "PhyloMarkers_A_other_RNase_HII",
+					"ui-name": "PhyloMarkers_A_other_RNase_HII"
+				},
+				{
+					"value": "ahcY",
+					"display": "ahcY",
+					"id": "PhyloMarkers_A_other_ahcY",
+					"ui-name": "PhyloMarkers_A_other_ahcY"
+				},
+				{
+					"value": "top6b",
+					"display": "top6b",
+					"id": "PhyloMarkers_A_other_top6b",
+					"ui-name": "PhyloMarkers_A_other_top6b"
+				},
+				{
+					"value": "eno",
+					"display": "eno",
+					"id": "PhyloMarkers_A_other_eno",
+					"ui-name": "PhyloMarkers_A_other_eno"
+				},
+				{
+					"value": "nusA_arch",
+					"display": "nusA_arch",
+					"id": "PhyloMarkers_A_other_nusA_arch",
+					"ui-name": "PhyloMarkers_A_other_nusA_arch"
+				},
+				{
+					"value": "pyrH_arch",
+					"display": "pyrH_arch",
+					"id": "PhyloMarkers_A_other_pyrH_arch",
+					"ui-name": "PhyloMarkers_A_other_pyrH_arch"
+				},
+				{
+					"value": "recomb_radA",
+					"display": "recomb_radA",
+					"id": "PhyloMarkers_A_other_recomb_radA",
+					"ui-name": "PhyloMarkers_A_other_recomb_radA"
+				},
+				{
+					"value": "2_5_ligase",
+					"display": "2_5_ligase",
+					"id": "PhyloMarkers_A_other_2_5_ligase",
+					"ui-name": "PhyloMarkers_A_other_2_5_ligase"
+				},
+				{
+					"value": "prefoldin_alpha",
+					"display": "prefoldin_alpha",
+					"id": "PhyloMarkers_A_other_prefoldin_alpha",
+					"ui-name": "PhyloMarkers_A_other_prefoldin_alpha"
+				},
+				{
+					"value": "gimC_beta",
+					"display": "gimC_beta",
+					"id": "PhyloMarkers_A_other_gimC_beta",
+					"ui-name": "PhyloMarkers_A_other_gimC_beta"
+				},
+				{
+					"value": "RNase_Z",
+					"display": "RNase_Z",
+					"id": "PhyloMarkers_A_other_RNase_Z",
+					"ui-name": "PhyloMarkers_A_other_RNase_Z"
+				},
+				{
+					"value": "cca_archaeal",
+					"display": "cca_archaeal",
+					"id": "PhyloMarkers_A_other_cca_archaeal",
+					"ui-name": "PhyloMarkers_A_other_cca_archaeal"
+				},
+				{
+					"value": "fen_arch",
+					"display": "fen_arch",
+					"id": "PhyloMarkers_A_other_fen_arch",
+					"ui-name": "PhyloMarkers_A_other_fen_arch"
+				},
+				{
+					"value": "arCOG00985",
+					"display": "arCOG00985",
+					"id": "PhyloMarkers_A_other_arCOG00985",
+					"ui-name": "PhyloMarkers_A_other_arCOG00985"
+				},
+				{
+					"value": "arCOG04150",
+					"display": "arCOG04150",
+					"id": "PhyloMarkers_A_other_arCOG04150",
+					"ui-name": "PhyloMarkers_A_other_arCOG04150"
+				},
+				{
+					"value": "arch_KAE1",
+					"display": "arch_KAE1",
+					"id": "PhyloMarkers_A_other_arch_KAE1",
+					"ui-name": "PhyloMarkers_A_other_arch_KAE1"
+				}
+                ]
+            }
+        },
+        {
+            "id": "input_many_refs",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "valid_ws_types": [ "KBaseCollections.FeatureSet",
+				    "KBaseGenomes.Genome",
+				    "KBaseSearch.GenomeSet",
+				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly"
+				  ]
+            }
+        },
+        {
+            "id": "genome_disp_name_config",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "obj_name" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "obj_name",
+                                        "display": "Object_Name",
+                                        "id": "genome_disp_name_config-obj_name",
+                                        "ui-name": "genome_disp_name_config-obj_name"
+                                },
+                                {
+                                        "value": "obj_name_ver",
+                                        "display": "Object_Name.version",
+                                        "id": "genome_disp_name_config-obj_name_ver",
+                                        "ui-name": "genome_disp_name_config-obj_name_ver"
+                                },
+                                {
+                                        "value": "sci_name",
+                                        "display": "Scientific Name",
+                                        "id": "genome_disp_name_config-sci_name",
+                                        "ui-name": "genome_disp_name_config-sci_name"
+                                },
+                                {
+                                        "value": "obj_name_sci_name",
+                                        "display": "Object_Name: Scientific Name",
+                                        "id": "genome_disp_name_config-obj_name_sci_name",
+                                        "ui-name": "genome_disp_name_config-obj_name_sci_name"
+                                },
+                                {
+                                        "value": "obj_name_ver_sci_name",
+                                        "display": "Object_Name.version: Scientific Name",
+                                        "id": "genome_disp_name_config-obj_name_ver_sci_name",
+                                        "ui-name": "genome_disp_name_config-obj_name_ver_sci_name"
+                                }
+                ]
+            }
+        },
+        {
+            "id": "output_filtered_name",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "HMMER_PhyloMarkers_Search.FeatureSet" ],
+            "field_type": "text",
+            "text_options": {
+                "valid_ws_types": [ "KBaseCollections.FeatureSet" ],
+		"is_output_name": true
+            }
+        },
+        {
+            "id": "save_ALL_featureSets",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "0" ],
+            "field_type": "dropdown",
+	    "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "0",
+                                    "display": "Save only hits to explicitly requested models",
+                                        "id": "save_explicit",
+                                        "ui-name": "save_explicit"
+                                },
+                                {
+                                        "value": "1",
+                                    "display": "Save hits to ALL requested models",
+                                        "id": "save_ALL",
+                                        "ui-name": "save_ALL"
+                                }
+			]
+            }
+        },
+        {
+            "id": "e_value",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ ".001" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "float",
+                "min_integer" : 0
+            }
+        },
+        {
+            "id": "bitscore",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "100" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "float",
+                "min_integer" : 25
+            }
+        },
+        {
+            "id": "model_cov_perc",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "35.0" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "float",
+                "min_float" : 0.0,
+                "max_float" : 100.0
+            }
+        },
+        {
+            "id": "maxaccepts",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "1000" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "int",
+                "min_integer" : 0
+            }
+        },
+        {
+            "id": "heatmap",
+            "optional": false,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "1" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "1",
+                                        "display": "heatmap",
+                                        "id": "heatmap",
+                                        "ui-name": "heatmap"
+                                },
+                                {
+                                        "value": "0",
+                                        "display": "numerical",
+                                        "id": "numerical",
+                                        "ui-name": "numerical"
+                                }
+                ]
+            }
+        },
+        {
+            "id": "low_val",
+            "optional": false,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "1" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "0.1",
+                                        "display": "fixed: 0.1",
+                                        "id": "fixed: 0.1",
+                                        "ui-name": "fixed: 0.1"
+                                },
+                                {
+                                        "value": "1",
+                                        "display": "fixed: 1",
+                                        "id": "fixed: 1",
+                                        "ui-name": "fixed: 1"
+                                },
+                                {
+                                        "value": "detect",
+                                        "display": "detect",
+                                        "id": "detect",
+                                        "ui-name": "detect"
+                                }
+                ]
+            }
+        },
+        {
+            "id": "show_blanks",
+            "optional": false,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "0" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "1",
+                                        "display": "show categories with no hits",
+                                        "id": "show",
+                                        "ui-name": "show"
+                                },
+                                {
+                                        "value": "0",
+                                        "display": "hide categories with no hits",
+                                        "id": "hide",
+                                        "ui-name": "hide"
+                                }
+                ]
+            }
+        }
+    ],
+    "behavior": {
+        "service-mapping": {
+            "url": "",
+            "name": "kb_hmmer",
+            "method": "HMMER_PhyloMarkers_Search",
+            "input_mapping": [
+                {
+                    "narrative_system_variable": "workspace",
+                    "target_property": "workspace_name"
+                },
+                {
+                    "input_parameter": "input_PhyloMarkers_Univ_ids",
+                    "target_property": "input_PhyloMarkers_Univ_ids"
+                },
+                {
+                    "input_parameter": "input_PhyloMarkers_B_ribo_pol_ids",
+                    "target_property": "input_PhyloMarkers_B_ribo_pol_ids"
+                },
+                {
+                    "input_parameter": "input_PhyloMarkers_B_other_ids",
+                    "target_property": "input_PhyloMarkers_B_other_ids"
+                },
+                {
+                    "input_parameter": "input_PhyloMarkers_A_ribo_pol_ids",
+                    "target_property": "input_PhyloMarkers_A_ribo_pol_ids"
+                },
+                {
+                    "input_parameter": "input_PhyloMarkers_A_other_ids",
+                    "target_property": "input_PhyloMarkers_A_other_ids"
+                },
+                {
+                    "input_parameter": "input_many_refs",
+                    "target_property": "input_many_refs",
+		    "target_type_transform": "list<resolved-ref>"
+                },
+                {
+                    "input_parameter": "genome_disp_name_config",
+                    "target_property": "genome_disp_name_config"
+                },
+                {
+                    "input_parameter": "output_filtered_name",
+                    "target_property": "output_filtered_name"
+                },
+                {
+                    "constant_value": "0",
+                    "target_property": "coalesce_output"
+                },
+                {
+                    "input_parameter": "save_ALL_featureSets",
+                    "target_property": "save_ALL_featureSets"
+                },
+                {
+                    "input_parameter": "e_value",
+                    "target_property": "e_value"
+                },
+                {
+                    "input_parameter": "bitscore",
+                    "target_property": "bitscore"
+                },
+                {
+                    "input_parameter": "model_cov_perc",
+                    "target_property": "model_cov_perc"
+                },
+                {
+                    "input_parameter": "maxaccepts",
+                    "target_property": "maxaccepts"
+                },
+                {
+                    "input_parameter": "heatmap",
+                    "target_property": "heatmap"
+                },
+                {
+                    "input_parameter": "low_val",
+                    "target_property": "low_val"
+                },
+                {
+                    "constant_value": "1",
+                    "target_property": "vertical"
+                },
+                {
+                    "input_parameter": "show_blanks",
+                    "target_property": "show_blanks"
+                }
+            ],
+            "output_mapping": [
+                {
+                    "narrative_system_variable": "workspace",
+                    "target_property": "workspace_name"
+                },
+                {
+                    "service_method_output_path": [0, "report_name"],
+                    "target_property": "report_name"
+                },
+                {
+                    "service_method_output_path": [0, "report_ref"],
+                    "target_property": "report_ref"
+                },
+                {
+		    "constant_value": "16",
+                    "target_property": "report_window_line_height"
+                }
+            ]
+        }
+    },
+    "job_id_output_field": "docker"
+}

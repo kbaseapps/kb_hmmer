@@ -660,6 +660,146 @@ Method for HMMER search of Markov Models of environmental bioelement families
     }
 }
  
+
+
+=head2 HMMER_PhyloMarkers_Search
+
+  $return = $obj->HMMER_PhyloMarkers_Search($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a kb_hmmer.HMMER_PhyloMarkers_Params
+$return is a kb_hmmer.HMMER_Output
+HMMER_PhyloMarkers_Params is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a kb_hmmer.workspace_name
+	input_PhyloMarkers_Univ_ids has a value which is a kb_hmmer.data_obj_ref
+	input_PhyloMarkers_B_ribo_pol_ids has a value which is a kb_hmmer.data_obj_ref
+	input_PhyloMarkers_B_other_ids has a value which is a kb_hmmer.data_obj_ref
+	input_PhyloMarkers_A_ribo_pol_ids has a value which is a kb_hmmer.data_obj_ref
+	input_PhyloMarkers_A_other_ids has a value which is a kb_hmmer.data_obj_ref
+	input_many_refs has a value which is a kb_hmmer.data_obj_ref
+	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	genome_disp_name_config has a value which is a string
+	coalesce_output has a value which is a kb_hmmer.bool
+	save_ALL_featureSets has a value which is a kb_hmmer.bool
+	e_value has a value which is a float
+	bitscore has a value which is a float
+	model_cov_perc has a value which is a float
+	maxaccepts has a value which is a float
+	heatmap has a value which is a kb_hmmer.bool
+	low_val has a value which is a kb_hmmer.bool
+	vertical has a value which is a kb_hmmer.bool
+	show_blanks has a value which is a kb_hmmer.bool
+workspace_name is a string
+data_obj_ref is a string
+data_obj_name is a string
+bool is an int
+HMMER_Output is a reference to a hash where the following keys are defined:
+	report_name has a value which is a kb_hmmer.data_obj_name
+	report_ref has a value which is a kb_hmmer.data_obj_ref
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a kb_hmmer.HMMER_PhyloMarkers_Params
+$return is a kb_hmmer.HMMER_Output
+HMMER_PhyloMarkers_Params is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a kb_hmmer.workspace_name
+	input_PhyloMarkers_Univ_ids has a value which is a kb_hmmer.data_obj_ref
+	input_PhyloMarkers_B_ribo_pol_ids has a value which is a kb_hmmer.data_obj_ref
+	input_PhyloMarkers_B_other_ids has a value which is a kb_hmmer.data_obj_ref
+	input_PhyloMarkers_A_ribo_pol_ids has a value which is a kb_hmmer.data_obj_ref
+	input_PhyloMarkers_A_other_ids has a value which is a kb_hmmer.data_obj_ref
+	input_many_refs has a value which is a kb_hmmer.data_obj_ref
+	output_filtered_name has a value which is a kb_hmmer.data_obj_name
+	genome_disp_name_config has a value which is a string
+	coalesce_output has a value which is a kb_hmmer.bool
+	save_ALL_featureSets has a value which is a kb_hmmer.bool
+	e_value has a value which is a float
+	bitscore has a value which is a float
+	model_cov_perc has a value which is a float
+	maxaccepts has a value which is a float
+	heatmap has a value which is a kb_hmmer.bool
+	low_val has a value which is a kb_hmmer.bool
+	vertical has a value which is a kb_hmmer.bool
+	show_blanks has a value which is a kb_hmmer.bool
+workspace_name is a string
+data_obj_ref is a string
+data_obj_name is a string
+bool is an int
+HMMER_Output is a reference to a hash where the following keys are defined:
+	report_name has a value which is a kb_hmmer.data_obj_name
+	report_ref has a value which is a kb_hmmer.data_obj_ref
+
+
+=end text
+
+=item Description
+
+Method for HMMER search of Markov Models of phylogenetic marker families
+**
+**    overloading as follows:
+**        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SeqquenceSet deactivated)
+**        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
+
+=back
+
+=cut
+
+ sub HMMER_PhyloMarkers_Search
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function HMMER_PhyloMarkers_Search (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to HMMER_PhyloMarkers_Search:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'HMMER_PhyloMarkers_Search');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "kb_hmmer.HMMER_PhyloMarkers_Search",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'HMMER_PhyloMarkers_Search',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method HMMER_PhyloMarkers_Search",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'HMMER_PhyloMarkers_Search',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -703,16 +843,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'HMMER_EnvBioelement_Search',
+                method_name => 'HMMER_PhyloMarkers_Search',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method HMMER_EnvBioelement_Search",
+            error => "Error invoking method HMMER_PhyloMarkers_Search",
             status_line => $self->{client}->status_line,
-            method_name => 'HMMER_EnvBioelement_Search',
+            method_name => 'HMMER_PhyloMarkers_Search',
         );
     }
 }
@@ -1182,6 +1322,77 @@ input_EnvBioelement_Se_ids has a value which is a kb_hmmer.data_obj_ref
 input_EnvBioelement_Metal_ids has a value which is a kb_hmmer.data_obj_ref
 input_EnvBioelement_As_ids has a value which is a kb_hmmer.data_obj_ref
 input_EnvBioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
+input_many_refs has a value which is a kb_hmmer.data_obj_ref
+output_filtered_name has a value which is a kb_hmmer.data_obj_name
+genome_disp_name_config has a value which is a string
+coalesce_output has a value which is a kb_hmmer.bool
+save_ALL_featureSets has a value which is a kb_hmmer.bool
+e_value has a value which is a float
+bitscore has a value which is a float
+model_cov_perc has a value which is a float
+maxaccepts has a value which is a float
+heatmap has a value which is a kb_hmmer.bool
+low_val has a value which is a kb_hmmer.bool
+vertical has a value which is a kb_hmmer.bool
+show_blanks has a value which is a kb_hmmer.bool
+
+
+=end text
+
+=back
+
+
+
+=head2 HMMER_PhyloMarkers_Params
+
+=over 4
+
+
+
+=item Description
+
+HMMER PhyloMarkers Input Params
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a kb_hmmer.workspace_name
+input_PhyloMarkers_Univ_ids has a value which is a kb_hmmer.data_obj_ref
+input_PhyloMarkers_B_ribo_pol_ids has a value which is a kb_hmmer.data_obj_ref
+input_PhyloMarkers_B_other_ids has a value which is a kb_hmmer.data_obj_ref
+input_PhyloMarkers_A_ribo_pol_ids has a value which is a kb_hmmer.data_obj_ref
+input_PhyloMarkers_A_other_ids has a value which is a kb_hmmer.data_obj_ref
+input_many_refs has a value which is a kb_hmmer.data_obj_ref
+output_filtered_name has a value which is a kb_hmmer.data_obj_name
+genome_disp_name_config has a value which is a string
+coalesce_output has a value which is a kb_hmmer.bool
+save_ALL_featureSets has a value which is a kb_hmmer.bool
+e_value has a value which is a float
+bitscore has a value which is a float
+model_cov_perc has a value which is a float
+maxaccepts has a value which is a float
+heatmap has a value which is a kb_hmmer.bool
+low_val has a value which is a kb_hmmer.bool
+vertical has a value which is a kb_hmmer.bool
+show_blanks has a value which is a kb_hmmer.bool
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a kb_hmmer.workspace_name
+input_PhyloMarkers_Univ_ids has a value which is a kb_hmmer.data_obj_ref
+input_PhyloMarkers_B_ribo_pol_ids has a value which is a kb_hmmer.data_obj_ref
+input_PhyloMarkers_B_other_ids has a value which is a kb_hmmer.data_obj_ref
+input_PhyloMarkers_A_ribo_pol_ids has a value which is a kb_hmmer.data_obj_ref
+input_PhyloMarkers_A_other_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_refs has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string

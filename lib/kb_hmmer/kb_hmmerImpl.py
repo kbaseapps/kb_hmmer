@@ -51,9 +51,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.6.0"
+    VERSION = "1.7.0"
     GIT_URL = "https://github.com/dcchivian/kb_hmmer"
-    GIT_COMMIT_HASH = "3b08a58d4aebf1e37cff3bef5afa8d0d56edbb95"
+    GIT_COMMIT_HASH = "8c9ec19d87ea05be42484b4f315f3140a27a819a"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -3679,6 +3679,58 @@ class kb_hmmer:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method HMMER_EnvBioelement_Search return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def HMMER_PhyloMarkers_Search(self, ctx, params):
+        """
+        Method for HMMER search of Markov Models of phylogenetic marker families
+        **
+        **    overloading as follows:
+        **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SeqquenceSet deactivated)
+        **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
+        :param params: instance of type "HMMER_PhyloMarkers_Params" (HMMER
+           PhyloMarkers Input Params) -> structure: parameter
+           "workspace_name" of type "workspace_name" (** The workspace object
+           refs are of form: ** **    objects = ws.get_objects([{'ref':
+           params['workspace_id']+'/'+params['obj_name']}]) ** ** "ref" means
+           the entire name combining the workspace id and the object name **
+           "id" is a numerical identifier of the workspace or object, and
+           should just be used for workspace ** "name" is a string identifier
+           of a workspace or object.  This is received from Narrative.),
+           parameter "input_PhyloMarkers_Univ_ids" of type "data_obj_ref",
+           parameter "input_PhyloMarkers_B_ribo_pol_ids" of type
+           "data_obj_ref", parameter "input_PhyloMarkers_B_other_ids" of type
+           "data_obj_ref", parameter "input_PhyloMarkers_A_ribo_pol_ids" of
+           type "data_obj_ref", parameter "input_PhyloMarkers_A_other_ids" of
+           type "data_obj_ref", parameter "input_many_refs" of type
+           "data_obj_ref", parameter "output_filtered_name" of type
+           "data_obj_name", parameter "genome_disp_name_config" of String,
+           parameter "coalesce_output" of type "bool", parameter
+           "save_ALL_featureSets" of type "bool", parameter "e_value" of
+           Double, parameter "bitscore" of Double, parameter "model_cov_perc"
+           of Double, parameter "maxaccepts" of Double, parameter "heatmap"
+           of type "bool", parameter "low_val" of type "bool", parameter
+           "vertical" of type "bool", parameter "show_blanks" of type "bool"
+        :returns: instance of type "HMMER_Output" (HMMER Output) ->
+           structure: parameter "report_name" of type "data_obj_name",
+           parameter "report_ref" of type "data_obj_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN HMMER_PhyloMarkers_Search
+        print('--->\nRunning kb_hmmer.HMMER_PhyloMarkers_Search\nparams:')
+        print(json.dumps(params, indent=1))
+
+        hu = HmmerUtil(self.config, ctx)
+        params['model_group'] = 'PhyloMarkers'
+        returnVal = hu.run_HMMER_Model_Group_Search(params)
+        #END HMMER_PhyloMarkers_Search
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method HMMER_PhyloMarkers_Search return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

@@ -189,4 +189,42 @@ module kb_hmmer {
     **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
     */
     funcdef HMMER_EnvBioelement_Search (HMMER_EnvBioelement_Params params)  returns (HMMER_Output) authentication required;
+
+
+    /* HMMER PhyloMarkers Input Params
+    */
+    typedef structure {
+        workspace_name workspace_name;
+
+	data_obj_ref   input_PhyloMarkers_Univ_ids;
+	data_obj_ref   input_PhyloMarkers_B_ribo_pol_ids;
+	data_obj_ref   input_PhyloMarkers_B_other_ids;
+	data_obj_ref   input_PhyloMarkers_A_ribo_pol_ids;
+	data_obj_ref   input_PhyloMarkers_A_other_ids;
+	
+	data_obj_ref   input_many_refs;
+        data_obj_name  output_filtered_name;
+        string         genome_disp_name_config;
+
+	bool  coalesce_output;
+	bool  save_ALL_featureSets;
+	float e_value;
+	float bitscore;
+	float model_cov_perc;
+	float maxaccepts;
+
+	bool  heatmap;
+	bool  low_val;
+	bool  vertical;  /* only supports true for now */
+	bool  show_blanks;
+    } HMMER_PhyloMarkers_Params;
+
+
+    /*  Method for HMMER search of Markov Models of phylogenetic marker families
+    **
+    **    overloading as follows:
+    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SeqquenceSet deactivated)
+    **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
+    */
+    funcdef HMMER_PhyloMarkers_Search (HMMER_PhyloMarkers_Params params)  returns (HMMER_Output) authentication required;
 };
