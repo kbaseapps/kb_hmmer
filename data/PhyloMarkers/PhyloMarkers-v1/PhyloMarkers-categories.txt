@@ -1,0 +1,5 @@
+Univ	Bacteria + Archaea	bacteria + archaea
+B_ribo_pol	 Bacteria Ribosomal + Polymerases	bacteria ribo + pol
+B_other		 Bacteria Other	    bacteria other
+A_ribo_pol	 Archaea Ribosomal + Polymerases	archaea ribo + pol
+A_other		 Archaea Other	   archaea other

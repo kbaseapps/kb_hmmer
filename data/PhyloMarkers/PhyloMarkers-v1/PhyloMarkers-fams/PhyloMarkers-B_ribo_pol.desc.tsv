@@ -1,0 +1,32 @@
+rpsA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00717" target="_blank">TIGR00717</a> - ribosomal protein bS1
+rpsB_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01011" target="_blank">TIGR01011</a> - ribosomal protein uS2
+rpsC_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01009" target="_blank">TIGR01009</a> - ribosomal protein uS3
+rpsD_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01017" target="_blank">TIGR01017</a> - ribosomal protein uS4
+rpsE_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01021" target="_blank">TIGR01021</a> - ribosomal protein uS5
+S6	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00166" target="_blank">TIGR00166</a> - ribosomal protein bS6
+rpsG_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01029" target="_blank">TIGR01029</a> - ribosomal protein uS7
+Ribosomal_S9	<a href="https://pfam.xfam.org/family/PF00380" target="_blank">PF00380</a> - Ribosomal protein S9/S16
+uS11_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03632" target="_blank">TIGR03632</a> - ribosomal protein uS11
+S20	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00029" target="_blank">TIGR00029</a> - ribosomal protein bS20
+rplA_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01169" target="_blank">TIGR01169</a> - ribosomal protein uL1
+rplB_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01171" target="_blank">TIGR01171</a> - ribosomal protein uL2
+L3_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03625" target="_blank">TIGR03625</a> - 50S ribosomal protein uL3
+rplD_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03953" target="_blank">TIGR03953</a> - 50S ribosomal protein uL4
+L6_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03654" target="_blank">TIGR03654</a> - ribosomal protein uL6
+L9	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00158" target="_blank">TIGR00158</a> - ribosomal protein bL9
+L11_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01632" target="_blank">TIGR01632</a> - ribosomal protein uL11
+rplM_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01066" target="_blank">TIGR01066</a> - ribosomal protein uL13
+rplO_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01071" target="_blank">TIGR01071</a> - ribosomal protein uL15
+rplP_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01164" target="_blank">TIGR01164</a> - ribosomal protein uL16
+L17	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00059" target="_blank">TIGR00059</a> - ribosomal protein bL17
+rplT_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01032" target="_blank">TIGR01032</a> - ribosomal protein bL20
+L21	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00061" target="_blank">TIGR00061</a> - ribosomal protein bL21
+rplV_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01044" target="_blank">TIGR01044</a> - ribosomal protein uL22
+rplX_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01079" target="_blank">TIGR01079</a> - ribosomal protein uL24
+pola	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00593" target="_blank">TIGR00593</a> - DNA polymerase I
+dnan	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00663" target="_blank">TIGR00663</a> - DNA polymerase III, beta subunit
+dnaX_nterm	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02397" target="_blank">TIGR02397</a> - DNA polymerase III, subunit gamma and tau
+holA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01128" target="_blank">TIGR01128</a> - DNA polymerase III, delta subunit
+rpoA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02027" target="_blank">TIGR02027</a> - DNA-directed RNA polymerase, alpha subunit
+rpoB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02013" target="_blank">TIGR02013</a> - DNA-directed RNA polymerase, beta subunit
+RNA_pol_rpoC	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02386" target="_blank">TIGR02386</a> - DNA-directed RNA polymerase, beta' subunit

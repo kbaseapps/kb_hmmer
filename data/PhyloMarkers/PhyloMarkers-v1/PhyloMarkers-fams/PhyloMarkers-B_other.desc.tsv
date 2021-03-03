@@ -1,0 +1,79 @@
+alaS	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00344" target="_blank">TIGR00344</a> - alanine--tRNA ligase
+leuS_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00396" target="_blank">TIGR00396</a> - leucine--tRNA ligase
+serS	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00414" target="_blank">TIGR00414</a> - serine--tRNA ligase
+cysS	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00435" target="_blank">TIGR00435</a> - cysteine--tRNA ligase
+aspS_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00459" target="_blank">TIGR00459</a> - aspartate--tRNA ligase
+pheT_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00472" target="_blank">TIGR00472</a> - phenylalanine--tRNA ligase, beta subunit
+murC	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01082" target="_blank">TIGR01082</a> - UDP-N-acetylmuramate--L-alanine ligase
+murD	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01087" target="_blank">TIGR01087</a> - UDP-N-acetylmuramoylalanine--D-glutamate ligase
+trmD	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00088" target="_blank">TIGR00088</a> - tRNA (guanine(37)-N(1))-methyltransferase
+trmU	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00420" target="_blank">TIGR00420</a> - tRNA (5-methylaminomethyl-2-thiouridylate)-methyltransferase
+TruB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00431" target="_blank">TIGR00431</a> - tRNA pseudouridine(55) synthase
+fmt	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00460" target="_blank">TIGR00460</a> - methionyl-tRNA formyltransferase
+lysidine_TilS_N	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02432" target="_blank">TIGR02432</a> - tRNA(Ile)-lysidine synthetase
+T6A_TsaD_YgjD	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03723" target="_blank">TIGR03723</a> - tRNA threonylcarbamoyl adenosine modification protein TsaD
+T6A_YeaZ	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03725" target="_blank">TIGR03725</a> - tRNA threonylcarbamoyl adenosine modification protein YeaZ
+ftsZ	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00065" target="_blank">TIGR00065</a> - cell division protein FtsZ
+DnaA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00362" target="_blank">TIGR00362</a> - chromosomal replication initiator protein DnaA
+ruvA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00084" target="_blank">TIGR00084</a> - Holliday junction DNA helicase RuvA
+ruvB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00635" target="_blank">TIGR00635</a> - Holliday junction DNA helicase RuvB
+tigrfam_recA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02012" target="_blank">TIGR02012</a> - protein RecA
+recG	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00643" target="_blank">TIGR00643</a> - ATP-dependent DNA helicase RecG
+recN	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00634" target="_blank">TIGR00634</a> - DNA repair protein RecN
+recR	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00615" target="_blank">TIGR00615</a> - recombination protein RecR
+uvrb	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00631" target="_blank">TIGR00631</a> - excinuclease ABC subunit B
+uvrC	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00194" target="_blank">TIGR00194</a> - excinuclease ABC subunit C
+GrpE	<a href="https://pfam.xfam.org/family/PF01025" target="_blank">PF01025</a> - GrpE
+DUF150	<a href="https://pfam.xfam.org/family/PF02576" target="_blank">PF02576</a> - Uncharacterised BCR, YhbC family COG0779
+PNPase	<a href="https://pfam.xfam.org/family/PF03726" target="_blank">PF03726</a> - Polyribonucleotide nucleotidyltransferase, RNA binding domain
+prfA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00019" target="_blank">TIGR00019</a> - peptide chain release factor 1
+prfB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00020" target="_blank">TIGR00020</a> - peptide chain release factor 2
+ybeY	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00043" target="_blank">TIGR00043</a> - rRNA maturation RNase YbeY
+rseP	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00054" target="_blank">TIGR00054</a> - RIP metalloprotease RseP
+rbfA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00082" target="_blank">TIGR00082</a> - ribosome-binding factor A
+ribF	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00083" target="_blank">TIGR00083</a> - riboflavin biosynthesis protein RibF
+smpB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00086" target="_blank">TIGR00086</a> - SsrA-binding protein
+rsfS_iojap_ybeB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00090" target="_blank">TIGR00090</a> - ribosome silencing factor
+ychF	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00092" target="_blank">TIGR00092</a> - GTP-binding protein YchF
+tig	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00115" target="_blank">TIGR00115</a> - trigger factor
+tsf	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00116" target="_blank">TIGR00116</a> - translation elongation factor Ts
+rsmD	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00095" target="_blank">TIGR00095</a> - 16S rRNA (guanine(966)-N(2))-methyltransferase RsmD
+rsmG_gidB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00138" target="_blank">TIGR00138</a> - 16S rRNA (guanine(527)-N(7))-methyltransferase RsmG
+rsmH	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00006" target="_blank">TIGR00006</a> - 16S rRNA (cytosine(1402)-N(4))-methyltransferase
+IF-2	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00487" target="_blank">TIGR00487</a> - translation initiation factor IF-2
+infC	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00168" target="_blank">TIGR00168</a> - translation initiation factor IF-3
+rRNA_methyl_3	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00186" target="_blank">TIGR00186</a> - RNA methyltransferase, TrmH family, group 3
+RNAse_H_YqgF	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00250" target="_blank">TIGR00250</a> - putative transcription antitermination factor YqgF
+clpX	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00382" target="_blank">TIGR00382</a> - ATP-dependent Clp protease, ATP-binding subunit ClpX
+sms	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00416" target="_blank">TIGR00416</a> - DNA repair protein RadA
+era	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00436" target="_blank">TIGR00436</a> - GTP-binding protein Era
+mraY	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00445" target="_blank">TIGR00445</a> - phospho-N-acetylmuramoyl-pentapeptide-transferase
+frr	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00496" target="_blank">TIGR00496</a> - ribosome recycling factor
+hemN_rel	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00539" target="_blank">TIGR00539</a> - putative oxygen-independent coproporphyrinogen III oxidase
+mfd	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00580" target="_blank">TIGR00580</a> - transcription-repair coupling factor
+ksgA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00755" target="_blank">TIGR00755</a> - ribosomal RNA small subunit methyltransferase A
+nusG	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00922" target="_blank">TIGR00922</a> - transcription termination/antitermination factor NusG
+purB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00928" target="_blank">TIGR00928</a> - adenylosuccinate lyase
+ffh	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00959" target="_blank">TIGR00959</a> - signal recognition particle protein
+secA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00963" target="_blank">TIGR00963</a> - preprotein translocase, SecA subunit
+secE_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00964" target="_blank">TIGR00964</a> - preprotein translocase, SecE subunit
+secG	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00810" target="_blank">TIGR00810</a> - preprotein translocase, SecG subunit
+secY	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00967" target="_blank">TIGR00967</a> - preprotein translocase, SecY subunit
+gyrA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01063" target="_blank">TIGR01063</a> - DNA gyrase, A subunit
+gyrB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01059" target="_blank">TIGR01059</a> - DNA gyrase, B subunit
+atpD	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01039" target="_blank">TIGR01039</a> - ATP synthase F1, beta subunit
+ATPsyn_F1gamma	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01146" target="_blank">TIGR01146</a> - ATP synthase F1, gamma subunit
+IMP_dehydrog	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01302" target="_blank">TIGR01302</a> - inosine-5'-monophosphate dehydrogenase
+dnaG	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01391" target="_blank">TIGR01391</a> - DNA primase
+lepA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01393" target="_blank">TIGR01393</a> - elongation factor 4
+TypA_BipA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01394" target="_blank">TIGR01394</a> - GTP-binding protein TypA/BipA
+coaD_prev_kdtB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01510" target="_blank">TIGR01510</a> - pantetheine-phosphate adenylyltransferase
+NusA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01953" target="_blank">TIGR01953</a> - transcription termination factor NusA
+nusB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01951" target="_blank">TIGR01951</a> - transcription antitermination factor NusB
+pyrH_bact	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02075" target="_blank">TIGR02075</a> - UMP kinase
+RNaseIII	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02191" target="_blank">TIGR02191</a> - ribonuclease III
+16S_RimM	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02273" target="_blank">TIGR02273</a> - 16S rRNA processing protein RimM
+prok_dnaK	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02350" target="_blank">TIGR02350</a> - chaperone protein DnaK
+Obg_CgtA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02729" target="_blank">TIGR02729</a> - Obg family GTPase CgtA
+guanyl_kin	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03263" target="_blank">TIGR03263</a> - guanylate kinase
+GTPase_EngA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03594" target="_blank">TIGR03594</a> - ribosome-associated GTPase EngA

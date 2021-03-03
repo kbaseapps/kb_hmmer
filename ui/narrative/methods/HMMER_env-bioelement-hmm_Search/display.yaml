@@ -139,24 +139,18 @@ parameters :
             limits the number of hits in result.  Default: 1000
     heatmap :
         ui-name : |
-            View GenomeSet profile as
+            View profile as
         short-hint : |
-            Display as heatmap or numerical table (if input is GenomeSet)
-        long-hint  : |
             Display as heatmap or numerical table (if input is GenomeSet)
     low_val :
         ui-name : |
             Heatmap low value
         short-hint : |
             Use fixed value or lowest detected value as base of heatmap
-        long-hint  : |
-            Use fixed value or lowest detected value as base of heatmap
     show_blanks :
         ui-name : |
-            Show GenomeSet profile empty categories
+            Show empty categories
         short-hint : |
-            Show categories or families that have no counts
-        long-hint  : |
             Show categories or families that have no counts
 
 description : |
@@ -164,7 +158,7 @@ description : |
     <p><hr></p>
     <p><i>Implemented for KBase by <a href="https://github.com/dcchivian">Dylan Chivian</a> (<a href="mailto:DCChivian@lbl.gov">DCChivian@lbl.gov</a>)</i></p>
     <p><hr></p>
-    <p><i>HMMER Search & Functional Profile with Custom Models</i> performs multiple HMMER searches.  It reads the objects in the Narrative to find the Multiple Sequence Alignments (MSAs) and uses those MSAs to create a set of Hidden Markov Models (HMMs) which are used in turn to search a protein sequence database.  The MSAs must first be generated using a tool such as MUSCLE that builds an MSA from a FeatureSet object.  The KBase implementation permits searching through the genes in a Genome object, the genes in the Genome members of a GenomeSet, or the genes in a FeatureSet.  The output object of these searches is a FeatureSet containing those genes that pass the thresholds given by the user.  The App also provides a table of the hits (with those hits that are below the thresholds in gray) and links to download the table of hits and a Stockholm format MSA.  A separate table for each MSA/HMM is provided, whereas the user may select whether to combine the hits into a single FeatureSet or produce a separate FeatureSet object for each MSA/HMM.</p>
+    <p><i>HMMER Search & Functional Profile with Custom Models</i> performs multiple HMMER searches.  It reads the objects in the Narrative to find the Multiple Sequence Alignments (MSAs) and uses those MSAs to create a set of Hidden Markov Models (HMMs) which are used in turn to search a protein sequence database.  The MSAs must first be generated using a tool such as MUSCLE that builds an MSA from a FeatureSet object.  The KBase implementation permits searching through the genes in a Genome object, the genes in the Genome members of a GenomeSet, or the genes in a FeatureSet.  The output object of these searches is a FeatureSet containing those genes that pass the thresholds given by the user.  The App also provides a table of the hits (with those hits that are below the thresholds in gray) and links to download the table of hits.  A separate table for each MSA/HMM is provided, whereas the user may select whether to combine the hits into a single FeatureSet or produce a separate FeatureSet object for each MSA/HMM.</p>
     <p><hr></p>
     <p><b>Configuration:</b></p>
     <p><b><i>Targets Object:</i></b> The Targets Object may be a FeatureSet of genes, a Genome, or a GenomeSet.  A HMMER search database will be automatically generated from the Targets Object.</p>

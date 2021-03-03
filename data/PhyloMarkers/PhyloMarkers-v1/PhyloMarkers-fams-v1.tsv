@@ -1,0 +1,234 @@
+#ID	ID_DISP	CAT_ID	CAT_DISP	SUBCAT(s)	SUBCATS(s)_COL_DISP
+Ribosomal_S8	Ribosomal_S8	Univ	Bacteria + Archaea
+Ribosomal_L10	Ribosomal_L10	Univ	Bacteria + Archaea
+ftsY	ftsY	Univ	Bacteria + Archaea
+PyrG	PyrG	Univ	Bacteria + Archaea
+ileS	ileS	Univ	Bacteria + Archaea
+metG	metG	Univ	Bacteria + Archaea
+hisS	hisS	Univ	Bacteria + Archaea
+argS	argS	Univ	Bacteria + Archaea
+pheS	pheS	Univ	Bacteria + Archaea
+rpsA	rpsA	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rpsB_bact	rpsB_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rpsC_bact	rpsC_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rpsD_bact	rpsD_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rpsE_bact	rpsE_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+S6	S6	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rpsG_bact	rpsG_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+Ribosomal_S9	Ribosomal_S9	B_ribo_pol	Bacteria Ribosomal + Polymerases
+uS11_bact	uS11_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+S20	S20	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rplA_bact	rplA_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rplB_bact	rplB_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+L3_bact	L3_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rplD_bact	rplD_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+L6_bact	L6_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+L9	L9	B_ribo_pol	Bacteria Ribosomal + Polymerases
+L11_bact	L11_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rplM_bact	rplM_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rplO_bact	rplO_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rplP_bact	rplP_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+L17	L17	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rplT_bact	rplT_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+L21	L21	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rplV_bact	rplV_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rplX_bact	rplX_bact	B_ribo_pol	Bacteria Ribosomal + Polymerases
+pola	pola	B_ribo_pol	Bacteria Ribosomal + Polymerases
+dnan	dnan	B_ribo_pol	Bacteria Ribosomal + Polymerases
+dnaX_nterm	dnaX_nterm	B_ribo_pol	Bacteria Ribosomal + Polymerases
+holA	holA	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rpoA	rpoA	B_ribo_pol	Bacteria Ribosomal + Polymerases
+rpoB	rpoB	B_ribo_pol	Bacteria Ribosomal + Polymerases
+RNA_pol_rpoC	RNA_pol_rpoC	B_ribo_pol	Bacteria Ribosomal + Polymerases
+alaS	alaS	B_other	Bacteria Other
+leuS_bact	leuS_bact	B_other	Bacteria Other
+serS	serS	B_other	Bacteria Other
+cysS	cysS	B_other	Bacteria Other
+aspS_bact	aspS_bact	B_other	Bacteria Other
+pheT_bact	pheT_bact	B_other	Bacteria Other
+murC	murC	B_other	Bacteria Other
+murD	murD	B_other	Bacteria Other
+trmD	trmD	B_other	Bacteria Other
+trmU	trmU	B_other	Bacteria Other
+TruB	TruB	B_other	Bacteria Other
+fmt	fmt	B_other	Bacteria Other
+lysidine_TilS_N	lysidine_TilS_N	B_other	Bacteria Other
+T6A_TsaD_YgjD	T6A_TsaD_YgjD	B_other	Bacteria Other
+T6A_YeaZ	T6A_YeaZ	B_other	Bacteria Other
+ftsZ	ftsZ	B_other	Bacteria Other
+DnaA	DnaA	B_other	Bacteria Other
+ruvA	ruvA	B_other	Bacteria Other
+ruvB	ruvB	B_other	Bacteria Other
+tigrfam_recA	tigrfam_recA	B_other	Bacteria Other
+recG	recG	B_other	Bacteria Other
+recN	recN	B_other	Bacteria Other
+recR	recR	B_other	Bacteria Other
+uvrb	uvrb	B_other	Bacteria Other
+uvrC	uvrC	B_other	Bacteria Other
+GrpE	GrpE	B_other	Bacteria Other
+DUF150	DUF150	B_other	Bacteria Other
+PNPase	PNPase	B_other	Bacteria Other
+prfA	prfA	B_other	Bacteria Other
+prfB	prfB	B_other	Bacteria Other
+ybeY	ybeY	B_other	Bacteria Other
+rseP	rseP	B_other	Bacteria Other
+rbfA	rbfA	B_other	Bacteria Other
+ribF	ribF	B_other	Bacteria Other
+smpB	smpB	B_other	Bacteria Other
+rsfS_iojap_ybeB	rsfS_iojap_ybeB	B_other	Bacteria Other
+ychF	ychF	B_other	Bacteria Other
+tig	tig	B_other	Bacteria Other
+tsf	tsf	B_other	Bacteria Other
+rsmD	rsmD	B_other	Bacteria Other
+rsmG_gidB	rsmG_gidB	B_other	Bacteria Other
+rsmH	rsmH	B_other	Bacteria Other
+IF-2	IF-2	B_other	Bacteria Other
+infC	infC	B_other	Bacteria Other
+rRNA_methyl_3	rRNA_methyl_3	B_other	Bacteria Other
+RNAse_H_YqgF	RNAse_H_YqgF	B_other	Bacteria Other
+clpX	clpX	B_other	Bacteria Other
+sms	sms	B_other	Bacteria Other
+era	era	B_other	Bacteria Other
+mraY	mraY	B_other	Bacteria Other
+frr	frr	B_other	Bacteria Other
+hemN_rel	hemN_rel	B_other	Bacteria Other
+mfd	mfd	B_other	Bacteria Other
+ksgA	ksgA	B_other	Bacteria Other
+nusG	nusG	B_other	Bacteria Other
+purB	purB	B_other	Bacteria Other
+ffh	ffh	B_other	Bacteria Other
+secA	secA	B_other	Bacteria Other
+secE_bact	secE_bact	B_other	Bacteria Other
+secG	secG	B_other	Bacteria Other
+secY	secY	B_other	Bacteria Other
+gyrA	gyrA	B_other	Bacteria Other
+gyrB	gyrB	B_other	Bacteria Other
+atpD	atpD	B_other	Bacteria Other
+ATPsyn_F1gamma	ATPsyn_F1gamma	B_other	Bacteria Other
+IMP_dehydrog	IMP_dehydrog	B_other	Bacteria Other
+dnaG	dnaG	B_other	Bacteria Other
+lepA	lepA	B_other	Bacteria Other
+TypA_BipA	TypA_BipA	B_other	Bacteria Other
+coaD_prev_kdtB	coaD_prev_kdtB	B_other	Bacteria Other
+NusA	NusA	B_other	Bacteria Other
+nusB	nusB	B_other	Bacteria Other
+pyrH_bact	pyrH_bact	B_other	Bacteria Other
+RNaseIII	RNaseIII	B_other	Bacteria Other
+16S_RimM	16S_RimM	B_other	Bacteria Other
+prok_dnaK	prok_dnaK	B_other	Bacteria Other
+Obg_CgtA	Obg_CgtA	B_other	Bacteria Other
+guanyl_kin	guanyl_kin	B_other	Bacteria Other
+GTPase_EngA	GTPase_EngA	B_other	Bacteria Other
+uS2_euk_arch	uS2_euk_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+uS3_euk_arch	uS3_euk_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+Ribosomal_S3Ae	Ribosomal_S3Ae	A_ribo_pol	Archaea Ribosomal + Polymerases
+uS4_arch	uS4_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+Ribosomal_S4e	Ribosomal_S4e	A_ribo_pol	Archaea Ribosomal + Polymerases
+uS5_euk_arch	uS5_euk_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+Ribosomal_S6e	Ribosomal_S6e	A_ribo_pol	Archaea Ribosomal + Polymerases
+uS7_euk_arch	uS7_euk_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+eS8	eS8	A_ribo_pol	Archaea Ribosomal + Polymerases
+uS9_arch	uS9_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+uS10_euk_arch	uS10_euk_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+arch_S11P	arch_S11P	A_ribo_pol	Archaea Ribosomal + Polymerases
+uS12_E_A	uS12_E_A	A_ribo_pol	Archaea Ribosomal + Polymerases
+uS13_arch	uS13_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+uS19_arch	uS19_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+Ribosomal_S19e	Ribosomal_S19e	A_ribo_pol	Archaea Ribosomal + Polymerases
+Ribosomal_S24e	Ribosomal_S24e	A_ribo_pol	Archaea Ribosomal + Polymerases
+Ribosomal_S28e	Ribosomal_S28e	A_ribo_pol	Archaea Ribosomal + Polymerases
+L3_arch	L3_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+rpl4p_arch	rpl4p_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+uL6_arch	uL6_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+eL8_ribo	eL8_ribo	A_ribo_pol	Archaea Ribosomal + Polymerases
+Ribosomal_L1	Ribosomal_L1	A_ribo_pol	Archaea Ribosomal + Polymerases
+L13_A_E	L13_A_E	A_ribo_pol	Archaea Ribosomal + Polymerases
+uL14_arch	uL14_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+Ribosomal_L15e	Ribosomal_L15e	A_ribo_pol	Archaea Ribosomal + Polymerases
+uL16_euk_arch	uL16_euk_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+Ribosomal_L19e	Ribosomal_L19e	A_ribo_pol	Archaea Ribosomal + Polymerases
+Ribosomal_L21e	Ribosomal_L21e	A_ribo_pol	Archaea Ribosomal + Polymerases
+uL22_arch_euk	uL22_arch_euk	A_ribo_pol	Archaea Ribosomal + Polymerases
+uL23_arch	uL23_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+rplX_A_E	rplX_A_E	A_ribo_pol	Archaea Ribosomal + Polymerases
+uL30_arch	uL30_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+Ribosomal_L31e	Ribosomal_L31e	A_ribo_pol	Archaea Ribosomal + Polymerases
+Ribosomal_L32e	Ribosomal_L32e	A_ribo_pol	Archaea Ribosomal + Polymerases
+RNA_pol_rpoA1	RNA_pol_rpoA1	A_ribo_pol	Archaea Ribosomal + Polymerases
+RNA_pol_rpoA2	RNA_pol_rpoA2	A_ribo_pol	Archaea Ribosomal + Polymerases
+rpoB_arch	rpoB_arch	A_ribo_pol	Archaea Ribosomal + Polymerases
+rpoE	rpoE	A_ribo_pol	Archaea Ribosomal + Polymerases
+RNA_pol_A_bac	RNA_pol_A_bac	A_ribo_pol	Archaea Ribosomal + Polymerases
+RNA_pol_N	RNA_pol_N	A_ribo_pol	Archaea Ribosomal + Polymerases
+RNA_pol_L_2	RNA_pol_L_2	A_ribo_pol	Archaea Ribosomal + Polymerases
+RNA_pol_Rpb4	RNA_pol_Rpb4	A_ribo_pol	Archaea Ribosomal + Polymerases
+RNA_pol_Rpb5_C	RNA_pol_Rpb5_C	A_ribo_pol	Archaea Ribosomal + Polymerases
+A-tRNA_syn_arch	A-tRNA_syn_arch	A_other	Archaea Other
+glyS_dimeric	glyS_dimeric	A_other	Archaea Other
+proS_fam_I	proS_fam_I	A_other	Archaea Other
+valS	valS	A_other	Archaea Other
+aspS_nondisc	aspS_nondisc	A_other	Archaea Other
+gltX_arch	gltX_arch	A_other	Archaea Other
+pheT_arch	pheT_arch	A_other	Archaea Other
+gatE_arch	gatE_arch	A_other	Archaea Other
+arch_pth2	arch_pth2	A_other	Archaea Other
+TRM1	TRM1	A_other	Archaea Other
+endA	endA	A_other	Archaea Other
+arcsn_tRNA_tgt	arcsn_tRNA_tgt	A_other	Archaea Other
+pseudo_Pus10arc	pseudo_Pus10arc	A_other	Archaea Other
+gatD_arch	gatD_arch	A_other	Archaea Other
+HMG-CoA_red	HMG-CoA_red	A_other	Archaea Other
+Fibrillarin	Fibrillarin	A_other	Archaea Other
+V_ATPase_I	V_ATPase_I	A_other	Archaea Other
+Nop	Nop	A_other	Archaea Other
+CarS-like	CarS-like	A_other	Archaea Other
+Diphthamide_syn	Diphthamide_syn	A_other	Archaea Other
+UPF0086	UPF0086	A_other	Archaea Other
+dsDNA_bind	dsDNA_bind	A_other	Archaea Other
+ATP-synt_F	ATP-synt_F	A_other	Archaea Other
+PPS_PS	PPS_PS	A_other	Archaea Other
+SRP_SPB	SRP_SPB	A_other	Archaea Other
+DUF359	DUF359	A_other	Archaea Other
+primase_sml	primase_sml	A_other	Archaea Other
+DNA_primase_lrg	DNA_primase_lrg	A_other	Archaea Other
+DUF655	DUF655	A_other	Archaea Other
+Fe-ADH_2	Fe-ADH_2	A_other	Archaea Other
+rpiA	rpiA	A_other	Archaea Other
+rdgB	rdgB	A_other	Archaea Other
+pelota	pelota	A_other	Archaea Other
+ATCase_reg	ATCase_reg	A_other	Archaea Other
+alpha-NAC_hom	alpha-NAC_hom	A_other	Archaea Other
+MBF1	MBF1	A_other	Archaea Other
+RNA_SBDS	RNA_SBDS	A_other	Archaea Other
+pyrE	pyrE	A_other	Archaea Other
+CBF5	CBF5	A_other	Archaea Other
+TFE_alpha	TFE_alpha	A_other	Archaea Other
+KOW_elon_Spt5	KOW_elon_Spt5	A_other	Archaea Other
+aIF-2	aIF-2	A_other	Archaea Other
+EIF_2_alpha	EIF_2_alpha	A_other	Archaea Other
+eif2g_arch	eif2g_arch	A_other	Archaea Other
+eIF-6	eIF-6	A_other	Archaea Other
+aEF-2	aEF-2	A_other	Archaea Other
+eIF_5A	eIF_5A	A_other	Archaea Other
+met_pdase_II	met_pdase_II	A_other	Archaea Other
+coaBC_dfp	coaBC_dfp	A_other	Archaea Other
+dph5	dph5	A_other	Archaea Other
+mevalon_kin	mevalon_kin	A_other	Archaea Other
+orni_carb_tr	orni_carb_tr	A_other	Archaea Other
+asp_carb_tr	asp_carb_tr	A_other	Archaea Other
+RNase_HII	RNase_HII	A_other	Archaea Other
+ahcY	ahcY	A_other	Archaea Other
+top6b	top6b	A_other	Archaea Other
+eno	eno	A_other	Archaea Other
+nusA_arch	nusA_arch	A_other	Archaea Other
+pyrH_arch	pyrH_arch	A_other	Archaea Other
+recomb_radA	recomb_radA	A_other	Archaea Other
+2_5_ligase	2_5_ligase	A_other	Archaea Other
+prefoldin_alpha	prefoldin_alpha	A_other	Archaea Other
+gimC_beta	gimC_beta	A_other	Archaea Other
+RNase_Z	RNase_Z	A_other	Archaea Other
+cca_archaeal	cca_archaeal	A_other	Archaea Other
+fen_arch	fen_arch	A_other	Archaea Other
+arCOG00985	arCOG00985	A_other	Archaea Other
+arCOG04150	arCOG04150	A_other	Archaea Other
+arch_KAE1	arch_KAE1	A_other	Archaea Other

@@ -1,0 +1,69 @@
+A-tRNA_syn_arch	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03683" target="_blank">TIGR03683</a> - alanine--tRNA ligase
+glyS_dimeric	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00389" target="_blank">TIGR00389</a> - glycine--tRNA ligase
+proS_fam_I	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00408" target="_blank">TIGR00408</a> - proline--tRNA ligase
+valS	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00422" target="_blank">TIGR00422</a> - valine--tRNA ligase
+aspS_nondisc	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00458" target="_blank">TIGR00458</a> - aspartate--tRNA(Asn) ligase
+gltX_arch	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00463" target="_blank">TIGR00463</a> - glutamate--tRNA ligase
+pheT_arch	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00471" target="_blank">TIGR00471</a> - phenylalanine--tRNA ligase, beta subunit
+gatE_arch	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00134" target="_blank">TIGR00134</a> - glutamyl-tRNA(Gln) amidotransferase, subunit E
+arch_pth2	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00283" target="_blank">TIGR00283</a> - peptidyl-tRNA hydrolase
+TRM1	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00308" target="_blank">TIGR00308</a> - N2,N2-dimethylguanosine tRNA methyltransferase
+endA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00324" target="_blank">TIGR00324</a> - tRNA-intron lyase
+arcsn_tRNA_tgt	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00432" target="_blank">TIGR00432</a> - tRNA-guanine(15) transglycosylase
+pseudo_Pus10arc	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01213" target="_blank">TIGR01213</a> - tRNA pseudouridine(54/55) synthase
+gatD_arch	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02153" target="_blank">TIGR02153</a> - glutamyl-tRNA(Gln) amidotransferase, subunit D
+HMG-CoA_red	<a href="https://pfam.xfam.org/family/PF00368" target="_blank">PF00368</a> - Hydroxymethylglutaryl-coenzyme A reductase
+Fibrillarin	<a href="https://pfam.xfam.org/family/PF01269" target="_blank">PF01269</a> - Fibrillarin
+V_ATPase_I	<a href="https://pfam.xfam.org/family/PF01496" target="_blank">PF01496</a> - V-type ATPase 116kDa subunit family
+Nop	<a href="https://pfam.xfam.org/family/PF01798" target="_blank">PF01798</a> - Putative snoRNA binding domain
+CarS-like	<a href="https://pfam.xfam.org/family/PF01864" target="_blank">PF01864</a> - Putative integral membrane protein DUF46
+Diphthamide_syn	<a href="https://pfam.xfam.org/family/PF01866" target="_blank">PF01866</a> - Putative diphthamide synthesis protein
+UPF0086	<a href="https://pfam.xfam.org/family/PF01868" target="_blank">PF01868</a> - Domain of unknown function UPF0086
+dsDNA_bind	<a href="https://pfam.xfam.org/family/PF01984" target="_blank">PF01984</a> - Double-stranded DNA-binding domain
+ATP-synt_F	<a href="https://pfam.xfam.org/family/PF01990" target="_blank">PF01990</a> - ATP synthase (F/14-kDa) subunit
+PPS_PS	<a href="https://pfam.xfam.org/family/PF02006" target="_blank">PF02006</a> - Protein of unknown function DUF137
+SRP_SPB	<a href="https://pfam.xfam.org/family/PF02978" target="_blank">PF02978</a> - Signal peptide binding domain
+DUF359	<a href="https://pfam.xfam.org/family/PF04019" target="_blank">PF04019</a> - Protein of unknown function (DUF359)
+primase_sml	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00335" target="_blank">TIGR00335</a> - putative DNA primase, eukaryotic-type, small subunit
+DNA_primase_lrg	<a href="https://pfam.xfam.org/family/PF04104" target="_blank">PF04104</a> - Eukaryotic and archaeal DNA primase, large subunit
+DUF655	<a href="https://pfam.xfam.org/family/PF04919" target="_blank">PF04919</a> - Protein of unknown function (DUF655)
+Fe-ADH_2	<a href="https://pfam.xfam.org/family/PF13685" target="_blank">PF13685</a> - Iron-containing alcohol dehydrogenase
+rpiA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00021" target="_blank">TIGR00021</a> - ribose 5-phosphate isomerase A
+rdgB	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00042" target="_blank">TIGR00042</a> - non-canonical purine NTP pyrophosphatase, RdgB/HAM1 family
+pelota	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00111" target="_blank">TIGR00111</a> - mRNA surveillance protein pelota
+ATCase_reg	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00240" target="_blank">TIGR00240</a> - aspartate carbamoyltransferase, regulatory subunit
+alpha-NAC_hom	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00264" target="_blank">TIGR00264</a> - alpha-NAC homolog
+MBF1	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00270" target="_blank">TIGR00270</a> - TIGR00270 family protein
+RNA_SBDS	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00291" target="_blank">TIGR00291</a> - rRNA metabolism protein, SBDS family
+pyrE	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00336" target="_blank">TIGR00336</a> - orotate phosphoribosyltransferase
+CBF5	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00425" target="_blank">TIGR00425</a> - putative rRNA pseudouridine synthase
+TFE_alpha	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00373" target="_blank">TIGR00373</a> - transcription factor E
+KOW_elon_Spt5	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00405" target="_blank">TIGR00405</a> - transcription elongation factor Spt5
+aIF-2	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00491" target="_blank">TIGR00491</a> - translation initiation factor aIF-2
+EIF_2_alpha	<a href="https://pfam.xfam.org/family/PF07541" target="_blank">PF07541</a> - Eukaryotic translation initiation factor 2 alpha subunit
+eif2g_arch	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03680" target="_blank">TIGR03680</a> - translation initiation factor 2, gamma subunit
+eIF-6	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00323" target="_blank">TIGR00323</a> - putative translation initiation factor eIF-6
+aEF-2	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00490" target="_blank">TIGR00490</a> - translation elongation factor aEF-2
+eIF_5A	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00037" target="_blank">TIGR00037</a> - translation elongation factor IF5A
+met_pdase_II	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00501" target="_blank">TIGR00501</a> - methionine aminopeptidase, type II
+coaBC_dfp	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00521" target="_blank">TIGR00521</a> - phosphopantothenoylcysteine decarboxylase / phosphopantothenate--cysteine ligase
+dph5	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00522" target="_blank">TIGR00522</a> - diphthine synthase
+mevalon_kin	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00549" target="_blank">TIGR00549</a> - mevalonate kinase
+orni_carb_tr	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00658" target="_blank">TIGR00658</a> - ornithine carbamoyltransferase
+asp_carb_tr	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00670" target="_blank">TIGR00670</a> - aspartate carbamoyltransferase
+RNase_HII	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00729" target="_blank">TIGR00729</a> - ribonuclease HII
+ahcY	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00936" target="_blank">TIGR00936</a> - adenosylhomocysteinase
+top6b	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01052" target="_blank">TIGR01052</a> - DNA topoisomerase VI, B subunit
+eno	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01060" target="_blank">TIGR01060</a> - phosphopyruvate hydratase
+nusA_arch	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01952" target="_blank">TIGR01952</a> - NusA family KH domain protein, archaeal
+pyrH_arch	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02076" target="_blank">TIGR02076</a> - putative uridylate kinase
+recomb_radA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02236" target="_blank">TIGR02236</a> - DNA repair and recombination protein RadA
+2_5_ligase	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02258" target="_blank">TIGR02258</a> - 2'-5' RNA ligase
+prefoldin_alpha	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR00293" target="_blank">TIGR00293</a> - prefoldin, alpha subunit
+gimC_beta	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02338" target="_blank">TIGR02338</a> - prefoldin, beta subunit
+RNase_Z	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02651" target="_blank">TIGR02651</a> - ribonuclease Z
+cca_archaeal	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03671" target="_blank">TIGR03671</a> - CCA-adding enzyme
+fen_arch	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03674" target="_blank">TIGR03674</a> - flap structure-specific endonuclease
+arCOG00985	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03684" target="_blank">TIGR03684</a> - arCOG04150 universal archaeal PUA-domain protein
+arCOG04150	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03665" target="_blank">TIGR03665</a> - arCOG04150 universal archaeal KH domain protein
+arch_KAE1	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR03722" target="_blank">TIGR03722</a> - universal archaeal protein Kae1

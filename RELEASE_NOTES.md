@@ -1,3 +1,7 @@
+### Version 1.7.0
+__Changes__
+- added phylogenetic marker library App
+
 ### Version 1.6.0
 __Changes__
 - updated HMMER to v3.3.2

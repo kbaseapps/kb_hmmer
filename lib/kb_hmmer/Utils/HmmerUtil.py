@@ -1974,6 +1974,12 @@ class HmmerUtil:
 
 
                 # rest of rows
+                num_cols = 0;
+                for cat in cats:
+                    if not cat_seen.get(cat) and not show_blanks:
+                        continue
+                    num_cols += 1
+
                 for input_many_ref in input_many_refs:
                     many_type_name = many_type_names[input_many_ref]
 
@@ -1982,6 +1988,7 @@ class HmmerUtil:
                         html_report_lines += ['<tr>']
                         html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +
                                           graph_gen_fontsize + '><b><nobr>' + input_obj_disp_name + sp + '</nobr></b></font></div></td>']
+                        html_report_lines += ['<td colspan='+str(num_cols)+' bgcolor="#dddddd"></td>']
                         html_report_lines += ['</tr>']
                     
                     for genome_ref in genome_refs[input_many_ref]:
