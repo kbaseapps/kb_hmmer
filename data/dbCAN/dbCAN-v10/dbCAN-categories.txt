@@ -1,6 +1,6 @@
 cellulosome	Cellulosome	Cellulosome-specific components
 GH	Glycoside Hydrolases	hydrolysis and/or rearrangement of glycosidic bonds
-GT	Glycosyl Transferases	formation of glycosidic bonds
+GT	GlycosylTransferases	formation of glycosidic bonds
 CBM	Carbohydrate-Binding Modules	carbohydrate-binding activity
 CE	Carbohydrate Esterases	hydrolysis of carbohydrate esters
 PL	Polysaccharide Lyases	non-hydrolytic cleavage of glycosidic bonds
