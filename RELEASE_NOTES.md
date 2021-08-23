@@ -1,3 +1,11 @@
+### Version 1.8.0
+__Changes__
+- updated dbCAN to v10
+
+### Version 1.7.1
+__Changes__
+- tidying
+
 ### Version 1.7.0
 __Changes__
 - added phylogenetic marker library App
