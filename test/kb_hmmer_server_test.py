@@ -147,7 +147,7 @@ class kb_hmmerTest(unittest.TestCase):
         cls.genomeSet_refs.append(str(obj_info[WSID_I]) +'/'+ str(obj_info[OBJID_I]) +'/'+ str(obj_info[VERSION_I]))
 
 
-        # Upload a test Annotated Metagenome Assembly
+        # Upload some test Annotated Metagenome Assemblies
         cls.ama_refs = []
         ama_name = "ama_test.AMA"
         ama_feature_cnt = 888
@@ -161,7 +161,6 @@ class kb_hmmerTest(unittest.TestCase):
         shutil.copy (ama_genes_file_src, ama_genes_file_upload)
         ama_upload_params = {
             "workspace_name": cls.wsName,
-            "genome_name": ama_name,
             "fasta_file": {"path": ama_contigs_file_upload},
             "gff_file": {"path": ama_genes_file_upload},
             "source": "GFF",
@@ -174,14 +173,18 @@ class kb_hmmerTest(unittest.TestCase):
                                  token=cls.ctx['token'],
                                  service_ver=SERVICE_VER
                              )
-
-            print ("UPLOADING AMA: "+ama_name+" to WORKSPACE "+cls.wsName+" ...")
-            ama_upload_result = GFU.fasta_gff_to_metagenome (ama_upload_params)
         except:
-            raise ValueError("unable to upload test AMA data object")
-        pprint (ama_upload_result)
-        ama_ref_1 = ama_upload_result['metagenome_ref']
-        cls.ama_refs.append(ama_ref_1)
+            raise ValueError("unable to instantiate GFU client")
+        for i in range(2):
+            ama_upload_params['genome_name'] = ama_name+'-'+str(i)
+            print ("UPLOADING AMA: "+ama_name+" to WORKSPACE "+cls.wsName+" ...")
+            try:
+                ama_upload_result = GFU.fasta_gff_to_metagenome (ama_upload_params)
+            except:
+                raise ValueError("unable to upload test AMA data object")
+            pprint (ama_upload_result)
+            ama_ref = ama_upload_result['metagenome_ref']
+            cls.ama_refs.append(ama_ref)
         
 
         # Upload MSAs
@@ -809,7 +812,9 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 0,
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'overlap_fraction': "50.0",
@@ -866,7 +871,9 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 0,
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
                        #'e_value': ".001",
                        'e_value': ".1",
                        #'bitscore': "50",
@@ -926,7 +933,9 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,  # KEY
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 0,
+                       'save_ANY_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'overlap_fraction': "50.0",
@@ -983,7 +992,9 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 1,  # KEY
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'overlap_fraction': "50.0",
@@ -1047,7 +1058,9 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'model_cov_perc': "35.0",
@@ -1111,7 +1124,9 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'model_cov_perc': "35.0",
@@ -1175,7 +1190,9 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,  # KEY
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'model_cov_perc': "35.0",
@@ -1239,7 +1256,9 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,  # KEY
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'model_cov_perc': "35.0",
@@ -1303,7 +1322,9 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 1,  # KEY
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'model_cov_perc': "35.0",
@@ -1358,7 +1379,9 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'model_cov_perc': "35.0",
@@ -1413,7 +1436,9 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'model_cov_perc': "35.0",
@@ -1468,7 +1493,9 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,  # KEY
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'model_cov_perc': "35.0",
@@ -1523,7 +1550,66 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_sci_name',
                        'coalesce_output': 0,  # KEY
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'model_cov_perc': "35.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'low_val': "1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_PhyloMarkers_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created objs
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 17_03: PhyloMarkers Models against AMA+AMA, DON'T coalesce output
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_17_03_kb_hmmer_HMMER_PhyloMarkers_Search_AMA_AMA_NOcoalesce()")
+    def test_17_03_kb_hmmer_HMMER_PhyloMarkers_Search_AMA_AMA_NOcoalesce(self):
+        test_name = 'test_17_03_kb_hmmer_HMMER_PhyloMarkers_Search_AMA_AMA_NOcoalesce'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_PhyloMarkers_Univ_ids': ['ALL'],
+                       'input_PhyloMarkers_B_ribo_pol_ids': ['ALL'],
+                       'input_PhyloMarkers_B_other_ids': ['ALL'],
+                       'input_PhyloMarkers_A_ribo_pol_ids': ['ALL'],
+                       'input_PhyloMarkers_A_other_ids': ['ALL'],
+                       'input_many_refs': [self.ama_refs[0], self.ama_refs[1]], # AMA+AMA
+                       'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
+                       'coalesce_output': 0,  # KEY
+                       'show_target_block_headers': 0,
+                       'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'model_cov_perc': "35.0",
@@ -1578,7 +1664,9 @@ class kb_hmmerTest(unittest.TestCase):
                        'output_filtered_name': obj_out_name,
                        'genome_disp_name_config': 'obj_name_ver_sci_name',
                        'coalesce_output': 1,  # KEY
+                       'show_target_block_headers': 1,
                        'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
                        'e_value': ".001",
                        'bitscore': "50",
                        'model_cov_perc': "35.0",

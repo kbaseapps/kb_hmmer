@@ -385,8 +385,10 @@ HMMER_dbCAN_Params is a reference to a hash where the following keys are defined
 	input_many_refs has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
+	show_target_block_headers has a value which is a kb_hmmer.bool
 	coalesce_output has a value which is a kb_hmmer.bool
 	save_ALL_featureSets has a value which is a kb_hmmer.bool
+	save_ANY_featureSets has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	model_cov_perc has a value which is a float
@@ -423,8 +425,10 @@ HMMER_dbCAN_Params is a reference to a hash where the following keys are defined
 	input_many_refs has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
+	show_target_block_headers has a value which is a kb_hmmer.bool
 	coalesce_output has a value which is a kb_hmmer.bool
 	save_ALL_featureSets has a value which is a kb_hmmer.bool
+	save_ANY_featureSets has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	model_cov_perc has a value which is a float
@@ -536,8 +540,10 @@ HMMER_EnvBioelement_Params is a reference to a hash where the following keys are
 	input_many_refs has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
+	show_target_block_headers has a value which is a kb_hmmer.bool
 	coalesce_output has a value which is a kb_hmmer.bool
 	save_ALL_featureSets has a value which is a kb_hmmer.bool
+	save_ANY_featureSets has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	model_cov_perc has a value which is a float
@@ -581,8 +587,10 @@ HMMER_EnvBioelement_Params is a reference to a hash where the following keys are
 	input_many_refs has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
+	show_target_block_headers has a value which is a kb_hmmer.bool
 	coalesce_output has a value which is a kb_hmmer.bool
 	save_ALL_featureSets has a value which is a kb_hmmer.bool
+	save_ANY_featureSets has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	model_cov_perc has a value which is a float
@@ -685,8 +693,10 @@ HMMER_PhyloMarkers_Params is a reference to a hash where the following keys are 
 	input_many_refs has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
+	show_target_block_headers has a value which is a kb_hmmer.bool
 	coalesce_output has a value which is a kb_hmmer.bool
 	save_ALL_featureSets has a value which is a kb_hmmer.bool
+	save_ANY_featureSets has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	model_cov_perc has a value which is a float
@@ -721,8 +731,10 @@ HMMER_PhyloMarkers_Params is a reference to a hash where the following keys are 
 	input_many_refs has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
+	show_target_block_headers has a value which is a kb_hmmer.bool
 	coalesce_output has a value which is a kb_hmmer.bool
 	save_ALL_featureSets has a value which is a kb_hmmer.bool
+	save_ANY_featureSets has a value which is a kb_hmmer.bool
 	e_value has a value which is a float
 	bitscore has a value which is a float
 	model_cov_perc has a value which is a float
@@ -1207,8 +1219,10 @@ input_dbCAN_cellulosome_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_refs has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
+show_target_block_headers has a value which is a kb_hmmer.bool
 coalesce_output has a value which is a kb_hmmer.bool
 save_ALL_featureSets has a value which is a kb_hmmer.bool
+save_ANY_featureSets has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
 model_cov_perc has a value which is a float
@@ -1236,8 +1250,10 @@ input_dbCAN_cellulosome_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_refs has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
+show_target_block_headers has a value which is a kb_hmmer.bool
 coalesce_output has a value which is a kb_hmmer.bool
 save_ALL_featureSets has a value which is a kb_hmmer.bool
+save_ANY_featureSets has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
 model_cov_perc has a value which is a float
@@ -1289,8 +1305,10 @@ input_EnvBioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_refs has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
+show_target_block_headers has a value which is a kb_hmmer.bool
 coalesce_output has a value which is a kb_hmmer.bool
 save_ALL_featureSets has a value which is a kb_hmmer.bool
+save_ANY_featureSets has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
 model_cov_perc has a value which is a float
@@ -1325,8 +1343,10 @@ input_EnvBioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_refs has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
+show_target_block_headers has a value which is a kb_hmmer.bool
 coalesce_output has a value which is a kb_hmmer.bool
 save_ALL_featureSets has a value which is a kb_hmmer.bool
+save_ANY_featureSets has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
 model_cov_perc has a value which is a float
@@ -1369,8 +1389,10 @@ input_PhyloMarkers_A_other_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_refs has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
+show_target_block_headers has a value which is a kb_hmmer.bool
 coalesce_output has a value which is a kb_hmmer.bool
 save_ALL_featureSets has a value which is a kb_hmmer.bool
+save_ANY_featureSets has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
 model_cov_perc has a value which is a float
@@ -1396,8 +1418,10 @@ input_PhyloMarkers_A_other_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_refs has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
+show_target_block_headers has a value which is a kb_hmmer.bool
 coalesce_output has a value which is a kb_hmmer.bool
 save_ALL_featureSets has a value which is a kb_hmmer.bool
+save_ANY_featureSets has a value which is a kb_hmmer.bool
 e_value has a value which is a float
 bitscore has a value which is a float
 model_cov_perc has a value which is a float

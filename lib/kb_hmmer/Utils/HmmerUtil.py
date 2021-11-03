@@ -1119,6 +1119,8 @@ class HmmerUtil:
                 elif (not params.get('save_ALL_featureSets') or int(params['save_ALL_featureSets']) != 1) and \
                      not explicitly_requested_models.get(hmm_id):
                     self.log(console, "\tMODEL "+hmm_id+" NOT EXPLICITLY REQUESTED, SO NOT SAVING FEATURESET.  MUST EXPLICITLY REQUEST MODEL OR CHANGE 'save_ALL_featureSets' to TRUE.")
+                elif int(params.get('save_ANY_featureSets',1)) != 1:
+                    self.log(console, "\tsave_ANY_featureSets set to FALSE. SO NOT SAVING FEATURESET.  MUST CHANGE 'save_ANY_featureSets' to TRUE.")
                 else:
                     self.log(console, "\tEXTRACTING ACCEPTED HITS FROM INPUT for model "+hmm_id)
                     ##self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
@@ -1346,7 +1348,9 @@ class HmmerUtil:
                                 genome_ref_to_sci_name[genome_ref] = obj2file_retVal[input_many_ref]['genome_ref_to_sci_name'][genome_ref]
                         elif many_type_name == 'AnnotatedMetagenomeAssembly':
                             for ama_ref in obj2file_retVal[input_many_ref]['ama_ref_to_obj_name'].keys():
-                                ama_ref_to_obj_name[ama_ref] = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name'][ama_ref]
+                                self.log(console, "AMA_REF: "+ama_ref)
+                                #ama_ref_to_obj_name[ama_ref] = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name'][ama_ref]
+                                ama_ref_to_obj_name[ama_ref] = obj2file_retVal[input_many_ref]['ama_ref_to_obj_name'][ama_ref]
 
                     head_color = "#eeeeff"
                     border_head_color = "#ffccff"
@@ -1594,6 +1598,9 @@ class HmmerUtil:
                 if len(invalid_msgs) == 0:
                     if not hit_accept_something[hmm_group]:
                         self.log(console, "No Coalesced Hits Object to Upload for all HMMs in Group " + hmm_group)  # DEBUG
+
+                    elif int(params.get('save_ANY_featureSets',1)) != 1:
+                        self.log(console, "save_ANY_featureSets not set to TRUE")  # DEBUG
 
                     else:
                         self.log(console, "Uploading Coalesced Hits Object for HMM Group " + hmm_group)  # DEBUG
@@ -1864,7 +1871,8 @@ class HmmerUtil:
             border = "0"
             #row_spacing = "-2"
             num_rows = len(all_genome_refs)
-            if len(input_many_refs) > 1:
+            if int(params.get('show_target_block_headers',1)) == 1 and \
+               len(input_many_refs) > 1:
                 num_rows += len(input_many_refs)
             show_groups = False
             show_blanks = False
@@ -1983,7 +1991,8 @@ class HmmerUtil:
                 for input_many_ref in input_many_refs:
                     many_type_name = many_type_names[input_many_ref]
 
-                    if len(input_many_refs) > 1:
+                    if int(params.get('show_target_block_headers',1)) == 1 and \
+                       len(input_many_refs) > 1:
                         input_obj_disp_name = input_many_names[input_many_ref]
                         html_report_lines += ['<tr>']
                         html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +

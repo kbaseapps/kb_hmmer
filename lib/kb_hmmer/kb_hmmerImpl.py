@@ -51,9 +51,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.8.0"
+    VERSION = "1.8.1"
     GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "bd8914359e506b3cb3b8f49855d50d325463a664"
+    GIT_COMMIT_HASH = "3527ec7cd6839ff217d8c96d2cc0b9bff4d62b08"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -3593,8 +3593,10 @@ class kb_hmmer:
            "input_dbCAN_cellulosome_ids" of type "data_obj_ref", parameter
            "input_many_refs" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "genome_disp_name_config" of String, parameter "coalesce_output"
-           of type "bool", parameter "save_ALL_featureSets" of type "bool",
+           "genome_disp_name_config" of String, parameter
+           "show_target_block_headers" of type "bool", parameter
+           "coalesce_output" of type "bool", parameter "save_ALL_featureSets"
+           of type "bool", parameter "save_ANY_featureSets" of type "bool",
            parameter "e_value" of Double, parameter "bitscore" of Double,
            parameter "model_cov_perc" of Double, parameter "maxaccepts" of
            Double, parameter "heatmap" of type "bool", parameter "low_val" of
@@ -3654,8 +3656,10 @@ class kb_hmmer:
            parameter "input_EnvBioelement_Halo_ids" of type "data_obj_ref",
            parameter "input_many_refs" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "genome_disp_name_config" of String, parameter "coalesce_output"
-           of type "bool", parameter "save_ALL_featureSets" of type "bool",
+           "genome_disp_name_config" of String, parameter
+           "show_target_block_headers" of type "bool", parameter
+           "coalesce_output" of type "bool", parameter "save_ALL_featureSets"
+           of type "bool", parameter "save_ANY_featureSets" of type "bool",
            parameter "e_value" of Double, parameter "bitscore" of Double,
            parameter "model_cov_perc" of Double, parameter "maxaccepts" of
            Double, parameter "heatmap" of type "bool", parameter "low_val" of
@@ -3707,12 +3711,14 @@ class kb_hmmer:
            type "data_obj_ref", parameter "input_many_refs" of type
            "data_obj_ref", parameter "output_filtered_name" of type
            "data_obj_name", parameter "genome_disp_name_config" of String,
-           parameter "coalesce_output" of type "bool", parameter
-           "save_ALL_featureSets" of type "bool", parameter "e_value" of
-           Double, parameter "bitscore" of Double, parameter "model_cov_perc"
-           of Double, parameter "maxaccepts" of Double, parameter "heatmap"
-           of type "bool", parameter "low_val" of type "bool", parameter
-           "vertical" of type "bool", parameter "show_blanks" of type "bool"
+           parameter "show_target_block_headers" of type "bool", parameter
+           "coalesce_output" of type "bool", parameter "save_ALL_featureSets"
+           of type "bool", parameter "save_ANY_featureSets" of type "bool",
+           parameter "e_value" of Double, parameter "bitscore" of Double,
+           parameter "model_cov_perc" of Double, parameter "maxaccepts" of
+           Double, parameter "heatmap" of type "bool", parameter "low_val" of
+           type "bool", parameter "vertical" of type "bool", parameter
+           "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"

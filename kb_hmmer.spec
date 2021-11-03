@@ -121,8 +121,10 @@ module kb_hmmer {
         data_obj_name  output_filtered_name;
         string         genome_disp_name_config;
 
+	bool  show_target_block_headers;
 	bool  coalesce_output;
 	bool  save_ALL_featureSets;
+	bool  save_ANY_featureSets;
 	float e_value;
 	float bitscore;
 	float model_cov_perc;
@@ -168,8 +170,10 @@ module kb_hmmer {
         data_obj_name  output_filtered_name;
         string         genome_disp_name_config;
 
+	bool  show_target_block_headers;
 	bool  coalesce_output;
 	bool  save_ALL_featureSets;
+	bool  save_ANY_featureSets;
 	float e_value;
 	float bitscore;
 	float model_cov_perc;
@@ -206,8 +210,10 @@ module kb_hmmer {
         data_obj_name  output_filtered_name;
         string         genome_disp_name_config;
 
+	bool  show_target_block_headers;
 	bool  coalesce_output;
 	bool  save_ALL_featureSets;
+	bool  save_ANY_featureSets;
 	float e_value;
 	float bitscore;
 	float model_cov_perc;
