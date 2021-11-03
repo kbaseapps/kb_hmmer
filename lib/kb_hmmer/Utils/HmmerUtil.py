@@ -1348,7 +1348,7 @@ class HmmerUtil:
                                 genome_ref_to_sci_name[genome_ref] = obj2file_retVal[input_many_ref]['genome_ref_to_sci_name'][genome_ref]
                         elif many_type_name == 'AnnotatedMetagenomeAssembly':
                             for ama_ref in obj2file_retVal[input_many_ref]['ama_ref_to_obj_name'].keys():
-                                self.log(console, "AMA_REF: "+ama_ref)
+                                #self.log(console, "AMA_REF: "+ama_ref)
                                 #ama_ref_to_obj_name[ama_ref] = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name'][ama_ref]
                                 ama_ref_to_obj_name[ama_ref] = obj2file_retVal[input_many_ref]['ama_ref_to_obj_name'][ama_ref]
 
