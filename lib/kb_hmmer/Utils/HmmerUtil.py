@@ -300,6 +300,30 @@ class HmmerUtil:
         return (this_appropriate_sequence_found_in_MSA_input, msa_invalid_msgs)
 
 
+    def _get_genome_disp_name (self, 
+                               params, 
+                               genome_ref, 
+                               many_type_name, 
+                               ama_ref_to_obj_name, 
+                               genome_ref_to_obj_name,
+                               genome_ref_to_sci_name):
+        if many_type_name == 'AnnotatedMetagenomeAssembly':
+            genome_disp_name = ama_ref_to_obj_name[genome_ref]
+        else:
+            genome_obj_name = genome_ref_to_obj_name[genome_ref]
+            genome_sci_name = genome_ref_to_sci_name[genome_ref]
+            [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
+            genome_disp_name = ''
+            if 'obj_name' in params['genome_disp_name_config']:
+                genome_disp_name += genome_obj_name
+            if 'ver' in params['genome_disp_name_config']:
+                genome_disp_name += '.v'+str(genome_obj_version)
+            if 'sci_name' in params['genome_disp_name_config']:
+                genome_disp_name += ': '+genome_sci_name
+
+        return genome_disp_name
+
+
     def run_HMMER_Model_Group_Search(self, params):
         """
         Method for HMMER search of a meaningful group of Hidden Markov Models
@@ -828,7 +852,7 @@ class HmmerUtil:
                 #
                 # SYNTAX (from http://eddylab.org/software/hmmer3/3.1b2/Userguide.pdf)
                 #
-                # hmmsearch --domtblout <TAB_out> -A <MSA_out> --noali --notextw -E <e_value> -T <bit_score> <hmmfile> <seqdb>
+                # hmmsearch [--cut_tc] --domtblout <TAB_out> -A <MSA_out> --noali --notextw -E <e_value> -T <bit_score> <hmmfile> <seqdb>
                 #
                 for input_many_ref in input_many_refs:
                     hmmer_search_bin = self.HMMER_SEARCH
@@ -862,8 +886,11 @@ class HmmerUtil:
                     #hmmer_search_cmd.append(output_hit_MSA_file_path)
                     hmmer_search_cmd.append('--noali')
                     hmmer_search_cmd.append('--notextw')
-                    hmmer_search_cmd.append('-E')  # can't use -T with -E, so we'll use -E
-                    hmmer_search_cmd.append(str(params['e_value']))
+                    if int(params.get('use_model_specific_thresholds',0)) == 1:
+                        hmmer_search_cmd.append('--cut_tc')
+                    else:
+                        hmmer_search_cmd.append('-domE')  # can't use -T with -E, so we'll use -E
+                        hmmer_search_cmd.append(str(params['e_value']))
                     hmmer_search_cmd.append(HMM_file_path)
                     hmmer_search_cmd.append(many_forward_reads_file_paths[input_many_ref])
 
@@ -1272,7 +1299,10 @@ class HmmerUtil:
                                     coalesce_featureIds_genome_ordering.append(this_genome_ref)
 
                     else:  # keep output separate  Upload results if coalesce_output is 0
-                        output_name = hmm_id + '-' + params['output_filtered_name']
+                        hmm_obj_id = hmm_id
+                        if '+' in hmm_id:
+                            hmm_obj_id = hmm_obj_id.replace('+','-')
+                        output_name = hmm_obj_id + '-' + params['output_filtered_name']
 
                         if len(invalid_msgs) == 0:
                             if len(accepted_hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
@@ -1991,8 +2021,7 @@ class HmmerUtil:
                 for input_many_ref in input_many_refs:
                     many_type_name = many_type_names[input_many_ref]
 
-                    if int(params.get('show_target_block_headers',1)) == 1 and \
-                       len(input_many_refs) > 1:
+                    if int(params.get('show_target_block_headers',1)) == 1:
                         input_obj_disp_name = input_many_names[input_many_ref]
                         html_report_lines += ['<tr>']
                         html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +
@@ -2000,21 +2029,35 @@ class HmmerUtil:
                         html_report_lines += ['<td colspan='+str(num_cols)+' bgcolor="#dddddd"></td>']
                         html_report_lines += ['</tr>']
                     
-                    for genome_ref in genome_refs[input_many_ref]:
-                        # set genome_disp_name
-                        if many_type_name == 'AnnotatedMetagenomeAssembly':
-                            genome_disp_name = ama_ref_to_obj_name[genome_ref]
-                        else:
-                            genome_obj_name = genome_ref_to_obj_name[genome_ref]
-                            genome_sci_name = genome_ref_to_sci_name[genome_ref]
-                            [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
-                            genome_disp_name = ''
-                            if 'obj_name' in params['genome_disp_name_config']:
-                                genome_disp_name += genome_obj_name
-                            if 'ver' in params['genome_disp_name_config']:
-                                genome_disp_name += '.v'+str(genome_obj_version)
-                            if 'sci_name' in params['genome_disp_name_config']:
-                                genome_disp_name += ': '+genome_sci_name
+
+                    # add genome and ama rows, order GenomeSet elements by disp name
+                    if many_type_name != 'GenomeSet':
+                        genome_ref_order = genome_refs[input_many_ref]
+                    else:
+                        genome_ref_order = []
+                        genome_disp_name_to_ref = dict()
+                        for genome_ref in genome_ref_order:
+                            genome_disp_name = self._get_genome_disp_name (params,
+                                                                           genome_ref,
+                                                                           many_type_name,
+                                                                           ama_ref_to_obj_name,
+                                                                           genome_ref_to_obj_name,
+                                                                           genome_ref_to_sci_name)
+                            if genome_disp_name not in genome_disp_name_to_ref:
+                                genome_disp_name_to_ref[genome_disp_name] = []
+                            genome_disp_name_to_ref[genome_disp_name].append(genome_ref)
+
+                        for genome_disp_name in sorted(genome_disp_name_to_ref.keys()):
+                            for genome_ref in genome_disp_name_to_ref[genome_disp_name]:
+                                genome_ref_order.append(genome_ref)
+
+                    for genome_ref in genome_ref_order:
+                        genome_disp_name = self._get_genome_disp_name (params,
+                                                                       genome_ref,
+                                                                       many_type_name,
+                                                                       ama_ref_to_obj_name,
+                                                                       genome_ref_to_obj_name,
+                                                                       genome_ref_to_sci_name)
 
                         # build html report table line
                         html_report_lines += ['<tr>']

@@ -1,3 +1,10 @@
+### Version 1.9.0
+__Changes__
+- added MicroTrait BioElement App
+- added model-specific threshold option to MicroTrait BioElement App
+- fixed incorrect model IDs in Env BioElement App input options
+- added sort by genome object name within GenomeSet for HMMER Custom Model Suite Apps
+
 ### Version 1.8.1
 __Changes__
 - fixed bug in Model collection Profiling that prevented multiple AMAs as input

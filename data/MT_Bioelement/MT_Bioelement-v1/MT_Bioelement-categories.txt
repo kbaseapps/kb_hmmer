@@ -1,0 +1,14 @@
+N	Nitrogen	nitrogen cycling
+H	Hydrogen	hydrogen cycling
+O	Oxygen	oxygen cycling
+CFix	Carbon Fixation	carbon fixation
+C1	C1 Compounds	C1 compound cycling
+CH4	Methane	methane cycling
+CO	Carbon Monoxide	carbon monoxide cycling
+S	Sulfur	sulfur cycling
+CN	Nitriles	nitrile cycling
+CH4N2O	Urea	urea cycling
+Se	Selenium	selenium cycling
+Metal	Metals	metal cycling
+As	Arsenic	arsenic cycling
+Halo	Halogenated Compounds	halogenated compound cycling

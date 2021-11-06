@@ -52,6 +52,10 @@ WORKDIR /kb/module
 RUN \
   curl https://bcb.unl.edu/dbCAN2/download/dbCAN-HMMdb-V${dbCAN_VERSION}.txt > data/dbCAN/dbCAN-v${dbCAN_VERSION}/dbCAN-fam-HMMs-v${dbCAN_VERSION}.txt
 
+
+# Start up
+#
+WORKDIR /kb/module
 ENTRYPOINT [ "./scripts/entrypoint.sh" ]
 
 CMD [ ]

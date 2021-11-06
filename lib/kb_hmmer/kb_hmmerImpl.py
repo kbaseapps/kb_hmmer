@@ -51,9 +51,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.8.1"
+    VERSION = "1.9.0"
     GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "3527ec7cd6839ff217d8c96d2cc0b9bff4d62b08"
+    GIT_COMMIT_HASH = "6ef3f69017ff6b82edb5acd566441c553d849cd3"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -3683,6 +3683,70 @@ class kb_hmmer:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method HMMER_EnvBioelement_Search return value ' +
+                             'returnVal is not type dict as required.')
+        # return the results
+        return [returnVal]
+
+    def HMMER_MT_Bioelement_Search(self, ctx, params):
+        """
+        Method for HMMER search of Markov Models of MicroTrait bioelement families
+        **
+        **    overloading as follows:
+        **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SeqquenceSet deactivated)
+        **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
+        :param params: instance of type "HMMER_MT_Bioelement_Params" (HMMER
+           MT_Bioelement Input Params) -> structure: parameter
+           "workspace_name" of type "workspace_name" (** The workspace object
+           refs are of form: ** **    objects = ws.get_objects([{'ref':
+           params['workspace_id']+'/'+params['obj_name']}]) ** ** "ref" means
+           the entire name combining the workspace id and the object name **
+           "id" is a numerical identifier of the workspace or object, and
+           should just be used for workspace ** "name" is a string identifier
+           of a workspace or object.  This is received from Narrative.),
+           parameter "input_MT_Bioelement_N_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_H_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_O_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_CFix_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_C1_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_CH4_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_CO_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_S_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_CN_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_CH4N2O_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_Se_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_Metal_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_As_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_Halo_ids" of type "data_obj_ref",
+           parameter "input_many_refs" of type "data_obj_ref", parameter
+           "output_filtered_name" of type "data_obj_name", parameter
+           "genome_disp_name_config" of String, parameter
+           "use_model_specific_thresholds" of type "bool", parameter
+           "show_target_block_headers" of type "bool", parameter
+           "coalesce_output" of type "bool", parameter "save_ALL_featureSets"
+           of type "bool", parameter "save_ANY_featureSets" of type "bool",
+           parameter "e_value" of Double, parameter "bitscore" of Double,
+           parameter "model_cov_perc" of Double, parameter "maxaccepts" of
+           Double, parameter "heatmap" of type "bool", parameter "low_val" of
+           type "bool", parameter "vertical" of type "bool", parameter
+           "show_blanks" of type "bool"
+        :returns: instance of type "HMMER_Output" (HMMER Output) ->
+           structure: parameter "report_name" of type "data_obj_name",
+           parameter "report_ref" of type "data_obj_ref"
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN HMMER_MT_Bioelement_Search
+        print('--->\nRunning kb_hmmer.HMMER_MT_Bioelement_Search\nparams:')
+        print(json.dumps(params, indent=1))
+
+        hu = HmmerUtil(self.config, ctx)
+        params['model_group'] = 'MT_Bioelement'
+        returnVal = hu.run_HMMER_Model_Group_Search(params)
+        #END HMMER_MT_Bioelement_Search
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method HMMER_MT_Bioelement_Search return value ' +
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]

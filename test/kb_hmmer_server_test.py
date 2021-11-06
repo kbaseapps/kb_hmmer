@@ -225,7 +225,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 01: Single Model against Single Genome
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_01_kb_hmmer_HMMER_MSA_Search_Genome()")
+    @unittest.skip("skipped test test_01_kb_hmmer_HMMER_MSA_Search_Genome()")
     def test_01_kb_hmmer_HMMER_MSA_Search_Genome(self):
         test_name = 'test_01_kb_hmmer_HMMER_MSA_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
@@ -269,7 +269,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 02: Single Model against GenomeSet
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet()")
+    @unittest.skip("skipped test test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet()")
     def test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet(self):
         test_name = 'test_02_kb_hmmer_HMMER_MSA_Search_GenomeSet'
         header_msg = "RUNNING "+test_name+"()"
@@ -313,7 +313,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 03: Single nucleotide Model (to test failure)
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_03_kb_hmmer_HMMER_MSA_Search_Genome_nuc_MSA()")
+    @unittest.skip("skipped test test_03_kb_hmmer_HMMER_MSA_Search_Genome_nuc_MSA()")
     def test_03_kb_hmmer_HMMER_MSA_Search_Genome_nuc_MSA(self):
         test_name = 'test_03_kb_hmmer_HMMER_MSA_Search_Genome_nuc_MSA'
         header_msg = "RUNNING "+test_name+"()"
@@ -353,7 +353,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 03_02: Single Model against Single AnnotatedMetagenomeAssembly
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_03_02_kb_hmmer_HMMER_MSA_Search_AMA()")
+    @unittest.skip("skipped test test_03_02_kb_hmmer_HMMER_MSA_Search_AMA()")
     def test_003_02_kb_hmmer_HMMER_MSA_Search_AMA(self):
         test_name = 'test_03_02_kb_hmmer_HMMER_MSA_Search_AMA'
         header_msg = "RUNNING "+test_name+"()"
@@ -400,7 +400,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 04: Specific Models in workspace against Single Genome
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome()")
+    @unittest.skip("skipped test test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome()")
     def test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome(self):
         test_name = 'test_04_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
@@ -451,7 +451,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 04_02: Specific Models in workspace against Single Annotated Metagenome Assembly
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_04_02_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA()")
+    @unittest.skip("skipped test test_04_02_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA()")
     def test_04_02_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA(self):
         test_name = 'test_04_02_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA'
         header_msg = "RUNNING "+test_name+"()"
@@ -505,7 +505,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 04_03: All Models in workspace against Single Annotated Metagenome Assembly, DON'T Coalesce output
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_04_04_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA_ALL_DONT_coalesce()")
+    @unittest.skip("skipped test test_04_04_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA_ALL_DONT_coalesce()")
     def test_04_03_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA_ALL_DONT_coalesce(self):
         test_name = 'test_04_03_kb_hmmer_HMMER_Local_MSA_Group_Search_AMA_ALL_DONT_coalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -559,7 +559,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 05: All Models in workspace against GenomeSet, DON'T coalesce output
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_NOcoalesce()")
+    @unittest.skip("skipped test test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_NOcoalesce()")
     def test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_NOcoalesce(self):
         test_name = 'test_05_kb_hmmer_HMMER_Local_MSA_Group_Search_GenomeSet_NOcoalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -608,7 +608,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 07: Specific Model with nucleotides (should fail)
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_07_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_nuc_MSA()")
+    @unittest.skip("skipped test test_07_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_nuc_MSA()")
     def test_07_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_nuc_MSA(self):
         test_name = 'test_07_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_nuc_MSA'
         header_msg = "RUNNING "+test_name+"()"
@@ -653,7 +653,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 08: Single Model against Single Genome, threshold above all hits
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_08_kb_hmmer_HMMER_MSA_Search_Genome_removeALL()")
+    @unittest.skip("skipped test test_08_kb_hmmer_HMMER_MSA_Search_Genome_removeALL()")
     def test_08_kb_hmmer_HMMER_MSA_Search_Genome_removeALL(self):
         test_name = 'test_08_kb_hmmer_HMMER_MSA_Search_Genome_removeALL'
         header_msg = "RUNNING "+test_name+"()"
@@ -693,7 +693,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 09: All Models in workspace against Single Genome, threshold above all hits
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_09_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL()")
+    @unittest.skip("skipped test test_09_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL()")
     def test_09_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL(self):
         test_name = 'test_09_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL'
         header_msg = "RUNNING "+test_name+"()"
@@ -738,7 +738,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 09_02: All Models in workspace against Single Genome, threshold above all hits, show blanks
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_09_02_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL_show_blanks()")
+    @unittest.skip("skipped test test_09_02_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL_show_blanks()")
     def test_09_02_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL_show_blanks(self):
         test_name = 'test_09_02_kb_hmmer_HMMER_Local_MSA_Group_Search_Genome_removeALL_show_blanks'
         header_msg = "RUNNING "+test_name+"()"
@@ -783,7 +783,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 10: dbCAN Models against Single Genome
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_10_kb_hmmer_HMMER_dbCAN_Search_Genome()")
+    @unittest.skip("skipped test test_10_kb_hmmer_HMMER_dbCAN_Search_Genome()")
     def test_10_kb_hmmer_HMMER_dbCAN_Search_Genome(self):
         test_name = 'test_10_kb_hmmer_HMMER_dbCAN_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
@@ -842,7 +842,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 10_02: dbCAN Models against Single AnnotatedMetagenomeAssembly
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_10_02_kb_hmmer_HMMER_dbCAN_Search_AMA()")
+    @unittest.skip("skipped test test_10_02_kb_hmmer_HMMER_dbCAN_Search_AMA()")
     def test_10_02_kb_hmmer_HMMER_dbCAN_Search_AMA(self):
         test_name = 'test_10_02_kb_hmmer_HMMER_dbCAN_Search_AMA'
         header_msg = "RUNNING "+test_name+"()"
@@ -904,7 +904,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 11: dbCAN Models against GenomeSet, DON'T coalesce output
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_11_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce()")
+    @unittest.skip("skipped test test_11_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce()")
     def test_11_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce(self):
         test_name = 'test_11_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_NOcoalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -963,7 +963,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 12: dbCAN Models against GenomeSet, DO coalesce output
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_12_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce()")
+    @unittest.skip("skipped test test_12_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce()")
     def test_12_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce(self):
         test_name = 'test_12_kb_hmmer_HMMER_dbCAN_Search_GenomeSet_coalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -1022,7 +1022,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 13: envbioelement Models against Single Genome
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_13_kb_hmmer_HMMER_envbioelement_Search_Genome()")
+    @unittest.skip("skipped test test_13_kb_hmmer_HMMER_envbioelement_Search_Genome()")
     def test_13_kb_hmmer_HMMER_envbioelement_Search_Genome(self):
         test_name = 'test_13_kb_hmmer_HMMER_envbioelement_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
@@ -1088,7 +1088,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 13_02: envbioelement Models against Single AMA
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_13_02_kb_hmmer_HMMER_envbioelement_Search_AMA()")
+    @unittest.skip("skipped test test_13_02_kb_hmmer_HMMER_envbioelement_Search_AMA()")
     def test_13_02_kb_hmmer_HMMER_envbioelement_Search_AMA(self):
         test_name = 'test_13_02_kb_hmmer_HMMER_envbioelement_Search_AMA'
         header_msg = "RUNNING "+test_name+"()"
@@ -1154,7 +1154,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 14: envbioelement Models against GenomeSet, DON'T coalesce output
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_14_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_NOcoalesce()")
+    @unittest.skip("skipped test test_14_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_NOcoalesce()")
     def test_14_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_NOcoalesce(self):
         test_name = 'test_14_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_NOcoalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -1220,7 +1220,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 14_02: envbioelement Models against GenomeSet+AMA, DON'T coalesce output
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_14_02_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_AMA_NOcoalesce()")
+    @unittest.skip("skipped test test_14_02_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_AMA_NOcoalesce()")
     def test_14_02_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_AMA_NOcoalesce(self):
         test_name = 'test_14_02_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_AMA_NOcoalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -1286,7 +1286,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 15: envbioelement Models against GenomeSet, DO coalesce output
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_15_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_coalesce()")
+    @unittest.skip("skipped test test_15_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_coalesce()")
     def test_15_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_coalesce(self):
         test_name = 'test_15_kb_hmmer_HMMER_envbioelement_Search_GenomeSet_coalesce'
         header_msg = "RUNNING "+test_name+"()"
@@ -1349,12 +1349,347 @@ class kb_hmmerTest(unittest.TestCase):
         pass
 
 
-    ### Test 16: PhyloMarkers Models against Single Genome
+    ### Test 16: MT_Bioelement Models against Single Genome
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_16_kb_hmmer_HMMER_PhyloMarkers_Search_Genome()")
-    def test_16_kb_hmmer_HMMER_PhyloMarkers_Search_Genome(self):
-        test_name = 'test_16_kb_hmmer_HMMER_PhyloMarkers_Search_Genome'
+    # HIDE @unittest.skip("skipped test test_16_kb_hmmer_HMMER_MT_Bioelement_Search_Genome()")
+    def test_16_kb_hmmer_HMMER_MT_Bioelement_Search_Genome(self):
+        test_name = 'test_16_kb_hmmer_HMMER_MT_Bioelement_Search_Genome'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_MT_Bioelement_N_ids': ['ALL'],
+                       'input_MT_Bioelement_H_ids': ['ALL'],
+                       'input_MT_Bioelement_O_ids': ['ALL'],
+                       'input_MT_Bioelement_CFix_ids': ['ALL'],
+                       'input_MT_Bioelement_C1_ids': ['ALL'],
+                       'input_MT_Bioelement_CH4_ids': ['ALL'],
+                       'input_MT_Bioelement_CO_ids': ['ALL'],
+                       'input_MT_Bioelement_S_ids': ['ALL'],
+                       'input_MT_Bioelement_CN_ids': ['ALL'],
+                       'input_MT_Bioelement_CH4N2O_ids': ['ALL'],
+                       'input_MT_Bioelement_Se_ids': ['ALL'],
+                       'input_MT_Bioelement_Metal_ids': ['ALL'],
+                       'input_MT_Bioelement_As_ids': ['ALL'],
+                       'input_MT_Bioelement_Halo_ids': ['ALL'],
+                       'input_many_refs': [self.genome_refs[3]],  # Single Genome
+                       'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
+                       'coalesce_output': 0,
+                       'use_model_specific_thresholds': 1,
+                       'show_target_block_headers': 1,
+                       'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'model_cov_perc': "35.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'low_val': "detect",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_MT_Bioelement_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created obj
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 16_02: MT_Bioelement Models against Single AMA
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_16_02_kb_hmmer_HMMER_MT_Bioelement_Search_AMA()")
+    def test_16_02_kb_hmmer_HMMER_MT_Bioelement_Search_AMA(self):
+        test_name = 'test_16_02_kb_hmmer_HMMER_MT_Bioelement_Search_AMA'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_MT_Bioelement_N_ids': ['ALL'],
+                       'input_MT_Bioelement_H_ids': ['ALL'],
+                       'input_MT_Bioelement_O_ids': ['ALL'],
+                       'input_MT_Bioelement_CFix_ids': ['ALL'],
+                       'input_MT_Bioelement_C1_ids': ['ALL'],
+                       'input_MT_Bioelement_CH4_ids': ['ALL'],
+                       'input_MT_Bioelement_CO_ids': ['ALL'],
+                       'input_MT_Bioelement_S_ids': ['ALL'],
+                       'input_MT_Bioelement_CN_ids': ['ALL'],
+                       'input_MT_Bioelement_CH4N2O_ids': ['ALL'],
+                       'input_MT_Bioelement_Se_ids': ['ALL'],
+                       'input_MT_Bioelement_Metal_ids': ['ALL'],
+                       'input_MT_Bioelement_As_ids': ['ALL'],
+                       'input_MT_Bioelement_Halo_ids': ['ALL'],
+                       'input_many_refs': [self.ama_refs[0]],  # Single AMA
+                       'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
+                       'coalesce_output': 0,
+                       'use_model_specific_thresholds': 1,
+                       'show_target_block_headers': 1,
+                       'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'model_cov_perc': "35.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'low_val': "detect",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_MT_Bioelement_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created obj
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 17: MT_Bioelement Models against GenomeSet, DON'T coalesce output
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_17_kb_hmmer_HMMER_MT_Bioelement_Search_GenomeSet_NOcoalesce()")
+    def test_17_kb_hmmer_HMMER_MT_Bioelement_Search_GenomeSet_NOcoalesce(self):
+        test_name = 'test_17_kb_hmmer_HMMER_MT_Bioelement_Search_GenomeSet_NOcoalesce'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_MT_Bioelement_N_ids': ['ALL'],
+                       'input_MT_Bioelement_H_ids': ['ALL'],
+                       'input_MT_Bioelement_O_ids': ['ALL'],
+                       'input_MT_Bioelement_CFix_ids': ['ALL'],
+                       'input_MT_Bioelement_C1_ids': ['ALL'],
+                       'input_MT_Bioelement_CH4_ids': ['ALL'],
+                       'input_MT_Bioelement_CO_ids': ['ALL'],
+                       'input_MT_Bioelement_S_ids': ['ALL'],
+                       'input_MT_Bioelement_CN_ids': ['ALL'],
+                       'input_MT_Bioelement_CH4N2O_ids': ['ALL'],
+                       'input_MT_Bioelement_Se_ids': ['ALL'],
+                       'input_MT_Bioelement_Metal_ids': ['ALL'],
+                       'input_MT_Bioelement_As_ids': ['ALL'],
+                       'input_MT_Bioelement_Halo_ids': ['ALL'],
+                       'input_many_refs': [self.genomeSet_refs[0]],  # GenomeSet
+                       'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
+                       'coalesce_output': 0,  # KEY
+                       'use_model_specific_thresholds': 1,
+                       'show_target_block_headers': 1,
+                       'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'model_cov_perc': "35.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'low_val': "1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_MT_Bioelement_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created objs
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 17_02: MT_Bioelement Models against GenomeSet+AMA, DON'T coalesce output
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_17_02_kb_hmmer_HMMER_MT_Bioelement_Search_GenomeSet_AMA_NOcoalesce()")
+    def test_17_02_kb_hmmer_HMMER_MT_Bioelement_Search_GenomeSet_AMA_NOcoalesce(self):
+        test_name = 'test_17_02_kb_hmmer_HMMER_MT_Bioelement_Search_GenomeSet_AMA_NOcoalesce'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_MT_Bioelement_N_ids': ['nirB'],
+                       'input_MT_Bioelement_H_ids': ['NONE'],
+                       'input_MT_Bioelement_O_ids': ['NONE'],
+                       'input_MT_Bioelement_CFix_ids': ['NONE'],
+                       'input_MT_Bioelement_C1_ids': ['NONE'],
+                       'input_MT_Bioelement_CH4_ids': ['NONE'],
+                       'input_MT_Bioelement_CO_ids': ['NONE'],
+                       'input_MT_Bioelement_S_ids': ['NONE'],
+                       'input_MT_Bioelement_CN_ids': ['NONE'],
+                       'input_MT_Bioelement_CH4N2O_ids': ['NONE'],
+                       'input_MT_Bioelement_Se_ids': ['NONE'],
+                       'input_MT_Bioelement_Metal_ids': ['NONE'],
+                       'input_MT_Bioelement_As_ids': ['NONE'],
+                       'input_MT_Bioelement_Halo_ids': ['NONE'],
+                       'input_many_refs': [self.genomeSet_refs[0], self.ama_refs[0]], # GenomeSet+AMA
+                       'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
+                       'coalesce_output': 0,  # KEY
+                       'use_model_specific_thresholds': 1,
+                       'show_target_block_headers': 1,
+                       'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'model_cov_perc': "35.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'low_val': "1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_MT_Bioelement_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created objs
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 18: MT_Bioelement Models against GenomeSet, DO coalesce output
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_18_kb_hmmer_HMMER_MT_Bioelement_Search_GenomeSet_coalesce()")
+    def test_18_kb_hmmer_HMMER_MT_Bioelement_Search_GenomeSet_coalesce(self):
+        test_name = 'test_18_kb_hmmer_HMMER_MT_Bioelement_Search_GenomeSet_coalesce'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_MT_Bioelement_N_ids': ['ALL'],
+                       'input_MT_Bioelement_H_ids': ['ALL'],
+                       'input_MT_Bioelement_O_ids': ['ALL'],
+                       'input_MT_Bioelement_CFix_ids': ['ALL'],
+                       'input_MT_Bioelement_C1_ids': ['ALL'],
+                       'input_MT_Bioelement_CH4_ids': ['ALL'],
+                       'input_MT_Bioelement_CO_ids': ['ALL'],
+                       'input_MT_Bioelement_S_ids': ['ALL'],
+                       'input_MT_Bioelement_CN_ids': ['ALL'],
+                       'input_MT_Bioelement_CH4N2O_ids': ['ALL'],
+                       'input_MT_Bioelement_Se_ids': ['ALL'],
+                       'input_MT_Bioelement_Metal_ids': ['ALL'],
+                       'input_MT_Bioelement_As_ids': ['ALL'],
+                       'input_MT_Bioelement_Halo_ids': ['ALL'],
+                       'input_many_refs': [self.genomeSet_refs[0]],  # GenomeSet
+                       'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_ver_sci_name',
+                       'coalesce_output': 1,  # KEY
+                       'use_model_specific_thresholds': 1,
+                       'show_target_block_headers': 1,
+                       'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'model_cov_perc': "35.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'low_val': "0.1",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_MT_Bioelement_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created objs
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
+    ### Test 19: PhyloMarkers Models against Single Genome
+    #
+    # uncomment to skip this test
+    @unittest.skip("skipped test test_19_kb_hmmer_HMMER_PhyloMarkers_Search_Genome()")
+    def test_19_kb_hmmer_HMMER_PhyloMarkers_Search_Genome(self):
+        test_name = 'test_19_kb_hmmer_HMMER_PhyloMarkers_Search_Genome'
         header_msg = "RUNNING "+test_name+"()"
         header_delim = len(header_msg) * '='
         print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
@@ -1406,12 +1741,12 @@ class kb_hmmerTest(unittest.TestCase):
         pass
 
 
-    ### Test 16_02: PhyloMarkers Models against Single AMA
+    ### Test 19_02: PhyloMarkers Models against Single AMA
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_16_02_kb_hmmer_HMMER_PhyloMarkers_Search_AMA()")
-    def test_16_02_kb_hmmer_HMMER_PhyloMarkers_Search_AMA(self):
-        test_name = 'test_16_02_kb_hmmer_HMMER_PhyloMarkers_Search_AMA'
+    @unittest.skip("skipped test test_19_02_kb_hmmer_HMMER_PhyloMarkers_Search_AMA()")
+    def test_19_02_kb_hmmer_HMMER_PhyloMarkers_Search_AMA(self):
+        test_name = 'test_19_02_kb_hmmer_HMMER_PhyloMarkers_Search_AMA'
         header_msg = "RUNNING "+test_name+"()"
         header_delim = len(header_msg) * '='
         print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
@@ -1463,12 +1798,12 @@ class kb_hmmerTest(unittest.TestCase):
         pass
 
 
-    ### Test 17: PhyloMarkers Models against GenomeSet, DON'T coalesce output
+    ### Test 20: PhyloMarkers Models against GenomeSet, DON'T coalesce output
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_17_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_NOcoalesce()")
-    def test_17_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_NOcoalesce(self):
-        test_name = 'test_17_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_NOcoalesce'
+    @unittest.skip("skipped test test_20_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_NOcoalesce()")
+    def test_20_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_NOcoalesce(self):
+        test_name = 'test_20_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_NOcoalesce'
         header_msg = "RUNNING "+test_name+"()"
         header_delim = len(header_msg) * '='
         print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
@@ -1520,12 +1855,12 @@ class kb_hmmerTest(unittest.TestCase):
         pass
 
 
-    ### Test 17_02: PhyloMarkers Models against GenomeSet+AMA, DON'T coalesce output
+    ### Test 20_02: PhyloMarkers Models against GenomeSet+AMA, DON'T coalesce output
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_17_02_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_AMA_NOcoalesce()")
-    def test_17_02_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_AMA_NOcoalesce(self):
-        test_name = 'test_17_02_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_AMA_NOcoalesce'
+    @unittest.skip("skipped test test_20_02_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_AMA_NOcoalesce()")
+    def test_20_02_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_AMA_NOcoalesce(self):
+        test_name = 'test_20_02_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_AMA_NOcoalesce'
         header_msg = "RUNNING "+test_name+"()"
         header_delim = len(header_msg) * '='
         print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
@@ -1577,12 +1912,12 @@ class kb_hmmerTest(unittest.TestCase):
         pass
 
 
-    ### Test 17_03: PhyloMarkers Models against AMA+AMA, DON'T coalesce output
+    ### Test 20_03: PhyloMarkers Models against AMA+AMA, DON'T coalesce output
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_17_03_kb_hmmer_HMMER_PhyloMarkers_Search_AMA_AMA_NOcoalesce()")
-    def test_17_03_kb_hmmer_HMMER_PhyloMarkers_Search_AMA_AMA_NOcoalesce(self):
-        test_name = 'test_17_03_kb_hmmer_HMMER_PhyloMarkers_Search_AMA_AMA_NOcoalesce'
+    @unittest.skip("skipped test test_20_03_kb_hmmer_HMMER_PhyloMarkers_Search_AMA_AMA_NOcoalesce()")
+    def test_20_03_kb_hmmer_HMMER_PhyloMarkers_Search_AMA_AMA_NOcoalesce(self):
+        test_name = 'test_20_03_kb_hmmer_HMMER_PhyloMarkers_Search_AMA_AMA_NOcoalesce'
         header_msg = "RUNNING "+test_name+"()"
         header_delim = len(header_msg) * '='
         print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
@@ -1634,12 +1969,12 @@ class kb_hmmerTest(unittest.TestCase):
         pass
 
 
-    ### Test 18: PhyloMarkers Models against GenomeSet, DO coalesce output
+    ### Test 21: PhyloMarkers Models against GenomeSet, DO coalesce output
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_18_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_coalesce()")
-    def test_18_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_coalesce(self):
-        test_name = 'test_18_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_coalesce'
+    @unittest.skip("skipped test test_21_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_coalesce()")
+    def test_21_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_coalesce(self):
+        test_name = 'test_21_kb_hmmer_HMMER_PhyloMarkers_Search_GenomeSet_coalesce'
         header_msg = "RUNNING "+test_name+"()"
         header_delim = len(header_msg) * '='
         print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
