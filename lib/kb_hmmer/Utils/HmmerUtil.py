@@ -1895,7 +1895,7 @@ class HmmerUtil:
             #row_spacing = "-2"
             num_rows = len(all_genome_refs)
             if int(params.get('show_target_block_headers',1)) == 1 and \
-               len(input_many_refs) > 1:
+                len(input_many_refs) > 1:
                 num_rows += len(input_many_refs)
             show_groups = False
             show_blanks = False
@@ -2014,7 +2014,8 @@ class HmmerUtil:
                 for input_many_ref in input_many_refs:
                     many_type_name = many_type_names[input_many_ref]
 
-                    if int(params.get('show_target_block_headers',1)) == 1:
+                    if int(params.get('show_target_block_headers',1)) == 1 and \
+                        len(input_many_refs) > 1:
                         input_obj_disp_name = input_many_names[input_many_ref]
                         html_report_lines += ['<tr>']
                         html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +

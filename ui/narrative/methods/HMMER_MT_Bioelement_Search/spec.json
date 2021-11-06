@@ -1243,7 +1243,7 @@
             "optional": false,
             "advanced": false,
             "allow_multiple": false,
-            "default_values": [ "HMMER_MT_Bioelement_Search.FeatureSet" ],
+            "default_values": [ "MicroTrait_Bioelement.FeatureSet" ],
             "field_type": "text",
             "text_options": {
                 "valid_ws_types": [ "KBaseCollections.FeatureSet" ],
