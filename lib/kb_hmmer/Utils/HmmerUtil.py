@@ -1506,19 +1506,12 @@ class HmmerUtil:
                                 func_disp = feature_id_to_function[genome_ref][fid_lookup]
 
                                 # set genome_disp_name
-                                if many_type_name == 'AnnotatedMetagenomeAssembly':
-                                    genome_disp_name = ama_ref_to_obj_name[genome_ref]
-                                else:
-                                    genome_obj_name = genome_ref_to_obj_name[genome_ref]
-                                    genome_sci_name = genome_ref_to_sci_name[genome_ref]
-                                    [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
-                                    genome_disp_name = ''
-                                    if 'obj_name' in params['genome_disp_name_config']:
-                                        genome_disp_name += genome_obj_name
-                                    if 'ver' in params['genome_disp_name_config']:
-                                        genome_disp_name += '.v'+str(genome_obj_version)
-                                    if 'sci_name' in params['genome_disp_name_config']:
-                                        genome_disp_name += ': '+genome_sci_name
+                                genome_disp_name = self._get_genome_disp_name (params,
+                                                                               genome_ref,
+                                                                               many_type_name,
+                                                                               ama_ref_to_obj_name,
+                                                                               genome_ref_to_obj_name,
+                                                                               genome_ref_to_sci_name)
 
                                 # build html report table line
                                 html_report_chunk += ['<tr bgcolor="' + row_color + '">']
@@ -2031,12 +2024,12 @@ class HmmerUtil:
                     
 
                     # add genome and ama rows, order GenomeSet elements by disp name
-                    if many_type_name != 'GenomeSet':
+                    if many_type_name != 'GenomeSet' and many_type_name != 'FeatureSet':
                         genome_ref_order = genome_refs[input_many_ref]
                     else:
                         genome_ref_order = []
                         genome_disp_name_to_ref = dict()
-                        for genome_ref in genome_ref_order:
+                        for genome_ref in genome_refs[input_many_ref]:
                             genome_disp_name = self._get_genome_disp_name (params,
                                                                            genome_ref,
                                                                            many_type_name,
