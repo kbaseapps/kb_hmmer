@@ -124,7 +124,7 @@ hydrogenase_NiFeGroup4i	hydrog_NiFe_4i	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
 cld	cld	Halo	Halogenated Compounds	Chlorite reduction	ClO2-R
 E3.8.1.2	E3.8.1.2	Halo	Halogenated Compounds	Compound degradation	Halo
 pceA	pceA	Halo	Halogenated Compounds	Compound degradation	Halo
-arcC	arsC	As	Arsenic	Arsenate reduction	AsO4-R
+arsC	arsC	As	Arsenic	Arsenate reduction	AsO4-R
 arsC2	arsC2	As	Arsenic	Arsenate reduction	AsO4-R
 aoxA	aoxA	As	Arsenic	Arsenite oxidation	AsO3-R
 aoxB	aoxB	As	Arsenic	Arsenite oxidation	AsO3-R

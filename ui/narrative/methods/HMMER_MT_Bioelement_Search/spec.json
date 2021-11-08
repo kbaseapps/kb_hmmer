@@ -999,10 +999,10 @@
 					"ui-name": "MT_Bioelement_As_ALL"
 				},
 				{
-					"value": "arcC",
+					"value": "arsC",
 					"display": "Arsenate reduction - arsC",
-					"id": "MT_Bioelement_As_arcC",
-					"ui-name": "MT_Bioelement_As_arcC"
+					"id": "MT_Bioelement_As_arsC",
+					"ui-name": "MT_Bioelement_As_arsC"
 				},
 				{
 					"value": "arsC2",
