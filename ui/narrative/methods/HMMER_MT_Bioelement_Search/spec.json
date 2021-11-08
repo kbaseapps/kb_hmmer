@@ -118,7 +118,7 @@
 				},
 				{
 					"value": "narG",
-					"display": "Nitrite oxidation - narG",
+					"display": "Nitrate reduction / Nitrite oxidation - narG",
 					"id": "MT_Bioelement_N_narG",
 					"ui-name": "MT_Bioelement_N_narG"
 				},
@@ -133,12 +133,6 @@
 					"display": "Nitric oxide reduction - norC",
 					"id": "MT_Bioelement_N_norC",
 					"ui-name": "MT_Bioelement_N_norC"
-				},
-				{
-					"value": "narG",
-					"display": "Nitrite oxidation - narG",
-					"id": "MT_Bioelement_N_narG",
-					"ui-name": "MT_Bioelement_N_narG"
 				},
 				{
 					"value": "narH",
@@ -747,6 +741,12 @@
 					"ui-name": "MT_Bioelement_H_ALL"
 				},
 				{
+					"value": "hydrogenase_Fe",
+					"display": "Fe hydrogenase - hydrog_Fe",
+					"id": "MT_Bioelement_H_hydrogenase_Fe",
+					"ui-name": "MT_Bioelement_H_hydrogenase_Fe"
+				},
+				{
 					"value": "hydrogenase_FeFeGroupA1",
 					"display": "Fe-Fe hydrogenase - hydrog_FeFe_A1",
 					"id": "MT_Bioelement_H_hydrogenase_FeFeGroupA1",
@@ -775,6 +775,24 @@
 					"display": "Fe-Fe hydrogenase - hydrog_FeFe_B",
 					"id": "MT_Bioelement_H_hydrogenase_FeFeGroupB",
 					"ui-name": "MT_Bioelement_H_hydrogenase_FeFeGroupB"
+				},
+				{
+					"value": "hydrogenase_FeFeGroupC1",
+					"display": "Fe-Fe hydrogenase - hydrog_FeFe_C1",
+					"id": "MT_Bioelement_H_hydrogenase_FeFeGroupC1",
+					"ui-name": "MT_Bioelement_H_hydrogenase_FeFeGroupC1"
+				},
+				{
+					"value": "hydrogenase_FeFeGroupC2",
+					"display": "Fe-Fe hydrogenase - hydrog_FeFe_C2",
+					"id": "MT_Bioelement_H_hydrogenase_FeFeGroupC2",
+					"ui-name": "MT_Bioelement_H_hydrogenase_FeFeGroupC2"
+				},
+				{
+					"value": "hydrogenase_FeFeGroupC3",
+					"display": "Fe-Fe hydrogenase - hydrog_FeFe_C3",
+					"id": "MT_Bioelement_H_hydrogenase_FeFeGroupC3",
+					"ui-name": "MT_Bioelement_H_hydrogenase_FeFeGroupC3"
 				},
 				{
 					"value": "hydrogenase_NiFeGroup1a",
@@ -853,6 +871,24 @@
 					"display": "Ni-Fe hydrogenase - hydrog_NiFe_2b",
 					"id": "MT_Bioelement_H_hydrogenase_NiFeGroup2b",
 					"ui-name": "MT_Bioelement_H_hydrogenase_NiFeGroup2b"
+				},
+				{
+					"value": "hydrogenase_NiFeGroup2c",
+					"display": "Ni-Fe hydrogenase - hydrog_NiFe_2c",
+					"id": "MT_Bioelement_H_hydrogenase_NiFeGroup2c",
+					"ui-name": "MT_Bioelement_H_hydrogenase_NiFeGroup2c"
+				},
+				{
+					"value": "hydrogenase_NiFeGroup2d",
+					"display": "Ni-Fe hydrogenase - hydrog_NiFe_2d",
+					"id": "MT_Bioelement_H_hydrogenase_NiFeGroup2d",
+					"ui-name": "MT_Bioelement_H_hydrogenase_NiFeGroup2d"
+				},
+				{
+					"value": "hydrogenase_NiFeGroup2e",
+					"display": "Ni-Fe hydrogenase - hydrog_NiFe_2e",
+					"id": "MT_Bioelement_H_hydrogenase_NiFeGroup2e",
+					"ui-name": "MT_Bioelement_H_hydrogenase_NiFeGroup2e"
 				},
 				{
 					"value": "hydrogenase_NiFeGroup3a",

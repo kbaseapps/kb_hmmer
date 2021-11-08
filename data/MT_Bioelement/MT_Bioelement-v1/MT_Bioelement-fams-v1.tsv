@@ -13,10 +13,9 @@ vnfK	vnfK	N	Nitrogen	N2 fixation	N2-F
 vnfG	vnfG	N	Nitrogen	N2 fixation	N2-F
 napA	napA	N	Nitrogen	Nitrate reduction	NO3-R
 napB	napB	N	Nitrogen	Nitrate reduction	NO3-R
-narG	narG	N	Nitrogen	Nitrate reduction	NO3-R
+narG	narG	N	Nitrogen	Nitrate reduction / Nitrite oxidation	NO3-R
 norB	norB	N	Nitrogen	Nitric oxide reduction	NO-R
 norC	norC	N	Nitrogen	Nitric oxide reduction	NO-R
-narG	narG	N	Nitrogen	Nitrite oxidation	NO2-Ox
 narH	narH	N	Nitrogen	Nitrite oxidation	NO2-Ox
 nrfA	nrfA	N	Nitrogen	Nitrite reduction	NO2-R
 nrfH	nrfH	N	Nitrogen	Nitrite reduction	NO2-R
@@ -90,11 +89,15 @@ mdo	mdo	C1	C1 Compounds	Methanol oxidation	CH3OH-Ox
 pqqC	pqqC	C1	C1 Compounds	Methanol oxidation	CH3OH-Ox
 mauA	mauA	C1	C1 Compounds	Methylamine -> formaldehyde	CH3NH2-DH
 mauB	mauB	C1	C1 Compounds	Methylamine -> formaldehyde	CH3NH2-DH
+hydrogenase_Fe	hydrog_Fe	H	Hydrogen	Fe hydrogenase	Fe-H
 hydrogenase_FeFeGroupA1	hydrog_FeFe_A1	H	Hydrogen	Fe-Fe hydrogenase	FeFe-H
 hydrogenase_FeFeGroupA2	hydrog_FeFe_A2	H	Hydrogen	Fe-Fe hydrogenase	FeFe-H
 hydrogenase_FeFeGroupA3	hydrog_FeFe_A3	H	Hydrogen	Fe-Fe hydrogenase	FeFe-H
 hydrogenase_FeFeGroupA4	hydrog_FeFe_A4	H	Hydrogen	Fe-Fe hydrogenase	FeFe-H
 hydrogenase_FeFeGroupB	hydrog_FeFe_B	H	Hydrogen	Fe-Fe hydrogenase	FeFe-H
+hydrogenase_FeFeGroupC1	hydrog_FeFe_C1	H	Hydrogen	Fe-Fe hydrogenase	FeFe-H
+hydrogenase_FeFeGroupC2	hydrog_FeFe_C2	H	Hydrogen	Fe-Fe hydrogenase	FeFe-H
+hydrogenase_FeFeGroupC3	hydrog_FeFe_C3	H	Hydrogen	Fe-Fe hydrogenase	FeFe-H
 hydrogenase_NiFeGroup1a	hydrog_NiFe_1a	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
 hydrogenase_NiFeGroup1b	hydrog_NiFe_1b	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
 hydrogenase_NiFeGroup1c	hydrog_NiFe_1c	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
@@ -108,6 +111,9 @@ hydrogenase_NiFeGroup1j	hydrog_NiFe_1j	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
 hydrogenase_NiFeGroup1k	hydrog_NiFe_1k	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
 hydrogenase_NiFeGroup2a	hydrog_NiFe_2a	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
 hydrogenase_NiFeGroup2b	hydrog_NiFe_2b	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
+hydrogenase_NiFeGroup2b	hydrog_NiFe_2c	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
+hydrogenase_NiFeGroup2b	hydrog_NiFe_2d	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
+hydrogenase_NiFeGroup2b	hydrog_NiFe_2e	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
 hydrogenase_NiFeGroup3a	hydrog_NiFe_3a	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
 hydrogenase_NiFeGroup3b	hydrog_NiFe_3b	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H
 hydrogenase_NiFeGroup3c	hydrog_NiFe_3c	H	Hydrogen	Ni-Fe hydrogenase	NiFe-H

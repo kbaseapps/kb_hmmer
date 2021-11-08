@@ -12,7 +12,7 @@ vnfK	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02932" target="_bla
 vnfG	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR02930" target="_blank">TIGR02930</a> - V-containing nitrogenase, delta subunit
 napA	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01706" target="_blank">TIGR01706</a> - periplasmic nitrate reductase, large subunit
 napB	<a href="https://pfam.xfam.org/family/PF03892" target="_blank">PF03892</a> - Nitrate reductase cytochrome c-type subunit (NapB)
-narG	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01580" target="_blank">TIGR01580</a> - nitrate reductase, alpha subunit
+narG	<a href="https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR01580" target="_blank">TIGR01580</a> - nitrate reductase / nitrite oxidase, alpha subunit
 narH	<a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a> - Nitrite oxidation 
 norB	<a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a> - Nitric oxide reduction
 norC	<a href="https://doi.org/10.1038/ncomms13219" target="_blank">Custom Model</a> - Nitric oxide reduction
