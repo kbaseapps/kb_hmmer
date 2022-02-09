@@ -1275,30 +1275,6 @@
                 ]
             }
         },
-        {
-            "id": "count_category",
-            "optional": false,
-            "advanced": true,
-            "allow_multiple": false,
-            "default_values": [ "raw_count" ],
-            "field_type": "dropdown",
-            "dropdown_options": {
-                "options": [
-                                {
-                                        "value": "raw_count",
-                                        "display": "raw count of genes with the annotation",
-                                        "id": "raw_count",
-                                        "ui-name": "raw_count"
-                                },
-                                {
-                                        "value": "perc_all",
-                                        "display": "percentage of all protein-coding genes",
-                                        "id": "perc_all",
-                                        "ui-name": "perc_all"
-                                }
-                ]
-            }
-        },
 	{
             "id": "output_filtered_name",
             "optional": false,
@@ -1481,6 +1457,30 @@
             }
         },
         {
+            "id": "count_category",
+            "optional": false,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "raw_count" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                        "value": "raw_count",
+                                        "display": "raw count of genes with the annotation",
+                                        "id": "raw_count",
+                                        "ui-name": "raw_count"
+                                },
+                                {
+                                        "value": "perc_all",
+                                        "display": "percentage of all protein-coding genes",
+                                        "id": "perc_all",
+                                        "ui-name": "perc_all"
+                                }
+                ]
+            }
+        },
+        {
             "id": "low_val",
             "optional": false,
             "advanced": true,
@@ -1611,10 +1611,6 @@
                     "target_property": "genome_disp_name_config"
                 },
                 {
-                    "input_parameter": "count_category",
-                    "target_property": "count_category"
-                },
-                {
                     "input_parameter": "output_filtered_name",
                     "target_property": "output_filtered_name"
                 },
@@ -1657,6 +1653,10 @@
                 {
                     "input_parameter": "heatmap",
                     "target_property": "heatmap"
+                },
+                {
+                    "input_parameter": "count_category",
+                    "target_property": "count_category"
                 },
                 {
                     "input_parameter": "low_val",

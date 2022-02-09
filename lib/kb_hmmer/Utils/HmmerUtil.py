@@ -409,6 +409,7 @@ class HmmerUtil:
         all_genome_refs = []
         genome_refs = dict()
         feature_ids = dict()
+        genome_CDS_count_by_ref = dict()
         appropriate_sequence_found_in_many_inputs = dict()
         input_many_names = dict()
         many_type_names = dict()
@@ -517,6 +518,9 @@ class HmmerUtil:
                     genome_refs[input_many_ref] = these_genome_refs
                     all_genome_refs.extend(these_genome_refs)
                     
+                    for this_genome_ref in these_genome_refs:
+                        genome_CDS_count_by_ref[this_genome_ref] = len(feature_ids[input_many_ref]['by_genome_ref'][this_genome_ref])
+
                 # DEBUG
                 #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
                 #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
@@ -557,6 +561,8 @@ class HmmerUtil:
                     genome_refs[input_many_ref] = [input_many_ref]
                     all_genome_refs.append(input_many_ref)
                     
+                    genome_CDS_count_by_ref[input_many_ref] = len(feature_ids[input_many_ref]['basic'])
+
                 # DEBUG
                 #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
                 #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
@@ -586,7 +592,7 @@ class HmmerUtil:
                     'invalid_msgs': invalid_msgs,
                     'residue_type': 'protein',
                     'feature_type': 'CDS',
-                    'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
+                    'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%featurev_id%%',
                     'record_desc_pattern': '[%%genome_ref%%]',
                     'case': 'upper',
                     'linewrap': 50,
@@ -604,6 +610,10 @@ class HmmerUtil:
                 feature_ids[input_many_ref]['by_genome_id'] = GenomeSetToFASTA_retVal['feature_ids_by_genome_id']
                 if len(feature_ids[input_many_ref]['by_genome_id'].keys()) > 0:
                     appropriate_sequence_found_in_many_inputs[input_many_ref] = True
+
+                    for this_genome_id in feature_ids[input_many_ref]['by_genome_id'].keys():
+                        this_genome_ref = input_many_genomeSet['elements'][this_genome_id]['ref']
+                        genome_CDS_count_by_ref[this_genome_ref] = len(feature_ids[input_many_ref]['by_genome_id'][this_genome_id])
 
                 # DEBUG
                 #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
@@ -659,6 +669,10 @@ class HmmerUtil:
                 if len(feature_ids[input_many_ref]['by_genome_id'].keys()) > 0:
                     appropriate_sequence_found_in_many_inputs[input_many_ref] = True
 
+                    for this_genome_id in feature_ids[input_many_ref]['by_genome_id'].keys():
+                        this_genome_ref = input_many_tree['ws_refs'][this_genome_id]['g'][0]
+                        genome_CDS_count_by_ref[this_genome_ref] = len(feature_ids[input_many_ref]['by_genome_id'][this_genome_id])
+
                 # DEBUG
                 #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
                 #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
@@ -697,6 +711,7 @@ class HmmerUtil:
                 feature_ids[input_many_ref]['basic'] = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_ids']
                 if len(feature_ids) > 0:
                     appropriate_sequence_found_in_many_inputs[input_many_ref] = True
+                    genome_CDS_count_by_ref[input_many_ref] = len(feature_ids[input_many_ref]['basic'])
 
                 genome_refs[input_many_ref] = [input_many_ref]
                 all_genome_refs.append(input_many_ref)
@@ -1878,7 +1893,9 @@ class HmmerUtil:
             table_data = dict()
             table_genes = dict()
             INSANE_VALUE = 10000000000000000
-            if params.get('low_val') and params['low_val'] != 'detect':
+            if params.get('count_category') and params['count_category'] == 'perc_all':
+                overall_low_val = INSANE_VALUE
+            elif params.get('low_val') and params['low_val'] != 'detect':
                 overall_low_val = float(params['low_val'])
             else:
                 overall_low_val = INSANE_VALUE
@@ -1906,6 +1923,15 @@ class HmmerUtil:
                         table_genes[genome_ref][cat] = hit_genes_by_genome_and_model[genome_ref][cat]
                         cat_seen[cat] = True
 
+            # adjust to perc all CDS if not raw count
+            if params.get('count_category') and params['count_category'] == 'perc_all':
+                for genome_ref in all_genome_refs:
+                    total_genes = genome_CDS_count_by_ref[genome_ref]
+                    for cat in cats:
+                        if table_data[genome_ref][cat] != 0:
+                            table_data[genome_ref][cat] /= float(total_genes)
+                            table_data[genome_ref][cat] *= 100.0
+                        
             # determine high and low val
             for genome_ref in all_genome_refs:
                 for cat in cats:

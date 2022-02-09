@@ -1586,6 +1586,74 @@ class kb_hmmerTest(unittest.TestCase):
         pass
 
 
+    ### Test 16_03: MT_Bioelement Models against Single AMA, calc perc of total CDS count
+    #
+    # uncomment to skip this test
+    # HIDE @unittest.skip("skipped test test_16_03_kb_hmmer_HMMER_MT_Bioelement_Search_AMA_perc_CDS()")
+    def test_16_03_kb_hmmer_HMMER_MT_Bioelement_Search_AMA_perc_CDS(self):
+        test_name = 'test_16_03_kb_hmmer_HMMER_MT_Bioelement_Search_AMA_perc_CDS'
+        header_msg = "RUNNING "+test_name+"()"
+        header_delim = len(header_msg) * '='
+        print ("\n"+header_delim+"\n"+header_msg+"\n"+header_delim+"\n")
+
+        obj_basename = test_name+'.HMMER_MSA'
+        obj_out_name = obj_basename+".test_output.FS"
+        obj_out_type = "KBaseCollections.FeatureSet"
+
+        [OBJID_I, NAME_I, TYPE_I, SAVE_DATE_I, VERSION_I, SAVED_BY_I, WSID_I, WORKSPACE_I, CHSUM_I, SIZE_I, META_I] = range(11)  # object_info tuple
+
+        #reference_prok_genomes_WS = 'ReferenceDataManager'  # PROD and CI
+        #genome_ref_1 = 'ReferenceDataManager/GCF_000021385.1/1'  # D. vulgaris str. 'Miyazaki F'
+
+        # app run params
+        parameters = { 'workspace_name': self.getWsName(),
+                       'input_MT_Bioelement_N_ids': ['ALL'],
+                       'input_MT_Bioelement_H_ids': ['ALL'],
+                       'input_MT_Bioelement_O_ids': ['ALL'],
+                       'input_MT_Bioelement_CFix_ids': ['ALL'],
+                       'input_MT_Bioelement_C1_ids': ['ALL'],
+                       'input_MT_Bioelement_CH4_ids': ['ALL'],
+                       'input_MT_Bioelement_CO_ids': ['ALL'],
+                       'input_MT_Bioelement_S_ids': ['ALL'],
+                       'input_MT_Bioelement_CN_ids': ['ALL'],
+                       'input_MT_Bioelement_CH4N2O_ids': ['ALL'],
+                       'input_MT_Bioelement_Se_ids': ['ALL'],
+                       'input_MT_Bioelement_Metal_ids': ['ALL'],
+                       'input_MT_Bioelement_As_ids': ['ALL'],
+                       'input_MT_Bioelement_Halo_ids': ['ALL'],
+                       'input_many_refs': [self.ama_refs[0]],  # Single AMA
+                       'output_filtered_name': obj_out_name,
+                       'genome_disp_name_config': 'obj_name_sci_name',
+                       'coalesce_output': 0,
+                       'use_model_specific_thresholds': 1,
+                       'show_target_block_headers': 1,
+                       'save_ALL_featureSets': 1,
+                       'save_ANY_featureSets': 1,
+                       'e_value': ".001",
+                       'bitscore': "50",
+                       'model_cov_perc': "35.0",
+                       'maxaccepts': "1000",
+                       'heatmap': "1",
+                       'count_category': "perc_all",
+                       'low_val': "detect",
+                       'vertical': "1",
+                       'show_blanks': "0"
+                     }
+        ret = self.getImpl().HMMER_MT_Bioelement_Search(self.getContext(), parameters)[0]
+        self.assertIsNotNone(ret['report_ref'])
+
+        # check created obj
+        #report_obj = self.getWsClient().get_objects2({'objects':[{'ref':ret['report_ref']}]})[0]['data']
+        report_obj = self.getWsClient().get_objects([{'ref':ret['report_ref']}])[0]['data']
+        self.assertIsNotNone(report_obj['objects_created'][0]['ref'])
+
+        created_objs_info = self.getWsClient().get_object_info_new({'objects':[{'ref':report_obj['objects_created'][0]['ref']}]})
+        for created_obj_info in created_objs_info:
+            #self.assertEqual(created_obj_info[NAME_I], obj_out_name)  # MSA name is prepended
+            self.assertEqual(created_obj_info[TYPE_I].split('-')[0], obj_out_type)
+        pass
+
+
     ### Test 17: MT_Bioelement Models against GenomeSet, DON'T coalesce output
     #
     # uncomment to skip this test
@@ -1723,7 +1791,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 17_03: MT_Bioelement Models against SpeciesTree
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_17_03_kb_hmmer_HMMER_MT_Bioelement_Search_SpeciesTree()")
+    @unittest.skip("skipped test test_17_03_kb_hmmer_HMMER_MT_Bioelement_Search_SpeciesTree()")
     def test_17_03_kb_hmmer_HMMER_MT_Bioelement_Search_SpeciesTree(self):
         test_name = 'test_17_03_kb_hmmer_HMMER_MT_Bioelement_Search_SpeciesTree'
         header_msg = "RUNNING "+test_name+"()"
