@@ -702,6 +702,7 @@ HMMER_MT_Bioelement_Params is a reference to a hash where the following keys are
 	input_many_refs has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
+	count_category has a value which is a string
 	use_model_specific_thresholds has a value which is a kb_hmmer.bool
 	show_target_block_headers has a value which is a kb_hmmer.bool
 	coalesce_output has a value which is a kb_hmmer.bool
@@ -750,6 +751,7 @@ HMMER_MT_Bioelement_Params is a reference to a hash where the following keys are
 	input_many_refs has a value which is a kb_hmmer.data_obj_ref
 	output_filtered_name has a value which is a kb_hmmer.data_obj_name
 	genome_disp_name_config has a value which is a string
+	count_category has a value which is a string
 	use_model_specific_thresholds has a value which is a kb_hmmer.bool
 	show_target_block_headers has a value which is a kb_hmmer.bool
 	coalesce_output has a value which is a kb_hmmer.bool
@@ -1562,6 +1564,7 @@ input_MT_Bioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_refs has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
+count_category has a value which is a string
 use_model_specific_thresholds has a value which is a kb_hmmer.bool
 show_target_block_headers has a value which is a kb_hmmer.bool
 coalesce_output has a value which is a kb_hmmer.bool
@@ -1601,6 +1604,7 @@ input_MT_Bioelement_Halo_ids has a value which is a kb_hmmer.data_obj_ref
 input_many_refs has a value which is a kb_hmmer.data_obj_ref
 output_filtered_name has a value which is a kb_hmmer.data_obj_name
 genome_disp_name_config has a value which is a string
+count_category has a value which is a string
 use_model_specific_thresholds has a value which is a kb_hmmer.bool
 show_target_block_headers has a value which is a kb_hmmer.bool
 coalesce_output has a value which is a kb_hmmer.bool

@@ -218,6 +218,7 @@ module kb_hmmer {
 	data_obj_ref   input_many_refs;
         data_obj_name  output_filtered_name;
         string         genome_disp_name_config;
+        string         count_category;
 	bool           use_model_specific_thresholds;
 	
 	bool  show_target_block_headers;

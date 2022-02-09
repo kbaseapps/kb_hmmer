@@ -39,6 +39,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "input_many_refs",
     "output_filtered_name",
     "genome_disp_name_config",
+    "count_category",
     "use_model_specific_thresholds",
     "show_target_block_headers",
     "coalesce_output",
@@ -91,6 +92,8 @@ public class HMMERMTBioelementParams {
     private String outputFilteredName;
     @JsonProperty("genome_disp_name_config")
     private String genomeDispNameConfig;
+    @JsonProperty("count_category")
+    private String countCategory;
     @JsonProperty("use_model_specific_thresholds")
     private Long useModelSpecificThresholds;
     @JsonProperty("show_target_block_headers")
@@ -389,6 +392,21 @@ public class HMMERMTBioelementParams {
         return this;
     }
 
+    @JsonProperty("count_category")
+    public String getCountCategory() {
+        return countCategory;
+    }
+
+    @JsonProperty("count_category")
+    public void setCountCategory(String countCategory) {
+        this.countCategory = countCategory;
+    }
+
+    public HMMERMTBioelementParams withCountCategory(String countCategory) {
+        this.countCategory = countCategory;
+        return this;
+    }
+
     @JsonProperty("use_model_specific_thresholds")
     public Long getUseModelSpecificThresholds() {
         return useModelSpecificThresholds;
@@ -596,7 +614,7 @@ public class HMMERMTBioelementParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((("HMMERMTBioelementParams"+" [workspaceName=")+ workspaceName)+", inputMTBioelementNIds=")+ inputMTBioelementNIds)+", inputMTBioelementHIds=")+ inputMTBioelementHIds)+", inputMTBioelementOIds=")+ inputMTBioelementOIds)+", inputMTBioelementCFixIds=")+ inputMTBioelementCFixIds)+", inputMTBioelementC1Ids=")+ inputMTBioelementC1Ids)+", inputMTBioelementCH4Ids=")+ inputMTBioelementCH4Ids)+", inputMTBioelementCOIds=")+ inputMTBioelementCOIds)+", inputMTBioelementSIds=")+ inputMTBioelementSIds)+", inputMTBioelementCNIds=")+ inputMTBioelementCNIds)+", inputMTBioelementCH4N2OIds=")+ inputMTBioelementCH4N2OIds)+", inputMTBioelementSeIds=")+ inputMTBioelementSeIds)+", inputMTBioelementMetalIds=")+ inputMTBioelementMetalIds)+", inputMTBioelementAsIds=")+ inputMTBioelementAsIds)+", inputMTBioelementHaloIds=")+ inputMTBioelementHaloIds)+", inputManyRefs=")+ inputManyRefs)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", useModelSpecificThresholds=")+ useModelSpecificThresholds)+", showTargetBlockHeaders=")+ showTargetBlockHeaders)+", coalesceOutput=")+ coalesceOutput)+", saveALLFeatureSets=")+ saveALLFeatureSets)+", saveANYFeatureSets=")+ saveANYFeatureSets)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", modelCovPerc=")+ modelCovPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", lowVal=")+ lowVal)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((("HMMERMTBioelementParams"+" [workspaceName=")+ workspaceName)+", inputMTBioelementNIds=")+ inputMTBioelementNIds)+", inputMTBioelementHIds=")+ inputMTBioelementHIds)+", inputMTBioelementOIds=")+ inputMTBioelementOIds)+", inputMTBioelementCFixIds=")+ inputMTBioelementCFixIds)+", inputMTBioelementC1Ids=")+ inputMTBioelementC1Ids)+", inputMTBioelementCH4Ids=")+ inputMTBioelementCH4Ids)+", inputMTBioelementCOIds=")+ inputMTBioelementCOIds)+", inputMTBioelementSIds=")+ inputMTBioelementSIds)+", inputMTBioelementCNIds=")+ inputMTBioelementCNIds)+", inputMTBioelementCH4N2OIds=")+ inputMTBioelementCH4N2OIds)+", inputMTBioelementSeIds=")+ inputMTBioelementSeIds)+", inputMTBioelementMetalIds=")+ inputMTBioelementMetalIds)+", inputMTBioelementAsIds=")+ inputMTBioelementAsIds)+", inputMTBioelementHaloIds=")+ inputMTBioelementHaloIds)+", inputManyRefs=")+ inputManyRefs)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", countCategory=")+ countCategory)+", useModelSpecificThresholds=")+ useModelSpecificThresholds)+", showTargetBlockHeaders=")+ showTargetBlockHeaders)+", coalesceOutput=")+ coalesceOutput)+", saveALLFeatureSets=")+ saveALLFeatureSets)+", saveANYFeatureSets=")+ saveANYFeatureSets)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", modelCovPerc=")+ modelCovPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", lowVal=")+ lowVal)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

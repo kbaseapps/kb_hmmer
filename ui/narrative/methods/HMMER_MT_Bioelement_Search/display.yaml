@@ -31,7 +31,7 @@ parameters :
         ui-name : |
             Targets Objects
         short-hint : |
-            PROTEIN Targets objects to be searched. Data types may be FeatureSet, Genome, GenomeSet, or AnnotatedMetagenomeAssembly.
+            PROTEIN Targets objects to be searched. Data types may be FeatureSet, Genome, GenomeSet, SpeciesTree, or AnnotatedMetagenomeAssembly.
     genome_disp_name_config:
         ui-name : |
             Display genome as

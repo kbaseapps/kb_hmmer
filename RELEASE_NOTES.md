@@ -1,3 +1,7 @@
+### Version 1.9.1
+__Changes__
+- added Species Tree input to MicroTrait App
+
 ### Version 1.9.0
 __Changes__
 - added MicroTrait BioElement App

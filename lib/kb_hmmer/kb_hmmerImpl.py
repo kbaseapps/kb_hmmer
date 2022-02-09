@@ -51,9 +51,9 @@ class kb_hmmer:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "1.9.0"
+    VERSION = "1.9.1"
     GIT_URL = "https://github.com/kbaseapps/kb_hmmer"
-    GIT_COMMIT_HASH = "6ef3f69017ff6b82edb5acd566441c553d849cd3"
+    GIT_COMMIT_HASH = "8f5bf78d09a3435da00c0e126046dace9c8c9eb5"
 
     #BEGIN_CLASS_HEADER
     workspaceURL = None
@@ -3719,9 +3719,9 @@ class kb_hmmer:
            parameter "input_MT_Bioelement_Halo_ids" of type "data_obj_ref",
            parameter "input_many_refs" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "genome_disp_name_config" of String, parameter
-           "use_model_specific_thresholds" of type "bool", parameter
-           "show_target_block_headers" of type "bool", parameter
+           "genome_disp_name_config" of String, parameter "count_category" of
+           String, parameter "use_model_specific_thresholds" of type "bool",
+           parameter "show_target_block_headers" of type "bool", parameter
            "coalesce_output" of type "bool", parameter "save_ALL_featureSets"
            of type "bool", parameter "save_ANY_featureSets" of type "bool",
            parameter "e_value" of Double, parameter "bitscore" of Double,

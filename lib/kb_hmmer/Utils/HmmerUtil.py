@@ -15,12 +15,18 @@ import numpy as np
 import math
 import gzip
 
-from installed_clients.WorkspaceClient import Workspace
+# Tree utils
+import ete3
 
 # SDK Utils
+from installed_clients.WorkspaceClient import Workspace
 from installed_clients.KBaseDataObjectToFileUtilsClient import KBaseDataObjectToFileUtils
 from installed_clients.DataFileUtilClient import DataFileUtil as DFUClient
 from installed_clients.KBaseReportClient import KBaseReport
+
+# resource Utils
+from installed_clients.BBToolsClient import BBTools
+
 
 # silence whining
 import requests
@@ -429,7 +435,7 @@ class HmmerUtil:
                 raise ValueError('Unable to fetch input_many_name object from workspace: ' + str(e))
                 #to get the full stack trace: traceback.format_exc()
 
-            # Handle overloading (input_many can be SequenceSet, FeatureSet, Genome, or GenomeSet)
+            # Handle overloading (input_many can be SequenceSet, FeatureSet, Genome, GenomeSet, Tree, or AMA)
             #
             if many_type_name == 'SequenceSet':
                 try:
@@ -604,6 +610,60 @@ class HmmerUtil:
                 #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
 
                 
+            # SpeciesTree
+            #
+            elif many_type_name == 'Tree':
+                input_many_tree = input_many_data
+                input_many_objs[input_many_ref] = input_many_tree
+                many_forward_reads_file_dir = self.output_dir
+                many_forward_reads_file = input_many_name + ".fasta"
+
+                if 'type' not in input_many_tree or \
+                   input_many_tree['type'] != 'SpeciesTree':
+                    raise ValueError ("Tree type must be SpeciesTree for object "+input_many_names[input_many_ref])
+                if 'ws_refs' not in input_many_tree:
+                    raise ValueError ("Tree must contain ws_refs data for object "+input_many_names[input_many_ref])
+
+                for genome_id in input_many_tree['ws_refs']:
+                    genome_ref = input_many_tree['ws_refs'][genome_id]['g'][0]
+                    if genome_ref not in genome_refs:
+                        genome_refs[input_many_ref].append(genome_ref)
+                        all_genome_refs.append(genome_ref)
+                        
+                # DEBUG
+                #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+                SpeciesTreeToFASTA_params = {
+                    'tree_ref': input_many_ref,
+                    'file': many_forward_reads_file,
+                    'dir': many_forward_reads_file_dir,
+                    'console': console,
+                    'invalid_msgs': invalid_msgs,
+                    'residue_type': 'protein',
+                    'feature_type': 'CDS',
+                    'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
+                    'record_desc_pattern': '[%%genome_ref%%]',
+                    'case': 'upper',
+                    'linewrap': 50,
+                    'merge_fasta_files': 'TRUE'
+                }
+
+                #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
+                #SERVICE_VER = 'release'
+                SERVICE_VER = 'dev'
+                DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+                SpeciesTreeToFASTA_retVal = DOTFU.SpeciesTreeToFASTA(SpeciesTreeToFASTA_params)
+                obj2file_retVal[input_many_ref] = SpeciesTreeToFASTA_retVal
+                many_forward_reads_file_paths[input_many_ref] = SpeciesTreeToFASTA_retVal['fasta_file_path_list'][0]
+                feature_ids[input_many_ref] = dict()
+                feature_ids[input_many_ref]['by_genome_id'] = SpeciesTreeToFASTA_retVal['feature_ids_by_genome_id']
+                if len(feature_ids[input_many_ref]['by_genome_id'].keys()) > 0:
+                    appropriate_sequence_found_in_many_inputs[input_many_ref] = True
+
+                # DEBUG
+                #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+                #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
+
+                
             # AnnotatedMetagenomeAssembly
             #
             elif many_type_name == 'AnnotatedMetagenomeAssembly':
@@ -662,6 +722,9 @@ class HmmerUtil:
                  or many_type_names[input_many_ref] == 'AnnotatedMetagenomeAssembly':
                 seq_total = len(feature_ids[input_many_ref]['basic'])
             elif many_type_names[input_many_ref] == 'GenomeSet':
+                for genome_id in feature_ids[input_many_ref]['by_genome_id'].keys():
+                    seq_total += len(feature_ids[input_many_ref]['by_genome_id'][genome_id])
+            elif many_type_names[input_many_ref] == 'Tree':
                 for genome_id in feature_ids[input_many_ref]['by_genome_id'].keys():
                     seq_total += len(feature_ids[input_many_ref]['by_genome_id'][genome_id])
 
@@ -1252,6 +1315,28 @@ class HmmerUtil:
                                         if genome_ref not in output_featureSet['elements'][feature_id]:
                                             output_featureSet['elements'][feature_id].append(genome_ref)
 
+                        # Parse SpeciesTree hits into FeatureSet
+                        #
+                        elif many_type_name == 'Tree':
+                            #self.log(console,"READING HITS FOR GENOMES")  # DEBUG
+                            input_many_tree = input_many_objs[input_many_ref]
+                            for genome_id in feature_ids[input_many_ref]['by_genome_id'].keys():
+                                #self.log(console,"READING HITS FOR GENOME "+genome_id)  # DEBUG
+                                genome_ref = input_many_tree['ws_refs'][genome_id]['g'][0]
+                                for feature_id in feature_ids[input_many_ref]['by_genome_id'][genome_id]:
+                                    id_untrans = genome_ref + genome_id_feature_id_delim + feature_id
+                                    id_trans = re.sub('\|', ':', id_untrans)
+                                    if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
+                                        #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
+                                        #output_featureSet['element_ordering'].append(feature['id'])
+                                        accept_fids[id_untrans] = True
+                                        #feature_id = id_untrans  # don't change fId for output FeatureSet
+                                        if feature_id not in output_featureSet['elements']:
+                                            output_featureSet['elements'][feature_id] = []
+                                            output_featureSet['element_ordering'].append(feature_id)
+                                        if genome_ref not in output_featureSet['elements'][feature_id]:
+                                            output_featureSet['elements'][feature_id].append(genome_ref)
+
                         # Parse AnnotatedMetagenomeAssembly hits into FeatureSet
                         #
                         elif many_type_name == 'AnnotatedMetagenomeAssembly':
@@ -1326,7 +1411,7 @@ class HmmerUtil:
                                     }]
                                 })[0]
                             '''
-                            #else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+                            #else:  # input FeatureSet, Genome, GenomeSet, Tree, and AMA -> upload FeatureSet output
                             new_obj_info = self.wsClient.save_objects({
                                 'workspace': params['workspace_name'],
                                 'objects': [{
@@ -1367,12 +1452,13 @@ class HmmerUtil:
                     for input_many_ref in input_many_refs:
                         many_type_name = many_type_names[input_many_ref]
 
+                        print ("SETTING FEATURE_ID_TO_FUNCTION")  # DEBUG
                         for genome_ref in obj2file_retVal[input_many_ref]['feature_id_to_function'].keys():
                             if genome_ref not in feature_id_to_function:
                                 feature_id_to_function[genome_ref] = dict()
                             for fid in  obj2file_retVal[input_many_ref]['feature_id_to_function'][genome_ref].keys():
                                 feature_id_to_function[genome_ref][fid] = obj2file_retVal[input_many_ref]['feature_id_to_function'][genome_ref][fid]
-                        if many_type_name == 'Genome' or many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
+                        if many_type_name == 'Genome' or many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet' or many_type_name == 'Tree':
                             for genome_ref in obj2file_retVal[input_many_ref]['genome_ref_to_obj_name'].keys():
                                 genome_ref_to_obj_name[genome_ref] = obj2file_retVal[input_many_ref]['genome_ref_to_obj_name'][genome_ref]
                                 genome_ref_to_sci_name[genome_ref] = obj2file_retVal[input_many_ref]['genome_ref_to_sci_name'][genome_ref]
@@ -1468,9 +1554,10 @@ class HmmerUtil:
                             elif many_type_name == 'Genome' or \
                                  many_type_name == 'AnnotatedMetagenomeAssembly' or \
                                  many_type_name == 'GenomeSet' or \
+                                 many_type_name == 'Tree' or \
                                  many_type_name == 'FeatureSet':
                                 
-                                if 'Set' in many_type_name:
+                                if 'Set' in many_type_name or many_type_name == 'Tree':
                                     [genome_ref, hit_fid] = hit_seq_id.split(genome_id_feature_id_delim)
                                 else:
                                     genome_ref = input_many_ref
@@ -1488,7 +1575,7 @@ class HmmerUtil:
                                         #self.log (console, "GOT ONE!")  # DEBUG
                                         if many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
                                             accept_id = fid
-                                        elif many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
+                                        elif many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet' or many_type_name == 'Tree':
                                             accept_id = genome_ref + genome_id_feature_id_delim + fid
                                         if accept_id in accept_fids:
                                             row_color = accept_row_color
@@ -1642,7 +1729,7 @@ class HmmerUtil:
                                 }]
                             })[0]
 
-                        else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+                        else:  # input FeatureSet, Genome, GenomeSet, Tree, and AMA -> upload FeatureSet output
 
                             output_featureSet['element_ordering'] = coalesce_featureIds_element_ordering
                             output_featureSet['elements'] = dict()
@@ -1839,6 +1926,7 @@ class HmmerUtil:
             
             # build html report
             sp = '&nbsp;'
+            body_bgcolor = '#ffffff'
             text_color = "#606060"
             text_color_2 = "#606060"
             head_color_1 = "#eeeeee"
@@ -1919,12 +2007,14 @@ class HmmerUtil:
                 ".vertical-text_title {\ndisplay: inline-block;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
 
             # add colors as style for DIV
+            html_report_lines += [".heatmap_cell-"+'BLANK'+" {\nwidth: "+str(cell_width)+"px;\nheight: "+str(cell_height)+"px;\nborder-radius: "+str(corner_radius)+"px;\nbackground-color: "+body_bgcolor+";\ntext-align: center;\n}"]
+            
             for color_i,color_val in enumerate(color_list):
                 html_report_lines += [".heatmap_cell-"+str(color_i)+" {\nwidth: "+str(cell_width)+"px;\nheight: "+str(cell_height)+"px;\nborder-radius: "+str(corner_radius)+"px;\nbackground-color: "+str(color_val)+";\ntext-align: center;\n}"]
             
             html_report_lines += ['</style>']
             html_report_lines += ['</head>']
-            html_report_lines += ['<body bgcolor="white">']
+            html_report_lines += ['<body bgcolor="'+body_bgcolor+'">']
             html_report_lines += ['<font color="' + header_tab_color + '" size=' +
                                   header_tab_fontsize + '><b>TABULAR PROFILE</b></font> | ']
 
@@ -2025,10 +2115,26 @@ class HmmerUtil:
                     
 
                     # add genome and ama rows, order GenomeSet elements by disp name
-                    if many_type_name != 'GenomeSet' and many_type_name != 'FeatureSet':
+                    genome_ref_order = []
+                    if many_type_name != 'GenomeSet' and many_type_name != 'FeatureSet' and many_type_name != 'Tree':
                         genome_ref_order = genome_refs[input_many_ref]
+                        
+                    # Use tree order, first ETE3 ladderize tree
+                    elif many_type_name == 'Tree':
+                        input_many_tree = input_many_objs[input_many_ref]
+                        genome_id_by_ref = dict()
+                        genome_ref_by_id = dict()    
+                        for genome_id in input_many_tree['default_node_labels'].keys():
+                            genome_ref = input_many_tree['ws_refs'][genome_id]['g'][0]
+                            genome_id_by_ref[genome_ref] = genome_id
+                            genome_ref_by_id[genome_id] = genome_ref
+                        species_tree = ete3.Tree(input_many_tree['tree'])
+                        species_tree.ladderize()
+                        for genome_id in species_tree.get_leaf_names():
+                            genome_ref_order.append(genome_ref_by_id[genome_id])
+
+                    # Sort disp names alphabetically
                     else:
-                        genome_ref_order = []
                         genome_disp_name_to_ref = dict()
                         for genome_ref in genome_refs[input_many_ref]:
                             genome_disp_name = self._get_genome_disp_name (params,
@@ -2062,7 +2168,10 @@ class HmmerUtil:
                                 continue
                             val = table_data[genome_ref][cat]
                             if not cat_seen.get(cat) or val == 0:
-                                html_report_lines += ['<td bgcolor=white></td>']
+                                #html_report_lines += ['<td bgcolor=white></td>']
+                                html_report_lines += ['<td align=center valign=middle bgcolor="'+body_bgcolor+'">']
+                                html_report_lines += ['<div class="heatmap_cell-BLANK"></div>']
+                                html_report_lines += ['</td>']
                                 continue
                             elif overall_high_val == overall_low_val:
                                 cell_color_i = 0
@@ -2080,7 +2189,7 @@ class HmmerUtil:
                                 hmm_group_i = hmm_id_to_hmm_group_index[cat]
                                 group_html_search_file = search_tool_name + '_Search-' + \
                                                          str(hmm_group_i) + '-' + str(hmm_group) + '.html'
-                                html_report_lines += ['<td title="'+cell_title+'" align=center valign=middle bgcolor=white>' +
+                                html_report_lines += ['<td title="'+cell_title+'" align=center valign=middle bgcolor="'+body_bgcolor+'">' +
                                                       '<a href="'+group_html_search_file+'#'+cat+'">' +
                                                       '<div class="heatmap_cell-'+str(cell_color_i)+'"></div>' +
                                                       '</a></td>']

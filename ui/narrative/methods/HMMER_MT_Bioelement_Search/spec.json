@@ -1,5 +1,5 @@
 {
-    "ver": "1.9.0",
+    "ver": "1.9.1",
     "authors": [
         "dylan", "ukaraoz", "seanjungbluth"
     ],
@@ -1228,7 +1228,8 @@
                 "valid_ws_types": [ "KBaseCollections.FeatureSet",
 				    "KBaseGenomes.Genome",
 				    "KBaseSearch.GenomeSet",
-				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly"
+				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly",
+				    "KBaseTrees.Tree"
 				  ]
             }
         },
@@ -1274,7 +1275,7 @@
                 ]
             }
         },
-        {
+	{
             "id": "output_filtered_name",
             "optional": false,
             "advanced": false,
