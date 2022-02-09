@@ -592,7 +592,7 @@ class HmmerUtil:
                     'invalid_msgs': invalid_msgs,
                     'residue_type': 'protein',
                     'feature_type': 'CDS',
-                    'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%featurev_id%%',
+                    'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
                     'record_desc_pattern': '[%%genome_ref%%]',
                     'case': 'upper',
                     'linewrap': 50,
