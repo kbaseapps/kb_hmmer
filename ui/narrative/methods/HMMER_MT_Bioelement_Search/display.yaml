@@ -37,6 +37,11 @@ parameters :
             Display genome as
         short-hint : |
             Use the object name, object version, and/or scientific name of the Genome in the function profile report
+    count_category :
+        ui-name : |
+            View values as
+        short-hint : |
+            Calculate hits as percentages of total genes or as raw counts of genes.
     input_MT_Bioelement_N_ids:
         ui-name : |
             Nitrogen - N

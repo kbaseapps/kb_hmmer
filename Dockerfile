@@ -43,7 +43,9 @@ RUN make all
 #
 WORKDIR /kb/module
 RUN \
-  git clone -b ${ETE3_VERSION} https://github.com/etetoolkit/ete
+  git clone -b ${ETE3_VERSION} https://github.com/etetoolkit/ete && \
+  cd ete && \
+  python setup.py install
 
 
 # Install HMMER
@@ -66,9 +68,7 @@ RUN \
 #
 WORKDIR /kb/module
 RUN \
-  curl https://bcb.unl.edu/dbCAN2/download/dbCAN-HMMdb-V${dbCAN_VERSION}.txt > data/dbCAN/dbCAN-v${dbCAN_VERSION}/dbCAN-fam-HMMs-v${dbCAN_VERSION}.txt && \
-  cd ete && \
-  python setup.py install
+  curl https://bcb.unl.edu/dbCAN2/download/dbCAN-HMMdb-V${dbCAN_VERSION}.txt > data/dbCAN/dbCAN-v${dbCAN_VERSION}/dbCAN-fam-HMMs-v${dbCAN_VERSION}.txt
 
 
 # Start up
