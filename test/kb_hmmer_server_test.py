@@ -945,7 +945,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 10_02: dbCAN Models against Single AnnotatedMetagenomeAssembly
     #
     # uncomment to skip this test
-    @unittest.skip("skipped test test_10_02_kb_hmmer_HMMER_dbCAN_Search_AMA()")
+    # HIDE @unittest.skip("skipped test test_10_02_kb_hmmer_HMMER_dbCAN_Search_AMA()")
     def test_10_02_kb_hmmer_HMMER_dbCAN_Search_AMA(self):
         test_name = 'test_10_02_kb_hmmer_HMMER_dbCAN_Search_AMA'
         header_msg = "RUNNING "+test_name+"()"
@@ -1589,7 +1589,7 @@ class kb_hmmerTest(unittest.TestCase):
     ### Test 16_03: MT_Bioelement Models against Single AMA, calc perc of total CDS count
     #
     # uncomment to skip this test
-    # HIDE @unittest.skip("skipped test test_16_03_kb_hmmer_HMMER_MT_Bioelement_Search_AMA_perc_CDS()")
+    @unittest.skip("skipped test test_16_03_kb_hmmer_HMMER_MT_Bioelement_Search_AMA_perc_CDS()")
     def test_16_03_kb_hmmer_HMMER_MT_Bioelement_Search_AMA_perc_CDS(self):
         test_name = 'test_16_03_kb_hmmer_HMMER_MT_Bioelement_Search_AMA_perc_CDS'
         header_msg = "RUNNING "+test_name+"()"

@@ -1,6 +1,6 @@
 ### Version 1.9.1
 __Changes__
-- added Species Tree input to MicroTrait App
+- added Species Tree input to MicroTrait App 
 - added scaling by percentage of genes in Genome or AMA to MicroTrait App
 
 ### Version 1.9.0
