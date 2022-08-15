@@ -967,7 +967,7 @@ class HmmerUtil:
                     if int(params.get('use_model_specific_thresholds',0)) == 1:
                         hmmer_search_cmd.append('--cut_tc')
                     else:
-                        hmmer_search_cmd.append('-domE')  # can't use -T with -E, so we'll use -E
+                        hmmer_search_cmd.append('--domE')  # can't use -T with -E, so we'll use -E
                         hmmer_search_cmd.append(str(params['e_value']))
                     hmmer_search_cmd.append(HMM_file_path)
                     hmmer_search_cmd.append(many_forward_reads_file_paths[input_many_ref])
