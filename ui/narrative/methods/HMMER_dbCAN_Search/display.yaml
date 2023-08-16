@@ -44,7 +44,7 @@ parameters :
         ui-name : |
             Output FeatureSet basename
         short-hint : |
-            FeatureSets containing hits with thresholds.  Object names will be HMM name attached to configured basename.
+            FeatureSets containing hits within thresholds.  Object names will be HMM name attached to configured basename.
     input_dbCAN_cellulosome_ids:
         ui-name : |
             Cellulosome Fams
@@ -191,4 +191,3 @@ publications :
         display-text: |
             Chivian D, Jungbluth SP, Dehal PS, Wood-Charlson EM, Canon RS, Allen BH, Clark MM, Gu T, Land ML, Price GA, Riehl WJ, Sneddon MW, Sutormin R, Zhang Q, Cottingham RW, Henry CS, Arkin AP. Metagenome-assembled genome extraction and analysis from microbiomes using KBase. Nat Protoc. 2023 Jan;18(1):208-238. doi: 10.1038/s41596-022-00747-x
         link: https://www.nature.com/articles/s41596-022-00747-x
-description : |
