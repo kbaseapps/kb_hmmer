@@ -75,6 +75,9 @@ description : |
 
     <p>This App turns a protein multiple sequence alignment (MSA) into a Hidden Markov Model (HMM) which is used to search a protein sequence database. The MSA must first be generated using a tool such as MUSCLE to build an MSA from a FeatureSet object. The KBase implementation permits searching through the genes in a Genome object, the genes in the Genome members of a GenomeSet, or the genes in a FeatureSet. The output object of these searches is a FeatureSet containing those genes that pass the thresholds given by the user. The App also provides a table of hits (with those hits that are below the thresholds in gray) and links to download the table of hits and a Stockholm format MSA.</p>
 
+    <p><b>Tool and Data Sources:</b></p>
+    <p>HMMER v3.3.2 is installed from <a href="http://hmmer.org">http://hmmer.org</a></p>
+    
     <p><b>Configuration:</b></p>
     <p><b><i>Query MSA:</i></b> The MSA to use as the query.  It must be generated using an alignment App such as MUSCLE. An HMM will be automatically generated from the MSA by hmmbuild.</p>
     <p><b><i>Targets Object:</i></b> The Targets object may be a FeatureSet of genes, a Genome, or a GenomeSet. An HMMER search database will be automatically generated from the Targets object.</p>
@@ -88,16 +91,28 @@ description : |
     <p><b><i>Output HTML Table:</i></b> The tab-delimited hit table is HTML-formatted and shows the region of the hit sequence (as there is no query sequence) covered by the HMMER alignment. Hits that are above the e-value threshold but below other thresholds and are not included in the FeatureSet output object are shown in gray, with the attributes that were below the threshold in red.</p>
     <p><b><i>Downloadable files:</i></b> HMMER table and Stockholm format MSA are available for download. These are not altered from the direct output from the HMMER run.</p>
 
-    <strong>Team members who implemented App in KBase:</strong> <a href="https://narrative.kbase.us/#people/dylan">Dylan Chivian</a>. For questions, please <a href=”http://www.kbase.us/support/”>contact us</a>.</p>
+    <p><strong>Team members who implemented App in KBase:</strong> <a href="https://narrative.kbase.us/#people/dylan">Dylan Chivian</a>. For questions, please <a href=”http://www.kbase.us/support/”>contact us</a>.</p>
 
+
+    <p><strong>Please cite:</strong>
+      <ul>
+        <li>Eddy SR. Accelerated Profile HMM Searches. PLOS Computational Biology. 2011;7: e1002195. doi:10.1371/journal.pcbi.1002195
+        <li>Chivian D, Jungbluth SP, Dehal PS, Wood-Charlson EM, Canon RS, Allen BH, Clark MM, Gu T, Land ML, Price GA, Riehl WJ, Sneddon MW, Sutormin R, Zhang Q, Cottingham RW, Henry CS, Arkin AP. Metagenome-assembled genome extraction and analysis from microbiomes using KBase. Nat Protoc. 2023 Jan;18(1):208-238. doi: 10.1038/s41596-022-00747-x
+      </ul>
+    </p>
 
 publications :
     -
+        pmid: 22039361
         display-text: |
             Eddy SR. Accelerated Profile HMM Searches. PLOS Computational Biology. 2011;7: e1002195. doi:10.1371/journal.pcbi.1002195
         link: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195
-
     -
         display-text: |
-            HMMER v3.3.1 source:
+            HMMER v3.3.2 source:
         link: http://HMMER.ORG
+    -
+        pmid: 36376589
+        display-text: |
+            Chivian D, Jungbluth SP, Dehal PS, Wood-Charlson EM, Canon RS, Allen BH, Clark MM, Gu T, Land ML, Price GA, Riehl WJ, Sneddon MW, Sutormin R, Zhang Q, Cottingham RW, Henry CS, Arkin AP. Metagenome-assembled genome extraction and analysis from microbiomes using KBase. Nat Protoc. 2023 Jan;18(1):208-238. doi: 10.1038/s41596-022-00747-x
+        link: https://www.nature.com/articles/s41596-022-00747-x

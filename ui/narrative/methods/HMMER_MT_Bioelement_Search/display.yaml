@@ -4,7 +4,10 @@
 name: Search with HMMs of MicroTrait Bioelement families - v1
 tooltip: |
     Search for matches to HMMs of MicroTrait environmental bioelement cycling families using HMMER 3
-screenshots: []
+screenshots:
+
+    - MT_Bioelement_profile.png
+    - MT_Bioelement_S_hit_table.png
 
 icon: bioelement-cyan.png
 
@@ -174,37 +177,57 @@ parameters :
             Show categories or families that have no counts
 
 description : |
-    <p>This method performs a set of Hidden Markov Model (HMM) searches on protein sequences using HMMER models built for a Group of MSAs.</p>
+    <p>This method scans protein sequences found in Genomes and Annotated Metagenome Assemblies (AMAs) using a set of Hidden Markov Model (HMM) from the environmental bioelement MicroTrait collection. It uses HMMER software.</p>
     <p><hr></p>
-    <p><i>Implemented for KBase by <a href="https://narrative.kbase.us/#people/dylan">Dylan Chivian</a></p>
+
+    <p><b>Tool and Data Sources:</b></p>
+    <p>HMMER v3.3.2 is installed from <a href="http://hmmer.org">http://hmmer.org</a></p>
+    <p>MicroTrait v1.0 HMMs are installed from <a href="https://github.com/ukaraoz/microtrait-hmm/tree/master/data.kb_hmmer/hmm">https://github.com/ukaraoz/microtrait-hmm/tree/master/data.kb_hmmer/hmm</a></p>
     
     <p><hr></p>
-    <p><i>HMMER Search & Functional Profile with Custom Models</i> performs multiple HMMER searches.  It reads the objects in the Narrative to find the Multiple Sequence Alignments (MSAs) and uses those MSAs to create a set of Hidden Markov Models (HMMs) which are used in turn to search a protein sequence database.  The MSAs must first be generated using a tool such as MUSCLE that builds an MSA from a FeatureSet object.  The KBase implementation permits searching through the genes in an Annotated Metagenome Assembly (AMA), the genes in a Genome object, the genes in the Genome members of a GenomeSet, or the genes in a FeatureSet.  The output object of these searches is a FeatureSet containing those genes that pass the thresholds given by the user.  The App also provides a table of the hits (with those hits that are below the thresholds in gray) and links to download the table of hits.  A separate table for each MSA/HMM is provided, whereas the user may select whether to combine the hits into a single FeatureSet or produce a separate FeatureSet object for each MSA/HMM.</p>
+    <p><i>Search with HMMs of MicroTrait Bioelement families</i> profiles collections of genes, genomes, and/or annotated metagenome assemblies for MicroTrait functions and optionally outputs FeatureSet collections for each of the requested gene families.  It uses gene-family-derived HMMs from the MicroTrait collection, which include model-specific lower confidence thresholds to improve the accuracy of the functional classification.  The user can run with the entire collection, just those from a given Bioelement category, or specify individual gene families with which to search.  In this last mode, FeatureSet objects are produced that can be used in additional KBase phylogenomic Apps, such as <i>Build Gene Tree</i>.  Hits by each gene family to genes in the target set are also shown in the report.</p>
+
     <p><hr></p>
     <p><b>Configuration:</b></p>
-    <p><b><i>Targets Object:</i></b> The Targets Object may be a FeatureSet of genes, a Genome, a GenomeSet, or an Annotated Metagenome Assembly (AMA).  A HMMER search database will be automatically generated from the Targets Object.</p>
-    <p><b><i>Output Object:</i></b> This is the set of genes that are both hit and pass user-defined thresholds.</p>
-    <p><b><i>Coalesce Output:</i></b> Select whether to combine all hits into a single FeatureSet (which may be used in subsequent Functional Profiling) or make a separate FeatureSet of hits for each MSA/HMM.</p>
-    <p><b><i>E-value:</i></b> This bounds the e-value for the weakest hit to consider viable.  Values below this do not get reported in the table or the HMMER output text downloads.</p>
-    <p><b><i>Bitscore:</i></b> This bounds the bitscore for the weakest hit to include in the FeatureSet output object.  Hits below this threshold are still reported in the table and HMMER text downloads.</p>
-    <p><b><i>Max Accepts:</i></b> Hard cap on how many hits to report (Default: 1000)</p>
-    <p><hr></p>
+    <p><b><i>Targets Objects:</i></b> The Targets Objects may be a FeatureSet of genes, a Genome, a GenomeSet, a SpeciesTree, or an Annotated Metagenome Assembly (AMA).  A HMMER search database will be automatically generated from the Targets Object.</p>
+    <p><b><i>Output FeatureSet basename:</i></b> This is the basename for the objects that will contain the set of genes that are both hit and pass confidence thresholds for each model.</p>
+    <p><b><i>Other Parameters:</i></b> See "Parameters" section below.</p>
+
     <p><b>Output:</b></p>
-    <p><b><i>Output Object:</i></b> Gene hits are captured in a FeatureSet output object.  If there are additional user-defined thresholds, those are filtered out and do not appear in the object, even if they are shown in the output table.  The Output object name is used as a basename to which the MSA/HMM name is prepended if the user has selected to separate FeatureSets.</p>
-    <p><b><i>Output HTML Table:</i></b> The tab-delimited hit table is HTML formatted and additionally shows the region of the hit sequence (as there is no query sequence) covered by the HMMER alignment.  Hits that are above the e-value threshold but below other thresholds and are not included in the FeatureSet output object are shown in gray, with the attributes that were below the threshold in red.  A separate table is made for each MSA/HMM.</p>
-    <p><b><i>Downloadable files:</i></b> HMMER table and Stockholm format MSA are available for download.  These are not altered from the direct output from the HMMER run.  The text output is generated for each MSA/HMM.</p>
+    <p><b><i>Output Object:</i></b> Gene hits are captured in a FeatureSet output object.  If there are additional user-defined thresholds, those are filtered out and do not appear in the object, even if they are shown in the output table.  The Output object name is used as a basename to which the HMM name is prepended.</p>
+    <p><b><i>Output HTML Profile:</i></b> A raw count or heatmap of the number of genes hit from each gene family (column) with each genome or annotated metagenome assembly (row). Each cell in the profile offers a roll-over of the number of hits and the gene IDs of those hits. If the input targets is a SpeciesTree, the rows are ordered by their order in a ladderized view of that tree (available from the "View Tree" App).</p>
+    <p><b><i>Output HTML Table:</i></b> The tab-delimited hit table is HTML formatted and additionally shows the region of the hit sequence (as there is no query sequence) covered by the HMMER alignment.  Hits that are above the e-value threshold but below other thresholds and are not included in the FeatureSet output object are shown in gray, with the attributes that were below the threshold in red.  A separate table is made for each HMM.</p>
+    <p><b><i>Downloadable files:</i></b> HMMER output hit table is available for download.  These are not altered from the direct output from the HMMER run.  The text output is generated for each HMM.</p>
+
+    <p><hr></p>
+    <p><strong>Team members who implemented App in KBase:</strong> <a href="https://narrative.kbase.us/#people/dylan">Dylan Chivian</a> and <a href="https://narrative.kbase.us/#people/seanjungbluth">Sean Jungbluth</a>. For questions, please <a href=”http://www.kbase.us/support/”>contact us</a>.</p>
+
+    <p><strong>Please cite:</strong>
+      <ul>
+        <li>Karaoz U, Brodie EL. microTrait: A Toolset for a Trait-Based Representation of Microbial Genomes. Front Bioinform. 2022 Jul 22;2:918853. doi: 10.3389/fbinf.2022.918853
+        <li>Eddy SR. Accelerated Profile HMM Searches. PLOS Computational Biology. 2011;7: e1002195. doi:10.1371/journal.pcbi.1002195
+        <li>Chivian D, Jungbluth SP, Dehal PS, Wood-Charlson EM, Canon RS, Allen BH, Clark MM, Gu T, Land ML, Price GA, Riehl WJ, Sneddon MW, Sutormin R, Zhang Q, Cottingham RW, Henry CS, Arkin AP. Metagenome-assembled genome extraction and analysis from microbiomes using KBase. Nat Protoc. 2023 Jan;18(1):208-238. doi: 10.1038/s41596-022-00747-x
+      </ul>
+    </p>
+
 
 publications :
     -
+        pmid: 36304272
+        display-text: |
+            Karaoz U, Brodie EL. microTrait: A Toolset for a Trait-Based Representation of Microbial Genomes. Front Bioinform. 2022 Jul 22;2:918853. doi: 10.3389/fbinf.2022.918853
+        link: https://www.frontiersin.org/articles/10.3389/fbinf.2022.918853/full
+    -
+        pmid: 22039361
         display-text: |
             Eddy SR. Accelerated Profile HMM Searches. PLOS Computational Biology. 2011;7: e1002195. doi:10.1371/journal.pcbi.1002195
         link: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195
     -
         display-text: |
-            Anatharaman K, Brown CT, Hug LA, Sharon I, Castelle CJ, Probst AJ, Thomas BC, Singh A, Wilkins MJ, Karaoz U, Brodie EL, Williams KH, Hubbard SS, Banfield JF. Thousands of microbial genomes shed light on interconnected biogeochemical processes in an aquifer system. Nature Communications. 2016;7: 13219. doi:10.1038/ncomms13219
-        link: https://www.nature.com/articles/ncomms13219
-
-    -
-        display-text: |
-            HMMER v3.3 source:
+            HMMER v3.3.2 source:
         link: http://HMMER.ORG
+    -
+        pmid: 36376589
+        display-text: |
+            Chivian D, Jungbluth SP, Dehal PS, Wood-Charlson EM, Canon RS, Allen BH, Clark MM, Gu T, Land ML, Price GA, Riehl WJ, Sneddon MW, Sutormin R, Zhang Q, Cottingham RW, Henry CS, Arkin AP. Metagenome-assembled genome extraction and analysis from microbiomes using KBase. Nat Protoc. 2023 Jan;18(1):208-238. doi: 10.1038/s41596-022-00747-x
+        link: https://www.nature.com/articles/s41596-022-00747-x
