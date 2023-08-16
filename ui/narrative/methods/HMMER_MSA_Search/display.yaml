@@ -88,7 +88,7 @@ description : |
     <p><b><i>Output HTML Table:</i></b> The tab-delimited hit table is HTML-formatted and shows the region of the hit sequence (as there is no query sequence) covered by the HMMER alignment. Hits that are above the e-value threshold but below other thresholds and are not included in the FeatureSet output object are shown in gray, with the attributes that were below the threshold in red.</p>
     <p><b><i>Downloadable files:</i></b> HMMER table and Stockholm format MSA are available for download. These are not altered from the direct output from the HMMER run.</p>
 
-    <strong>Team members who implemented App in KBase:</strong> Dylan Chivian. For questions, please <a href=”http://kbase.us/contact-us/”>contact us</a>.</p>
+    <strong>Team members who implemented App in KBase:</strong> <a href="https://narrative.kbase.us/#people/dylan">Dylan Chivian</a>. For questions, please <a href=”http://www.kbase.us/support/”>contact us</a>.</p>
 
 
 publications :
