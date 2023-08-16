@@ -13,7 +13,7 @@
 }, {
   "module_name" : "KBaseDataObjectToFileUtils",
   "type" : "sdk",
-  "version_tag" : "beta"
+  "version_tag" : "release"
 }, {
   "module_name" : "KBaseReport",
   "type" : "sdk",

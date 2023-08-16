@@ -465,8 +465,7 @@ class kb_hmmer:
             }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            #SERVICE_VER = 'release'
-            SERVICE_VER = 'dev'
+            SERVICE_VER = 'release'
             DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
             FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA(FeatureSetToFASTA_params)
             many_forward_reads_file_path = FeatureSetToFASTA_retVal['fasta_file_path']
@@ -501,8 +500,7 @@ class kb_hmmer:
             }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            #SERVICE_VER = 'release'
-            SERVICE_VER = 'dev'
+            SERVICE_VER = 'release'
             DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
             GenomeToFASTA_retVal = DOTFU.GenomeToFASTA(GenomeToFASTA_params)
             many_forward_reads_file_path = GenomeToFASTA_retVal['fasta_file_path']
@@ -539,8 +537,7 @@ class kb_hmmer:
             }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            #SERVICE_VER = 'release'
-            SERVICE_VER = 'dev'
+            SERVICE_VER = 'release'
             DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
             GenomeSetToFASTA_retVal = DOTFU.GenomeSetToFASTA(GenomeSetToFASTA_params)
             many_forward_reads_file_path = GenomeSetToFASTA_retVal['fasta_file_path_list'][0]
@@ -575,8 +572,7 @@ class kb_hmmer:
             }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            #SERVICE_VER = 'release'
-            SERVICE_VER = 'beta'
+            SERVICE_VER = 'release'
             DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
             AnnotatedMetagenomeAssemblyToFASTA_retVal = DOTFU.AnnotatedMetagenomeAssemblyToFASTA (AnnotatedMetagenomeAssemblyToFASTA_params)
             many_forward_reads_file_path = AnnotatedMetagenomeAssemblyToFASTA_retVal['fasta_file_path']
@@ -1742,8 +1738,7 @@ class kb_hmmer:
             }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            #SERVICE_VER = 'release'
-            SERVICE_VER = 'dev'
+            SERVICE_VER = 'release'
             DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
             FeatureSetToFASTA_retVal = DOTFU.FeatureSetToFASTA(FeatureSetToFASTA_params)
             many_forward_reads_file_path = FeatureSetToFASTA_retVal['fasta_file_path']
@@ -1780,8 +1775,7 @@ class kb_hmmer:
             }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            #SERVICE_VER = 'release'
-            SERVICE_VER = 'dev'
+            SERVICE_VER = 'release'
             DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
             GenomeToFASTA_retVal = DOTFU.GenomeToFASTA(GenomeToFASTA_params)
             many_forward_reads_file_path = GenomeToFASTA_retVal['fasta_file_path']
@@ -1825,8 +1819,7 @@ class kb_hmmer:
             }
 
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            #SERVICE_VER = 'release'
-            SERVICE_VER = 'dev'
+            SERVICE_VER = 'release'
             DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
             GenomeSetToFASTA_retVal = DOTFU.GenomeSetToFASTA(GenomeSetToFASTA_params)
             many_forward_reads_file_path = GenomeSetToFASTA_retVal['fasta_file_path_list'][0]
@@ -1863,8 +1856,7 @@ class kb_hmmer:
             genome_refs = [input_many_ref]
             
             #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
-            #SERVICE_VER = 'release'
-            SERVICE_VER = 'beta'
+            SERVICE_VER = 'release'
             DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
             AnnotatedMetagenomeAssemblyToFASTA_retVal = DOTFU.AnnotatedMetagenomeAssemblyToFASTA (AnnotatedMetagenomeAssemblyToFASTA_params)
             many_forward_reads_file_path = AnnotatedMetagenomeAssemblyToFASTA_retVal['fasta_file_path']
