@@ -177,15 +177,15 @@ parameters :
             Show categories or families that have no counts
 
 description : |
-    <p>This method scans protein sequences found in Genomes and Annotated Metagenome Assemblies (AMAs) using a set of Hidden Markov Model (HMM) from the environmental bioelement MicroTrait collection. It uses HMMER software.</p>
+    <p>This method scans protein sequences found in Genomes and Annotated Metagenome Assemblies (AMAs) using a set of Hidden Markov Models (HMMs) from the environmental bioelement MicroTrait collection. It uses HMMER software.</p>
+    
     <p><hr></p>
+    <p><b><i>Search with HMMs of MicroTrait Bioelement families</i></b> profiles collections of genes, genomes, and/or annotated metagenome assemblies for MicroTrait functions and optionally outputs FeatureSet collections for each of the requested gene families.  It uses gene-family-derived HMMs from the MicroTrait collection, which include model-specific lower confidence thresholds to improve the accuracy of the functional classification.  The user can run with the entire collection, just those from a given Bioelement category, or specify individual gene families with which to search.  In this last mode, FeatureSet objects are produced that can be used in additional KBase phylogenomic Apps, such as <i>Build Gene Tree</i>.  Hits by each gene family to genes in the target set are also shown in the report.</p>
 
+    <p><hr></p>
     <p><b>Tool and Data Sources:</b></p>
     <p>HMMER v3.3.2 is installed from <a href="http://hmmer.org">http://hmmer.org</a></p>
     <p>MicroTrait v1.0 HMMs are installed from <a href="https://github.com/ukaraoz/microtrait-hmm/tree/master/data.kb_hmmer/hmm">https://github.com/ukaraoz/microtrait-hmm/tree/master/data.kb_hmmer/hmm</a></p>
-    
-    <p><hr></p>
-    <p><i>Search with HMMs of MicroTrait Bioelement families</i> profiles collections of genes, genomes, and/or annotated metagenome assemblies for MicroTrait functions and optionally outputs FeatureSet collections for each of the requested gene families.  It uses gene-family-derived HMMs from the MicroTrait collection, which include model-specific lower confidence thresholds to improve the accuracy of the functional classification.  The user can run with the entire collection, just those from a given Bioelement category, or specify individual gene families with which to search.  In this last mode, FeatureSet objects are produced that can be used in additional KBase phylogenomic Apps, such as <i>Build Gene Tree</i>.  Hits by each gene family to genes in the target set are also shown in the report.</p>
 
     <p><hr></p>
     <p><b>Configuration:</b></p>

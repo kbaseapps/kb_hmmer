@@ -138,15 +138,15 @@ parameters :
             Show categories or families that have no counts
 
 description : |
-    <p>This method scans protein sequences found in Genomes and Annotated Metagenome Assemblies (AMAs) using a set of Hidden Markov Model (HMM) from the dbCAN2 CAZy collection. It uses HMMER software.</p>
-    <p><hr></p>
+    <p>This method scans protein sequences found in Genomes and Annotated Metagenome Assemblies (AMAs) using a set of Hidden Markov Models (HMMs) from the dbCAN2 CAZy collection. It uses HMMER software.</p>
 
+    <p><hr></p>
+    <p><b><i>Search with dbCAN2 HMMs of CAZy families</i></b> profiles collections of genes, genomes, and/or annotated metagenome assemblies for CAZy functions and optionally outputs FeatureSet collections for each of the requested gene families.  It uses gene-family-derived HMMs from the dbCAN2 collection.  The user can run with the entire collection, just those from a given CAZy category, or specify individual gene families with which to search.  In this last mode, FeatureSet objects are produced that can be used in additional KBase phylogenomic Apps, such as <i>Build Gene Tree</i>.  Hits by each gene family to genes in the target set are also shown in the report.</p>
+
+    <p><hr></p>
     <p><b>Tool and Data Sources:</b></p>
     <p>HMMER v3.3.2 is installed from <a href="http://hmmer.org">http://hmmer.org</a></p>
     <p>The dbCAN2 HMM collection of CAZy families is downloaded from <a href="https://bcb.unl.edu/dbCAN2/download/">https://bcb.unl.edu/dbCAN2/download/</a>.</p>
-
-    <p><hr></p>
-    <p><i>Search with dbCAN2 HMMs of CAZy families</i> profiles collections of genes, genomes, and/or annotated metagenome assemblies for CAZy functions and optionally outputs FeatureSet collections for each of the requested gene families.  It uses gene-family-derived HMMs from the dbCAN2 collection.  The user can run with the entire collection, just those from a given CAZy category, or specify individual gene families with which to search.  In this last mode, FeatureSet objects are produced that can be used in additional KBase phylogenomic Apps, such as <i>Build Gene Tree</i>.  Hits by each gene family to genes in the target set are also shown in the report.</p>
 
     <p><hr></p>
     <p><b>Configuration:</b></p>

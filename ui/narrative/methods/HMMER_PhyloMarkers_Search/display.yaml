@@ -123,14 +123,14 @@ parameters :
 
 description : |
     <p>This method scans protein sequences found in Genomes and Annotated Metagenome Assemblies (AMAs) using a set of Hidden Markov Model (HMM) from PFAM and TIGRFAMs that correspond to universal single copy essential genes, which resist horizontal transfer and therefore are useful as phylogenetic markers. It uses HMMER software.</p>
-    <p><hr></p>
 
+    <p><hr></p>
+    <p><b><i>Search with HMMs of Phylogenetic Marker families</i></b> profiles collections of genes, genomes, and/or annotated metagenome assemblies for Phylogenetic marker genes and optionally outputs FeatureSet collections for each of the requested gene families.  It uses gene-family-derived HMMs from the PFAM and TIGERFAMs which were identified as single copy universal by the GTDB resource.  The user can run with the entire collection, just those from a given category, or specify individual gene families with which to search.  In this last mode, FeatureSet objects are produced that can be used in additional KBase phylogenomic Apps, such as <i>Build Gene Tree</i>.  Hits by each gene family to genes in the target set are also shown in the report.</p>
+
+    <p><hr></p>
     <p><b>Tool and Data Sources:</b></p>
     <p>HMMER v3.3.2 is installed from <a href="http://hmmer.org">http://hmmer.org</a></p>
     <p>Phylogenetic Marker HMMs are defined from <a href="https://gtdb.ecogenomic.org/">GTDB R05RS95</a>, with models from <a href="https://www.jcvi.org/research/tigrfams">TIGERFAMs v15.0</a> and <a href="https://www.ebi.ac.uk/interpro/entry/pfam/#table">PFAM 33.1</a>.  The v1 set of markers used is available at <a href="https://github.com/kbaseapps/kb_hmmer/blob/master/data/PhyloMarkers/PhyloMarkers-v1/tables/all_marker_info_r95-adjusted.tsv">https://github.com/kbaseapps/kb_hmmer/blob/master/data/PhyloMarkers/PhyloMarkers-v1/tables/all_marker_info_r95-adjusted.tsv</a>.</p>
-
-    <p><hr></p>
-    <p><i>Search with HMMs of Phylogenetic Marker families</i> profiles collections of genes, genomes, and/or annotated metagenome assemblies for Phylogenetic marker genes and optionally outputs FeatureSet collections for each of the requested gene families.  It uses gene-family-derived HMMs from the PFAM and TIGERFAMs which were identified as single copy universal by the GTDB resource.  The user can run with the entire collection, just those from a given category, or specify individual gene families with which to search.  In this last mode, FeatureSet objects are produced that can be used in additional KBase phylogenomic Apps, such as <i>Build Gene Tree</i>.  Hits by each gene family to genes in the target set are also shown in the report.</p>
 
     <p><hr></p>
     <p><b>Configuration:</b></p>
