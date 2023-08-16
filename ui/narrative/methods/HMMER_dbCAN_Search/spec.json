@@ -1,11 +1,11 @@
 {
-    "ver": "1.8.1",
+    "ver": "1.9.1",
     "authors": [
         "dylan"
     ],
     "contact": "http://www.kbase.us/support/",
     "visible": true,
-    "categories": ["active","sequence"],
+    "categories": ["active","annotation"],
     "widgets": {
         "input": null,
         "output": "no-display"
@@ -22,7 +22,8 @@
                 "valid_ws_types": [ "KBaseCollections.FeatureSet",
 				    "KBaseGenomes.Genome",
 				    "KBaseSearch.GenomeSet",
-				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly"
+				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly",
+				    "KBaseTrees.Tree"
 				  ]
             }
         },
