@@ -354,6 +354,10 @@ class Application(object):
                              name='kb_hmmer.HMMER_EnvBioelement_Search',
                              types=[dict])
         self.method_authentication['kb_hmmer.HMMER_EnvBioelement_Search'] = 'required'  # noqa
+        self.rpc_service.add(impl_kb_hmmer.HMMER_MT_Bioelement_Search,
+                             name='kb_hmmer.HMMER_MT_Bioelement_Search',
+                             types=[dict])
+        self.method_authentication['kb_hmmer.HMMER_MT_Bioelement_Search'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_hmmer.HMMER_PhyloMarkers_Search,
                              name='kb_hmmer.HMMER_PhyloMarkers_Search',
                              types=[dict])

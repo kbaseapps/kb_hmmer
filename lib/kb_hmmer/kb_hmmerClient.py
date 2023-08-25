@@ -120,8 +120,10 @@ class kb_hmmer(object):
            "input_dbCAN_cellulosome_ids" of type "data_obj_ref", parameter
            "input_many_refs" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "genome_disp_name_config" of String, parameter "coalesce_output"
-           of type "bool", parameter "save_ALL_featureSets" of type "bool",
+           "genome_disp_name_config" of String, parameter
+           "show_target_block_headers" of type "bool", parameter
+           "coalesce_output" of type "bool", parameter "save_ALL_featureSets"
+           of type "bool", parameter "save_ANY_featureSets" of type "bool",
            parameter "e_value" of Double, parameter "bitscore" of Double,
            parameter "model_cov_perc" of Double, parameter "maxaccepts" of
            Double, parameter "heatmap" of type "bool", parameter "low_val" of
@@ -166,8 +168,10 @@ class kb_hmmer(object):
            parameter "input_EnvBioelement_Halo_ids" of type "data_obj_ref",
            parameter "input_many_refs" of type "data_obj_ref", parameter
            "output_filtered_name" of type "data_obj_name", parameter
-           "genome_disp_name_config" of String, parameter "coalesce_output"
-           of type "bool", parameter "save_ALL_featureSets" of type "bool",
+           "genome_disp_name_config" of String, parameter
+           "show_target_block_headers" of type "bool", parameter
+           "coalesce_output" of type "bool", parameter "save_ALL_featureSets"
+           of type "bool", parameter "save_ANY_featureSets" of type "bool",
            parameter "e_value" of Double, parameter "bitscore" of Double,
            parameter "model_cov_perc" of Double, parameter "maxaccepts" of
            Double, parameter "heatmap" of type "bool", parameter "low_val" of
@@ -178,6 +182,55 @@ class kb_hmmer(object):
            parameter "report_ref" of type "data_obj_ref"
         """
         return self._client.call_method('kb_hmmer.HMMER_EnvBioelement_Search',
+                                        [params], self._service_ver, context)
+
+    def HMMER_MT_Bioelement_Search(self, params, context=None):
+        """
+        Method for HMMER search of Markov Models of MicroTrait bioelement families
+        **
+        **    overloading as follows:
+        **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SeqquenceSet deactivated)
+        **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
+        :param params: instance of type "HMMER_MT_Bioelement_Params" (HMMER
+           MT_Bioelement Input Params) -> structure: parameter
+           "workspace_name" of type "workspace_name" (** The workspace object
+           refs are of form: ** **    objects = ws.get_objects([{'ref':
+           params['workspace_id']+'/'+params['obj_name']}]) ** ** "ref" means
+           the entire name combining the workspace id and the object name **
+           "id" is a numerical identifier of the workspace or object, and
+           should just be used for workspace ** "name" is a string identifier
+           of a workspace or object.  This is received from Narrative.),
+           parameter "input_MT_Bioelement_N_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_H_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_O_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_CFix_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_C1_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_CH4_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_CO_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_S_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_CN_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_CH4N2O_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_Se_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_Metal_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_As_ids" of type "data_obj_ref",
+           parameter "input_MT_Bioelement_Halo_ids" of type "data_obj_ref",
+           parameter "input_many_refs" of type "data_obj_ref", parameter
+           "output_filtered_name" of type "data_obj_name", parameter
+           "genome_disp_name_config" of String, parameter "count_category" of
+           String, parameter "use_model_specific_thresholds" of type "bool",
+           parameter "show_target_block_headers" of type "bool", parameter
+           "coalesce_output" of type "bool", parameter "save_ALL_featureSets"
+           of type "bool", parameter "save_ANY_featureSets" of type "bool",
+           parameter "e_value" of Double, parameter "bitscore" of Double,
+           parameter "model_cov_perc" of Double, parameter "maxaccepts" of
+           Double, parameter "heatmap" of type "bool", parameter "low_val" of
+           type "bool", parameter "vertical" of type "bool", parameter
+           "show_blanks" of type "bool"
+        :returns: instance of type "HMMER_Output" (HMMER Output) ->
+           structure: parameter "report_name" of type "data_obj_name",
+           parameter "report_ref" of type "data_obj_ref"
+        """
+        return self._client.call_method('kb_hmmer.HMMER_MT_Bioelement_Search',
                                         [params], self._service_ver, context)
 
     def HMMER_PhyloMarkers_Search(self, params, context=None):
@@ -204,12 +257,14 @@ class kb_hmmer(object):
            type "data_obj_ref", parameter "input_many_refs" of type
            "data_obj_ref", parameter "output_filtered_name" of type
            "data_obj_name", parameter "genome_disp_name_config" of String,
-           parameter "coalesce_output" of type "bool", parameter
-           "save_ALL_featureSets" of type "bool", parameter "e_value" of
-           Double, parameter "bitscore" of Double, parameter "model_cov_perc"
-           of Double, parameter "maxaccepts" of Double, parameter "heatmap"
-           of type "bool", parameter "low_val" of type "bool", parameter
-           "vertical" of type "bool", parameter "show_blanks" of type "bool"
+           parameter "show_target_block_headers" of type "bool", parameter
+           "coalesce_output" of type "bool", parameter "save_ALL_featureSets"
+           of type "bool", parameter "save_ANY_featureSets" of type "bool",
+           parameter "e_value" of Double, parameter "bitscore" of Double,
+           parameter "model_cov_perc" of Double, parameter "maxaccepts" of
+           Double, parameter "heatmap" of type "bool", parameter "low_val" of
+           type "bool", parameter "vertical" of type "bool", parameter
+           "show_blanks" of type "bool"
         :returns: instance of type "HMMER_Output" (HMMER Output) ->
            structure: parameter "report_name" of type "data_obj_name",
            parameter "report_ref" of type "data_obj_ref"

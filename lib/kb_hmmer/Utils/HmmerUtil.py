@@ -15,12 +15,18 @@ import numpy as np
 import math
 import gzip
 
-from installed_clients.WorkspaceClient import Workspace
+# Tree utils
+import ete3
 
 # SDK Utils
+from installed_clients.WorkspaceClient import Workspace
 from installed_clients.KBaseDataObjectToFileUtilsClient import KBaseDataObjectToFileUtils
 from installed_clients.DataFileUtilClient import DataFileUtil as DFUClient
 from installed_clients.KBaseReportClient import KBaseReport
+
+# resource Utils
+from installed_clients.BBToolsClient import BBTools
+
 
 # silence whining
 import requests
@@ -300,6 +306,30 @@ class HmmerUtil:
         return (this_appropriate_sequence_found_in_MSA_input, msa_invalid_msgs)
 
 
+    def _get_genome_disp_name (self, 
+                               params, 
+                               genome_ref, 
+                               many_type_name, 
+                               ama_ref_to_obj_name, 
+                               genome_ref_to_obj_name,
+                               genome_ref_to_sci_name):
+        if many_type_name == 'AnnotatedMetagenomeAssembly':
+            genome_disp_name = ama_ref_to_obj_name[genome_ref]
+        else:
+            genome_obj_name = genome_ref_to_obj_name[genome_ref]
+            genome_sci_name = genome_ref_to_sci_name[genome_ref]
+            [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
+            genome_disp_name = ''
+            if 'obj_name' in params['genome_disp_name_config']:
+                genome_disp_name += genome_obj_name
+            if 'ver' in params['genome_disp_name_config']:
+                genome_disp_name += '.v'+str(genome_obj_version)
+            if 'sci_name' in params['genome_disp_name_config']:
+                genome_disp_name += ': '+genome_sci_name
+
+        return genome_disp_name
+
+
     def run_HMMER_Model_Group_Search(self, params):
         """
         Method for HMMER search of a meaningful group of Hidden Markov Models
@@ -379,6 +409,7 @@ class HmmerUtil:
         all_genome_refs = []
         genome_refs = dict()
         feature_ids = dict()
+        genome_CDS_count_by_ref = dict()
         appropriate_sequence_found_in_many_inputs = dict()
         input_many_names = dict()
         many_type_names = dict()
@@ -405,7 +436,7 @@ class HmmerUtil:
                 raise ValueError('Unable to fetch input_many_name object from workspace: ' + str(e))
                 #to get the full stack trace: traceback.format_exc()
 
-            # Handle overloading (input_many can be SequenceSet, FeatureSet, Genome, or GenomeSet)
+            # Handle overloading (input_many can be SequenceSet, FeatureSet, Genome, GenomeSet, Tree, or AMA)
             #
             if many_type_name == 'SequenceSet':
                 try:
@@ -487,6 +518,9 @@ class HmmerUtil:
                     genome_refs[input_many_ref] = these_genome_refs
                     all_genome_refs.extend(these_genome_refs)
                     
+                    for this_genome_ref in these_genome_refs:
+                        genome_CDS_count_by_ref[this_genome_ref] = len(feature_ids[input_many_ref]['by_genome_ref'][this_genome_ref])
+
                 # DEBUG
                 #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
                 #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
@@ -527,6 +561,8 @@ class HmmerUtil:
                     genome_refs[input_many_ref] = [input_many_ref]
                     all_genome_refs.append(input_many_ref)
                     
+                    genome_CDS_count_by_ref[input_many_ref] = len(feature_ids[input_many_ref]['basic'])
+
                 # DEBUG
                 #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
                 #self.log(console, "Genome2Fasta() took "+str(end_time-beg_time)+" secs")
@@ -575,6 +611,68 @@ class HmmerUtil:
                 if len(feature_ids[input_many_ref]['by_genome_id'].keys()) > 0:
                     appropriate_sequence_found_in_many_inputs[input_many_ref] = True
 
+                    for this_genome_id in feature_ids[input_many_ref]['by_genome_id'].keys():
+                        this_genome_ref = input_many_genomeSet['elements'][this_genome_id]['ref']
+                        genome_CDS_count_by_ref[this_genome_ref] = len(feature_ids[input_many_ref]['by_genome_id'][this_genome_id])
+
+                # DEBUG
+                #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+                #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
+
+                
+            # SpeciesTree
+            #
+            elif many_type_name == 'Tree':
+                input_many_tree = input_many_data
+                input_many_objs[input_many_ref] = input_many_tree
+                many_forward_reads_file_dir = self.output_dir
+                many_forward_reads_file = input_many_name + ".fasta"
+
+                if 'type' not in input_many_tree or \
+                   input_many_tree['type'] != 'SpeciesTree':
+                    raise ValueError ("Tree type must be SpeciesTree for object "+input_many_names[input_many_ref])
+                if 'ws_refs' not in input_many_tree:
+                    raise ValueError ("Tree must contain ws_refs data for object "+input_many_names[input_many_ref])
+
+                for genome_id in input_many_tree['ws_refs']:
+                    genome_ref = input_many_tree['ws_refs'][genome_id]['g'][0]
+                    if genome_ref not in genome_refs:
+                        genome_refs[input_many_ref].append(genome_ref)
+                        all_genome_refs.append(genome_ref)
+                        
+                # DEBUG
+                #beg_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
+                SpeciesTreeToFASTA_params = {
+                    'tree_ref': input_many_ref,
+                    'file': many_forward_reads_file,
+                    'dir': many_forward_reads_file_dir,
+                    'console': console,
+                    'invalid_msgs': invalid_msgs,
+                    'residue_type': 'protein',
+                    'feature_type': 'CDS',
+                    'record_id_pattern': '%%genome_ref%%' + genome_id_feature_id_delim + '%%feature_id%%',
+                    'record_desc_pattern': '[%%genome_ref%%]',
+                    'case': 'upper',
+                    'linewrap': 50,
+                    'merge_fasta_files': 'TRUE'
+                }
+
+                #self.log(console,"callbackURL='"+self.callbackURL+"'")  # DEBUG
+                #SERVICE_VER = 'release'
+                SERVICE_VER = 'dev'
+                DOTFU = KBaseDataObjectToFileUtils(url=self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+                SpeciesTreeToFASTA_retVal = DOTFU.SpeciesTreeToFASTA(SpeciesTreeToFASTA_params)
+                obj2file_retVal[input_many_ref] = SpeciesTreeToFASTA_retVal
+                many_forward_reads_file_paths[input_many_ref] = SpeciesTreeToFASTA_retVal['fasta_file_path_list'][0]
+                feature_ids[input_many_ref] = dict()
+                feature_ids[input_many_ref]['by_genome_id'] = SpeciesTreeToFASTA_retVal['feature_ids_by_genome_id']
+                if len(feature_ids[input_many_ref]['by_genome_id'].keys()) > 0:
+                    appropriate_sequence_found_in_many_inputs[input_many_ref] = True
+
+                    for this_genome_id in feature_ids[input_many_ref]['by_genome_id'].keys():
+                        this_genome_ref = input_many_tree['ws_refs'][this_genome_id]['g'][0]
+                        genome_CDS_count_by_ref[this_genome_ref] = len(feature_ids[input_many_ref]['by_genome_id'][this_genome_id])
+
                 # DEBUG
                 #end_time = (datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()
                 #self.log(console, "FeatureSetToFasta() took "+str(end_time-beg_time)+" secs")
@@ -613,6 +711,7 @@ class HmmerUtil:
                 feature_ids[input_many_ref]['basic'] = AnnotatedMetagenomeAssemblyToFASTA_retVal['feature_ids']
                 if len(feature_ids) > 0:
                     appropriate_sequence_found_in_many_inputs[input_many_ref] = True
+                    genome_CDS_count_by_ref[input_many_ref] = len(feature_ids[input_many_ref]['basic'])
 
                 genome_refs[input_many_ref] = [input_many_ref]
                 all_genome_refs.append(input_many_ref)
@@ -638,6 +737,9 @@ class HmmerUtil:
                  or many_type_names[input_many_ref] == 'AnnotatedMetagenomeAssembly':
                 seq_total = len(feature_ids[input_many_ref]['basic'])
             elif many_type_names[input_many_ref] == 'GenomeSet':
+                for genome_id in feature_ids[input_many_ref]['by_genome_id'].keys():
+                    seq_total += len(feature_ids[input_many_ref]['by_genome_id'][genome_id])
+            elif many_type_names[input_many_ref] == 'Tree':
                 for genome_id in feature_ids[input_many_ref]['by_genome_id'].keys():
                     seq_total += len(feature_ids[input_many_ref]['by_genome_id'][genome_id])
 
@@ -828,7 +930,7 @@ class HmmerUtil:
                 #
                 # SYNTAX (from http://eddylab.org/software/hmmer3/3.1b2/Userguide.pdf)
                 #
-                # hmmsearch --domtblout <TAB_out> -A <MSA_out> --noali --notextw -E <e_value> -T <bit_score> <hmmfile> <seqdb>
+                # hmmsearch [--cut_tc] --domtblout <TAB_out> -A <MSA_out> --noali --notextw -E <e_value> -T <bit_score> <hmmfile> <seqdb>
                 #
                 for input_many_ref in input_many_refs:
                     hmmer_search_bin = self.HMMER_SEARCH
@@ -862,8 +964,11 @@ class HmmerUtil:
                     #hmmer_search_cmd.append(output_hit_MSA_file_path)
                     hmmer_search_cmd.append('--noali')
                     hmmer_search_cmd.append('--notextw')
-                    hmmer_search_cmd.append('-E')  # can't use -T with -E, so we'll use -E
-                    hmmer_search_cmd.append(str(params['e_value']))
+                    if int(params.get('use_model_specific_thresholds',0)) == 1:
+                        hmmer_search_cmd.append('--cut_tc')
+                    else:
+                        hmmer_search_cmd.append('--domE')  # can't use -T with -E, so we'll use -E
+                        hmmer_search_cmd.append(str(params['e_value']))
                     hmmer_search_cmd.append(HMM_file_path)
                     hmmer_search_cmd.append(many_forward_reads_file_paths[input_many_ref])
 
@@ -1119,6 +1224,8 @@ class HmmerUtil:
                 elif (not params.get('save_ALL_featureSets') or int(params['save_ALL_featureSets']) != 1) and \
                      not explicitly_requested_models.get(hmm_id):
                     self.log(console, "\tMODEL "+hmm_id+" NOT EXPLICITLY REQUESTED, SO NOT SAVING FEATURESET.  MUST EXPLICITLY REQUEST MODEL OR CHANGE 'save_ALL_featureSets' to TRUE.")
+                elif int(params.get('save_ANY_featureSets',1)) != 1:
+                    self.log(console, "\tsave_ANY_featureSets set to FALSE. SO NOT SAVING FEATURESET.  MUST CHANGE 'save_ANY_featureSets' to TRUE.")
                 else:
                     self.log(console, "\tEXTRACTING ACCEPTED HITS FROM INPUT for model "+hmm_id)
                     ##self.log(console, 'MANY_TYPE_NAME: '+many_type_name)  # DEBUG
@@ -1223,6 +1330,28 @@ class HmmerUtil:
                                         if genome_ref not in output_featureSet['elements'][feature_id]:
                                             output_featureSet['elements'][feature_id].append(genome_ref)
 
+                        # Parse SpeciesTree hits into FeatureSet
+                        #
+                        elif many_type_name == 'Tree':
+                            #self.log(console,"READING HITS FOR GENOMES")  # DEBUG
+                            input_many_tree = input_many_objs[input_many_ref]
+                            for genome_id in feature_ids[input_many_ref]['by_genome_id'].keys():
+                                #self.log(console,"READING HITS FOR GENOME "+genome_id)  # DEBUG
+                                genome_ref = input_many_tree['ws_refs'][genome_id]['g'][0]
+                                for feature_id in feature_ids[input_many_ref]['by_genome_id'][genome_id]:
+                                    id_untrans = genome_ref + genome_id_feature_id_delim + feature_id
+                                    id_trans = re.sub('\|', ':', id_untrans)
+                                    if id_trans in accepted_hit_seq_ids or id_untrans in accepted_hit_seq_ids:
+                                        #self.log(console, 'FOUND HIT: '+feature['id'])  # DEBUG
+                                        #output_featureSet['element_ordering'].append(feature['id'])
+                                        accept_fids[id_untrans] = True
+                                        #feature_id = id_untrans  # don't change fId for output FeatureSet
+                                        if feature_id not in output_featureSet['elements']:
+                                            output_featureSet['elements'][feature_id] = []
+                                            output_featureSet['element_ordering'].append(feature_id)
+                                        if genome_ref not in output_featureSet['elements'][feature_id]:
+                                            output_featureSet['elements'][feature_id].append(genome_ref)
+
                         # Parse AnnotatedMetagenomeAssembly hits into FeatureSet
                         #
                         elif many_type_name == 'AnnotatedMetagenomeAssembly':
@@ -1270,7 +1399,10 @@ class HmmerUtil:
                                     coalesce_featureIds_genome_ordering.append(this_genome_ref)
 
                     else:  # keep output separate  Upload results if coalesce_output is 0
-                        output_name = hmm_id + '-' + params['output_filtered_name']
+                        hmm_obj_id = hmm_id
+                        if '+' in hmm_id:
+                            hmm_obj_id = hmm_obj_id.replace('+','-')
+                        output_name = hmm_obj_id + '-' + params['output_filtered_name']
 
                         if len(invalid_msgs) == 0:
                             if len(accepted_hit_seq_ids.keys()) == 0:   # Note, this is after filtering, so there may be more unfiltered hits
@@ -1294,7 +1426,7 @@ class HmmerUtil:
                                     }]
                                 })[0]
                             '''
-                            #else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+                            #else:  # input FeatureSet, Genome, GenomeSet, Tree, and AMA -> upload FeatureSet output
                             new_obj_info = self.wsClient.save_objects({
                                 'workspace': params['workspace_name'],
                                 'objects': [{
@@ -1335,18 +1467,21 @@ class HmmerUtil:
                     for input_many_ref in input_many_refs:
                         many_type_name = many_type_names[input_many_ref]
 
+                        print ("SETTING FEATURE_ID_TO_FUNCTION")  # DEBUG
                         for genome_ref in obj2file_retVal[input_many_ref]['feature_id_to_function'].keys():
                             if genome_ref not in feature_id_to_function:
                                 feature_id_to_function[genome_ref] = dict()
                             for fid in  obj2file_retVal[input_many_ref]['feature_id_to_function'][genome_ref].keys():
                                 feature_id_to_function[genome_ref][fid] = obj2file_retVal[input_many_ref]['feature_id_to_function'][genome_ref][fid]
-                        if many_type_name == 'Genome' or many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
+                        if many_type_name == 'Genome' or many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet' or many_type_name == 'Tree':
                             for genome_ref in obj2file_retVal[input_many_ref]['genome_ref_to_obj_name'].keys():
                                 genome_ref_to_obj_name[genome_ref] = obj2file_retVal[input_many_ref]['genome_ref_to_obj_name'][genome_ref]
                                 genome_ref_to_sci_name[genome_ref] = obj2file_retVal[input_many_ref]['genome_ref_to_sci_name'][genome_ref]
                         elif many_type_name == 'AnnotatedMetagenomeAssembly':
                             for ama_ref in obj2file_retVal[input_many_ref]['ama_ref_to_obj_name'].keys():
-                                ama_ref_to_obj_name[ama_ref] = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name'][ama_ref]
+                                #self.log(console, "AMA_REF: "+ama_ref)
+                                #ama_ref_to_obj_name[ama_ref] = AnnotatedMetagenomeAssemblyToFASTA_retVal['ama_ref_to_obj_name'][ama_ref]
+                                ama_ref_to_obj_name[ama_ref] = obj2file_retVal[input_many_ref]['ama_ref_to_obj_name'][ama_ref]
 
                     head_color = "#eeeeff"
                     border_head_color = "#ffccff"
@@ -1434,9 +1569,10 @@ class HmmerUtil:
                             elif many_type_name == 'Genome' or \
                                  many_type_name == 'AnnotatedMetagenomeAssembly' or \
                                  many_type_name == 'GenomeSet' or \
+                                 many_type_name == 'Tree' or \
                                  many_type_name == 'FeatureSet':
                                 
-                                if 'Set' in many_type_name:
+                                if 'Set' in many_type_name or many_type_name == 'Tree':
                                     [genome_ref, hit_fid] = hit_seq_id.split(genome_id_feature_id_delim)
                                 else:
                                     genome_ref = input_many_ref
@@ -1454,7 +1590,7 @@ class HmmerUtil:
                                         #self.log (console, "GOT ONE!")  # DEBUG
                                         if many_type_name == 'Genome' or many_type_name == 'AnnotatedMetagenomeAssembly':
                                             accept_id = fid
-                                        elif many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet':
+                                        elif many_type_name == 'GenomeSet' or many_type_name == 'FeatureSet' or many_type_name == 'Tree':
                                             accept_id = genome_ref + genome_id_feature_id_delim + fid
                                         if accept_id in accept_fids:
                                             row_color = accept_row_color
@@ -1472,19 +1608,12 @@ class HmmerUtil:
                                 func_disp = feature_id_to_function[genome_ref][fid_lookup]
 
                                 # set genome_disp_name
-                                if many_type_name == 'AnnotatedMetagenomeAssembly':
-                                    genome_disp_name = ama_ref_to_obj_name[genome_ref]
-                                else:
-                                    genome_obj_name = genome_ref_to_obj_name[genome_ref]
-                                    genome_sci_name = genome_ref_to_sci_name[genome_ref]
-                                    [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
-                                    genome_disp_name = ''
-                                    if 'obj_name' in params['genome_disp_name_config']:
-                                        genome_disp_name += genome_obj_name
-                                    if 'ver' in params['genome_disp_name_config']:
-                                        genome_disp_name += '.v'+str(genome_obj_version)
-                                    if 'sci_name' in params['genome_disp_name_config']:
-                                        genome_disp_name += ': '+genome_sci_name
+                                genome_disp_name = self._get_genome_disp_name (params,
+                                                                               genome_ref,
+                                                                               many_type_name,
+                                                                               ama_ref_to_obj_name,
+                                                                               genome_ref_to_obj_name,
+                                                                               genome_ref_to_sci_name)
 
                                 # build html report table line
                                 html_report_chunk += ['<tr bgcolor="' + row_color + '">']
@@ -1595,6 +1724,9 @@ class HmmerUtil:
                     if not hit_accept_something[hmm_group]:
                         self.log(console, "No Coalesced Hits Object to Upload for all HMMs in Group " + hmm_group)  # DEBUG
 
+                    elif int(params.get('save_ANY_featureSets',1)) != 1:
+                        self.log(console, "save_ANY_featureSets not set to TRUE")  # DEBUG
+
                     else:
                         self.log(console, "Uploading Coalesced Hits Object for HMM Group " + hmm_group)  # DEBUG
 
@@ -1612,7 +1744,7 @@ class HmmerUtil:
                                 }]
                             })[0]
 
-                        else:  # input FeatureSet, Genome, and GenomeSet -> upload FeatureSet output
+                        else:  # input FeatureSet, Genome, GenomeSet, Tree, and AMA -> upload FeatureSet output
 
                             output_featureSet['element_ordering'] = coalesce_featureIds_element_ordering
                             output_featureSet['elements'] = dict()
@@ -1761,7 +1893,9 @@ class HmmerUtil:
             table_data = dict()
             table_genes = dict()
             INSANE_VALUE = 10000000000000000
-            if params.get('low_val') and params['low_val'] != 'detect':
+            if params.get('count_category') and params['count_category'] == 'perc_all':
+                overall_low_val = INSANE_VALUE
+            elif params.get('low_val') and params['low_val'] != 'detect':
                 overall_low_val = float(params['low_val'])
             else:
                 overall_low_val = INSANE_VALUE
@@ -1789,6 +1923,15 @@ class HmmerUtil:
                         table_genes[genome_ref][cat] = hit_genes_by_genome_and_model[genome_ref][cat]
                         cat_seen[cat] = True
 
+            # adjust to perc all CDS if not raw count
+            if params.get('count_category') and params['count_category'] == 'perc_all':
+                for genome_ref in all_genome_refs:
+                    total_genes = genome_CDS_count_by_ref[genome_ref]
+                    for cat in cats:
+                        if table_data[genome_ref][cat] != 0:
+                            table_data[genome_ref][cat] /= float(total_genes)
+                            table_data[genome_ref][cat] *= 100.0
+                        
             # determine high and low val
             for genome_ref in all_genome_refs:
                 for cat in cats:
@@ -1809,6 +1952,7 @@ class HmmerUtil:
             
             # build html report
             sp = '&nbsp;'
+            body_bgcolor = '#ffffff'
             text_color = "#606060"
             text_color_2 = "#606060"
             head_color_1 = "#eeeeee"
@@ -1864,7 +2008,8 @@ class HmmerUtil:
             border = "0"
             #row_spacing = "-2"
             num_rows = len(all_genome_refs)
-            if len(input_many_refs) > 1:
+            if int(params.get('show_target_block_headers',1)) == 1 and \
+                len(input_many_refs) > 1:
                 num_rows += len(input_many_refs)
             show_groups = False
             show_blanks = False
@@ -1888,12 +2033,14 @@ class HmmerUtil:
                 ".vertical-text_title {\ndisplay: inline-block;\nwidth: 1.0em;\n}\n.vertical-text__inner_title {\ndisplay: inline-block;\nwhite-space: nowrap;\nline-height: 1.0;\ntransform: translate(0,100%) rotate(-90deg);\ntransform-origin: 0 0;\n}\n.vertical-text__inner_title:after {\ncontent: \"\";\ndisplay: block;\nmargin: 0.0em 0 100%;\n}"]
 
             # add colors as style for DIV
+            html_report_lines += [".heatmap_cell-"+'BLANK'+" {\nwidth: "+str(cell_width)+"px;\nheight: "+str(cell_height)+"px;\nborder-radius: "+str(corner_radius)+"px;\nbackground-color: "+body_bgcolor+";\ntext-align: center;\n}"]
+            
             for color_i,color_val in enumerate(color_list):
                 html_report_lines += [".heatmap_cell-"+str(color_i)+" {\nwidth: "+str(cell_width)+"px;\nheight: "+str(cell_height)+"px;\nborder-radius: "+str(corner_radius)+"px;\nbackground-color: "+str(color_val)+";\ntext-align: center;\n}"]
             
             html_report_lines += ['</style>']
             html_report_lines += ['</head>']
-            html_report_lines += ['<body bgcolor="white">']
+            html_report_lines += ['<body bgcolor="'+body_bgcolor+'">']
             html_report_lines += ['<font color="' + header_tab_color + '" size=' +
                                   header_tab_fontsize + '><b>TABULAR PROFILE</b></font> | ']
 
@@ -1983,7 +2130,8 @@ class HmmerUtil:
                 for input_many_ref in input_many_refs:
                     many_type_name = many_type_names[input_many_ref]
 
-                    if len(input_many_refs) > 1:
+                    if int(params.get('show_target_block_headers',1)) == 1 and \
+                        len(input_many_refs) > 1:
                         input_obj_disp_name = input_many_names[input_many_ref]
                         html_report_lines += ['<tr>']
                         html_report_lines += ['<td align=right><div class="horz-text"><font color="' + text_color + '" size=' +
@@ -1991,21 +2139,51 @@ class HmmerUtil:
                         html_report_lines += ['<td colspan='+str(num_cols)+' bgcolor="#dddddd"></td>']
                         html_report_lines += ['</tr>']
                     
-                    for genome_ref in genome_refs[input_many_ref]:
-                        # set genome_disp_name
-                        if many_type_name == 'AnnotatedMetagenomeAssembly':
-                            genome_disp_name = ama_ref_to_obj_name[genome_ref]
-                        else:
-                            genome_obj_name = genome_ref_to_obj_name[genome_ref]
-                            genome_sci_name = genome_ref_to_sci_name[genome_ref]
-                            [ws_id, obj_id, genome_obj_version] = genome_ref.split('/')
-                            genome_disp_name = ''
-                            if 'obj_name' in params['genome_disp_name_config']:
-                                genome_disp_name += genome_obj_name
-                            if 'ver' in params['genome_disp_name_config']:
-                                genome_disp_name += '.v'+str(genome_obj_version)
-                            if 'sci_name' in params['genome_disp_name_config']:
-                                genome_disp_name += ': '+genome_sci_name
+
+                    # add genome and ama rows, order GenomeSet elements by disp name
+                    genome_ref_order = []
+                    if many_type_name != 'GenomeSet' and many_type_name != 'FeatureSet' and many_type_name != 'Tree':
+                        genome_ref_order = genome_refs[input_many_ref]
+                        
+                    # Use tree order, first ETE3 ladderize tree
+                    elif many_type_name == 'Tree':
+                        input_many_tree = input_many_objs[input_many_ref]
+                        genome_id_by_ref = dict()
+                        genome_ref_by_id = dict()    
+                        for genome_id in input_many_tree['default_node_labels'].keys():
+                            genome_ref = input_many_tree['ws_refs'][genome_id]['g'][0]
+                            genome_id_by_ref[genome_ref] = genome_id
+                            genome_ref_by_id[genome_id] = genome_ref
+                        species_tree = ete3.Tree(input_many_tree['tree'])
+                        species_tree.ladderize()
+                        for genome_id in species_tree.get_leaf_names():
+                            genome_ref_order.append(genome_ref_by_id[genome_id])
+
+                    # Sort disp names alphabetically
+                    else:
+                        genome_disp_name_to_ref = dict()
+                        for genome_ref in genome_refs[input_many_ref]:
+                            genome_disp_name = self._get_genome_disp_name (params,
+                                                                           genome_ref,
+                                                                           many_type_name,
+                                                                           ama_ref_to_obj_name,
+                                                                           genome_ref_to_obj_name,
+                                                                           genome_ref_to_sci_name)
+                            if genome_disp_name not in genome_disp_name_to_ref:
+                                genome_disp_name_to_ref[genome_disp_name] = []
+                            genome_disp_name_to_ref[genome_disp_name].append(genome_ref)
+
+                        for genome_disp_name in sorted(genome_disp_name_to_ref.keys()):
+                            for genome_ref in genome_disp_name_to_ref[genome_disp_name]:
+                                genome_ref_order.append(genome_ref)
+
+                    for genome_ref in genome_ref_order:
+                        genome_disp_name = self._get_genome_disp_name (params,
+                                                                       genome_ref,
+                                                                       many_type_name,
+                                                                       ama_ref_to_obj_name,
+                                                                       genome_ref_to_obj_name,
+                                                                       genome_ref_to_sci_name)
 
                         # build html report table line
                         html_report_lines += ['<tr>']
@@ -2016,7 +2194,10 @@ class HmmerUtil:
                                 continue
                             val = table_data[genome_ref][cat]
                             if not cat_seen.get(cat) or val == 0:
-                                html_report_lines += ['<td bgcolor=white></td>']
+                                #html_report_lines += ['<td bgcolor=white></td>']
+                                html_report_lines += ['<td align=center valign=middle bgcolor="'+body_bgcolor+'">']
+                                html_report_lines += ['<div class="heatmap_cell-BLANK"></div>']
+                                html_report_lines += ['</td>']
                                 continue
                             elif overall_high_val == overall_low_val:
                                 cell_color_i = 0
@@ -2034,7 +2215,7 @@ class HmmerUtil:
                                 hmm_group_i = hmm_id_to_hmm_group_index[cat]
                                 group_html_search_file = search_tool_name + '_Search-' + \
                                                          str(hmm_group_i) + '-' + str(hmm_group) + '.html'
-                                html_report_lines += ['<td title="'+cell_title+'" align=center valign=middle bgcolor=white>' +
+                                html_report_lines += ['<td title="'+cell_title+'" align=center valign=middle bgcolor="'+body_bgcolor+'">' +
                                                       '<a href="'+group_html_search_file+'#'+cat+'">' +
                                                       '<div class="heatmap_cell-'+str(cell_color_i)+'"></div>' +
                                                       '</a></td>']

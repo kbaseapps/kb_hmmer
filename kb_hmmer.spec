@@ -121,8 +121,10 @@ module kb_hmmer {
         data_obj_name  output_filtered_name;
         string         genome_disp_name_config;
 
+	bool  show_target_block_headers;
 	bool  coalesce_output;
 	bool  save_ALL_featureSets;
+	bool  save_ANY_featureSets;
 	float e_value;
 	float bitscore;
 	float model_cov_perc;
@@ -168,8 +170,10 @@ module kb_hmmer {
         data_obj_name  output_filtered_name;
         string         genome_disp_name_config;
 
+	bool  show_target_block_headers;
 	bool  coalesce_output;
 	bool  save_ALL_featureSets;
+	bool  save_ANY_featureSets;
 	float e_value;
 	float bitscore;
 	float model_cov_perc;
@@ -191,6 +195,57 @@ module kb_hmmer {
     funcdef HMMER_EnvBioelement_Search (HMMER_EnvBioelement_Params params)  returns (HMMER_Output) authentication required;
 
 
+    /* HMMER MT_Bioelement Input Params
+    */
+    typedef structure {
+        workspace_name workspace_name;
+
+	data_obj_ref   input_MT_Bioelement_N_ids;
+	data_obj_ref   input_MT_Bioelement_H_ids;
+	data_obj_ref   input_MT_Bioelement_O_ids;
+	data_obj_ref   input_MT_Bioelement_CFix_ids;
+	data_obj_ref   input_MT_Bioelement_C1_ids;
+	data_obj_ref   input_MT_Bioelement_CH4_ids;
+	data_obj_ref   input_MT_Bioelement_CO_ids;
+	data_obj_ref   input_MT_Bioelement_S_ids;
+	data_obj_ref   input_MT_Bioelement_CN_ids;
+	data_obj_ref   input_MT_Bioelement_CH4N2O_ids;
+	data_obj_ref   input_MT_Bioelement_Se_ids;
+	data_obj_ref   input_MT_Bioelement_Metal_ids;
+	data_obj_ref   input_MT_Bioelement_As_ids;
+	data_obj_ref   input_MT_Bioelement_Halo_ids;
+	
+	data_obj_ref   input_many_refs;
+        data_obj_name  output_filtered_name;
+        string         genome_disp_name_config;
+        string         count_category;
+	bool           use_model_specific_thresholds;
+	
+	bool  show_target_block_headers;
+	bool  coalesce_output;
+	bool  save_ALL_featureSets;
+	bool  save_ANY_featureSets;
+	float e_value;
+	float bitscore;
+	float model_cov_perc;
+	float maxaccepts;
+
+	bool  heatmap;
+	bool  low_val;
+	bool  vertical;  /* only supports true for now */
+	bool  show_blanks;
+    } HMMER_MT_Bioelement_Params;
+
+
+    /*  Method for HMMER search of Markov Models of MicroTrait bioelement families
+    **
+    **    overloading as follows:
+    **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SeqquenceSet deactivated)
+    **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
+    */
+    funcdef HMMER_MT_Bioelement_Search (HMMER_MT_Bioelement_Params params)  returns (HMMER_Output) authentication required;
+
+
     /* HMMER PhyloMarkers Input Params
     */
     typedef structure {
@@ -206,8 +261,10 @@ module kb_hmmer {
         data_obj_name  output_filtered_name;
         string         genome_disp_name_config;
 
+	bool  show_target_block_headers;
 	bool  coalesce_output;
 	bool  save_ALL_featureSets;
+	bool  save_ANY_featureSets;
 	float e_value;
 	float bitscore;
 	float model_cov_perc;

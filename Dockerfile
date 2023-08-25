@@ -8,10 +8,19 @@ MAINTAINER KBase Developer
 
 ENV HMMER_VERSION='3.3.2'
 ENV dbCAN_VERSION='10'
+#ENV ETE3_VERSION='3.0.0b35'
+ENV ETE3_VERSION='3.1.1'
+#ENV ETE3_VERSION='3.1.2'
 
 # Update packages
 RUN apt-get update
 
+# Install ETE3 dependencies
+#RUN apt-get update && \
+#    apt-get -y install xvfb python-qt4 && \
+#    pip install ete3==${ETE3_VERSION}
+RUN apt-get -y install xvfb python-qt4 python-numpy python-lxml python-six
+    
 # add packages
 #RUN apt install -y build-essential
 
@@ -29,6 +38,15 @@ RUN chmod -R a+rw /kb/module
 WORKDIR /kb/module
 
 RUN make all
+
+# install ETE3
+#
+WORKDIR /kb/module
+RUN \
+  git clone -b ${ETE3_VERSION} https://github.com/etetoolkit/ete && \
+  cd ete && \
+  python setup.py install
+
 
 # Install HMMER
 #
@@ -52,6 +70,10 @@ WORKDIR /kb/module
 RUN \
   curl https://bcb.unl.edu/dbCAN2/download/dbCAN-HMMdb-V${dbCAN_VERSION}.txt > data/dbCAN/dbCAN-v${dbCAN_VERSION}/dbCAN-fam-HMMs-v${dbCAN_VERSION}.txt
 
+
+# Start up
+#
+WORKDIR /kb/module
 ENTRYPOINT [ "./scripts/entrypoint.sh" ]
 
 CMD [ ]

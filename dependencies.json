@@ -1,4 +1,8 @@
 [ {
+  "module_name" : "BBTools",
+  "type" : "sdk",
+  "version_tag" : "dev"
+}, {
   "module_name" : "DataFileUtil",
   "type" : "sdk",
   "version_tag" : "release"
@@ -9,7 +13,7 @@
 }, {
   "module_name" : "KBaseDataObjectToFileUtils",
   "type" : "sdk",
-  "version_tag" : "beta"
+  "version_tag" : "release"
 }, {
   "module_name" : "KBaseReport",
   "type" : "sdk",

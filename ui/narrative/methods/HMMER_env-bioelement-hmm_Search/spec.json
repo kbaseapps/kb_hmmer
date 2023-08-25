@@ -1,11 +1,11 @@
 {
-    "ver": "1.6.0",
+    "ver": "1.8.1",
     "authors": [
         "seanjungbluth", "dylan"
     ],
     "contact": "http://www.kbase.us/support/",
     "visible": true,
-    "categories": ["active","sequence"],
+    "categories": ["inactive","sequence"],
     "widgets": {
         "input": null,
         "output": "no-display"
@@ -63,7 +63,7 @@
 					"ui-name": "EnvBioelement_N_hzsA"
 				},
 				{
-					"value": "anfD_nitrog",
+					"value": "ANFD",
 					"display": "N2 fixation - anfD",
 					"id": "EnvBioelement_N_anfD_nitrog",
 					"ui-name": "EnvBioelement_N_anfD_nitrog"
@@ -99,7 +99,7 @@
 					"ui-name": "EnvBioelement_N_nifH"
 				},
 				{
-					"value": "vnfD_nitrog",
+					"value": "VNFD",
 					"display": "N2 fixation - vnfD",
 					"id": "EnvBioelement_N_vnfD_nitrog",
 					"ui-name": "EnvBioelement_N_vnfD_nitrog"
@@ -159,7 +159,7 @@
 					"ui-name": "EnvBioelement_N_nxrB"
 				},
 				{
-					"value": "cyt_c552_large_NrfA",
+					"value": "cyt_c552_large_NrFA",
 					"display": "Nitrite reduction - nrfA",
 					"id": "EnvBioelement_N_cyt_c552_large_NrfA",
 					"ui-name": "EnvBioelement_N_cyt_c552_large_NrfA"
@@ -585,13 +585,13 @@
 					"ui-name": "EnvBioelement_CFix_codh_catalytic"
 				},
 				{
-					"value": "codh_beta",
+					"value": "codhC_beta",
 					"display": "Wood-Ljungdahl pathway - cdhC",
 					"id": "EnvBioelement_CFix_codh_beta",
 					"ui-name": "EnvBioelement_CFix_codh_beta"
 				},
 				{
-					"value": "codh_delta",
+					"value": "codhD_delta",
 					"display": "Wood-Ljungdahl pathway - cdhD",
 					"id": "EnvBioelement_CFix_codh_delta",
 					"ui-name": "EnvBioelement_CFix_codh_delta"
@@ -663,7 +663,7 @@
 					"ui-name": "EnvBioelement_C1_ALL"
 				},
 				{
-					"value": "one_C_fae",
+					"value": "fae",
 					"display": "Formaldehyde oxidation - fae",
 					"id": "EnvBioelement_C1_one_C_fae",
 					"ui-name": "EnvBioelement_C1_one_C_fae"
@@ -705,19 +705,19 @@
 					"ui-name": "EnvBioelement_C1_mycoS_dep_FDH"
 				},
 				{
-					"value": "fdh_alpha",
+					"value": "fdh-alpha",
 					"display": "Formate oxidation - fdhA",
 					"id": "EnvBioelement_C1_fdh_alpha",
 					"ui-name": "EnvBioelement_C1_fdh_alpha"
 				},
 				{
-					"value": "fdh_beta",
+					"value": "fdh-beta",
 					"display": "Formate oxidation - fdhB",
 					"id": "EnvBioelement_C1_fdh_beta",
 					"ui-name": "EnvBioelement_C1_fdh_beta"
 				},
 				{
-					"value": "fdh_gamma",
+					"value": "fdh-gamma",
 					"display": "Formate oxidation - FDH_gamma",
 					"id": "EnvBioelement_C1_fdh_gamma",
 					"ui-name": "EnvBioelement_C1_fdh_gamma"
@@ -963,7 +963,7 @@
 					"ui-name": "EnvBioelement_Se_ALL"
 				},
 				{
-					"value": "ygfN",
+					"value": "Se_sel_red_Mo",
 					"display": "Selenate reduction - ygfN",
 					"id": "EnvBioelement_Se_ygfN",
 					"ui-name": "EnvBioelement_Se_ygfN"
@@ -1167,6 +1167,30 @@
             }
         },
         {
+            "id": "show_target_block_headers",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "1" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                    "value": "0",
+                                    "display": "DON'T show target block headers",
+                                    "id": "show_target_block_headers-NO",
+                                    "ui-name": "show_target_block_headers-NO"
+                                },
+                                {
+                                    "value": "1",
+                                    "display": "DO show target block headers",
+                                    "id": "show_target_block_headers-YES",
+                                    "ui-name": "show_target_block_headers-YES"
+                                }
+                        ]
+            }
+        },
+        {
             "id": "save_ALL_featureSets",
             "optional": true,
             "advanced": true,
@@ -1188,6 +1212,30 @@
                                         "ui-name": "save_ALL"
                                 }
 			]
+            }
+        },
+        {
+            "id": "save_ANY_featureSets",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "1" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                    "value": "0",
+                                    "display": "DON'T save ANY featureSets",
+                                    "id": "save_ANY-NO",
+                                    "ui-name": "save_ANY-NO"
+                                },
+                                {
+                                    "value": "1",
+                                    "display": "DO save featureSets",
+                                    "id": "save_ANY-YES",
+                                    "ui-name": "save_ANY-YES"
+                                }
+                        ]
             }
         },
         {
@@ -1402,8 +1450,16 @@
                     "target_property": "coalesce_output"
                 },
                 {
+                    "input_parameter": "show_target_block_headers",
+                    "target_property": "show_target_block_headers"
+                },
+                {
                     "input_parameter": "save_ALL_featureSets",
                     "target_property": "save_ALL_featureSets"
+                },
+                {
+                    "input_parameter": "save_ANY_featureSets",
+                    "target_property": "save_ANY_featureSets"
                 },
                 {
                     "input_parameter": "e_value",

@@ -1,3 +1,21 @@
+### Version 1.9.1
+__Changes__
+- added Species Tree input to MicroTrait App 
+- added scaling by percentage of genes in Genome or AMA to MicroTrait App
+
+### Version 1.9.0
+__Changes__
+- added MicroTrait BioElement App
+- added model-specific threshold option to MicroTrait BioElement App
+- added sort by genome object name within GenomeSet for HMMER Custom Model Suite Apps
+
+### Version 1.8.1
+__Changes__
+- fixed bug in Model collection Profiling that prevented multiple AMAs as input
+- made subsection headers in output profile table optional for Model collection profiling (e.g. dbCAN)
+- made saving any featuresets an option for Model collection profiling (e.g. dbCAN)
+- fixed incorrect model IDs in Env BioElement App input options
+
 ### Version 1.8.0
 __Changes__
 - updated dbCAN to v10
