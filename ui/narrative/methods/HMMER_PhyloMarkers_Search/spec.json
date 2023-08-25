@@ -1,11 +1,11 @@
 {
-    "ver": "1.7.0",
+    "ver": "1.9.1",
     "authors": [
         "dylan"
     ],
     "contact": "http://www.kbase.us/support/",
     "visible": true,
-    "categories": ["active","sequence"],
+    "categories": ["active","sequence","annotation"],
     "widgets": {
         "input": null,
         "output": "no-display"
@@ -1540,7 +1540,8 @@
                 "valid_ws_types": [ "KBaseCollections.FeatureSet",
 				    "KBaseGenomes.Genome",
 				    "KBaseSearch.GenomeSet",
-				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly"
+				    "KBaseMetagenomes.AnnotatedMetagenomeAssembly",
+				    "KBaseTrees.Tree"
 				  ]
             }
         },
@@ -1599,6 +1600,30 @@
             }
         },
         {
+            "id": "show_target_block_headers",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "1" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                    "value": "0",
+                                    "display": "DON'T show target block headers",
+                                    "id": "show_target_block_headers-NO",
+                                    "ui-name": "show_target_block_headers-NO"
+                                },
+                                {
+                                    "value": "1",
+                                    "display": "DO show target block headers",
+                                    "id": "show_target_block_headers-YES",
+                                    "ui-name": "show_target_block_headers-YES"
+                                }
+                        ]
+            }
+        },
+        {
             "id": "save_ALL_featureSets",
             "optional": true,
             "advanced": true,
@@ -1620,6 +1645,30 @@
                                         "ui-name": "save_ALL"
                                 }
 			]
+            }
+        },
+        {
+            "id": "save_ANY_featureSets",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "1" ],
+            "field_type": "dropdown",
+            "dropdown_options": {
+                "options": [
+                                {
+                                    "value": "0",
+                                    "display": "DON'T save ANY featureSets",
+                                    "id": "save_ANY-NO",
+                                    "ui-name": "save_ANY-NO"
+                                },
+                                {
+                                    "value": "1",
+                                    "display": "DO save featureSets",
+                                    "id": "save_ANY-YES",
+                                    "ui-name": "save_ANY-YES"
+                                }
+                        ]
             }
         },
         {
@@ -1798,8 +1847,16 @@
                     "target_property": "coalesce_output"
                 },
                 {
+                    "input_parameter": "show_target_block_headers",
+                    "target_property": "show_target_block_headers"
+                },
+                {
                     "input_parameter": "save_ALL_featureSets",
                     "target_property": "save_ALL_featureSets"
+                },
+                {
+                    "input_parameter": "save_ANY_featureSets",
+                    "target_property": "save_ANY_featureSets"
                 },
                 {
                     "input_parameter": "e_value",

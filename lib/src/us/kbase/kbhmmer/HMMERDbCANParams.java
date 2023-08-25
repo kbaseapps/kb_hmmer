@@ -32,8 +32,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "input_many_refs",
     "output_filtered_name",
     "genome_disp_name_config",
+    "show_target_block_headers",
     "coalesce_output",
     "save_ALL_featureSets",
+    "save_ANY_featureSets",
     "e_value",
     "bitscore",
     "model_cov_perc",
@@ -67,10 +69,14 @@ public class HMMERDbCANParams {
     private String outputFilteredName;
     @JsonProperty("genome_disp_name_config")
     private String genomeDispNameConfig;
+    @JsonProperty("show_target_block_headers")
+    private Long showTargetBlockHeaders;
     @JsonProperty("coalesce_output")
     private Long coalesceOutput;
     @JsonProperty("save_ALL_featureSets")
     private Long saveALLFeatureSets;
+    @JsonProperty("save_ANY_featureSets")
+    private Long saveANYFeatureSets;
     @JsonProperty("e_value")
     private Double eValue;
     @JsonProperty("bitscore")
@@ -254,6 +260,21 @@ public class HMMERDbCANParams {
         return this;
     }
 
+    @JsonProperty("show_target_block_headers")
+    public Long getShowTargetBlockHeaders() {
+        return showTargetBlockHeaders;
+    }
+
+    @JsonProperty("show_target_block_headers")
+    public void setShowTargetBlockHeaders(Long showTargetBlockHeaders) {
+        this.showTargetBlockHeaders = showTargetBlockHeaders;
+    }
+
+    public HMMERDbCANParams withShowTargetBlockHeaders(Long showTargetBlockHeaders) {
+        this.showTargetBlockHeaders = showTargetBlockHeaders;
+        return this;
+    }
+
     @JsonProperty("coalesce_output")
     public Long getCoalesceOutput() {
         return coalesceOutput;
@@ -281,6 +302,21 @@ public class HMMERDbCANParams {
 
     public HMMERDbCANParams withSaveALLFeatureSets(Long saveALLFeatureSets) {
         this.saveALLFeatureSets = saveALLFeatureSets;
+        return this;
+    }
+
+    @JsonProperty("save_ANY_featureSets")
+    public Long getSaveANYFeatureSets() {
+        return saveANYFeatureSets;
+    }
+
+    @JsonProperty("save_ANY_featureSets")
+    public void setSaveANYFeatureSets(Long saveANYFeatureSets) {
+        this.saveANYFeatureSets = saveANYFeatureSets;
+    }
+
+    public HMMERDbCANParams withSaveANYFeatureSets(Long saveANYFeatureSets) {
+        this.saveANYFeatureSets = saveANYFeatureSets;
         return this;
     }
 
@@ -416,7 +452,7 @@ public class HMMERDbCANParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((((((((((((((((((((((((("HMMERDbCANParams"+" [workspaceName=")+ workspaceName)+", inputDbCANAAIds=")+ inputDbCANAAIds)+", inputDbCANCBMIds=")+ inputDbCANCBMIds)+", inputDbCANCEIds=")+ inputDbCANCEIds)+", inputDbCANGHIds=")+ inputDbCANGHIds)+", inputDbCANGTIds=")+ inputDbCANGTIds)+", inputDbCANPLIds=")+ inputDbCANPLIds)+", inputDbCANCellulosomeIds=")+ inputDbCANCellulosomeIds)+", inputManyRefs=")+ inputManyRefs)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", coalesceOutput=")+ coalesceOutput)+", saveALLFeatureSets=")+ saveALLFeatureSets)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", modelCovPerc=")+ modelCovPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", lowVal=")+ lowVal)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((((((((((((((((((((((("HMMERDbCANParams"+" [workspaceName=")+ workspaceName)+", inputDbCANAAIds=")+ inputDbCANAAIds)+", inputDbCANCBMIds=")+ inputDbCANCBMIds)+", inputDbCANCEIds=")+ inputDbCANCEIds)+", inputDbCANGHIds=")+ inputDbCANGHIds)+", inputDbCANGTIds=")+ inputDbCANGTIds)+", inputDbCANPLIds=")+ inputDbCANPLIds)+", inputDbCANCellulosomeIds=")+ inputDbCANCellulosomeIds)+", inputManyRefs=")+ inputManyRefs)+", outputFilteredName=")+ outputFilteredName)+", genomeDispNameConfig=")+ genomeDispNameConfig)+", showTargetBlockHeaders=")+ showTargetBlockHeaders)+", coalesceOutput=")+ coalesceOutput)+", saveALLFeatureSets=")+ saveALLFeatureSets)+", saveANYFeatureSets=")+ saveANYFeatureSets)+", eValue=")+ eValue)+", bitscore=")+ bitscore)+", modelCovPerc=")+ modelCovPerc)+", maxaccepts=")+ maxaccepts)+", heatmap=")+ heatmap)+", lowVal=")+ lowVal)+", vertical=")+ vertical)+", showBlanks=")+ showBlanks)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

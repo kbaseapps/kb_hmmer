@@ -255,6 +255,28 @@ public class KbHmmerClient {
     }
 
     /**
+     * <p>Original spec-file function name: HMMER_MT_Bioelement_Search</p>
+     * <pre>
+     * Method for HMMER search of Markov Models of MicroTrait bioelement families
+     * **
+     * **    overloading as follows:
+     * **        input_many_ref: SequenceSet, FeatureSet, Genome, GenomeSet, AMA (note: SeqquenceSet deactivated)
+     * **        output_name: SequenceSet (if input_many is SequenceSet), (else) FeatureSet
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.kbhmmer.HMMERMTBioelementParams HMMERMTBioelementParams} (original type "HMMER_MT_Bioelement_Params")
+     * @return   instance of type {@link us.kbase.kbhmmer.HMMEROutput HMMEROutput} (original type "HMMER_Output")
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public HMMEROutput hMMERMTBioelementSearch(HMMERMTBioelementParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<HMMEROutput>> retType = new TypeReference<List<HMMEROutput>>() {};
+        List<HMMEROutput> res = caller.jsonrpcCall("kb_hmmer.HMMER_MT_Bioelement_Search", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
      * <p>Original spec-file function name: HMMER_PhyloMarkers_Search</p>
      * <pre>
      * Method for HMMER search of Markov Models of phylogenetic marker families

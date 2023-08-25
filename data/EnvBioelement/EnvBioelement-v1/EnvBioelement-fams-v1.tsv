@@ -4,13 +4,13 @@ amoB	amoB	N	Nitrogen	Ammonia oxidation	Am-Ox
 amoC	amoC	N	Nitrogen	Ammonia oxidation	Am-Ox
 hzoA	hzoA	N	Nitrogen	Anammox	AnAm-Ox
 hzsA	hzsA	N	Nitrogen	Anammox	AnAm-Ox
-anfD_nitrog	anfD	N	Nitrogen	N2 fixation	N2-F
+ANFD	anfD	N	Nitrogen	N2 fixation	N2-F
 anfK_nitrog	anfK	N	Nitrogen	N2 fixation	N2-F
 anfG_nitrog	anfG	N	Nitrogen	N2 fixation	N2-F
 nifD	nifD	N	Nitrogen	N2 fixation	N2-F
 nifK	nifK	N	Nitrogen	N2 fixation	N2-F
 nifH	nifH	N	Nitrogen	N2 fixation	N2-F
-vnfD_nitrog	vnfD	N	Nitrogen	N2 fixation	N2-F
+VNFD	vnfD	N	Nitrogen	N2 fixation	N2-F
 vnfK_nitrog	vnfK	N	Nitrogen	N2 fixation	N2-F
 vnfG_nitrog	vnfG	N	Nitrogen	N2 fixation	N2-F
 napA	napA	N	Nitrogen	Nitrate reduction	NO3-R
@@ -20,7 +20,7 @@ norB	norB	N	Nitrogen	Nitric oxide reduction	NO-R
 norC	norC	N	Nitrogen	Nitric oxide reduction	NO-R
 nxrA	nxrA	N	Nitrogen	Nitrite oxidation	NO2-Ox
 nxrB	nxrB	N	Nitrogen	Nitrite oxidation	NO2-Ox
-cyt_c552_large_NrfA	nrfA	N	Nitrogen	Nitrite reduction	NO2-R
+cyt_c552_large_NrFA	nrfA	N	Nitrogen	Nitrite reduction	NO2-R
 cyt_c552_small_NrfH	nrfH	N	Nitrogen	Nitrite reduction	NO2-R
 nirB	nirB	N	Nitrogen	Nitrite reduction	NO2-R
 nirD	nirD	N	Nitrogen	Nitrite reduction	NO2-R
@@ -38,7 +38,7 @@ fcc	fcc	S	Sulfur	Sulfide oxidation	H2S-Ox
 sqr	sqr	S	Sulfur	Sulfide oxidation	H2S-Ox
 asrA	asrA	S	Sulfur	Sulfite reduction	SO3-R
 asrB	asrB	S	Sulfur	Sulfite reduction	SO3-R
-asrC	asrB	S	Sulfur	Sulfite reduction	SO3-R
+asrC	asrC	S	Sulfur	Sulfite reduction	SO3-R
 dsrD	dsrD	S	Sulfur	Sulfite reduction	SO3-R
 dsrA	dsrA	S	Sulfur	Sulfite reduction	SO3-R
 dsrB	dsrB	S	Sulfur	Sulfite reduction	SO3-R
@@ -75,21 +75,21 @@ rubisco_form_III	Rubisco_III	CFix	Carbon Fixation	Calvin-Benson-Bassham cycle	CB
 aclA	aclA	CFix	Carbon Fixation	Reverse TCA cycle	rTCA
 aclB	aclB	CFix	Carbon Fixation	Reverse TCA cycle	rTCA
 codh_catalytic	CO_DH_cata	CFix	Carbon Fixation	Wood-Ljungdahl pathway	WL
-codh_beta	cdhC	CFix	Carbon Fixation	Wood-Ljungdahl pathway	WL
-codh_delta	cdhD	CFix	Carbon Fixation	Wood-Ljungdahl pathway	WL
+codhC_beta	cdhC	CFix	Carbon Fixation	Wood-Ljungdahl pathway	WL
+codhD_delta	cdhD	CFix	Carbon Fixation	Wood-Ljungdahl pathway	WL
 coxL	coxL	CO	Carbon Monoxide	CO oxidation	CO-Ox
 coxM	coxM	CO	Carbon Monoxide	CO oxidation	CO-Ox
 coxS	coxS	CO	Carbon Monoxide	CO oxidation	CO-Ox
-one_C_fae	fae	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
+fae	fae	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
 fdhA_non_GSH	fdhA	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
 one_C_fhcD	fhcD	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
 one_C_mch	mch	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
 adh_III_F_hyde	ADH	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
 fghA_ester_D	fghA	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
 mycoS_dep_FDH	MycoS_dep_FDH	C1	C1 Compounds	Formaldehyde oxidation	CH2O-Ox
-fdh_alpha	fdhA	C1	C1 Compounds	Formate oxidation	CH2O2-Ox
-fdh_beta	fdhB	C1	C1 Compounds	Formate oxidation	CH2O2-Ox
-fdh_gamma	FDH_gamma	C1	C1 Compounds	Formate oxidation	CH2O2-Ox
+fdh-alpha	fdhA	C1	C1 Compounds	Formate oxidation	CH2O2-Ox
+fdh-beta	fdhB	C1	C1 Compounds	Formate oxidation	CH2O2-Ox
+fdh-gamma	FDH_gamma	C1	C1 Compounds	Formate oxidation	CH2O2-Ox
 NDMA_methanol	NDMA_methanol	C1	C1 Compounds	Methanol oxidation	CH3OH-Ox
 pqq	pqq	C1	C1 Compounds	Methanol oxidation	CH3OH-Ox
 madA	madA	C1	C1 Compounds	Methylamine -> formaldehyde	CH3NH2-DH
@@ -114,7 +114,7 @@ ars_reduc_gluta	ars_reduc_gluta	As	Arsenic	Arsenate reduction	AsO4-R
 arsC_pI258_fam	arsC_pI258	As	Arsenic	Arsenate reduction	AsO4-R
 arsenite_ox_L	aioA	As	Arsenic	Arsenite oxidation	AsO3-R
 arsenite_ox_S	aoxA	As	Arsenic	Arsenite oxidation	AsO3-R
-ygfN	ygfN	Se	Selenium	Selenate reduction	SeO4-R
+Se_sel_red_Mo	ygfN	Se	Selenium	Selenate reduction	SeO4-R
 ygfK	ygfK	Se	Selenium	Selenate reduction	SeO4-R
 ygfM	ygfM	Se	Selenium	Selenate reduction	SeO4-R
 ureA	ureA	CH4N2O	Urea	Urea hydrolysis	CH4N2O-H
